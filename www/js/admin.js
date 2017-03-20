@@ -1,19 +1,3 @@
-/* jshint -W097 */// jshint strict:true
-/* jslint vars: true */
-/* global io:false */
-/* global jQuery:false */
-/* jslint browser:true */
-/* jshint browser:true */
-/*global _ */
-/*global ace */
-/*global console */
-/*global alert */
-/*global confirm */
-/*global systemLang: true */
-/*global license */
-/*global translateAll */
-/*global initGridLanguage */
-/*global systemLang */
 'use strict';
 
 var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
