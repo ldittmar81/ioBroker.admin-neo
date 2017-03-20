@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="../../lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../../lib/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../../lib/css/font-awesome.min.css" rel="stylesheet"  type="text/css"/>
+        <link href="../../css/adapter.css" rel="stylesheet" type="text/css"/>
+
+        <link rel="stylesheet" type="text/css" href="admin.css"/>
+
+        <script type="text/javascript" src="../../lib/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../socket.io/socket.io.js"></script>		
+        <script type="text/javascript" src="../../lib/js/CLDRPluralRuleParser.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery.i18n.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery.i18n.messagestore.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery.i18n.fallbacks.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery.i18n.parser.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery.i18n.emitter.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery.i18n.language.js"></script>
+        <script type="text/javascript" src="../../lib/js/bootstrap.min.js"></script>		
+        <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+        <script type="text/javascript" src="admin.js"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <!-- you have to put your config page in a div with id adapter-container -->
+            <div class="form-horizontal" id="adapter-container">
+
+                <table><tr><td><img src="admin-neo.png" alt="Logo"/></td><td><h3 data-i18n="adapter_settings">Admin adapter settings</h3></td></tr></table>
+
+                <div class="form-group">
+                    <label for="bind">IP</label>:
+                    <select class="form-control value" id="bind"></select>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="port" for="port">Port</label>:
+                    <input class="form-control value number" id="port" size="5" maxlength="5" type="number"/>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="secure" for="secure">Secure (HTTPS)</label>:
+                    <input class="value" id="secure" type="checkbox" />
+                </div>
+                <div class="form-group" id="_certPublic">
+                    <label data-i18n="certPublic" for="certPublic">Public certificate</label>:
+                    <select id="certPublic" class="form-control value"></select>
+                </div>
+                <div class="form-group" id="_certPrivate">
+                    <label data-i18n="certPrivate" for="certPrivate">Private certificate</label>:
+                    <select id="certPrivate" class="form-control value"></select>
+                </div>			
+                <div class="form-group" id="_certChained">
+                    <label data-i18n="certChained" for="certChained">Chained certificate</label>:
+                    <select id="certChained" class="form-control value"></select>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="auth" for="auth">Authentication</label>:
+                    <input class="value" id="auth" type="checkbox" />
+                </div>
+                <div class="form-group" id="_ttl">
+                    <label data-i18n="ttl" for="ttl">Login timeout (sec)</label>:
+                    <input class="form-control value" id="ttl" />
+                </div>
+                <div class="form-group">
+                    <label data-i18n="cache" for="cache">Cache</label>:
+                    <input class="value" id="cache" type="checkbox" />
+                </div>
+                <div class="form-group defaultUser">
+                    <label data-i18n="defaultUser" for="defaultUser">Run as</label>:
+                    <select class="form-control value" id="defaultUser"></select>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="autoUpdate" for="autoUpdate">Updates check</label>:
+                    <select class="form-control value" id="autoUpdate">
+                        <option value="0" data-i18n="manually">manually</option>
+                        <option value="12" data-i18n="every12hours">every 12 hours</option>
+                        <option value="24" data-i18n="everyday">every day</option>
+                        <option value="48" data-i18n="every2day">every 2 days</option>
+                        <option value="72" data-i18n="every3day">every 3 days</option>
+                        <option value="168" data-i18n="everyweek">every week</option>
+                        <option value="336" data-i18n="every2weeks">every 2 weeks</option>
+                        <option value="720" data-i18n="monthly">monthly</option>
+                    </select>
+                </div>
+
+
+                <h3 data-i18n="letsEncrypt_settings">Let's Encrypt settings</h3>
+
+                <div class="form-group le-settings">
+                    <label for="leEnabled" data-i18n="letsEncrypt_certificates">Use Lets Encrypt certificates</label>:
+                    <input class="value" id="leEnabled" type="checkbox" />
+                </div>
+                <div class="form-group le-settings le-sub-settings">
+                    <label for="leUpdate" data-i18n="letsEncrypt_instance">Use this instance for automatic update</label>:
+                    <input class="value" id="leUpdate" type="checkbox" />
+                </div>
+                <div class="form-group le-settings le-sub-settings le-sub-settings-update">
+                    <label for="lePort" data-i18n="letsEncrypt_port">Port to check the domain</label>:
+                    <input class="form-control value number" id="lePort" type="number" size="5" maxlength="5" />
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

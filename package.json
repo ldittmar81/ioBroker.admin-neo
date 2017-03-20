@@ -1,0 +1,54 @@
+{
+  "name": "iobroker.admin-neo",
+  "description": "The adapter opens a webserver for the ioBroker admin neo UI.",
+  "version": "0.0.1",
+  "author": {
+    "name": "ldittmar",
+    "email": "iobroker@lmdsoft.de"
+  },
+  "homepage": "https://github.com/ldittmar81/ioBroker.admin-neo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ldittmar81/ioBroker.admin-neo"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/ldittmar81/ioBroker.admin-neo/blob/master/LICENSE"
+    }
+  ],
+  "keywords": [
+    "ioBroker",
+    "setup"
+  ],
+  "dependencies": {
+    "socket.io": "^1.5.1",
+    "request": "^2.76.0",
+    "express": "^4.14.0",
+    "cookie-parser": "^1.4.3",
+    "body-parser": "^1.15.2",
+    "express-session": "^1.14.0",
+    "passport-local": "^1.0.0",
+    "passport.socketio": "^3.6.2",
+    "passport": "^0.3.2",
+    "connect-flash": "^0.1.1",
+    "xtend": "^4.0.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-replace": "^0.9.3",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-jscs": "^2.0.0",
+    "grunt-http": "^1.6.0",
+    "mocha": "^2.3.4",
+    "chai": "^3.4.1"
+  },
+  "bugs": {
+    "url": "https://github.com/ldittmar81/ioBroker.admin-neo/issues"
+  },
+  "main": "admin-neo.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha"
+  },
+  "license": "MIT"
+}
