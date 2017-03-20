@@ -1,6 +1,9 @@
 {
+  "adapters": "Adaptador",
   "false": "errado",
-  "objects": "Objeto",
+  "instances": "Instâncias",
+  "log": "Log",
+  "objects": "Objetos",
   "system": "Systema",
   "true": "certo"
 }

@@ -1,5 +1,8 @@
 {
+  "adapters": "Adapter",
   "false": "falsch",
+  "instances": "Instanzen",
+  "log": "Log",
   "objects": "Objekte",
   "system": "System",
   "true": "wahr"

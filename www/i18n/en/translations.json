@@ -1,5 +1,8 @@
 {
+  "adapters": "Adapters",
   "false": "false",
+  "instances": "Instances",
+  "log": "Log",
   "objects": "Objects",
   "system": "System",
   "true": "true"
