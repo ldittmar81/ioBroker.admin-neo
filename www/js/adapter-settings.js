@@ -2,14 +2,14 @@ var path = location.pathname;
 var parts = path.split('/');
 parts.splice(-3);
 
-var socket   = io.connect('/', {path: parts.join('/') + '/socket.io'});
+var socket = io.connect('/', {path: parts.join('/') + '/socket.io'});
 var instance = window.location.search.slice(1);
-var common   = null; // common information of adapter
-var host     = null; // host object on which the adapter runs
-var changed  = false;
+var common = null; // common information of adapter
+var host = null; // host object on which the adapter runs
+var changed = false;
 var systemConfig;
-var certs    = [];
-var adapter  = '';
+var certs = [];
+var adapter = '';
 var onChangeSupported = false;
 
 $(document).ready(function () {
@@ -20,18 +20,19 @@ $(document).ready(function () {
     var id = 'system.adapter.' + adapter + '.' + instance;
 
     //socket.on('connection', function () {
-        loadSystemConfig(function () {
-            if (typeof translateAll === 'function') translateAll();
-            loadSettings(prepareTooltips);
-        });
+    loadSystemConfig(function () {
+        if (typeof translateAll === 'function')
+            translateAll();
+        loadSettings(prepareTooltips);
+    });
     //});
     var $body = $('body');
     $body.wrapInner('<div style="height: calc(100% - 44px); width: 100%; overflow:auto"></div>');
     $body.prepend('<div class="header ui-tabs-nav ui-widget ui-widget-header ui-corner-all" style="padding: 2px" >' +
-        '<button id="save" class="translateB">save</button>&nbsp;' +
-        '<button id="saveclose" class="translateB">saveclose</button>&nbsp;' +
-        '<button id="close" class="translateB" style="float: right;">cancel</button>&nbsp;' +
-        '</div>');
+            '<button id="save" class="translateB">save</button>&nbsp;' +
+            '<button id="saveclose" class="translateB">saveclose</button>&nbsp;' +
+            '<button id="close" class="translateB" style="float: right;">cancel</button>&nbsp;' +
+            '</div>');
 
     $('button#save').button({icons: {primary: 'ui-icon-disk'}}).click(function () {
         if (typeof save === 'undefined') {
@@ -46,9 +47,9 @@ $(document).ready(function () {
         });
     });
     $('button#saveclose').button({icons: {
-        primary: 'ui-icon-disk',
-        secondary: 'ui-icon-close'
-    }}).click(function () {
+            primary: 'ui-icon-disk',
+            secondary: 'ui-icon-close'
+        }}).click(function () {
         if (typeof save === 'undefined') {
             alert('Please implement save function in your admin/index.html');
             return;
@@ -79,7 +80,8 @@ $(document).ready(function () {
         }
 
         socket.emit('getObject', id, function (err, oldObj) {
-            if (!oldObj) oldObj = {};
+            if (!oldObj)
+                oldObj = {};
 
             for (var a in native) {
                 oldObj.native[a] = native[a];
@@ -101,7 +103,8 @@ $(document).ready(function () {
                     $('#saveclose').button('disable');
                     $('#close .ui-button-text').html(_('close'));
                 }
-                if (callback) callback();
+                if (callback)
+                    callback();
             });
         });
     }
@@ -118,7 +121,8 @@ $(document).ready(function () {
                     if (res.native && res.native.certificates) {
                         certs = [];
                         for (var c in res.native.certificates) {
-                            if (!res.native.certificates[c]) continue;
+                            if (!res.native.certificates[c])
+                                continue;
                             var _cert = {
                                 name: c,
                                 type: (res.native.certificates[c].substring(0, '-----BEGIN RSA PRIVATE KEY'.length) === '-----BEGIN RSA PRIVATE KEY' || res.native.certificates[c].substring(0, '-----BEGIN PRIVATE KEY'.length) === '-----BEGIN PRIVATE KEY') ? 'private' : 'public'
@@ -127,16 +131,19 @@ $(document).ready(function () {
                                 var m = res.native.certificates[c].split('-----END CERTIFICATE-----');
                                 var count = 0;
                                 for (var _m = 0; _m < m.length; _m++) {
-                                    if (m[_m].replace(/[\r\n|\r|\n]+/, '').trim()) count++;
+                                    if (m[_m].replace(/[\r\n|\r|\n]+/, '').trim())
+                                        count++;
                                 }
-                                if (count > 1) _cert.type = 'chained';
+                                if (count > 1)
+                                    _cert.type = 'chained';
                             }
 
                             certs.push(_cert);
                         }
                     }
                 }
-                if (callback) callback();
+                if (callback)
+                    callback();
             });
         });
     }
@@ -163,7 +170,8 @@ $(document).ready(function () {
                 $('.adapter-instance').html(adapter + '.' + instance);
                 $('.adapter-config').html('system.adapter.' + adapter + '.' + instance);
                 common = res.common;
-                if (res.common && res.common.name) $('.adapter-name').html(res.common.name);
+                if (res.common && res.common.name)
+                    $('.adapter-name').html(res.common.name);
                 if (typeof load === 'undefined') {
                     alert('Please implement save function in your admin/index.html');
                 } else {
@@ -203,7 +211,8 @@ function prepareTooltips() {
             }
         }
 
-        if (!id) return;
+        if (!id)
+            return;
 
         var tooltip = '';
         if (systemDictionary['tooltip_' + id]) {
@@ -249,7 +258,8 @@ function prepareTooltips() {
             }
         }
 
-        if (!id) return;
+        if (!id)
+            return;
 
         // check if translation for this exist
         if (systemDictionary['info_' + id]) {
@@ -262,15 +272,15 @@ function showMessage(message, title, icon, width) {
     var $dialogMessage = $('#dialog-message-settings');
     if (!$dialogMessage.length) {
         $('body').append('<div id="dialog-message-settings" title="Message" style="display: none">\n' +
-            '<p>' +
-            '<span id="dialog-message-icon-settings" class="ui-icon ui-icon-circle-check" style="float :left; margin: 0 7px 50px 0;"></span>\n' +
-            '<span id="dialog-message-text-settings"></span>\n' +
-            '</p>\n' +
-            '</div>');
+                '<p>' +
+                '<span id="dialog-message-icon-settings" class="ui-icon ui-icon-circle-check" style="float :left; margin: 0 7px 50px 0;"></span>\n' +
+                '<span id="dialog-message-text-settings"></span>\n' +
+                '</p>\n' +
+                '</div>');
         $dialogMessage = $('#dialog-message-settings');
         $dialogMessage.dialog({
             autoOpen: false,
-            modal:    true,
+            modal: true,
             buttons: [
                 {
                     text: _('Ok'),
@@ -300,18 +310,18 @@ function showMessage(message, title, icon, width) {
 }
 
 function confirmMessage(message, title, icon, buttons, callback) {
-    var $dialogConfirm =        $('#dialog-confirm-settings');
+    var $dialogConfirm = $('#dialog-confirm-settings');
     if (!$dialogConfirm.length) {
         $('body').append('<div id="dialog-confirm-settings" title="Message" style="display: none">\n' +
-            '<p>' +
-            '<span id="dialog-confirm-icon-settings" class="ui-icon ui-icon-circle-check" style="float :left; margin: 0 7px 50px 0;"></span>\n' +
-            '<span id="dialog-confirm-text-settings"></span>\n' +
-            '</p>\n' +
-            '</div>');
+                '<p>' +
+                '<span id="dialog-confirm-icon-settings" class="ui-icon ui-icon-circle-check" style="float :left; margin: 0 7px 50px 0;"></span>\n' +
+                '<span id="dialog-confirm-text-settings"></span>\n' +
+                '</p>\n' +
+                '</div>');
         $dialogConfirm = $('#dialog-confirm-settings');
         $dialogConfirm.dialog({
             autoOpen: false,
-            modal:    true
+            modal: true
         });
     }
     if (typeof buttons === 'function') {
@@ -323,7 +333,8 @@ function confirmMessage(message, title, icon, buttons, callback) {
                     var cb = $(this).data('callback');
                     $(this).data('callback', null);
                     $(this).dialog('close');
-                    if (cb) cb(true);
+                    if (cb)
+                        cb(true);
                 }
             },
             {
@@ -332,7 +343,8 @@ function confirmMessage(message, title, icon, buttons, callback) {
                     var cb = $(this).data('callback');
                     $(this).data('callback', null);
                     $(this).dialog('close');
-                    if (cb) cb(false);
+                    if (cb)
+                        cb(false);
                 }
             }
 
@@ -346,7 +358,8 @@ function confirmMessage(message, title, icon, buttons, callback) {
                     var id = parseInt(e.currentTarget.id.substring('dialog-confirm-button-'.length), 10);
                     var cb = $(this).data('callback');
                     $(this).dialog('close');
-                    if (cb) cb(id);
+                    if (cb)
+                        cb(id);
                 }
             }
         }
@@ -357,9 +370,9 @@ function confirmMessage(message, title, icon, buttons, callback) {
     $('#dialog-confirm-text-settings').html(message);
     if (icon) {
         $('#dialog-confirm-icon-settings')
-            .show()
-            .attr('class', '')
-            .addClass('ui-icon ui-icon-' + icon);
+                .show()
+                .attr('class', '')
+                .addClass('ui-icon ui-icon-' + icon);
     } else {
         $('#dialog-confirm-icon-settings').hide();
     }
@@ -370,9 +383,11 @@ function confirmMessage(message, title, icon, buttons, callback) {
 function getObject(id, callback) {
     socket.emit('getObject', id, function (err, res) {
         if (!err && res) {
-            if (callback) callback(err, res);
+            if (callback)
+                callback(err, res);
         } else {
-            if (callback) callback(null);
+            if (callback)
+                callback(null);
         }
     });
 }
@@ -380,9 +395,11 @@ function getObject(id, callback) {
 function getState(id, callback) {
     socket.emit('getState', id, function (err, res) {
         if (!err && res) {
-            if (callback) callback(err, res);
+            if (callback)
+                callback(err, res);
         } else {
-            if (callback) callback(null);
+            if (callback)
+                callback(null);
         }
     });
 }
@@ -390,14 +407,17 @@ function getState(id, callback) {
 function getEnums(_enum, callback) {
     socket.emit('getObjectView', 'system', 'enum', {startkey: 'enum.' + _enum, endkey: 'enum.' + _enum + '.\u9999'}, function (err, res) {
         if (!err && res) {
-            var _res   = {};
+            var _res = {};
             for (var i = 0; i < res.rows.length; i++) {
-                if (res.rows[i].id === 'enum.' + _enum) continue;
+                if (res.rows[i].id === 'enum.' + _enum)
+                    continue;
                 _res[res.rows[i].id] = res.rows[i].value;
             }
-            if (callback) callback(null, _res);
+            if (callback)
+                callback(null, _res);
         } else {
-            if (callback) callback(err, []);
+            if (callback)
+                callback(err, []);
         }
     });
 }
@@ -405,13 +425,15 @@ function getEnums(_enum, callback) {
 function getGroups(callback) {
     socket.emit('getObjectView', 'system', 'group', {startkey: 'system.group.', endkey: 'system.group.\u9999'}, function (err, res) {
         if (!err && res) {
-            var _res   = {};
+            var _res = {};
             for (var i = 0; i < res.rows.length; i++) {
                 _res[res.rows[i].id] = res.rows[i].value;
             }
-            if (callback) callback(null, _res);
+            if (callback)
+                callback(null, _res);
         } else {
-            if (callback) callback(err, []);
+            if (callback)
+                callback(err, []);
         }
     });
 }
@@ -419,13 +441,15 @@ function getGroups(callback) {
 function getUsers(callback) {
     socket.emit('getObjectView', 'system', 'user', {startkey: 'system.user.', endkey: 'system.user.\u9999'}, function (err, res) {
         if (!err && res) {
-            var _res   = {};
+            var _res = {};
             for (var i = 0; i < res.rows.length; i++) {
                 _res[res.rows[i].id] = res.rows[i].value;
             }
-            if (callback) callback(null, _res);
+            if (callback)
+                callback(null, _res);
         } else {
-            if (callback) callback(err, []);
+            if (callback)
+                callback(err, []);
         }
     });
 }
@@ -434,7 +458,7 @@ function fillUsers(elemId, current, callback) {
     getUsers(function (err, users) {
         var text = '';
         for (var u in users) {
-            text += '<option value="' + u + '" ' + ((current === u) ? 'selected' : '') + ' >' + users[u].common.name[0].toUpperCase() + users[u].common.name.substring(1)  + '</option>\n';
+            text += '<option value="' + u + '" ' + ((current === u) ? 'selected' : '') + ' >' + users[u].common.name[0].toUpperCase() + users[u].common.name.substring(1) + '</option>\n';
         }
         $(elemId).html(text);
     });
@@ -450,7 +474,7 @@ function getIPs(host, callback) {
         if (_host) {
             host = _host;
             var IPs4 = [{name: '[IPv4] 0.0.0.0 - ' + _('Listen on all IPs'), address: '0.0.0.0', family: 'ipv4'}];
-            var IPs6 = [{name: '[IPv6] ::',      address: '::',      family: 'ipv6'}];
+            var IPs6 = [{name: '[IPv6] ::', address: '::', family: 'ipv6'}];
             if (host.native.hardware && host.native.hardware.networkInterfaces) {
                 for (var eth in host.native.hardware.networkInterfaces) {
                     for (var num = 0; num < host.native.hardware.networkInterfaces[eth].length; num++) {
@@ -474,13 +498,16 @@ function fillSelectIPs(id, actualAddr, noIPv4, noIPv6, callback) {
     getIPs(function (ips) {
         var str = '';
         for (var i = 0; i < ips.length; i++) {
-            if (noIPv4 && ips[i].family === 'ipv4') continue;
-            if (noIPv6 && ips[i].family === 'ipv6') continue;
+            if (noIPv4 && ips[i].family === 'ipv4')
+                continue;
+            if (noIPv6 && ips[i].family === 'ipv6')
+                continue;
             str += '<option value="' + ips[i].address + '" ' + ((ips[i].address === actualAddr) ? 'selected' : '') + '>' + ips[i].name + '</option>';
         }
 
         $(id).html(str);
-        if (typeof callback === 'function') callback();
+        if (typeof callback === 'function')
+            callback();
     });
 }
 
@@ -496,7 +523,8 @@ function sendToHost(host, command, message, callback) {
 function fillSelectCertificates(id, type, actualValued) {
     var str = '<option value="">' + _('none') + '</option>';
     for (var i = 0; i < certs.length; i++) {
-        if (certs[i].type != type) continue;
+        if (certs[i].type != type)
+            continue;
         str += '<option value="' + certs[i].name + '" ' + ((certs[i].name === actualValued) ? 'selected' : '') + '>' + certs[i].name + '</option>';
     }
 
@@ -511,16 +539,19 @@ function getAdapterInstances(_adapter, callback) {
 
     socket.emit('getObjectView', 'system', 'instance', {startkey: 'system.adapter.' + (_adapter || adapter), endkey: 'system.adapter.' + (_adapter || adapter) + '.\u9999'}, function (err, doc) {
         if (err) {
-            if (callback) callback ([]);
+            if (callback)
+                callback([]);
         } else {
             if (doc.rows.length === 0) {
-                if (callback) callback ([]);
+                if (callback)
+                    callback([]);
             } else {
                 var res = [];
                 for (var i = 0; i < doc.rows.length; i++) {
                     res.push(doc.rows[i].value);
                 }
-                if (callback) callback (res);
+                if (callback)
+                    callback(res);
             }
         }
 
@@ -535,10 +566,12 @@ function getExtendableInstances(_adapter, callback) {
 
     socket.emit('getObjectView', 'system', 'instance', null, function (err, doc) {
         if (err) {
-            if (callback) callback ([]);
+            if (callback)
+                callback([]);
         } else {
             if (doc.rows.length === 0) {
-                if (callback) callback ([]);
+                if (callback)
+                    callback([]);
             } else {
                 var res = [];
                 for (var i = 0; i < doc.rows.length; i++) {
@@ -546,7 +579,8 @@ function getExtendableInstances(_adapter, callback) {
                         res.push(doc.rows[i].value);
                     }
                 }
-                if (callback) callback (res);
+                if (callback)
+                    callback(res);
             }
         }
     });
@@ -573,7 +607,7 @@ function getIsAdapterAlive(_adapter, callback) {
 // _isInitial - [optional] - if it is initial fill of the table. To not trigger the onChange
 function addToTable(tabId, value, $grid, _isInitial) {
     $grid = $grid || $('#' + tabId);
-    var obj  = {_id: $grid[0]._maxIdx++};
+    var obj = {_id: $grid[0]._maxIdx++};
     var cols = $grid[0]._cols;
 
     for (var i = 0; i < cols.length; i++) {
@@ -584,16 +618,17 @@ function addToTable(tabId, value, $grid, _isInitial) {
         }
     }
     obj._commands =
-        '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-edit-submit">'                        + _('edit')   + '</button>' +
-        '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-delete-submit">'                      + _('delete') + '</button>' +
-        '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-ok-submit" style="display:none">'     + _('ok')     + '</button>' +
-        '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-cancel-submit" style="display:none">' + _('cancel') + '</button>';
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-edit-submit">' + _('edit') + '</button>' +
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-delete-submit">' + _('delete') + '</button>' +
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-ok-submit" style="display:none">' + _('ok') + '</button>' +
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-cancel-submit" style="display:none">' + _('cancel') + '</button>';
 
     $grid.jqGrid('addRowData', tabId + '_' + obj._id, obj);
 
     _editInitButtons($grid, tabId, obj._id);
 
-    if (!_isInitial && $grid[0]._onChange) $grid[0]._onChange('add', value);
+    if (!_isInitial && $grid[0]._onChange)
+        $grid[0]._onChange('add', value);
 }
 
 function _editInitButtons($grid, tabId, objId) {
@@ -601,7 +636,7 @@ function _editInitButtons($grid, tabId, objId) {
 
     $('.' + tabId + '-edit-submit' + search).unbind('click').button({
         icons: {primary: 'ui-icon-pencil'},
-        text:  false
+        text: false
     }).click(function () {
         var id = $(this).attr('data-' + tabId + '-id');
 
@@ -617,12 +652,13 @@ function _editInitButtons($grid, tabId, objId) {
         changed = true;
         $('#save').button('enable');
         $('#saveclose').button('enable');
-        if (onChangeSupported) $('#close .ui-button-text').html(_('cancel'));
+        if (onChangeSupported)
+            $('#close .ui-button-text').html(_('cancel'));
     }).css({'height': '18px', width: '22px'});
 
     $('.' + tabId + '-delete-submit' + search).unbind('click').button({
         icons: {primary: 'ui-icon-trash'},
-        text:  false
+        text: false
     }).click(function () {
         var id = $(this).attr('data-' + tabId + '-id');
         $grid.jqGrid('delRowData', tabId + '_' + id);
@@ -630,18 +666,20 @@ function _editInitButtons($grid, tabId, objId) {
         changed = true;
         $('#save').button('enable');
         $('#saveclose').button('enable');
-        if (onChangeSupported) $('#close .ui-button-text').html(_('cancel'));
+        if (onChangeSupported)
+            $('#close .ui-button-text').html(_('cancel'));
 
         var pos = $grid[0]._edited.indexOf(id);
         if (pos !== -1) {
             $grid[0]._edited.splice(pos, 1);
         }
-        if ($grid[0]._onChange) $grid[0]._onChange('del', id);
+        if ($grid[0]._onChange)
+            $grid[0]._onChange('del', id);
     }).css({'height': '18px', width: '22px'});
 
     $('.' + tabId + '-ok-submit' + search).unbind('click').button({
         icons: {primary: 'ui-icon-check'},
-        text:  false
+        text: false
     }).click(function () {
         var id = $(this).attr('data-' + tabId + '-id');
 
@@ -655,18 +693,20 @@ function _editInitButtons($grid, tabId, objId) {
         changed = true;
         $('#save').button('enable');
         $('#saveclose').button('enable');
-        if (onChangeSupported) $('#close .ui-button-text').html(_('cancel'));
+        if (onChangeSupported)
+            $('#close .ui-button-text').html(_('cancel'));
 
         var pos = $grid[0]._edited.indexOf(id);
         if (pos !== -1) {
             $grid[0]._edited.splice(pos, 1);
         }
-        if ($grid[0]._onChange) $grid[0]._onChange('changed', $grid.jqGrid('getRowData', tabId + '_' + id));
+        if ($grid[0]._onChange)
+            $grid[0]._onChange('changed', $grid.jqGrid('getRowData', tabId + '_' + id));
     }).css({'height': '18px', width: '22px'});
 
     $('.' + tabId + '-cancel-submit' + search).unbind('click').button({
         icons: {primary: 'ui-icon-close'},
-        text:  false
+        text: false
     }).click(function () {
         var id = $(this).attr('data-' + tabId + '-id');
 
@@ -686,13 +726,14 @@ function _editInitButtons($grid, tabId, objId) {
 function _editTable(tabId, cols, values, rooms, top, onChange) {
     var title = 'Device list';
     if (typeof tabId === 'object') {
-        cols     = tabId.cols;
-        values   = tabId.values;
-        rooms    = tabId.rooms;
-        top      = tabId.top;
+        cols = tabId.cols;
+        values = tabId.values;
+        rooms = tabId.rooms;
+        top = tabId.top;
         onChange = tabId.onChange;
-        if (tabId.title) title = tabId.title;
-        tabId    = tabId.tabId;
+        if (tabId.title)
+            title = tabId.title;
+        tabId = tabId.tabId;
     }
 
     initGridLanguage(systemLang);
@@ -703,29 +744,31 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
 
     colNames.push('id');
     colModel.push({
-        name:    '_id',
-        index:   '_id',
-        hidden:  true
+        name: '_id',
+        index: '_id',
+        hidden: true
     });
     for (var i = 0; i < cols.length; i++) {
         var width = null;
         var checkbox = null;
 
         if (typeof cols[i] === 'object') {
-            width  = cols[i].width;
-            if (cols[i].checkbox) checkbox = true;
+            width = cols[i].width;
+            if (cols[i].checkbox)
+                checkbox = true;
             cols[i] = cols[i].name;
         }
         colNames.push(_(cols[i]));
         var _obj = {
-            name:     cols[i],
-            index:    cols[i],
+            name: cols[i],
+            index: cols[i],
 //                width:    160,
             editable: true
         };
-        if (width) _obj.width = width;
+        if (width)
+            _obj.width = width;
         if (checkbox) {
-            _obj.edittype    = 'checkbox';
+            _obj.edittype = 'checkbox';
             _obj.editoptions = {value: 'true:false'};
         }
 
@@ -734,11 +777,11 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             for (room in rooms) {
                 list[room] = _(rooms[room].common.name);
             }
-            _obj.stype =         'select';
-            _obj.edittype =      'select';
-            _obj.editoptions =   {value: list};
+            _obj.stype = 'select';
+            _obj.edittype = 'select';
+            _obj.editoptions = {value: list};
             _obj.searchoptions = {
-                sopt:  ['eq'],
+                sopt: ['eq'],
                 value: ':' + _('all')
             };
             for (room in rooms) {
@@ -750,22 +793,22 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
     colNames.push('');
     colModel.push({name: '_commands', index: '_commands', width: 50, editable: false, align: 'center', search: false});
 
-    $grid[0]._cols     = cols;
-    $grid[0]._rooms    = rooms;
-    $grid[0]._maxIdx   = 0;
-    $grid[0]._top      = top;
-    $grid[0]._edited   = [];
+    $grid[0]._cols = cols;
+    $grid[0]._rooms = rooms;
+    $grid[0]._maxIdx = 0;
+    $grid[0]._top = top;
+    $grid[0]._edited = [];
     $grid[0]._onChange = onChange;
 
     $grid.jqGrid({
-        datatype:  'local',
-        colNames:  colNames,
-        colModel:  colModel,
-        width:     800,
-        height:    330,
-        pager:     $('#pager-' + tabId),
-        rowNum:    1000,
-        rowList:   [1000],
+        datatype: 'local',
+        colNames: colNames,
+        colModel: colModel,
+        width: 800,
+        height: 330,
+        pager: $('#pager-' + tabId),
+        rowNum: 1000,
+        rowList: [1000],
         ondblClickRow: function (rowid) {
             var id = rowid.substring((tabId + '_').length);
             $('.' + tabId + '-edit-submit').hide();
@@ -773,14 +816,16 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             $('.' + tabId + '-ok-submit[data-' + tabId + '-id="' + id + '"]').show();
             $('.' + tabId + '-cancel-submit[data-' + tabId + '-id="' + id + '"]').show();
             $grid.jqGrid('editRow', rowid, {url: 'clientArray'});
-            if ($grid[0]._edited.indexOf(id) === -1) $grid[0]._edited.push(id);
+            if ($grid[0]._edited.indexOf(id) === -1)
+                $grid[0]._edited.push(id);
 
             changed = true;
             $('#save').button('enable');
             $('#saveclose').button('enable');
-            if (onChangeSupported) $('#close .ui-button-text').html(_('cancel'));
+            if (onChangeSupported)
+                $('#close .ui-button-text').html(_('cancel'));
         },
-        sortname:  'id',
+        sortname: 'id',
         sortorder: 'desc',
         viewrecords: false,
         pgbuttons: false,
@@ -795,14 +840,15 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             changed = true;
             $('#save').button('enable');
             $('#saveclose').button('enable');
-            if (onChangeSupported) $('#close .ui-button-text').html(_('cancel'));
+            if (onChangeSupported)
+                $('#close .ui-button-text').html(_('cancel'));
         }
     }).jqGrid('filterToolbar', {
         defaultSearch: 'cn',
-        autosearch:    true,
+        autosearch: true,
         searchOnEnter: false,
-        enableClear:   false,
-        afterSearch:   function () {
+        enableClear: false,
+        afterSearch: function () {
             _editInitButtons($grid, tabId);
         }
     });
@@ -811,10 +857,10 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
 
     if ($('#pager-' + tabId).length) {
         $grid.navGrid('#pager-' + tabId, {
-            search:  false,
-            edit:    false,
-            add:     false,
-            del:     false,
+            search: false,
+            edit: false,
+            add: false,
+            del: false,
             refresh: false
         }).jqGrid('navButtonAdd', '#pager-' + tabId, {
             caption: '',
@@ -830,7 +876,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
                     found = true;
                     for (var _id = 0; _id < ids.length; _id++) {
                         obj = $grid.jqGrid('getRowData', ids[_id]);
-                        if (obj && obj[$grid[0]._cols[0]] === newText + idx)  {
+                        if (obj && obj[$grid[0]._cols[0]] === newText + idx) {
                             idx++;
                             found = false;
                             break;
@@ -847,14 +893,15 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
                 changed = true;
                 $('#save').button('enable');
                 $('#saveclose').button('enable');
-                if (onChangeSupported) $('#close .ui-button-text').html(_('cancel'));
+                if (onChangeSupported)
+                    $('#close .ui-button-text').html(_('cancel'));
 
                 addToTable(tabId, obj, $grid);
             },
             position: 'first',
-            id:       'add-cert',
-            title:    _('new device'),
-            cursor:   'pointer'
+            id: 'add-cert',
+            title: _('new device'),
+            cursor: 'pointer'
         });
     }
 
@@ -878,8 +925,10 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
 // As input gets the list from getEnum
 function enumName2Id(enums, name) {
     for (var enumId in enums) {
-        if (enums[enumId].common.name === name) return enumId;
-        if (enums[enumId].name && enums[enumId].name === name) return enumId;
+        if (enums[enumId].common.name === name)
+            return enumId;
+        if (enums[enumId].name && enums[enumId].name === name)
+            return enumId;
     }
     return '';
 }
@@ -896,7 +945,7 @@ function enumName2Id(enums, name) {
 // To extract data from table
 function editTable(tabId, cols, values, top, onChange) {
     if (typeof tabId === 'object') {
-        cols     = tabId.cols;
+        cols = tabId.cols;
     }
 
     if (cols.indexOf('room') !== -1) {
@@ -991,8 +1040,8 @@ function getTableResult(tabId, cols) {
 function values2table(divId, values, onChange, onReady) {
     if (typeof values === 'function') {
         onChange = values;
-        values   = divId;
-        divId    = '';
+        values = divId;
+        divId = '';
     }
 
     values = values || [];
@@ -1012,22 +1061,23 @@ function values2table(divId, values, onChange, onReady) {
             icons: {primary: 'ui-icon-plus'},
             text: false
         })
-            //.css({width: '1em', height: '1em'})
-            .click(function () {
-                var $table = $div.find('.table-values');
-                var values = $table.data('values');
-                var names = $table.data('names');
-                var obj = {};
-                for (var i = 0; i < names.length; i++) {
-                    if (!names[i]) continue;
-                    obj[names[i].name] = names[i].def;
-                }
-                values.push(obj);
-                onChange && onChange();
-                setTimeout(function () {
-                    values2table(divId, values, onChange, onReady);
-                }, 100);
-            });
+                //.css({width: '1em', height: '1em'})
+                .click(function () {
+                    var $table = $div.find('.table-values');
+                    var values = $table.data('values');
+                    var names = $table.data('names');
+                    var obj = {};
+                    for (var i = 0; i < names.length; i++) {
+                        if (!names[i])
+                            continue;
+                        obj[names[i].name] = names[i].def;
+                    }
+                    values.push(obj);
+                    onChange && onChange();
+                    setTimeout(function () {
+                        values2table(divId, values, onChange, onReady);
+                    }, 100);
+                });
     }
 
     if (values) {
@@ -1047,8 +1097,10 @@ function values2table(divId, values, onChange, onReady) {
                 nnames.sort(function (a, b) {
                     a = a.toLowerCase();
                     b = b.toLowerCase();
-                    if (a > b) return 1;
-                    if (a < b) return -1;
+                    if (a > b)
+                        return 1;
+                    if (a < b)
+                        return -1;
                     return 0;
                 });
 
@@ -1072,8 +1124,10 @@ function values2table(divId, values, onChange, onReady) {
                 nnames.sort(function (a, b) {
                     a = a.toLowerCase();
                     b = b.toLowerCase();
-                    if (a > b) return 1;
-                    if (a < b) return -1;
+                    if (a > b)
+                        return 1;
+                    if (a < b)
+                        return -1;
                     return 0;
                 });
 
@@ -1089,14 +1143,16 @@ function values2table(divId, values, onChange, onReady) {
             var name = $(this).data('name');
             if (name) {
                 var obj = {
-                    name:    name,
-                    type:    $(this).data('type') || 'text',
-                    def:     $(this).data('default'),
-                    style:   $(this).data('style')
+                    name: name,
+                    type: $(this).data('type') || 'text',
+                    def: $(this).data('default'),
+                    style: $(this).data('style')
                 };
                 if (obj.type === 'checkbox') {
-                    if (obj.def === 'false') obj.def = false;
-                    if (obj.def === 'true')  obj.def = true;
+                    if (obj.def === 'false')
+                        obj.def = false;
+                    if (obj.def === 'true')
+                        obj.def = true;
                     obj.def = !!obj.def;
                 } else if (obj.type === 'select') {
                     var vals = ($(this).data('options') || '').split(';');
@@ -1104,7 +1160,8 @@ function values2table(divId, values, onChange, onReady) {
                     for (var v = 0; v < vals.length; v++) {
                         var parts = vals[v].split('/');
                         obj.options[parts[0]] = _(parts[1] || parts[0]);
-                        if (v === 0) obj.def = (obj.def === undefined) ? parts[0] : obj.def;
+                        if (v === 0)
+                            obj.def = (obj.def === undefined) ? parts[0] : obj.def;
                     }
                 } else {
                     obj.def = obj.def || '';
@@ -1203,79 +1260,81 @@ function values2table(divId, values, onChange, onReady) {
                     icons: {primary: 'ui-icon-trash'},
                     text: false
                 })
-                    .css({width: '1em', height: '1em'})
-                    .click(function () {
-                        var id = $(this).data('index');
-                        values.splice(id, 1);
-                        onChange && onChange();
-                        setTimeout(function () {
-                            values2table(divId, values, onChange, onReady);
-                        }, 100);
-                    });
+                        .css({width: '1em', height: '1em'})
+                        .click(function () {
+                            var id = $(this).data('index');
+                            values.splice(id, 1);
+                            onChange && onChange();
+                            setTimeout(function () {
+                                values2table(divId, values, onChange, onReady);
+                            }, 100);
+                        });
             } else if (command === 'up') {
                 $(this).button({
                     icons: {primary: 'ui-icon-triangle-1-n'},
                     text: false
                 })
-                    .css({width: '1em', height: '1em'})
-                    .click(function () {
-                        var id = $(this).data('index');
-                        var elem = values[id];
-                        values.splice(id, 1);
-                        values.splice(id - 1, 0, elem);
-                        onChange && onChange();
-                        setTimeout(function () {
-                            values2table(id, values, onChange, onReady);
-                        }, 100);
-                    });
+                        .css({width: '1em', height: '1em'})
+                        .click(function () {
+                            var id = $(this).data('index');
+                            var elem = values[id];
+                            values.splice(id, 1);
+                            values.splice(id - 1, 0, elem);
+                            onChange && onChange();
+                            setTimeout(function () {
+                                values2table(id, values, onChange, onReady);
+                            }, 100);
+                        });
             } else if (command === 'down') {
                 $(this).button({
                     icons: {primary: 'ui-icon-triangle-1-s'},
                     text: false
                 })
-                    .css({width: '1em', height: '1em'})
-                    .click(function () {
-                        var id = $(this).data('index');
-                        var elem = values[id];
-                        values.splice(id, 1);
-                        values.splice(id + 1, 0, elem);
-                        onChange && onChange();
-                        setTimeout(function () {
-                            values2table(id, values, onChange, onReady);
-                        }, 100);
-                    });
+                        .css({width: '1em', height: '1em'})
+                        .click(function () {
+                            var id = $(this).data('index');
+                            var elem = values[id];
+                            values.splice(id, 1);
+                            values.splice(id + 1, 0, elem);
+                            onChange && onChange();
+                            setTimeout(function () {
+                                values2table(id, values, onChange, onReady);
+                            }, 100);
+                        });
             } else if (command === 'edit') {
                 $(this).button({
                     icons: {primary: 'ui-icon-pencil'},
                     text: false
                 })
-                    .css({width: '1em', height: '1em'})
-                    .click(function () {
-                        var id = $(this).data('index');
-                        var elem = values[id];
-                        if (typeof editLine === 'function') {
-                            setTimeout(function () {
-                                editLine(id, JSON.parse(JSON.stringify(values[id])), function (err, id, newValues) {
-                                    if (!err) {
-                                        if (JSON.stringify(values[id]) !== JSON.stringify(newValues)) {
-                                            onChange && onChange();
-                                            values[id] = newValues;
-                                            _values2table(id, values, onChange, onReady);
+                        .css({width: '1em', height: '1em'})
+                        .click(function () {
+                            var id = $(this).data('index');
+                            var elem = values[id];
+                            if (typeof editLine === 'function') {
+                                setTimeout(function () {
+                                    editLine(id, JSON.parse(JSON.stringify(values[id])), function (err, id, newValues) {
+                                        if (!err) {
+                                            if (JSON.stringify(values[id]) !== JSON.stringify(newValues)) {
+                                                onChange && onChange();
+                                                values[id] = newValues;
+                                                _values2table(id, values, onChange, onReady);
+                                            }
                                         }
-                                    }
-                                });
-                            }, 100);
-                        }
-                    });
+                                    });
+                                }, 100);
+                            }
+                        });
             }
         });
 
         $lines.find('.values-input').change(function () {
             if ($(this).attr('type') === 'checkbox') {
-                if ($(this).prop('checked').toString() !== $(this).data('old-value')) onChange();
+                if ($(this).prop('checked').toString() !== $(this).data('old-value'))
+                    onChange();
                 values[$(this).data('index')][$(this).data('name')] = $(this).prop('checked');
             } else {
-                if ($(this).val() !== $(this).data('old-value')) onChange();
+                if ($(this).val() !== $(this).data('old-value'))
+                    onChange();
                 values[$(this).data('index')][$(this).data('name')] = $(this).val();
 
             }
@@ -1283,7 +1342,8 @@ function values2table(divId, values, onChange, onReady) {
             $(this).trigger('change');
         });
     }
-    if (typeof onReady === 'function') onReady();
+    if (typeof onReady === 'function')
+        onReady();
 }
 
 /**
