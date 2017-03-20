@@ -7,13 +7,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ioBroker - Automate your life!</title>
-        <link href="lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="lib/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../lib/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <link href="../css/admin.css" rel="stylesheet" type="text/css"/>
     </head>
     <body class="login">
         <div class="login_wrapper">
-            <div class="animate form login_form">
+            <div class="animate form login_form" id="loginForm">
                 <section class="login_content">
                     <form action="/login" method="post">
                         <h1>ioBroker Login</h1>
@@ -24,9 +24,9 @@
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required="" />
                         </div>
                         <div>
-                            <a class="btn btn-default submit" href="index.html">Log in</a>
+                            <a class="btn btn-default submit" id="submit" href="#" data-i18n="login">login</a>
                         </div>
-                        <div id="error" class="error" style="display:none"></div>
+                        <div id="error" class="alert alert-warning" style="display: none;"></div>
 
                         <div class="clearfix"></div>
 
@@ -39,5 +39,18 @@
                 </section>
             </div>
         </div>
+        
+        <script src="../lib/js/jquery.min.js"></script>
+        <script src="../lib/js/CLDRPluralRuleParser.js"></script>
+        <script src="../lib/js/jquery.i18n.js"></script>
+        <script src="../lib/js/jquery.i18n.messagestore.js"></script>
+        <script src="../lib/js/jquery.i18n.fallbacks.js"></script>
+        <script src="../lib/js/jquery.i18n.parser.js"></script>
+        <script src="../lib/js/jquery.i18n.emitter.js"></script>
+        <script src="../lib/js/jquery.i18n.language.js"></script>
+        <script src="../lib/js/bootstrap.min.js"></script>
+
+        <script src="../js/login.js"></script>
+        
     </body>
 </html>
