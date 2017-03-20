@@ -46,7 +46,7 @@
   "bugs": {
     "url": "https://github.com/ldittmar81/ioBroker.admin-neo/issues"
   },
-  "main": "admin-neo.js",
+  "main": "main.js",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha"
   },
