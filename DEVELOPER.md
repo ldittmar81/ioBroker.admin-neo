@@ -1,15 +1,16 @@
 ![Logo](admin/admin-neo.png)
 # ioBroker.admin-neo developer guide
-===================
 
 ## Bibliotheken
+
 ### CSS
-*Bootstrap 3.3.7 http://getbootstrap.com/
-*Font Awesome 4.7.0 http://fontawesome.io/examples/
+* Bootstrap 3.3.7 http://getbootstrap.com/
+* Font Awesome 4.7.0 http://fontawesome.io/examples/
+
 ### JS
-*Bootstrap 3.3.7 http://getbootstrap.com/
-*jQuery 3.3.1 https://api.jquery.com/
-*jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
+* Bootstrap 3.3.7 http://getbootstrap.com/
+* jQuery 3.3.1 https://api.jquery.com/
+* jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations
