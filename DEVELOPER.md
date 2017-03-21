@@ -6,12 +6,16 @@
 ### CSS
 * Bootstrap 3.3.7 http://getbootstrap.com/
 * Font Awesome 4.7.0 http://fontawesome.io/examples/
+* Animate.css 3.5.2 https://daneden.github.io/animate.css/
 
 ### JS
 * Bootstrap 3.3.7 http://getbootstrap.com/
 * jQuery 3.3.1 https://api.jquery.com/
 * jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
 * iCheck 1.0.2 http://icheck.fronteed.com/
+* Parsley 2.7.0 http://parsleyjs.org/
+* PNotify 3.0.0 https://sciactive.github.io/pnotify/
+* jQuery Inputmask 3.3.4 http://robinherbots.github.io/Inputmask/
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations
