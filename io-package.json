@@ -5,15 +5,17 @@
         "version": "0.0.1",
         "news": {            
             "0.0.1": {
-				"en": "initial commit",
-				"de": "Initiale Version",
-				"ru": "Первая версия"
-			}
+                                    "en": "initial commit",
+                                    "de": "Initiale Version",
+                                    "ru": "Первая версия",
+                                    "pt": "Versão inicial"
+            }
         },
         "desc": {
             "en":                   "Opens a webserver for the ioBroker admin neo UI",
             "de":                   "Stellt Webserver für 'ioBroker Admin Neo UI' zur Verfügung",
-            "ru":                   "Запускает веб сервер с 'ioBroker admin neo UI' для удобной настройки через веб интерфейс"
+            "ru":                   "Запускает веб сервер с 'ioBroker admin neo UI' для удобной настройки через веб интерфейс",
+            "pt":                   "Abre um servidor web para o ioBroker Admin Neo UI'"
         },
         "mode":                     "daemon",
         "platform":                 "Javascript/Node.js",
@@ -24,10 +26,8 @@
         "extIcon":                  "https://raw.githubusercontent.com/ldittmar81/ioBroker.admin-neo/master/admin/admin-neo.png",
         "keywords":                 ["setup", "config", "update", "upgrade", "system", "konfiguration", "administration", "einrichtung", "wartung"],
         "readme":                   "https://github.com/ldittmar81/ioBroker.admin-neo/blob/master/README.md",
-        "authors": [
-            "ldittmar <iobroker@lmdsoft.de>"
-        ],
-        "dependencies":             [{"js-controller": ">=0.12.0"}],
+        "authors":                  ["ldittmar <iobroker@lmdsoft.de>"],
+        "dependencies":             [{"js-controller": ">=0.16.0"}],
         "type":                     "common adapters",
         "license":                  "MIT",
         "logTransporter":           true,
@@ -56,12 +56,12 @@
     ],
     "instanceObjects": [
         {
-            "_id":  "info",
-            "type": "channel",
+            "_id":                  "info",
+            "type":                 "channel",
             "common": {
-                "name": "Information"
+                                    "name": "Information"
             },
-            "native": {}
+            "native":               {}
         }
     ]
 }

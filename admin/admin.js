@@ -144,12 +144,3 @@ function save(callback) {
 
     callback(obj, null, href);
 }
-
-$(function () {
-    i18n.locale = systemLang;
-    i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
-
-        $("[data-i18n]").i18n();
-    });
-
-});

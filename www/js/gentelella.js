@@ -1,3 +1,5 @@
+/* global i18n, systemLang */
+
 'use strict';
 
 var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
@@ -145,16 +147,8 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
     });
     // /Panel toolbox
 
-    // Tooltip
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip({
-            container: 'body'
-        });
-    });
-    // /Tooltip
-
     // iCheck
-    $(document).ready(function () {
+    $(function () {
         $('input[type=checkbox], input[type=radio]').iCheck({
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
@@ -163,7 +157,7 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
     // /iCheck
 
     // Accordion
-    $(document).ready(function () {
+    $(function () {
         $(".expand").on("click", function () {
             $(this).next().slideToggle(200);
             $expand = $(this).find(">:first-child");
@@ -173,8 +167,23 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
                 $expand.text("+");
             }
         });
-    })
-            ;
+    });
     // /Accordion
+
+    // Translation/Tooltip
+    $(function () {
+        i18n.locale = systemLang;
+        i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
+            $("[data-i18n]").i18n();
+            $("[data-i18n-tooltip]").each(function () {
+                var $this = $(this);
+                $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
+            });
+            $('[data-toggle="tooltip"]').tooltip({
+                container: 'body'
+            });
+        });
+    });
+    // / Translation/Tooltip  
 
 })(jQuery);

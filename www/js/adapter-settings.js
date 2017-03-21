@@ -26,7 +26,7 @@ $(document).ready(function () {
             translateAll();
         loadSettings(prepareTooltips);
     });
-   
+
     $('body').wrapInner('<div style="height: calc(100% - 44px); width: 100%; overflow:auto"></div>');
     $('.container-fluid').prepend('<div class="row">' +
             '<button type="button" id="save" class="btn btn-default" data-i18n="save">save</button>&nbsp;' +
