@@ -1,4 +1,4 @@
-/* global systemLang, i18n */
+/* global systemLang, i18n, availableLanguages */
 
 'use strict';
 
@@ -1198,10 +1198,11 @@
                                             if (!main.systemConfig.common.licenseConfirmed) {
                                                 // Show license agreement
                                                 var language = main.systemConfig.common.language || window.navigator.userLanguage || window.navigator.language;
-                                                if (language !== 'en' && language !== 'de' && language !== 'ru')
+                                                if (!(language in availableLanguages)){
                                                     language = 'en';
+                                                }
 
-                                                $('#license_text').html(license[language] || license.en);
+                                                $('#license_text').html($.i18n('license'));
                                                 $('#license_language_label').html(translateWord('Select language', language));
 
                                                 $('#license_checkbox')
@@ -1219,7 +1220,7 @@
                                                         .change(function () {
                                                             language = $(this).val();
                                                             $('#license_language_label').html(translateWord('Select language', language));
-                                                            $('#license_text').html(license[language] || license.en);
+                                                            $('#license_text').html($.i18n('license'));
                                                             $('#license_checkbox').html(translateWord('license_checkbox', language));
                                                             $('#license_agree .ui-button-text').html(translateWord('agree', language));
                                                             $('#license_non_agree .ui-button-text').html(translateWord('not agree', language));
@@ -1307,7 +1308,7 @@
                                             };
                                             main.systemConfig.common.language = window.navigator.userLanguage || window.navigator.language;
 
-                                            if (main.systemConfig.common.language !== 'en' && main.systemConfig.common.language !== 'de' && main.systemConfig.common.language !== 'ru') {
+                                            if (!(main.systemConfig.common.language in availableLanguages)) {
                                                 main.systemConfig.common.language = 'en';
                                             }
                                         }

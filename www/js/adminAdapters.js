@@ -1,3 +1,5 @@
+/* global systemLang, availableLanguages */
+
 function Adapters(main) {
     'use strict';
 
@@ -492,7 +494,7 @@ function Adapters(main) {
             for (var v in adapter.news) {
                 if (systemLang === v)
                     text += (text ? '\n' : '') + adapter.news[v];
-                if (v === 'en' || v === 'ru' || v === 'de')
+                if (v in availableLanguages)
                     continue;
                 if (v === actualVersion)
                     break;
