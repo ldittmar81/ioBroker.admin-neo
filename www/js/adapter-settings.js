@@ -1,4 +1,4 @@
-/* global io */
+/* global io, save, load */
 
 var path = location.pathname;
 var parts = path.split('/');
@@ -22,19 +22,17 @@ $(document).ready(function () {
     var id = 'system.adapter.' + adapter + '.' + instance;
 
     loadSystemConfig(function () {
-        if (typeof translateAll === 'function')
-            translateAll();
-        loadSettings(prepareTooltips);
+        loadSettings();
     });
 
     $('body').wrapInner('<div style="height: calc(100% - 44px); width: 100%; overflow:auto"></div>');
     $('.container-fluid').prepend('<div class="row">' +
-            '<button type="button" id="save" class="btn btn-default" data-i18n="save">save</button>&nbsp;' +
-            '<button type="button" id="saveclose" class="btn btn-default" data-i18n="saveclose">saveclose</button>&nbsp;' +
-            '<button type="button" id="close" class="btn btn-default" data-i18n="cancel">cancel</button>&nbsp;' +
+            '<button type="button" id="save" class="btn btn-default"><i class="fa fa-floppy-o fa-lg"></i> <span data-i18n="save">save</span></button>&nbsp;' +
+            '<button type="button" id="saveclose" class="btn btn-default"><i class="fa fa-floppy-o fa-lg"></i> <span data-i18n="saveclose">saveclose</span></button>&nbsp;' +
+            '<button type="button" id="close" class="btn btn-default"><i class="fa fa-ban fa-lg"></i> <span data-i18n="cancel">cancel</span></button>&nbsp;' +
             '</div>');
 
-    $('button#save').button({icons: {primary: 'ui-icon-disk'}}).click(function () {
+    $('button#save').click(function () {
         if (typeof save === 'undefined') {
             alert('Please implement save function in your admin/index.html');
             return;
@@ -46,10 +44,7 @@ $(document).ready(function () {
             saveSettings(obj, common);
         });
     });
-    $('button#saveclose').button({icons: {
-            primary: 'ui-icon-disk',
-            secondary: 'ui-icon-close'
-        }}).click(function () {
+    $('button#saveclose').click(function () {
         if (typeof save === 'undefined') {
             alert('Please implement save function in your admin/index.html');
             return;
@@ -66,7 +61,7 @@ $(document).ready(function () {
             });
         });
     });
-    $('button#close').button({icons: {primary: 'ui-icon-close'}}).click(function () {
+    $('button#close').click(function () {
         window.close();
         if (typeof parent !== 'undefined' && parent && parent.$iframeDialog) {
             parent.$iframeDialog.dialog('close');
@@ -99,9 +94,10 @@ $(document).ready(function () {
                 }
                 changed = false;
                 if (onChangeSupported) {
-                    $('#save').button('disable');
-                    $('#saveclose').button('disable');
-                    $('#close .ui-button-text').html(_('close'));
+                    $('#save').prop('disabled', true);
+                    $('#saveclose').prop('disabled', true);
+                    $('#close .fa').removeClass("fa-ban").addClass("fa-window-close");
+                    $('#close span').html($.i18n('close'));
                 }
                 if (callback)
                     callback();
@@ -153,14 +149,16 @@ $(document).ready(function () {
         onChangeSupported = true;
         if (typeof isChanged === 'boolean' && isChanged === false) {
             changed = false;
-            $('#save').button('disable');
-            $('#saveclose').button('disable');
-            $('#close .ui-button-text').html(_('close'));
+            $('#save').prop('disabled', true);
+            $('#saveclose').prop('disabled', true);
+            $('#close .fa').removeClass("fa-ban").addClass("fa-window-close");
+            $('#close span').html($.i18n('close'));
         } else {
             changed = true;
-            $('#save').button('enable');
-            $('#saveclose').button('enable');
-            $('#close .ui-button-text').html(_('cancel'));
+            $('#save').prop('disabled', false);
+            $('#saveclose').prop('disabled', false);
+            $('#close .fa').removeClass("fa-window-close").addClass("fa-ban");
+            $('#close span').html($.i18n('cancel'));
         }
     }
 
@@ -189,84 +187,6 @@ $(document).ready(function () {
         });
     }
 });
-
-function prepareTooltips() {
-    $('.admin-icon').each(function () {
-        var id = $(this).data('id');
-        if (!id) {
-            var $prev = $(this).prev();
-            var $input = $prev.find('input');
-            if (!$input.length) {
-                $input = $prev.find('select');
-            }
-            if (!$input.length) {
-                $prev = $prev.parent();
-                $input = $prev.find('input');
-                if (!$input.length) {
-                    $input = $prev.find('select');
-                }
-            }
-            if ($input.length) {
-                id = $input.attr('id');
-            }
-        }
-
-        if (!id)
-            return;
-
-        var tooltip = '';
-        if (systemDictionary['tooltip_' + id]) {
-            tooltip = systemDictionary['tooltip_' + id][systemLang] || systemDictionary['tooltip_' + id].en;
-        }
-
-        var icon = '';
-        var link = $(this).data('link');
-        if (link) {
-            if (link === true) {
-                if (common.readme) {
-                    link = common.readme + '#' + id;
-                } else {
-                    link = 'https://github.com/ioBroker/ioBroker.' + common.name + '#' + id;
-                }
-            }
-            if (!link.match('^https?:\/\/')) {
-                if (common.readme) {
-                    link = common.readme + '#' + link;
-                } else {
-                    link = 'https://github.com/ioBroker/ioBroker.' + common.name + '#' + link;
-                }
-            }
-            icon += '<a class="admin-tooltip-link" target="config_help" href="' + link + '" title="' + (tooltip || systemDictionary.htooltip[systemLang]) + '"><img class="admin-tooltip-icon" src="../../img/info.png" /></a>';
-        } else if (tooltip) {
-            icon += '<img class="admin-tooltip-icon" title="' + tooltip + '" src="../../img/info.png"/>';
-        }
-
-        if (icon) {
-            $(this).html(icon);
-        }
-    });
-    $('.admin-text').each(function () {
-        var id = $(this).data('id');
-        if (!id) {
-            var $prev = $(this).prev();
-            var $input = $prev.find('input');
-            if (!$input.length) {
-                $input = $prev.find('select');
-            }
-            if ($input.length) {
-                id = $input.attr('id');
-            }
-        }
-
-        if (!id)
-            return;
-
-        // check if translation for this exist
-        if (systemDictionary['info_' + id]) {
-            $(this).html('<span class="admin-tooltip-text">' + (systemDictionary['info_' + id][systemLang] || systemDictionary['info_' + id].en) + '</span>');
-        }
-    });
-}
 
 function showMessage(message, title, icon, width) {
     var $dialogMessage = $('#dialog-message-settings');
@@ -650,10 +570,12 @@ function _editInitButtons($grid, tabId, objId) {
             $grid[0]._edited.push(id);
         }
         changed = true;
-        $('#save').button('enable');
-        $('#saveclose').button('enable');
-        if (onChangeSupported)
-            $('#close .ui-button-text').html(_('cancel'));
+        $('#save').prop('disabled', false);
+        $('#saveclose').prop('disabled', false);
+        if (onChangeSupported) {
+            $('#close .fa').removeClass("fa-window-close").addClass("fa-ban");
+            $('#close span').html($.i18n('cancel'));
+        }
     }).css({'height': '18px', width: '22px'});
 
     $('.' + tabId + '-delete-submit' + search).unbind('click').button({
@@ -664,10 +586,12 @@ function _editInitButtons($grid, tabId, objId) {
         $grid.jqGrid('delRowData', tabId + '_' + id);
 
         changed = true;
-        $('#save').button('enable');
-        $('#saveclose').button('enable');
-        if (onChangeSupported)
-            $('#close .ui-button-text').html(_('cancel'));
+        $('#save').prop('disabled', false);
+        $('#saveclose').prop('disabled', false);
+        if (onChangeSupported) {
+            $('#close .fa').removeClass("fa-window-close").addClass("fa-ban");
+            $('#close span').html($.i18n('cancel'));
+        }
 
         var pos = $grid[0]._edited.indexOf(id);
         if (pos !== -1) {
@@ -691,10 +615,12 @@ function _editInitButtons($grid, tabId, objId) {
         $grid.jqGrid('saveRow', tabId + '_' + id, {url: 'clientArray'});
 
         changed = true;
-        $('#save').button('enable');
-        $('#saveclose').button('enable');
-        if (onChangeSupported)
-            $('#close .ui-button-text').html(_('cancel'));
+        $('#save').prop('disabled', false);
+        $('#saveclose').prop('disabled', false);
+        if (onChangeSupported) {
+            $('#close .fa').removeClass("fa-window-close").addClass("fa-ban");
+            $('#close span').html($.i18n('cancel'));
+        }
 
         var pos = $grid[0]._edited.indexOf(id);
         if (pos !== -1) {
@@ -820,10 +746,12 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
                 $grid[0]._edited.push(id);
 
             changed = true;
-            $('#save').button('enable');
-            $('#saveclose').button('enable');
-            if (onChangeSupported)
-                $('#close .ui-button-text').html(_('cancel'));
+            $('#save').prop('disabled', false);
+            $('#saveclose').prop('disabled', false);
+            if (onChangeSupported) {
+                $('#close .fa').removeClass("fa-window-close").addClass("fa-ban");
+                $('#close span').html($.i18n('cancel'));
+            }
         },
         sortname: 'id',
         sortorder: 'desc',
@@ -838,10 +766,12 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
         },
         onSortCol: function () {
             changed = true;
-            $('#save').button('enable');
-            $('#saveclose').button('enable');
-            if (onChangeSupported)
-                $('#close .ui-button-text').html(_('cancel'));
+            $('#save').prop('disabled', false);
+            $('#saveclose').prop('disabled', false);
+            if (onChangeSupported) {
+                $('#close .fa').removeClass("fa-window-close").addClass("fa-ban");
+                $('#close span').html($.i18n('cancel'));
+            }
         }
     }).jqGrid('filterToolbar', {
         defaultSearch: 'cn',
@@ -891,10 +821,12 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
                 obj[$grid[0]._cols[0]] = newText + idx;
 
                 changed = true;
-                $('#save').button('enable');
-                $('#saveclose').button('enable');
-                if (onChangeSupported)
-                    $('#close .ui-button-text').html(_('cancel'));
+                $('#save').prop('disabled', false);
+                $('#saveclose').prop('disabled', false);
+                if (onChangeSupported) {
+                    $('#close .fa').removeClass("fa-window-close").addClass("fa-ban");
+                    $('#close span').html($.i18n('cancel'));
+                }
 
                 addToTable(tabId, obj, $grid);
             },

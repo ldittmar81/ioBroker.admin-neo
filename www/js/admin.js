@@ -1313,8 +1313,6 @@
                                         }
                                     }
 
-                                    translateAll();
-
                                     // Here we go!
                                     initAllDialogs();
                                     tabs.hosts.prepare();

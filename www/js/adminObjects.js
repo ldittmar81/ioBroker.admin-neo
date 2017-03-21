@@ -1172,7 +1172,6 @@ function Objects(main) {
         });
         this.showCustomsData(ids.length > 1 ? null : ids[0]);
         $('#customs-button-save').button('disable');
-        translateAll();
         this.resizeHistory();
     };
 
