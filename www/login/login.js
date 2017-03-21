@@ -1,5 +1,6 @@
-$(function () {
-    var i18n = $.i18n();
+/* global i18n */
+
+$(function () {   
 
     $('#submit').on('click', function () {
         $('#loginForm').submit();

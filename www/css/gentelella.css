@@ -1,18 +1,18 @@
 html , body{
-	
- height:100%;
- 
+
+    height:100%;
+
 }
- 
+
 .full-width {
-	
- width:100%;
- 
- }
- 
+
+    width:100%;
+
+}
+
 .full-height{
- height:100%;
- }
+    height:100%;
+}
 
 .daterangepicker .ranges li {
     color: #73879C
@@ -1665,7 +1665,7 @@ span.right {
     position: fixed;
     width: 230px;
     background: #2A3F54;
-	z-index:999;
+    z-index:999;
 }
 .sidebar-footer a {
     padding: 7px 0 3px;
@@ -4172,17 +4172,17 @@ ul.notifications {
 
 
 @media (max-width: 767px) {
-   .dataTables_length { float:none; }
+    .dataTables_length { float:none; }
 }
 
 .daterangepicker.xdisplay { width:228px; }
 
 .dataTables_wrapper > .row{
-  overflow:auto !important; /*prevent datatables overflowing its container*/
+    overflow:auto !important; /*prevent datatables overflowing its container*/
 }
 
 .gears {
     left: calc(50% - 80px);
-	top: calc(50% - 80px);
-	position: fixed;
+    top: calc(50% - 80px);
+    position: fixed;
 }

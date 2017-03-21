@@ -11,6 +11,7 @@
 * Bootstrap 3.3.7 http://getbootstrap.com/
 * jQuery 3.3.1 https://api.jquery.com/
 * jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
+* iCheck 1.0.2 http://icheck.fronteed.com/
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations

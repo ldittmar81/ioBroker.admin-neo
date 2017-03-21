@@ -1,4 +1,4 @@
-/* global systemLang */
+/* global systemLang, i18n */
 
 var oldBind;
 var oldSecure;
@@ -146,8 +146,6 @@ function save(callback) {
 }
 
 $(function () {
-    var i18n = $.i18n();
-
     i18n.locale = systemLang;
     i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
 

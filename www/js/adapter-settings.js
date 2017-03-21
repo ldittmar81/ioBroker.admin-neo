@@ -1,3 +1,5 @@
+/* global io */
+
 var path = location.pathname;
 var parts = path.split('/');
 parts.splice(-3);
@@ -19,19 +21,17 @@ $(document).ready(function () {
     adapter = tmp[tmp.length - 2];
     var id = 'system.adapter.' + adapter + '.' + instance;
 
-    //socket.on('connection', function () {
     loadSystemConfig(function () {
         if (typeof translateAll === 'function')
             translateAll();
         loadSettings(prepareTooltips);
     });
-    //});
-    var $body = $('body');
-    $body.wrapInner('<div style="height: calc(100% - 44px); width: 100%; overflow:auto"></div>');
-    $body.prepend('<div class="header ui-tabs-nav ui-widget ui-widget-header ui-corner-all" style="padding: 2px" >' +
-            '<button id="save" class="translateB">save</button>&nbsp;' +
-            '<button id="saveclose" class="translateB">saveclose</button>&nbsp;' +
-            '<button id="close" class="translateB" style="float: right;">cancel</button>&nbsp;' +
+   
+    $('body').wrapInner('<div style="height: calc(100% - 44px); width: 100%; overflow:auto"></div>');
+    $('.container-fluid').prepend('<div class="row">' +
+            '<button type="button" id="save" class="btn btn-default" data-i18n="save">save</button>&nbsp;' +
+            '<button type="button" id="saveclose" class="btn btn-default" data-i18n="saveclose">saveclose</button>&nbsp;' +
+            '<button type="button" id="close" class="btn btn-default" data-i18n="cancel">cancel</button>&nbsp;' +
             '</div>');
 
     $('button#save').button({icons: {primary: 'ui-icon-disk'}}).click(function () {
