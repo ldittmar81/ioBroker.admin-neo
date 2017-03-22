@@ -20,6 +20,7 @@
 * Bootstrap 3.3.7 http://getbootstrap.com/
 * jQuery 3.3.1 https://api.jquery.com/
 * jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
+* Bootstrap Select 1.12.2 https://silviomoreto.github.io/bootstrap-select/
 * iCheck 1.0.2 http://icheck.fronteed.com/
 * Parsley 2.7.0 http://parsleyjs.org/
 * PNotify 3.0.0 https://sciactive.github.io/pnotify/

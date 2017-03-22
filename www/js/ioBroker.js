@@ -60,11 +60,11 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
 
 (function ($) {
 
-// Sidebar
-    $(document).ready(function () {
-// TODO: This is some kind of easy fix, maybe we can improve this
+    // Sidebar
+    $(function () {
+        // TODO: This is some kind of easy fix, maybe we can improve this
         var setContentHeight = function () {
-// reset height
+            // reset height
             $RIGHT_COL.css('min-height', $(window).height());
             var bodyHeight = $BODY.outerHeight(),
                     footerHeight = $BODY.hasClass('footer_fixed') ? -10 : $FOOTER.height(),
@@ -82,7 +82,7 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
                     setContentHeight();
                 });
             } else {
-// prevent closing menu if we are on child menu
+                // prevent closing menu if we are on child menu
                 if (!$li.parent().is('.child_menu')) {
                     $SIDEBAR_MENU.find('li').removeClass('active active-sm');
                     $SIDEBAR_MENU.find('li ul').slideUp();
@@ -131,7 +131,7 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
     // /Sidebar
 
     // Panel toolbox
-    $(document).ready(function () {
+    $(function () {
         $('.collapse-link').on('click', function () {
             var $BOX_PANEL = $(this).closest('.x_panel'),
                     $ICON = $(this).find('i'),
@@ -193,34 +193,5 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
         });
     });
     // / Translation/Tooltip
-
-    // Fullscreen
-    $(function () {
-        $('#button-fullscreen').on("click", function () {
-            if (!document.fullscreenElement && // alternative standard method
-                    !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen();
-                } else if (document.documentElement.msRequestFullscreen) {
-                    document.documentElement.msRequestFullscreen();
-                } else if (document.documentElement.mozRequestFullScreen) {
-                    document.documentElement.mozRequestFullScreen();
-                } else if (document.documentElement.webkitRequestFullscreen) {
-                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                }
-            }
-        })
-    });
-    // / Fullscreen
 
 })(jQuery);

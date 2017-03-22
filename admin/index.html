@@ -7,13 +7,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Admin adapter settings</title>
         <link href="../../lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="../../lib/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../../lib/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>       
         <link href="../../lib/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <link href="../../lib/css/animate.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../../lib/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
         <link href="../../lib/css/skins/flat/green.css" rel="stylesheet" type="text/css">
         <link href="../../lib/css/pnotify.min.css" rel="stylesheet" type="text/css" />
 
-        <link href="../../css/gentelella.css" rel="stylesheet" type="text/css"/>
+        <link href="../../css/ioBroker.css" rel="stylesheet" type="text/css"/>
         <link href="../../css/adapter.css" rel="stylesheet" type="text/css"/>
 
         <link rel="stylesheet" type="text/css" href="admin.css"/>
@@ -35,7 +36,7 @@
                         <i class="fa fa-info-circle" data-i18n-tooltip="tooltip_bind"></i>
                     </label>
                     <div class="col-sm-10">
-                        <select class="form-control value" id="bind"></select>
+                        <select class="form-control selectpicker value" id="bind"></select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,7 +63,7 @@
                         <i class="fa fa-info-circle" data-i18n-tooltip="tooltip_certPublic"></i>
                     </label>
                     <div class="col-sm-10">
-                        <select id="certPublic" class="form-control value"></select>
+                        <select id="certPublic" class="form-control selectpicker value"></select>
                     </div>
                 </div>
                 <div class="form-group" id="_certPrivate">
@@ -71,7 +72,7 @@
                         <i class="fa fa-info-circle" data-i18n-tooltip="tooltip_certPrivate"></i>
                     </label>
                     <div class="col-sm-10">
-                        <select id="certPrivate" class="form-control value"></select>
+                        <select id="certPrivate" class="form-control selectpicker value"></select>
                     </div>
                 </div>			
                 <div class="form-group" id="_certChained">
@@ -80,7 +81,7 @@
                         <i class="fa fa-info-circle" data-i18n-tooltip="tooltip_certChained"></i>
                     </label>
                     <div class="col-sm-10">
-                        <select id="certChained" class="form-control value"></select>
+                        <select id="certChained" class="form-control selectpicker value"></select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -116,7 +117,7 @@
                         <i class="fa fa-info-circle" data-i18n-tooltip="tooltip_defaultUser"></i>
                     </label>
                     <div class="col-sm-10">
-                        <select class="form-control value" id="defaultUser"></select>
+                        <select class="form-control selectpicker value" id="defaultUser"></select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -125,7 +126,7 @@
                         <i class="fa fa-info-circle" data-i18n-tooltip="tooltip_autoUpdate"></i>
                     </label>
                     <div class="col-sm-10">
-                        <select class="form-control value" id="autoUpdate">
+                        <select class="form-control selectpicker value" id="autoUpdate">
                             <option value="0" data-i18n="manually">manually</option>
                             <option value="12" data-i18n="every12hours">every 12 hours</option>
                             <option value="24" data-i18n="everyday">every day</option>
@@ -184,12 +185,13 @@
         <script type="text/javascript" src="../../lib/js/jquery.i18n.emitter.js"></script>
         <script type="text/javascript" src="../../lib/js/jquery.i18n.language.js"></script>
         <script type="text/javascript" src="../../lib/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../../lib/js/bootstrap-select.min.js"></script>
         <script type="text/javascript" src="../../lib/js/icheck.min.js"></script>
         <script type="text/javascript" src="../../lib/js/jquery.inputmask.bundle.min.js"></script>
         <script type="text/javascript" src="../../lib/js/pnotify.min.js"></script>
         <script type="text/javascript" src="../../lib/js/parsley.min.js"></script>
 
-        <script type="text/javascript" src="../../js/gentelella.js"></script>
+        <script type="text/javascript" src="../../js/ioBroker.js"></script>
         <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
         <script type="text/javascript" src="admin.js"></script>

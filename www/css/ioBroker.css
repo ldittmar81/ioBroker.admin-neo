@@ -4182,3 +4182,7 @@ ul.notifications {
     top: calc(50% - 80px);
     position: fixed;
 }
+
+.icheckbox_flat-green {
+    top: 5px;
+}
