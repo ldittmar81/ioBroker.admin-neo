@@ -58,17 +58,22 @@
         });
     });
     // / Fullscreen
-    
+
     // open links
-    $('#homeLink').on("click", function(){
-       $('#pageContent').load("templates/home.html", function(){
-           restartFunctions('pageContent');
-       }); 
+    $('#menu-home').on("click", function () {
+        $('#pageContent').load("templates/home.html", function () {
+            restartFunctions('pageContent');
+        });
     });
-    $('#adapterLink').on("click", function(){
-       $('#pageContent').load("templates/adapters.html", function(){
-           restartFunctions('pageContent');
-       }); 
+    $('#menu-adapter').on("click", function () {
+        $('#pageContent').load("templates/adapters.html", function () {
+            restartFunctions('pageContent');
+        });
+    });
+    $('#menu-instances').on("click", function () {
+        $('#pageContent').load("templates/instances.html", function () {
+            restartFunctions('pageContent');
+        });
     });
     // / open links
 
@@ -137,7 +142,7 @@
                 cmdCallback = callback;
                 main.socket.emit('cmdExec', host, activeCmdId, cmd, function (err) {
                     if (err) {
-                        stdout += '\n' + _(err);
+                        stdout += '\n' + $.i18n(err);
                         $stdout.val(stdout);
                         cmdCallback = null;
                         callback(err);
@@ -152,7 +157,7 @@
                     callback = buttons;
                     $dialogConfirm.dialog('option', 'buttons', [
                         {
-                            text: _('Ok'),
+                            text: $.i18n('Ok'),
                             click: function () {
                                 var cb = $(this).data('callback');
                                 $(this).dialog('close');
@@ -161,7 +166,7 @@
                             }
                         },
                         {
-                            text: _('Cancel'),
+                            text: $.i18n('Cancel'),
                             click: function () {
                                 var cb = $(this).data('callback');
                                 $(this).dialog('close');
@@ -188,7 +193,7 @@
                     $dialogConfirm.dialog('option', 'buttons', buttons);
                 }
 
-                $dialogConfirm.dialog('option', 'title', title || _('Message'));
+                $dialogConfirm.dialog('option', 'title', title || $.i18n('Message'));
                 $('#dialog-confirm-text').html(message);
                 if (icon) {
                     $('#dialog-confirm-icon').show();
@@ -201,7 +206,7 @@
                 $dialogConfirm.dialog('open');
             },
             showMessage: function (message, title, icon) {
-                $dialogMessage.dialog('option', 'title', title || _('Message'));
+                $dialogMessage.dialog('option', 'title', title || $.i18n('Message'));
                 $('#dialog-message-text').html(message);
                 if (icon) {
                     $('#dialog-message-icon').show();
@@ -213,7 +218,7 @@
                 $dialogMessage.dialog('open');
             },
             showError: function (error) {
-                main.showMessage(_(error), _('Error'), 'alert');
+                main.showMessage($.i18n(error), $.i18n('Error'), 'alert');
             },
             formatDate: function (dateObj, justTime) {
                 if (!dateObj)
@@ -300,7 +305,7 @@
                 }
 
                 if (main.objects[id] && main.objects[id].common && main.objects[id].common['object-non-deletable']) {
-                    main.showMessage(_('Cannot delete "%s" because not allowed', id), '', 'notice');
+                    main.showMessage($.i18n('Cannot delete "%s" because not allowed', id), '', 'notice');
                     if (typeof idOrList === 'object') {
                         setTimeout(function () {
                             this._delObject(idOrList, callback);
@@ -384,7 +389,7 @@
                     }
                 } else {
                     if (main.objects[id] && main.objects[id].common && main.objects[id].common['object-non-deletable']) {
-                        main.showMessage(_('Cannot delete "%s" because not allowed', id), '', 'notice');
+                        main.showMessage($.i18n('Cannot delete "%s" because not allowed', id), '', 'notice');
                         if (callback)
                             callback(null, id);
                     } else {
@@ -413,7 +418,7 @@
                 if (main.objects[id]) {
                     if (leaf && leaf.children) {
                         // ask if only object must be deleted or just this one
-                        main.confirmMessage(_('Do you want to delete just <span style="color: blue">one object</span> or <span style="color: red">all</span> children of %s too?', id), null, 'help', [_('_All'), _('Only one'), _('Cancel')], function (result) {
+                        main.confirmMessage($.i18n('Do you want to delete just <span style="color: blue">one object</span> or <span style="color: red">all</span> children of %s too?', id), null, 'help', [$.i18n('_All'), $.i18n('Only one'), $.i18n('Cancel')], function (result) {
                             // If all
                             if (result === 0) {
                                 main._delObjects(id, true, callback);
@@ -424,20 +429,20 @@
                             } // else do nothing
                         });
                     } else {
-                        main.confirmMessage(_('Are you sure to delete %s?', id), null, 'help', function (result) {
+                        main.confirmMessage($.i18n('Are you sure to delete %s?', id), null, 'help', function (result) {
                             // If all
                             if (result)
                                 main._delObjects(id, true, callback);
                         });
                     }
                 } else if (leaf && leaf.children) {
-                    main.confirmMessage(_('Are you sure to delete all children of %s?', id), null, 'help', function (result) {
+                    main.confirmMessage($.i18n('Are you sure to delete all children of %s?', id), null, 'help', function (result) {
                         // If all
                         if (result)
                             main._delObjects(id, true, callback);
                     });
                 } else {
-                    main.showMessage(_('Object "<b>%s</b>" does not exists. Update the page.', id), null, 'help', function (result) {
+                    main.showMessage($.i18n('Object "<b>%s</b>" does not exists. Update the page.', id), null, 'help', function (result) {
                         // If all
                         if (result)
                             main._delObjects(id, true, callback);
@@ -453,20 +458,20 @@
                     filter: {type: 'state'},
                     name: 'admin-select-member',
                     texts: {
-                        select: _('Select'),
-                        cancel: _('Cancel'),
-                        all: _('All'),
-                        id: _('ID'),
-                        name: _('Name'),
-                        role: _('Role'),
-                        room: _('Room'),
-                        value: _('Value'),
-                        selectid: _('Select ID'),
-                        from: _('From'),
-                        lc: _('Last changed'),
-                        ts: _('Time stamp'),
-                        wait: _('Processing...'),
-                        ack: _('Acknowledged')
+                        select: $.i18n('Select'),
+                        cancel: $.i18n('Cancel'),
+                        all: $.i18n('All'),
+                        id: $.i18n('ID'),
+                        name: $.i18n('Name'),
+                        role: $.i18n('Role'),
+                        room: $.i18n('Room'),
+                        value: $.i18n('Value'),
+                        selectid: $.i18n('Select ID'),
+                        from: $.i18n('From'),
+                        lc: $.i18n('Last changed'),
+                        ts: $.i18n('Time stamp'),
+                        wait: $.i18n('Processing...'),
+                        ack: $.i18n('Acknowledged')
                     },
                     columns: ['image', 'name', 'role', 'room', 'value']
                 });
@@ -481,10 +486,10 @@
                             icons: {primary: ' ui-icon-search'},
                             text: false
                         }).click(function () {
-                            $('#tabs').tabs('option', 'active', 1);
+                            //$('#tabs').tabs('option', 'active', 1);
                             // open configuration dialog
                             main.tabs.instances.showConfigDialog('system.adapter.discovery.0');
-                        }).attr('title', _('Device discovery'));
+                        }).attr('title', $.i18n('Device discovery'));
                     }
                     $wizard.show();
                 } else {
@@ -494,6 +499,7 @@
         };
 
         var tabs = {
+            home: new Home(main),
             adapters: new Adapters(main),
             instances: new Instances(main),
             logs: new Logs(main),
@@ -543,173 +549,6 @@
             }
         }
 
-        function initHtmlTabs(showTabs) {
-            // jQuery UI initializations
-            var $tabs = $('#tabs');
-            if (!$tabs.data('inited')) {
-                $tabs.data('inited', true);
-                $tabs.show().tabs({
-                    activate: function (event, ui) {
-                        window.location.hash = '#' + ui.newPanel.selector.slice(5);
-
-                        var $panel = $(ui.newPanel.selector);
-                        // Init source for iframe
-                        if ($panel.length) {
-                            var link = $panel.data('src');
-                            if (link && link.indexOf('%') === -1) {
-                                var $iframe = $panel.find('iframe');
-                                if ($iframe.length && !$iframe.attr('src')) {
-                                    $iframe.attr('src', link);
-                                }
-                            } else {
-                                $tabs.data('problem-link', ui.newPanel.selector);
-                            }
-                        }
-
-                        switch (ui.newPanel.selector) {
-                            case '#tab-objects':
-                                tabs.objects.init();
-                                break;
-
-                            case '#tab-hosts':
-                                tabs.hosts.init();
-                                break;
-
-                            case '#tab-states':
-                                tabs.states.init();
-                                break;
-
-                            case '#tab-scripts':
-                                break;
-
-                            case '#tab-adapters':
-                                tabs.hosts.initList();
-                                tabs.adapters.enableColResize();
-                                break;
-
-                            case '#tab-instances':
-                                tabs.instances.init();
-                                break;
-
-                            case '#tab-users':
-                                tabs.users.init();
-                                break;
-
-                            case '#tab-groups':
-                                tabs.groups.init();
-                                break;
-
-                            case '#tab-enums':
-                                tabs.enums.init();
-                                break;
-
-                            case '#tab-log':
-                                tabs.logs.init();
-                                break;
-                        }
-                    },
-                    create: function () {
-                        $('#tabs ul.ui-tabs-nav').prepend('<li class="header">ioBroker.admin</li>');
-
-                        var buttons = '<button class="menu-button" id="button-logout" title="' + _('Logout') + '"></button>';
-                        buttons += '<button class="menu-button" id="button-system" title="' + _('System') + '"></button>';
-                        buttons += '<div id="current-user" class="menu-button" style="padding-right: 10px; padding-top: 5px; height: 16px"></div>';
-                        buttons += '<button class="menu-button" id="button-edit-tabs"></button>';
-                        buttons += '<button class="menu-button" id="button-wizard"></button>';
-                        buttons += '<select id="tabs-show"></select>';
-
-                        $('#tabs ul.ui-tabs-nav').append(buttons);
-
-                        if (showTabs) {
-                            $('#tabs-show').html('<option value="">' + _('Show...') + '</option>' + showTabs).show();
-
-                            $('#tabs-show').selectmenu({
-                                width: 150,
-                                change: function () {
-                                    if ($(this).val()) {
-                                        main.systemConfig.common.tabs.push($(this).val());
-                                        // save
-                                        main.socket.emit('setObject', 'system.config', main.systemConfig, function (err) {
-                                            if (err) {
-                                                main.showError(err);
-                                                return;
-                                            }
-                                        });
-                                        initTabs();
-                                    }
-                                }
-                            });
-                        } else {
-                            $('#tabs-show').html('').hide();
-                        }
-
-                        $('#button-edit-tabs').button({
-                            icons: {primary: 'ui-icon-pencil'},
-                            text: false
-                        }).click(function () {
-                            if (main.editTabs) {
-                                $('.tab-close').hide();
-                                $('#tabs-show-button').hide();
-                                main.editTabs = false;
-                                $(this).removeClass('ui-state-error');
-                            } else {
-                                $('.tab-close').show();
-                                $('#tabs-show-button').show();
-                                $(this).addClass('ui-state-error');
-                                main.editTabs = true;
-                            }
-                        });
-
-                        main.updateWizard();
-
-                        if (!main.editTabs) {
-                            $('.tab-close').hide();
-                            $('#tabs-show-button').hide();
-                        } else {
-                            $('#button-edit-tabs').addClass('ui-state-error');
-                        }
-
-                        $('#button-logout').button({
-                            text: false
-                        }).click(function () {
-                            window.location.href = '/logout/';
-                        });
-
-                        main.systemDialog.init();
-
-                        window.onhashchange = navigation;
-                        navigation();
-                    }
-                });
-                main.socket.emit('authEnabled', function (auth, user) {
-                    if (!auth)
-                        $('#button-logout').remove();
-                    $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
-                });
-                resizeGrids();
-
-                $('#events_threshold').click(function () {
-                    main.socket.emit('eventsThreshold', false);
-                });
-            } else {
-                var panelSelector = $tabs.data('problem-link');
-                if (panelSelector) {
-                    var $panel = $(panelSelector);
-                    // Init source for iframe
-                    if ($panel.length) {
-                        var link = $panel.data('src');
-                        if (link && link.indexOf('%') === -1) {
-                            var $iframe = $panel.find('iframe');
-                            if ($iframe.length && !$iframe.attr('src')) {
-                                $iframe.attr('src', link);
-                                $tabs.data('problem-link', null);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         function initTabs() {
             // extract all additional instances
             var text = '';
@@ -743,7 +582,7 @@
             $('.admin-tab').each(function () {
                 list.push($(this).attr('id'));
                 if (!main.systemConfig.common.tabs || main.systemConfig.common.tabs.indexOf($(this).attr('id')) !== -1) {
-                    text += '<li><a href="#' + $(this).attr('id') + '">' + _($(this).data('name')) + '</a><button class="tab-close" data-tab="' + $(this).attr('id') + '"></button></li>\n';
+                    text += '<li><a href="#' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</a><button class="tab-close" data-tab="' + $(this).attr('id') + '"></button></li>\n';
                     $(this).show().appendTo($('#tabs'));
                 } else {
                     if ($(this).parent().prop('tagName') !== 'BODY') {
@@ -753,7 +592,7 @@
                             $t.hide()
                         }, 100);
                     }
-                    showTabs += '<option value="' + $(this).attr('id') + '">' + _($(this).data('name')) + '</option>';
+                    showTabs += '<option value="' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</option>';
                 }
             });
 
@@ -769,15 +608,15 @@
                         if (main.objects[addTabs[a]].common.adminTab.name[systemLang]) {
                             buttonName = main.objects[addTabs[a]].common.adminTab.name[systemLang];
                         } else if (main.objects[addTabs[a]].common.adminTab.name.en) {
-                            buttonName = _(main.objects[addTabs[a]].common.adminTab.name.en);
+                            buttonName = $.i18n(main.objects[addTabs[a]].common.adminTab.name.en);
                         } else {
-                            buttonName = _(main.objects[addTabs[a]].common.name);
+                            buttonName = $.i18n(main.objects[addTabs[a]].common.name);
                         }
                     } else {
-                        buttonName = _(main.objects[addTabs[a]].common.adminTab.name);
+                        buttonName = $.i18n(main.objects[addTabs[a]].common.adminTab.name);
                     }
                 } else {
-                    buttonName = _(main.objects[addTabs[a]].common.name);
+                    buttonName = $.i18n(main.objects[addTabs[a]].common.name);
                 }
 
                 if (!main.objects[addTabs[a]].common.adminTab.singleton) {
@@ -849,19 +688,12 @@
                 initTabs();
             }).css({width: 16, height: 16});
 
-            var $tabs = $('#tabs');
-            $tabs.hide();
-            if ($tabs.tabs('instance')) {
-                $tabs.tabs('destroy');
-                $tabs.data('inited', false);
-            }
             if ($('.link-replace').length) {
                 var countLink = 0;
 
                 // If some objects cannot be read => go by timeout
                 var loadTimeout = setTimeout(function () {
                     loadTimeout = null;
-                    initHtmlTabs(showTabs);
                 }, 1000);
 
                 $('.link-replace').each(function () {
@@ -874,18 +706,14 @@
                                 clearTimeout(loadTimeout);
                                 loadTimeout = null;
                             }
-                            initHtmlTabs(showTabs);
                         }
                     });
                 });
-            } else {
-                initHtmlTabs(showTabs);
             }
         }
 
-        // Use the function for this because it must be done after the language was read
+        // I want to initialize it only whe I need it
         function initAllDialogs() {
-            initGridLanguage(main.systemConfig.common.language);
 
             $dialogCommand.dialog({
                 autoOpen: false,
@@ -907,7 +735,7 @@
                 modal: true,
                 buttons: [
                     {
-                        text: _('Ok'),
+                        text: $.i18n('Ok'),
                         click: function () {
                             $(this).dialog("close");
                         }
@@ -922,7 +750,7 @@
                 height: 200,
                 buttons: [
                     {
-                        text: _('Ok'),
+                        text: $.i18n('Ok'),
                         click: function () {
                             var cb = $(this).data('callback');
                             $(this).dialog('close');
@@ -931,7 +759,7 @@
                         }
                     },
                     {
-                        text: _('Cancel'),
+                        text: $.i18n('Cancel'),
                         click: function () {
                             var cb = $(this).data('callback');
                             $(this).dialog('close');
@@ -1148,17 +976,13 @@
 
         // ---------------------------- Socket.io methods ---------------------------------------------
         main.socket.on('log', function (message) {
-            //message = {message: msg, severity: level, from: this.namespace, ts: (new Date()).getTime()}
             tabs.logs.add(message);
         });
         main.socket.on('error', function (error) {
-            //message = {message: msg, severity: level, from: this.namespace, ts: (new Date()).getTime()}
-            //addMessageLog({message: msg, severity: level, from: this.namespace, ts: (new Date()).getTime()});
             console.log(error);
         });
-
         main.socket.on('permissionError', function (err) {
-            main.showMessage(_('Has no permission to %s %s %s', err.operation, err.type, (err.id || '')));
+            main.showMessage($.i18n('Has no permission to %s %s %s', err.operation, err.type, (err.id || '')));
         });
         main.socket.on('stateChange', function (id, obj) {
             setTimeout(stateChange, 0, id, obj);
@@ -1358,7 +1182,6 @@
                                     }
 
                                     // Here we go!
-                                    initAllDialogs();
                                     tabs.hosts.prepare();
                                     tabs.objects.prepare();
                                     tabs.states.prepare();
@@ -1369,8 +1192,8 @@
                                     tabs.enums.prepare();
                                     tabs.objects.prepareCustoms();
                                     tabs.events.prepare();
+                                    tabs.home.prepare();
                                     main.systemDialog.prepare();
-                                    resizeGrids();
 
                                     getStates(getObjects);
                                 }, 0);
@@ -1402,41 +1225,11 @@
             location.reload();
         });
 
-        function resizeGrids() {
-            var x = $(window).width();
-            var y = $(window).height();
-            if (x < 720) {
-                x = 720;
-            }
-            if (y < 480) {
-                y = 480;
-            }
-            tabs.events.resize(x, y);
-            tabs.states.resize(x, y);
-            tabs.enums.resize(x, y);
-            tabs.adapters.resize(x, y);
-            tabs.instances.resize(x, y);
-            tabs.objects.resize(x, y);
-            tabs.hosts.resize(x, y);
-            tabs.users.resize(x, y);
-            tabs.groups.resize(x, y);
-            $('.iframe-in-tab').height(y - 55);
+        if (window.location.hash) {
+            var menu = 'menu-' + window.location.hash.slice(1);            
+            $('#' + menu).click();
+            $('.side-menu').find('a[href="' + window.location.hash + '"]').parent().addClass('active');
         }
-        function navigation() {
-            if (window.location.hash) {
-                var tab = 'tab-' + window.location.hash.slice(1);
-                var $tabs = $('#tabs');
-                var index = $tabs.find('a[href="#' + tab + '"]').parent().index() - 1;
-                $tabs.tabs('option', 'active', index);
-                if (tab === 'tab-hosts')
-                    tabs.hosts.init();
-            } else {
-                tabs.hosts.init();
-            }
-        }
-
-        $(window).resize(resizeGrids);
-
     });
 
 })(jQuery);

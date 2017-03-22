@@ -31,7 +31,7 @@
         <link rel="manifest" href="img/icons/manifest.json">
 
         <link href="lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="lib/css/bootstrap-theme.min" rel="stylesheet" type="text/css"/>
+        <link href="lib/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
         <link href="lib/css/font-awesome.min.css" rel="stylesheet"  type="text/css"/>
         <link href="lib/css/animate.min.css" rel="stylesheet" type="text/css"/>
         <link href="lib/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
@@ -56,15 +56,15 @@
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
                                 <ul class="nav side-menu">
-                                    <li><a href="#home" id="homeLink"><i class="fa fa-home"></i> <span data-i18n="home">Home</span> </a></li>
-                                    <li><a href="#adapters" id="adapterLink"><i class="fa fa-plug"></i> <span data-i18n="adapters">Adapters</span> </a></li>
-                                    <li><a href="#instances" id="instancesLink"><i class="fa fa-object-group"></i> <span data-i18n="instances">Instances</span> </a></li>
-                                    <li><a href="#objects" id="objectsLink"><i class="fa fa-gears"></i> <span data-i18n="objects">Objects</span> </a></li>
-                                    <li><a href="#log" id="logLink"><i class="fa fa-file-text-o"></i> <span data-i18n="log">Log</span> </a></li>
-                                    <li><a href="#states" id="statesLink"><i class="fa fa-bolt"></i> <span data-i18n="states">States</span> </a></li>
-                                    <li><a href="#events" id="eventsLink"><i class="fa fa-tint"></i> <span data-i18n="events">Events</span> </a></li>
-                                    <li><a href="#enums" id="enumsLink"><i class="fa fa-list-ol"></i> <span data-i18n="enums">Enums</span> </a></li>
-                                    <li><a href="#hosts" id="hostsLink"><i class="fa fa-server"></i> <span data-i18n="hosts">Hosts</span> </a></li>
+                                    <li><a href="#home" id="menu-home"><i class="fa fa-home"></i> <span data-i18n="home">Home</span> </a></li>
+                                    <li><a href="#adapters" id="menu-adapter"><i class="fa fa-plug"></i> <span data-i18n="adapters">Adapters</span> </a></li>
+                                    <li><a href="#instances" id="menu-instances"><i class="fa fa-object-group"></i> <span data-i18n="instances">Instances</span> </a></li>
+                                    <li><a href="#objects" id="menu-objects"><i class="fa fa-gears"></i> <span data-i18n="objects">Objects</span> </a></li>
+                                    <li><a href="#logs" id="menu-logs"><i class="fa fa-file-text-o"></i> <span data-i18n="log">Log</span> </a></li>
+                                    <li><a href="#states" id="menu-states"><i class="fa fa-bolt"></i> <span data-i18n="states">States</span> </a></li>
+                                    <li><a href="#events" id="menu-events"><i class="fa fa-tint"></i> <span data-i18n="events">Events</span> </a></li>
+                                    <li><a href="#enums" id="menu-enums"><i class="fa fa-list-ol"></i> <span data-i18n="enums">Enums</span> </a></li>
+                                    <li><a href="#hosts" id="menu-hosts"><i class="fa fa-server"></i> <span data-i18n="hosts">Hosts</span> </a></li>
                                 </ul>
                             </div>
                         </div>
@@ -141,7 +141,6 @@
                                     <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                                         <li>
                                             <a>
-                                                <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                                                 <span>
                                                     <span>John Smith</span>
                                                     <span class="time">3 mins ago</span>
@@ -153,7 +152,6 @@
                                         </li>
                                         <li>
                                             <a>
-                                                <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                                                 <span>
                                                     <span>John Smith</span>
                                                     <span class="time">3 mins ago</span>
@@ -217,12 +215,12 @@
         <script type="text/javascript" src="js/selectID.js"></script>
         <script type="text/javascript" src="js/ioBroker.js"></script>
 
+        <script type="text/javascript" src="js/adminHome.js"></script>
         <script type="text/javascript" src="js/adminAdapters.js"></script>
         <script type="text/javascript" src="js/adminInstances.js"></script>
         <script type="text/javascript" src="js/adminEnums.js"></script>
         <script type="text/javascript" src="js/adminEvents.js"></script>
         <script type="text/javascript" src="js/adminHosts.js"></script>
-        <script type="text/javascript" src="js/adminInstances.js"></script>
         <script type="text/javascript" src="js/adminLog.js"></script>
         <script type="text/javascript" src="js/adminObjects.js"></script>
         <script type="text/javascript" src="js/adminStates.js"></script>

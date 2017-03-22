@@ -14,7 +14,7 @@ var certs = [];
 var adapter = '';
 var onChangeSupported = false;
 
-$(document).ready(function () {
+$(function () {
     'use strict';
 
     var tmp = window.location.pathname.split('/');
@@ -89,7 +89,7 @@ $(document).ready(function () {
             }
             socket.emit('setObject', id, oldObj, function (err) {
                 if (err) {
-                    showMessage(err, _('Error'), 'alert');
+                    showMessage(err, $.i18n('Error'), 'alert');
                     return;
                 }
                 changed = false;
@@ -203,7 +203,7 @@ function showMessage(message, title, icon, width) {
             modal: true,
             buttons: [
                 {
-                    text: _('Ok'),
+                    text: $.i18n('Ok'),
                     click: function () {
                         $(this).dialog('close');
                     }
@@ -214,7 +214,7 @@ function showMessage(message, title, icon, width) {
     $dialogMessage.dialog('option', 'width', width + 500);
 
     if (typeof _ != 'undefined') {
-        $dialogMessage.dialog('option', 'title', title || _('Message'));
+        $dialogMessage.dialog('option', 'title', title || $.i18n('Message'));
     } else {
         $dialogMessage.dialog('option', 'title', title || 'Message');
     }
@@ -248,7 +248,7 @@ function confirmMessage(message, title, icon, buttons, callback) {
         callback = buttons;
         $dialogConfirm.dialog('option', 'buttons', [
             {
-                text: _('Ok'),
+                text: $.i18n('Ok'),
                 click: function () {
                     var cb = $(this).data('callback');
                     $(this).data('callback', null);
@@ -258,7 +258,7 @@ function confirmMessage(message, title, icon, buttons, callback) {
                 }
             },
             {
-                text: _('Cancel'),
+                text: $.i18n('Cancel'),
                 click: function () {
                     var cb = $(this).data('callback');
                     $(this).data('callback', null);
@@ -286,7 +286,7 @@ function confirmMessage(message, title, icon, buttons, callback) {
         $dialogConfirm.dialog('option', 'buttons', buttons);
     }
 
-    $dialogConfirm.dialog('option', 'title', title || _('Message'));
+    $dialogConfirm.dialog('option', 'title', title || $.i18n('Message'));
     $('#dialog-confirm-text-settings').html(message);
     if (icon) {
         $('#dialog-confirm-icon-settings')
@@ -393,7 +393,7 @@ function getIPs(host, callback) {
     socket.emit('getHostByIp', host || common.host, function (ip, _host) {
         if (_host) {
             host = _host;
-            var IPs4 = [{name: '[IPv4] 0.0.0.0 - ' + _('Listen on all IPs'), address: '0.0.0.0', family: 'ipv4'}];
+            var IPs4 = [{name: '[IPv4] 0.0.0.0 - ' + $.i18n('Listen on all IPs'), address: '0.0.0.0', family: 'ipv4'}];
             var IPs6 = [{name: '[IPv6] ::', address: '::', family: 'ipv6'}];
             if (host.native.hardware && host.native.hardware.networkInterfaces) {
                 for (var eth in host.native.hardware.networkInterfaces) {
@@ -441,7 +441,7 @@ function sendToHost(host, command, message, callback) {
 
 // fills select with names of the certificates and preselect it
 function fillSelectCertificates(id, type, actualValued) {
-    var str = '<option value="">' + _('none') + '</option>';
+    var str = '<option value="">' + $.i18n('none') + '</option>';
     for (var i = 0; i < certs.length; i++) {
         if (certs[i].type != type)
             continue;
@@ -538,10 +538,10 @@ function addToTable(tabId, value, $grid, _isInitial) {
         }
     }
     obj._commands =
-            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-edit-submit">' + _('edit') + '</button>' +
-            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-delete-submit">' + _('delete') + '</button>' +
-            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-ok-submit" style="display:none">' + _('ok') + '</button>' +
-            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-cancel-submit" style="display:none">' + _('cancel') + '</button>';
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-edit-submit">' + $.i18n('edit') + '</button>' +
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-delete-submit">' + $.i18n('delete') + '</button>' +
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-ok-submit" style="display:none">' + $.i18n('ok') + '</button>' +
+            '<button data-' + tabId + '-id="' + obj._id + '" class="' + tabId + '-cancel-submit" style="display:none">' + $.i18n('cancel') + '</button>';
 
     $grid.jqGrid('addRowData', tabId + '_' + obj._id, obj);
 
@@ -684,7 +684,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
                 checkbox = true;
             cols[i] = cols[i].name;
         }
-        colNames.push(_(cols[i]));
+        colNames.push($.i18n(cols[i]));
         var _obj = {
             name: cols[i],
             index: cols[i],
@@ -699,19 +699,19 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
         }
 
         if (cols[i] === 'room') {
-            var list = {'': _('none')};
+            var list = {'': $.i18n('none')};
             for (room in rooms) {
-                list[room] = _(rooms[room].common.name);
+                list[room] = $.i18n(rooms[room].common.name);
             }
             _obj.stype = 'select';
             _obj.edittype = 'select';
             _obj.editoptions = {value: list};
             _obj.searchoptions = {
                 sopt: ['eq'],
-                value: ':' + _('all')
+                value: ':' + $.i18n('all')
             };
             for (room in rooms) {
-                _obj.searchoptions.value += ';' + _(rooms[room].common.name) + ':' + _(rooms[room].common.name);
+                _obj.searchoptions.value += ';' + $.i18n(rooms[room].common.name) + ':' + $.i18n(rooms[room].common.name);
             }
         }
         colModel.push(_obj);
@@ -759,7 +759,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
         pgbuttons: false,
         pginput: false,
         pgtext: false,
-        caption: _(title),
+        caption: $.i18n(title),
         ignoreCase: true,
         loadComplete: function () {
             _editInitButtons($grid, tabId);
@@ -798,7 +798,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             onClickButton: function () {
                 // Find new unique name
                 var found;
-                var newText = _('New');
+                var newText = $.i18n('New');
                 var ids = $grid.jqGrid('getDataIDs');
                 var idx = 1;
                 var obj;
@@ -832,7 +832,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             },
             position: 'first',
             id: 'add-cert',
-            title: _('new device'),
+            title: $.i18n('new device'),
             cursor: 'pointer'
         });
     }
@@ -842,11 +842,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             addToTable(tabId, values[u], $grid, true);
         }
     }
-    $(window).resize(function () {
-        $grid.setGridHeight($(this).height() - top).setGridWidth($(this).width() - 10);
-    });
-    $(window).trigger('resize');
-
+   
     // hide scrollbar
     $('.ui-jqgrid-bdiv').css({'overflow-x': 'hidden'});
 
@@ -1021,7 +1017,7 @@ function values2table(divId, values, onChange, onReady) {
         if (!$table.data('rooms') && $table.find('th[data-name="room"]').length) {
             getEnums('rooms', function (err, list) {
                 var result = {};
-                result[_('none')] = '';
+                result[$.i18n('none')] = '';
                 var nnames = [];
                 for (var n in list) {
                     nnames.push(n);
@@ -1048,7 +1044,7 @@ function values2table(divId, values, onChange, onReady) {
         if (!$table.data('functions') && $table.find('th[data-name="func"]').length) {
             getEnums('functions', function (err, list) {
                 var result = {};
-                result[_('none')] = '';
+                result[$.i18n('none')] = '';
                 var nnames = [];
                 for (var n in list) {
                     nnames.push(n);
@@ -1091,7 +1087,7 @@ function values2table(divId, values, onChange, onReady) {
                     obj.options = {};
                     for (var v = 0; v < vals.length; v++) {
                         var parts = vals[v].split('/');
-                        obj.options[parts[0]] = _(parts[1] || parts[0]);
+                        obj.options[parts[0]] = $.i18n(parts[1] || parts[0]);
                         if (v === 0)
                             obj.def = (obj.def === undefined) ? parts[0] : obj.def;
                     }
