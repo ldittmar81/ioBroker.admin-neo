@@ -1,6 +1,14 @@
-/* global i18n, systemLang */
+/* global i18n, systemLang, PNotify */
 
 'use strict';
+
+var availableLanguages = ['en', 'de', 'ru', 'pt'];
+var systemLang = navigator.language || navigator.userLanguage;
+if (!(systemLang in availableLanguages))
+    systemLang = "en";
+var i18n = $.i18n();
+
+PNotify.prototype.options.styling = "fontawesome";
 
 var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
         $BODY = $('body'),
@@ -184,6 +192,35 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
             });
         });
     });
-    // / Translation/Tooltip  
+    // / Translation/Tooltip
+
+    // Fullscreen
+    $(function () {
+        $('#button-fullscreen').on("click", function () {
+            if (!document.fullscreenElement && // alternative standard method
+                    !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        })
+    });
+    // / Fullscreen
 
 })(jQuery);

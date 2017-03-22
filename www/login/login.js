@@ -1,4 +1,4 @@
-/* global i18n */
+/* global i18n, availableLanguages */
 
 $(function () {   
 
@@ -6,7 +6,11 @@ $(function () {
         $('#loginForm').submit();
     });
 
-    i18n.locale = navigator.language || navigator.userLanguage;
+    var lang = navigator.language || navigator.userLanguage;
+    if(!(lang in ['en', 'de', 'ru', 'pt'])){
+        lang = "en";
+    }
+    i18n.locale = lang;
     i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
         $("#origin").val(window.location.search.replace('&error', ''));
         $('#username').attr("placeholder", $.i18n('username'));

@@ -1,6 +1,14 @@
 ![Logo](admin/admin-neo.png)
 # ioBroker.admin-neo developer guide
 
+## Usage
+
+### Tooltips with translation
+
+```
+<i class="fa fa-question-circle" data-i18n-tooltip="tooltip_lePort"></i>
+```
+
 ## Bibliotheken
 
 ### CSS

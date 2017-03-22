@@ -1,4 +1,4 @@
-/* global systemLang, i18n, availableLanguages */
+/* global systemLang, i18n, availableLanguages, io, storage, toggleFullScreen */
 
 'use strict';
 
@@ -31,6 +31,7 @@
     };
 
     $(document).ready(function () {
+        
         var main = {
             objects: {},
             states: {},
@@ -172,7 +173,7 @@
             showError: function (error) {
                 main.showMessage(_(error), _('Error'), 'alert');
             },
-            formatDate: function (dateObj, justTime) {           
+            formatDate: function (dateObj, justTime) {
                 if (!dateObj)
                     return '';
                 var text = typeof dateObj;
@@ -1198,7 +1199,7 @@
                                             if (!main.systemConfig.common.licenseConfirmed) {
                                                 // Show license agreement
                                                 var language = main.systemConfig.common.language || window.navigator.userLanguage || window.navigator.language;
-                                                if (!(language in availableLanguages)){
+                                                if (!(language in availableLanguages)) {
                                                     language = 'en';
                                                 }
 
@@ -1395,5 +1396,5 @@
         $(window).resize(resizeGrids);
 
     });
-    
+
 })(jQuery);
