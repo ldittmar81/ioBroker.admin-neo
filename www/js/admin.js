@@ -58,6 +58,19 @@
         });
     });
     // / Fullscreen
+    
+    // open links
+    $('#homeLink').on("click", function(){
+       $('#pageContent').load("templates/home.html", function(){
+           restartFunctions('pageContent');
+       }); 
+    });
+    $('#adapterLink').on("click", function(){
+       $('#pageContent').load("templates/adapters.html", function(){
+           restartFunctions('pageContent');
+       }); 
+    });
+    // / open links
 
     $(function () {
 

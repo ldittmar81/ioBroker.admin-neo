@@ -132,7 +132,7 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
 
     // Panel toolbox
     $(function () {
-        $('.collapse-link').on('click', function () {
+        $(document.body).on('click', '.collapse-link', function () {
             var $BOX_PANEL = $(this).closest('.x_panel'),
                     $ICON = $(this).find('i'),
                     $BOX_CONTENT = $BOX_PANEL.find('.x_content');
@@ -178,6 +178,12 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
     });
     // /Accordion
 
+    // Bootstrap select
+    $(function () {
+        $('select').selectpicker();
+    });
+    // / Bootstrap select
+
     // Translation/Tooltip
     $(function () {
         i18n.locale = systemLang;
@@ -194,4 +200,26 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
     });
     // / Translation/Tooltip
 
+    // Others
+    $(function () {
+        $RIGHT_COL.css('padding-top', ($NAV_MENU.height() + 5) + 'px');
+    });
+    // / Others
+
 })(jQuery);
+
+function restartFunctions(id) {
+    $('#' + id + ' input[type=checkbox], #' + id + ' input[type=radio]').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass: 'iradio_flat-green'
+    });
+    $('#' + id + ' select').selectpicker();
+    $("#" + id + " [data-i18n]").i18n();
+    $("#" + id + " [data-i18n-tooltip]").each(function () {
+        var $this = $(this);
+        $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
+    });
+    $('#' + id + ' [data-toggle="tooltip"]').tooltip({
+        container: 'body'
+    });
+}
