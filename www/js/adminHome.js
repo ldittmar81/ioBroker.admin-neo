@@ -5,6 +5,10 @@ function Home(main) {
     
     this.prepare = function () {
         
-    }
+    };
+    
+    this.init = function () {
+        
+    };
     
 }

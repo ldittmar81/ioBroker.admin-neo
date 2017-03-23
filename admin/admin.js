@@ -56,10 +56,12 @@ function load(settings, onChange) {
     oldSecure = settings.secure;
     oldPort = settings.port;
 
-    if (settings.autoUpdate === undefined)
+    if (settings.autoUpdate === undefined) {
         settings.autoUpdate = 24;
-    if (!settings.lePort)
+    }
+    if (!settings.lePort) {
         settings.lePort = 80;
+    }
 
     $('.value').each(function () {
         var key = $(this).attr('id');
@@ -72,7 +74,7 @@ function load(settings, onChange) {
         } else {
             $('#' + key + '.value').val(settings[key]).change(onChange).keyup(function () {
                 onChange();
-                // Chack that only numbers entered
+                // Check that only numbers entered
                 if ($(this).hasClass('number')) {
                     var val = $(this).val();
                     if (val) {
@@ -120,7 +122,7 @@ function save(callback) {
     });
 
     if ($('#secure').prop('checked') && (!$('#certPrivate').val() || !$('#certPublic').val())) {
-        showMessage(_('Set certificates or load it first in the system settings (right top).'));
+        showMessage($.i18n('setCertMessage'));
         return;
     }
     var isRedirect = false;

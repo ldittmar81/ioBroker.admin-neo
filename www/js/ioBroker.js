@@ -1,12 +1,15 @@
-/* global i18n, systemLang, PNotify */
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* global io:false */
+/* global jQuery:false */
+/* jslint browser:true */
+/* jshint browser:true */
+/* global availableLanguages */
+/* global systemLang */
+/* global i18n */
+/* global PNotify */
 
 'use strict';
-
-var availableLanguages = ['en', 'de', 'ru', 'pt'];
-var systemLang = navigator.language || navigator.userLanguage;
-if (!(systemLang in availableLanguages))
-    systemLang = "en";
-var i18n = $.i18n();
 
 PNotify.prototype.options.styling = "fontawesome";
 
@@ -19,6 +22,16 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
         $RIGHT_COL = $('.right_col'),
         $NAV_MENU = $('.nav_menu'),
         $FOOTER = $('footer');
+
+jQuery.fn.changeTooltip = function (newValue) {
+    this.each(function () {
+        $(this).tooltip('hide')
+                .attr('data-original-title', newValue)
+                .tooltip('fixTitle')
+                .tooltip('show');
+    });
+    return this;
+};
 
 /**
  * Resize function without multiple trigger

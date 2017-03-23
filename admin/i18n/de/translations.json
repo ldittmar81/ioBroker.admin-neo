@@ -32,6 +32,7 @@
   "save": "Speichern",
   "saveclose": "Speichern und schließen",
   "secure": "Verschlüsselung (HTTPS)",
+  "setCertMessage": "Setze Zertifikate oder installiere sie erst in den Systemeinstellungen (oben rechts).",
   "tooltip_auth": "Prüfe Login und Kennwort beim öffnen. Man kann die Anwender im Benutzer-Menü anlegen.",
   "tooltip_autoUpdate": "Prüfe regelmässig auf Adapter-Updates",
   "tooltip_bind": "IP Addresse, die vom Adminadapter benutzt wird",

@@ -32,6 +32,7 @@
   "save": "Save",
   "saveclose": "Save and close",
   "secure": "Secure (HTTPS)",
+  "setCertMessage": "Set certificates or load it first in the system settings (right top).",
   "tooltip_auth": "Check login and password be access to the admin page. You can manage it on the users menu.",
   "tooltip_autoUpdate": "Check adapter updates",
   "tooltip_bind": "IP address, where the admin will run",

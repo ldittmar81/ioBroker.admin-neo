@@ -1,4 +1,11 @@
-/* global i18n, availableLanguages */
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* global jQuery:false */
+/* jslint browser:true */
+/* jshint browser:true */
+/* global availableLanguages */
+/* global i18n */
+/* global systemLang */
 
 $(function () {   
 
@@ -6,11 +13,7 @@ $(function () {
         $('#loginForm').submit();
     });
 
-    var lang = navigator.language || navigator.userLanguage;
-    if(!(lang in ['en', 'de', 'ru', 'pt'])){
-        lang = "en";
-    }
-    i18n.locale = lang;
+    i18n.locale = systemLang;
     i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
         $("#origin").val(window.location.search.replace('&error', ''));
         $('#username').attr("placeholder", $.i18n('username'));

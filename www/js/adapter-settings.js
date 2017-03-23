@@ -1,4 +1,12 @@
-/* global io, save, load */
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* global io:false */
+/* global jQuery:false */
+/* jslint browser:true */
+/* jshint browser:true */
+/* global bootbox */
+/* global save */
+/* global load */
 
 var path = location.pathname;
 var parts = path.split('/');
@@ -34,7 +42,7 @@ $(function () {
 
     $('button#save').click(function () {
         if (typeof save === 'undefined') {
-            alert('Please implement save function in your admin/index.html');
+            bootbox.alert('Please implement save function in your admin/index.html');
             return;
         }
         save(function (obj, common, redirect) {
@@ -46,7 +54,7 @@ $(function () {
     });
     $('button#saveclose').click(function () {
         if (typeof save === 'undefined') {
-            alert('Please implement save function in your admin/index.html');
+            bootbox.alert('Please implement save function in your admin/index.html');
             return;
         }
         save(function (obj, common, redirect) {
@@ -89,7 +97,7 @@ $(function () {
             }
             socket.emit('setObject', id, oldObj, function (err) {
                 if (err) {
-                    showMessage(err, $.i18n('Error'), 'alert');
+                    showMessage(err, $.i18n('error'), 'alert');
                     return;
                 }
                 changed = false;
@@ -171,7 +179,7 @@ $(function () {
                 if (res.common && res.common.name)
                     $('.adapter-name').html(res.common.name);
                 if (typeof load === 'undefined') {
-                    alert('Please implement save function in your admin/index.html');
+                    bootbox.alert('Please implement save function in your admin/index.html');
                 } else {
                     load(res.native, onChange);
                 }
@@ -182,122 +190,59 @@ $(function () {
                 if (typeof callback === 'function') {
                     callback();
                 }
-                alert('error loading settings for ' + id + '\n\n' + err);
+                bootbox.alert('error loading settings for ' + id + '\n\n' + err);
             }
         });
     }
 });
 
-function showMessage(message, title, icon, width) {
-    var $dialogMessage = $('#dialog-message-settings');
-    if (!$dialogMessage.length) {
-        $('body').append('<div id="dialog-message-settings" title="Message" style="display: none">\n' +
-                '<p>' +
-                '<span id="dialog-message-icon-settings" class="ui-icon ui-icon-circle-check" style="float :left; margin: 0 7px 50px 0;"></span>\n' +
-                '<span id="dialog-message-text-settings"></span>\n' +
-                '</p>\n' +
-                '</div>');
-        $dialogMessage = $('#dialog-message-settings');
-        $dialogMessage.dialog({
-            autoOpen: false,
-            modal: true,
-            buttons: [
-                {
-                    text: $.i18n('Ok'),
-                    click: function () {
-                        $(this).dialog('close');
-                    }
-                }
-            ]
-        });
+function showMessage(message, title, icon, btnlabel, btnclass) {
+    if (!btnlabel) {
+        btnlabel = $.i18n('ok');
     }
-    $dialogMessage.dialog('option', 'width', width + 500);
-
-    if (typeof _ != 'undefined') {
-        $dialogMessage.dialog('option', 'title', title || $.i18n('Message'));
-    } else {
-        $dialogMessage.dialog('option', 'title', title || 'Message');
+    if (!btnclass) {
+        btnclass = 'btn-primary';
     }
-    $('#dialog-message-text-settings').html(message);
     if (icon) {
-        $('#dialog-message-icon-settings').show();
-        $('#dialog-message-icon-settings').attr('class', '');
-        $('#dialog-message-icon-settings').addClass('ui-icon ui-icon-' + icon);
-    } else {
-        $('#dialog-message-icon-settings').hide();
+        switch (icon) {
+            case 'alert':
+                icon = "fa-exclamation-triangle text-danger"
+                break;
+        }
+        message = "<i class='fa " + icon + "'></i>&nbsp;" + message;
     }
-    $dialogMessage.dialog('open');
+    bootbox.alert({
+        title: title,
+        message: message,
+        buttons: {
+            ok: {
+                label: btnlabel,
+                className: btnclass
+            }
+        }
+    });
 }
 
 function confirmMessage(message, title, icon, buttons, callback) {
-    var $dialogConfirm = $('#dialog-confirm-settings');
-    if (!$dialogConfirm.length) {
-        $('body').append('<div id="dialog-confirm-settings" title="Message" style="display: none">\n' +
-                '<p>' +
-                '<span id="dialog-confirm-icon-settings" class="ui-icon ui-icon-circle-check" style="float :left; margin: 0 7px 50px 0;"></span>\n' +
-                '<span id="dialog-confirm-text-settings"></span>\n' +
-                '</p>\n' +
-                '</div>');
-        $dialogConfirm = $('#dialog-confirm-settings');
-        $dialogConfirm.dialog({
-            autoOpen: false,
-            modal: true
-        });
-    }
-    if (typeof buttons === 'function') {
-        callback = buttons;
-        $dialogConfirm.dialog('option', 'buttons', [
-            {
-                text: $.i18n('Ok'),
-                click: function () {
-                    var cb = $(this).data('callback');
-                    $(this).data('callback', null);
-                    $(this).dialog('close');
-                    if (cb)
-                        cb(true);
-                }
+    bootbox.confirm({
+        title: title,
+        message: message,
+        buttons: {
+            confirm: {
+                label: $.i18n('ok'),
+                className: 'btn-primary'
             },
-            {
-                text: $.i18n('Cancel'),
-                click: function () {
-                    var cb = $(this).data('callback');
-                    $(this).data('callback', null);
-                    $(this).dialog('close');
-                    if (cb)
-                        cb(false);
-                }
+            cancel: {
+                label: $.i18n('cancel'),
+                className: 'btn-default'
             }
-
-        ]);
-    } else if (typeof buttons === 'object') {
-        for (var b = 0; b < buttons.length; b++) {
-            buttons[b] = {
-                text: buttons[b],
-                id: 'dialog-confirm-button-' + b,
-                click: function (e) {
-                    var id = parseInt(e.currentTarget.id.substring('dialog-confirm-button-'.length), 10);
-                    var cb = $(this).data('callback');
-                    $(this).dialog('close');
-                    if (cb)
-                        cb(id);
-                }
+        },
+        callback: function (result) { /* result is a boolean; true = OK, false = Cancel*/
+            if (typeof callback === 'function') {
+                callback(result);
             }
         }
-        $dialogConfirm.dialog('option', 'buttons', buttons);
-    }
-
-    $dialogConfirm.dialog('option', 'title', title || $.i18n('Message'));
-    $('#dialog-confirm-text-settings').html(message);
-    if (icon) {
-        $('#dialog-confirm-icon-settings')
-                .show()
-                .attr('class', '')
-                .addClass('ui-icon ui-icon-' + icon);
-    } else {
-        $('#dialog-confirm-icon-settings').hide();
-    }
-    $dialogConfirm.data('callback', callback);
-    $dialogConfirm.dialog('open');
+    });
 }
 
 function getObject(id, callback) {
@@ -393,7 +338,7 @@ function getIPs(host, callback) {
     socket.emit('getHostByIp', host || common.host, function (ip, _host) {
         if (_host) {
             host = _host;
-            var IPs4 = [{name: '[IPv4] 0.0.0.0 - ' + $.i18n('Listen on all IPs'), address: '0.0.0.0', family: 'ipv4'}];
+            var IPs4 = [{name: '[IPv4] 0.0.0.0 - ' + $.i18n('listen_on_ip'), address: '0.0.0.0', family: 'ipv4'}];
             var IPs6 = [{name: '[IPv6] ::', address: '::', family: 'ipv6'}];
             if (host.native.hardware && host.native.hardware.networkInterfaces) {
                 for (var eth in host.native.hardware.networkInterfaces) {
@@ -798,7 +743,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             onClickButton: function () {
                 // Find new unique name
                 var found;
-                var newText = $.i18n('New');
+                var newText = $.i18n('new');
                 var ids = $grid.jqGrid('getDataIDs');
                 var idx = 1;
                 var obj;
@@ -842,7 +787,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             addToTable(tabId, values[u], $grid, true);
         }
     }
-   
+
     // hide scrollbar
     $('.ui-jqgrid-bdiv').css({'overflow-x': 'hidden'});
 

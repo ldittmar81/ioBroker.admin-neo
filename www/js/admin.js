@@ -4,6 +4,7 @@
 /* global jQuery:false */
 /* jslint browser:true */
 /* jshint browser:true */
+/* global bootbox */
 /* global systemLang */
 /* global storage */
 /* global i18n */
@@ -69,24 +70,6 @@
     });
     // / Fullscreen
 
-    // open links
-    $('#menu-home').on("click", function () {
-        $('#pageContent').load("templates/home.html", function () {
-            restartFunctions('pageContent');
-        });
-    });
-    $('#menu-adapter').on("click", function () {
-        $('#pageContent').load("templates/adapters.html", function () {
-            restartFunctions('pageContent');
-        });
-    });
-    $('#menu-instances').on("click", function () {
-        $('#pageContent').load("templates/instances.html", function () {
-            restartFunctions('pageContent');
-        });
-    });
-    // / open links
-
     $(function () {
 
         var main = {
@@ -105,7 +88,7 @@
                 menus.events.addEventMessage(id, state, rowData);
             },
             saveConfig: function (attr, value) {
-                if (attr){
+                if (attr) {
                     main.config[attr] = value;
                 }
 
@@ -168,7 +151,7 @@
                     callback = buttons;
                     $dialogConfirm.dialog('option', 'buttons', [
                         {
-                            text: $.i18n('Ok'),
+                            text: $.i18n('ok'),
                             click: function () {
                                 var cb = $(this).data('callback');
                                 $(this).dialog('close');
@@ -177,7 +160,7 @@
                             }
                         },
                         {
-                            text: $.i18n('Cancel'),
+                            text: $.i18n('cancel'),
                             click: function () {
                                 var cb = $(this).data('callback');
                                 $(this).dialog('close');
@@ -204,7 +187,7 @@
                     $dialogConfirm.dialog('option', 'buttons', buttons);
                 }
 
-                $dialogConfirm.dialog('option', 'title', title || $.i18n('Message'));
+                $dialogConfirm.dialog('option', 'title', title || $.i18n('message'));
                 $('#dialog-confirm-text').html(message);
                 if (icon) {
                     $('#dialog-confirm-icon').show();
@@ -216,20 +199,34 @@
                 $dialogConfirm.data('callback', callback);
                 $dialogConfirm.dialog('open');
             },
-            showMessage: function (message, title, icon) {
-                $dialogMessage.dialog('option', 'title', title || $.i18n('Message'));
-                $('#dialog-message-text').html(message);
-                if (icon) {
-                    $('#dialog-message-icon').show();
-                    $('#dialog-message-icon').attr('class', '');
-                    $('#dialog-message-icon').addClass('ui-icon ui-icon-' + icon);
-                } else {
-                    $('#dialog-message-icon').hide();
+            showMessage: function (message, title, icon, btnlabel, btnclass) {
+                if (!btnlabel) {
+                    btnlabel = $.i18n('ok');
                 }
-                $dialogMessage.dialog('open');
+                if (!btnclass) {
+                    btnclass = 'btn-primary';
+                }
+                if (icon) {
+                    switch (icon) {
+                        case 'alert':
+                            icon = "fa-exclamation-triangle text-danger"
+                            break;
+                    }
+                    message = "<i class='fa " + icon + "'></i>&nbsp;" + message;
+                }
+                bootbox.alert({
+                    title: title,
+                    message: message,
+                    buttons: {
+                        ok: {
+                            label: btnlabel,
+                            className: btnclass
+                        }
+                    }
+                });
             },
             showError: function (error) {
-                main.showMessage($.i18n(error), $.i18n('Error'), 'alert');
+                main.showMessage($.i18n(error), $.i18n('error'), 'alert');
             },
             formatDate: function (dateObj, justTime) {
                 if (!dateObj)
@@ -488,6 +485,12 @@
                 });
                 return main.selectId;
             },
+            fillContent: function(selector) {
+                if ($pageContent.children().length > 0) {
+                    $pageContent.first().appendTo($hiddenObjects);
+                }
+                $(selector).prependTo($pageContent);
+            },
             updateWizard: function () {
                 var $wizard = $('#button-wizard');
                 if (main.objects['system.adapter.discovery.0']) {
@@ -532,6 +535,11 @@
         var cmdCallback = null;
         var stdout;
         var activeCmdId = null;
+
+        var $pageContent = $('#pageContent');
+        var $hiddenObjects = $('#hiddenObjects');
+
+        var $stdout = $('#stdout');
 
         var firstConnect = true;
 
@@ -716,7 +724,6 @@
             }
         }
 
-        // I want to initialize it only whe I need it
         function initAllDialogs() {
 
             $dialogCommand.dialog({
@@ -986,7 +993,7 @@
             console.log(error);
         });
         main.socket.on('permissionError', function (err) {
-            main.showMessage($.i18n('Has no permission to %s %s %s', err.operation, err.type, (err.id || '')));
+            main.showMessage($.i18n('Has no permission to $1 $2 $3', err.operation, err.type, (err.id || '')));
         });
         main.socket.on('stateChange', function (id, obj) {
             setTimeout(stateChange, 0, id, obj);
@@ -1038,9 +1045,10 @@
                 firstConnect = false;
 
                 main.socket.emit('authEnabled', function (auth, user) {
-                    if (!auth){
+                    if (!auth) {
                         $('#link-logout').remove();
-                        $('#button-logout').remove();                        
+                        $('#button-logout').remove();
+                        $('#button-info').show();
                     }
                     $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
                     if (auth) {
@@ -1231,11 +1239,42 @@
             location.reload();
         });
 
+        // open links
+        $('#menu-home').on("click", function () {
+            menus.home.init();
+        });
+        $('#menu-adapter').on("click", function () {
+            menus.adapters.init();
+        });
+        $('#menu-instances').on("click", function () {
+            menus.instances.init();
+        });
+        $('#menu-logs').on("click", function () {
+            menus.logs.init();
+        });
+        $('#menu-objects').on("click", function () {
+            menus.objects.init();
+        });
+        $('#menu-states').on("click", function () {
+            menus.states.init();
+        });
+        $('#menu-events').on("click", function () {
+            menus.events.init();
+        });
+        $('#menu-enums').on("click", function () {
+            menus.enums.init();
+        });
+        $('#menu-hosts').on("click", function () {
+            menus.hosts.init();
+        });
+        // / open links
+
         if (window.location.hash) {
-            var menu = 'menu-' + window.location.hash.slice(1);            
+            var menu = 'menu-' + window.location.hash.slice(1);
             $('#' + menu).click();
             $('.side-menu').find('a[href="' + window.location.hash + '"]').parent().addClass('active');
         }
+
     });
 
 })(jQuery);

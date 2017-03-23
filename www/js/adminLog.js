@@ -35,8 +35,9 @@ function Logs(main) {
             that.$logFilterSeverity.change(this.filter);
 
             that.$logFilterMessage.change(function () {
-                if (that.logFilterTimeout)
+                if (that.logFilterTimeout) {
                     clearTimeout(that.logFilterTimeout);
+                }
                 that.logFilterTimeout = setTimeout(that.filter, 600);
             }).keyup(function (e) {
                 if (e.which === 13) {
@@ -71,11 +72,11 @@ function Logs(main) {
                 that.clear();
             });
 
-            $('#log-pause').attr('title', $.i18n('Pause output')).click(function () {
+            $('#log-pause').click(function () {
                 that.pause();
             });
 
-            this.logPauseCounterSpan = $('#log-pause .ui-button-text');
+            this.logPauseCounterSpan = $('#log-pause .fa');
 
             $('#log-clear').click(function () {
                 that.clear(false);
@@ -87,7 +88,7 @@ function Logs(main) {
             });
 
             $('#log-copy').click(function () {
-                var text = '<span class="error">' + $.i18n('copy note') + '</span>';
+                var text = '<span class="text-danger">' + $.i18n('copy note') + '</span>';
                 $('#tabs').hide();
                 $('#log-copy-text').show().html(text + '<br><table style="width: 100%; font-size:12px" id="log-copy-table">' + $('#log-table').html() + '</table>');
                 var lines = $('#log-copy-table .log-column-4');
@@ -102,14 +103,81 @@ function Logs(main) {
 
     };
 
-    function installColResize() {
-    }
-
     // -------------------------------- Logs ------------------------------------------------------------
     this.init = function () {
+        if (!this.main.currentHost) {
+            setTimeout(function () {
+                that.init();
+            }, 500);
+            return;
+        }
+
+        $('#log-table').html('');
+        this.main.socket.emit('sendToHost', this.main.currentHost, 'getLogs', 200, function (lines) {
+            setTimeout(function () {
+                var message = {message: '', severity: 'debug', from: '', ts: ''};
+                var size = lines ? lines.pop() : -1;
+                if (size !== -1) {
+                    size = parseInt(size);
+                    $('#log-size').html(($.i18n('logsize') + ': ' + ((size / (1024 * 1024)).toFixed(2) + ' MB ')).replace(/ /g, '&nbsp;'));
+                }
+                for (var i = 0; i < lines.length; i++) {
+                    if (!lines[i])
+                        continue;
+                    // 2014-12-05 14:47:10.739 - info: iobroker  ERR! network In most cases you are behind a proxy or have bad network settings.npm ERR! network
+                    if (lines[i][4] === '-' && lines[i][7] === '-') {
+                        lines[i] = lines[i].replace(/(\[[0-9]+m)/g, '');
+                        message.ts = lines[i].substring(0, 23);
+                        lines[i] = lines[i].substring(27);
+
+                        var pos = lines[i].indexOf(':');
+                        message.severity = lines[i].substring(0, pos);
+                        if (message.severity.charCodeAt(message.severity.length - 1) === 27)
+                            message.severity = message.severity.substring(0, message.severity.length - 1);
+                        if (message.severity.charCodeAt(0) === 27)
+                            message.severity = message.severity.substring(1);
+
+                        lines[i] = lines[i].substring(pos + 2);
+                        pos = lines[i].indexOf(' ');
+                        message.from = lines[i].substring(0, pos);
+                        message.message = lines[i].substring(pos);
+                    } else {
+                        message.message = lines[i];
+                    }
+                    that.add(message);
+                }
+
+                that.logFilterHost = that.$logFilterHost.val();
+                that.logFilterMessage = that.$logFilterMessage.val();
+                that.logFilterSeverity = that.$logFilterSeverity.val();
+            }, 0);
+        });
+        this.main.fillContent('#menu-logs-div');
     };
 
     this.add = function (message) {
+        // remove instance name from text
+        if (message.message.substring(0, message.from.length) === message.from) {
+            message.message = message.message.substring(message.from.length + 1);
+        }
+
+        if (this.logPauseMode) {
+            this.logPauseList.push(message);
+            this.logPauseCounter++;
+
+            if (this.logPauseCounter > this.logLimit) {
+                if (!this.logPauseOverflow) {
+                    $('#log-pause')
+                            .removeClass('btn-default')
+                            .addClass('btn-danger')
+                            .changeTooltip($.i18n('mboLosing'));
+                    this.logPauseOverflow = true;
+                }
+                this.logPauseList.shift();
+            }
+            this.logPauseCounterSpan.html(this.logPauseCounter);
+            return;
+        }
     };
 
     this.filter = function () {
@@ -159,8 +227,44 @@ function Logs(main) {
     };
 
     this.clear = function (isReload) {
+        if (isReload === undefined)
+            isReload = true;
+        $('#log-table').html('');
+        this.logLinesCount = 0;
+        this.logLinesStart = 0;
+        $('#menu-logs').removeClass('text-danger');
+
+        if (isReload) {
+            setTimeout(function () {
+                that.init();
+            }, 0);
+        }
     };
 
     this.pause = function () {
+        var $logPause = $('#log-pause');
+        if (!this.logPauseMode) {
+            $logPause
+                    .addClass('active')
+                    .find('.fa')
+                    .removeClass('fa-pause')
+                    .html('0');
+
+            this.logPauseCounter = 0;
+            this.logPauseMode = true;
+        } else {
+            this.logPauseMode = false;
+            for (var i = 0; i < this.logPauseList.length; i++) {
+                this.add(this.logPauseList[i]);
+            }
+            this.logPauseOverflow = false;
+            this.logPauseList = [];
+            this.logPauseCounter = 0;
+
+            $logPause
+                    .removeClass('active')
+                    .removeClass('btn-danger')
+                    .addClass('btn-default');
+        }
     };
 }

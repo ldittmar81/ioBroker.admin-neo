@@ -1,5 +1,5 @@
 /*
- Copyright 2014-2016 bluefox <dogafox@gmail.com>
+ Copyright 2014-2017 bluefox <dogafox@gmail.com>
 
  version: 1.0.1 (2016.10.14)
 
@@ -1572,7 +1572,7 @@
                     CLIPBOARD = null;
                     break;*/
                 default:
-                    alert('Unhandled command: ' + data.cmd);
+                    bootbox.alert('Unhandled command: ' + data.cmd);
                     return;
             }
 

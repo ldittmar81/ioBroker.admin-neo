@@ -1,42 +1,53 @@
-<div id="grid-log" class="hidden">
-    <div>
-        <table>
-            <tr>
-                <td><span data-i18n="log">Log</span></td>
-                <td id="log-size"></td>
-                <td><button id="log-pause" class="btn btn-default" data-i18n-tooltip="Pause output"><i class="fa fa-pause fa-lg"></i></button></td>
-                <td><button id="log-refresh" class="btn btn-default" data-i18n-tooltip="Refresh log"><i class="fa fa-refresh fa-lg"></i></button></td>
-                <td><button id="log-copy" class="btn btn-default" data-i18n-tooltip="Copy log"><i class="fa fa-files-o fa-lg"></i></button></td>
-                <td><button id="log-clear" class="btn btn-default" data-i18n-tooltip="Clear log"><i class="fa fa-times fa-lg"></i></button></td>
-                <td><button id="log-clear-on-disk" class="btn btn-danger" data-i18n-tooltip="Clear on disk permanent"><i class="fa fa-trash fa-lg"></i></button></td>
-            </tr>
-        </table>
+<div class="row">
+    <div class="page-title">
+        <div class="title_left">
+            <h3 data-i18n="log">Log <small id="log-size"></small></h3>
+        </div>
+
+        <button id="log-pause" class="btn btn-default" data-i18n-tooltip="Pause output"><i class="fa fa-pause fa-lg"></i></button>
+        <button id="log-refresh" class="btn btn-default" data-i18n-tooltip="Refresh log"><i class="fa fa-refresh fa-lg"></i></button>
+        <button id="log-copy" class="btn btn-default" data-i18n-tooltip="Copy log"><i class="fa fa-files-o fa-lg"></i></button>
+        <button id="log-clear" class="btn btn-default" data-i18n-tooltip="Clear log"><i class="fa fa-times fa-lg"></i></button>
+        <button id="log-clear-on-disk" class="btn btn-danger" data-i18n-tooltip="Clear on disk permanent"><i class="fa fa-trash fa-lg"></i></button>        
+
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
-    <table id="log-outer-header">
-        <thead>
-            <tr>
-                <th><select id="log-filter-host"></select></th>
-                <th data-i18n="ts">ts</th>
-                <th>
-                    <select id="log-filter-severity">
-                        <option value="" data-i18n="debug">debug</option>
-                        <option value="info" data-i18n="info">info</option>
-                        <option value="warn" data-i18n="warn">warn</option>
-                        <option value="error" data-i18n="error">error</option>
-                    </select>
-                </th>
-                <th>
-                    <span data-i18n="message">message</span>
-                    <input id="log-filter-message" type="text" size="10"/>
-                    <button id="log-filter-message-clear" class="btn btn-default"><i class="fa fa-times fa-lg"></i></button>
-                </th>
-            </tr>
-        </thead>
-    </table>
-    <div id="grid-log-inner">
-        <table id="log-outer">
-            <tbody id="log-table">
-            </tbody>
-        </table>
+
+    <div class="clearfix"></div>
+
+    <div class="x_panel">
+        <div class="x_title">
+            <select id="log-filter-host"></select>
+            <span data-i18n="ts">ts</span>
+            <select id="log-filter-severity">
+                <option value="" data-i18n="debug">debug</option>
+                <option value="info" data-i18n="info">info</option>
+                <option value="warn" data-i18n="warn">warn</option>
+                <option value="error" data-i18n="error">error</option>
+            </select>
+            <div>
+                <span data-i18n="message">message</span>
+                <input id="log-filter-message" type="text" size="10"/>
+                <button id="log-filter-message-clear" class="btn btn-default"><i class="fa fa-times fa-lg"></i></button>
+            </div>
+        </div>
+
+        <div class="x_content">
+            <table id="log-outer" class="table table-striped">
+                <tbody id="log-table">
+                </tbody>
+            </table>            
+        </div>
+
     </div>
 </div>
+
