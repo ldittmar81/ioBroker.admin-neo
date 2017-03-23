@@ -47,7 +47,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title" style="border: 0;">
-                            <a href="index.html" class="site_title"><i class="fa fa-cog"></i> <span>ioBroker</span></a>
+                            <a href="/" class="site_title"><i class="fa fa-cog"></i> <span>ioBroker</span></a>
                         </div>
 
                         <div class="clearfix"></div>
@@ -101,32 +101,32 @@
                                 <li class="">
                                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="fa fa-user-circle"></span>
-                                        <span id="user">Admin</span>
+                                        <span id="current-user">Admin</span>
                                         <span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-usermenu pull-right">
                                         <li>
-                                            <a href="javascript:;" id="groupsLink">
+                                            <a href="javascript:;" id="link-groups">
                                                 <i class="fa fa-users pull-right"></i> <span data-i18n="groups">Group</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:;" id="usersLink">
-                                                <i class="fa fa-user pull-right"></i> <span data-i18n="users">Userss</span>
+                                            <a href="javascript:;" id="link-users">
+                                                <i class="fa fa-user pull-right"></i> <span data-i18n="users">Users</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:;" id=configLink">
+                                            <a href="javascript:;" id=link-config">
                                                 <i class="fa fa-gear pull-right"></i> <span data-i18n="config">Settings</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:;" id="infoLink">
+                                            <a href="javascript:;" id="link-info">
                                                 <i class="fa fa-info-circle pull-right"></i> <span data-i18n="info">Info</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:;" id="logoutLink">
+                                            <a href="javascript:;" id="link-logout">
                                                 <i class="fa fa-sign-out pull-right"></i> <span data-i18n="logout">Log Out</span>
                                             </a>
                                         </li>
@@ -193,7 +193,8 @@
 
             </div>
         </div>
-
+        
+        <div id="menu-logs-div" class="hidden"></div>
         <div id="connecting" class="gears"><img src="img/gears.gif" alt="gears"/></div>
 
         <script type="text/javascript" src="lib/js/jquery.min.js"></script>

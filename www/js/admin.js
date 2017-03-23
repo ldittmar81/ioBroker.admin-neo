@@ -1,4 +1,14 @@
-/* global systemLang, i18n, availableLanguages, io, storage, toggleFullScreen */
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* global io:false */
+/* global jQuery:false */
+/* jslint browser:true */
+/* jshint browser:true */
+/* global systemLang */
+/* global storage */
+/* global i18n */
+/* global availableLanguages */
+/* global toggleFullScreen */
 
 'use strict';
 
@@ -88,15 +98,16 @@
             instances: null,
             objectsLoaded: false,
             waitForRestart: false,
-            tabs: null,
+            menus: null,
             selectId: null,
             config: {},
             addEventMessage: function (id, state, rowData) {
-                tabs.events.addEventMessage(id, state, rowData);
+                menus.events.addEventMessage(id, state, rowData);
             },
             saveConfig: function (attr, value) {
-                if (attr)
+                if (attr){
                     main.config[attr] = value;
+                }
 
                 if (typeof storage !== 'undefined') {
                     storage.set('adminConfig', JSON.stringify(main.config));
@@ -486,9 +497,9 @@
                             icons: {primary: ' ui-icon-search'},
                             text: false
                         }).click(function () {
-                            //$('#tabs').tabs('option', 'active', 1);
+                            //$('#menus').menus('option', 'active', 1);
                             // open configuration dialog
-                            main.tabs.instances.showConfigDialog('system.adapter.discovery.0');
+                            main.menus.instances.showConfigDialog('system.adapter.discovery.0');
                         }).attr('title', $.i18n('Device discovery'));
                     }
                     $wizard.show();
@@ -498,7 +509,7 @@
             }
         };
 
-        var tabs = {
+        var menus = {
             home: new Home(main),
             adapters: new Adapters(main),
             instances: new Instances(main),
@@ -512,8 +523,8 @@
             enums: new Enums(main)
         };
 
-        main.instances = tabs.instances.list;
-        main.tabs = tabs;
+        main.instances = menus.instances.list;
+        main.menus = menus;
         main.systemDialog = new System(main);
 
         var children = {};
@@ -521,13 +532,6 @@
         var cmdCallback = null;
         var stdout;
         var activeCmdId = null;
-
-        var $stdout = $('#stdout');
-
-        var $dialogCommand = $('#dialog-command');
-        var $dialogLicense = $('#dialog-license');
-        var $dialogMessage = $('#dialog-message');
-        var $dialogConfirm = $('#dialog-confirm');
 
         var firstConnect = true;
 
@@ -578,12 +582,12 @@
                 }
             }
 
-            // Build the standard tabs together
+            // Build the standard menus together
             $('.admin-tab').each(function () {
                 list.push($(this).attr('id'));
-                if (!main.systemConfig.common.tabs || main.systemConfig.common.tabs.indexOf($(this).attr('id')) !== -1) {
+                if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
                     text += '<li><a href="#' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</a><button class="tab-close" data-tab="' + $(this).attr('id') + '"></button></li>\n';
-                    $(this).show().appendTo($('#tabs'));
+                    $(this).show().appendTo($('#menus'));
                 } else {
                     if ($(this).parent().prop('tagName') !== 'BODY') {
                         $(this).appendTo($('body'));
@@ -596,7 +600,7 @@
                 }
             });
 
-            // Look for adapter tabs
+            // Look for adapter menus
             for (var a = 0; a < addTabs.length; a++) {
                 var name = 'tab-' + main.objects[addTabs[a]].common.name;
                 var link = main.objects[addTabs[a]].common.adminTab.link || '/adapter/' + main.objects[addTabs[a]].common.name + '/tab.html';
@@ -633,13 +637,13 @@
 
                 list.push(name);
 
-                if (!main.systemConfig.common.tabs || main.systemConfig.common.tabs.indexOf(name) !== -1) {
+                if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf(name) !== -1) {
                     var isReplace = false;
                     if (!link) {
                         link = '/adapter/' + parts[2] + '/tab.html';
                     } else {
                         // convert "http://%ip%:%port%" to "http://localhost:1880"
-                        /*main.tabs.instances._replaceLinks(link, parts[2], parts[3], name, function (link, adapter, instance, arg) {
+                        /*main.menus.instances._replaceLinks(link, parts[2], parts[3], name, function (link, adapter, instance, arg) {
                          $('#' + arg).data('src', link);
                          });*/
                         isReplace = link.indexOf('%') !== -1;
@@ -650,9 +654,9 @@
                     if (!$('#' + name).length) {
                         var div = '<div id="' + name + '" class="tab-custom ' + (isReplace ? 'link-replace' : '') + '" data-adapter="' + parts[2] + '" data-instance="' + parts[3] + '" data-src="' + link + '">' +
                                 '<iframe class="iframe-in-tab" style="border: 0; solid #FFF; display:block; left: 0; top: 0; width: 100%;"></iframe></div>';
-                        $(div).appendTo($('#tabs'));
+                        $(div).appendTo($('#menus'));
                     } else {
-                        $('#' + name).show().appendTo($('#tabs'));
+                        $('#' + name).show().appendTo($('#menus'));
                     }
                 } else {
                     $('#' + name).hide().appendTo($('body'));
@@ -666,17 +670,17 @@
             });
 
 
-            if (!main.systemConfig.common.tabs)
-                main.systemConfig.common.tabs = list;
-            $('#tabs-ul').html(text);
+            if (!main.systemConfig.common.menus)
+                main.systemConfig.common.menus = list;
+            $('#menus-ul').html(text);
 
             $('.tab-close').button({
                 icons: {primary: 'ui-icon-close'},
                 text: false
             }).unbind('click').click(function () {
-                var pos = main.systemConfig.common.tabs.indexOf($(this).data('tab'));
+                var pos = main.systemConfig.common.menus.indexOf($(this).data('tab'));
                 if (pos !== -1) {
-                    main.systemConfig.common.tabs.splice(pos, 1);
+                    main.systemConfig.common.menus.splice(pos, 1);
                     // save
                     main.socket.emit('setObject', 'system.config', main.systemConfig, function (err) {
                         if (err) {
@@ -699,7 +703,7 @@
                 $('.link-replace').each(function () {
                     // convert "http://%ip%:%port%" to "http://localhost:1880"
                     countLink++;
-                    main.tabs.instances._replaceLinks($(this).data('src'), $(this).data('adapter'), $(this).data('instance'), $(this).attr('id'), function (link, adapter, instance, arg) {
+                    main.menus.instances._replaceLinks($(this).data('src'), $(this).data('adapter'), $(this).data('instance'), $(this).attr('id'), function (link, adapter, instance, arg) {
                         $('#' + arg).data('src', link).removeClass('link-replace');
                         if (!--countLink) {
                             if (loadTimeout) {
@@ -772,7 +776,7 @@
             });
         }
 
-        tabs.logs.prepare();
+        menus.logs.prepare();
 
         // ----------------------------- Objects show and Edit ------------------------------------------------
         function getObjects(callback) {
@@ -789,13 +793,13 @@
                         if (obj.type === 'instance')
                             main.instances.push(id);
                         if (obj.type === 'enum')
-                            tabs.enums.list.push(id);
+                            menus.enums.list.push(id);
                         if (obj.type === 'user')
-                            tabs.users.list.push(id);
+                            menus.users.list.push(id);
                         if (obj.type === 'group')
-                            tabs.groups.list.push(id);
+                            menus.groups.list.push(id);
                         if (obj.type === 'adapter')
-                            tabs.adapters.list.push(id);
+                            menus.adapters.list.push(id);
                         if (obj.type === 'host') {
                             var addr = null;
                             // Find first non internal IP and use it as identifier
@@ -812,9 +816,9 @@
                                 }
                             }
                             if (addr) {
-                                tabs.hosts.list.push({name: obj.common.hostname, address: addr, id: obj._id});
+                                menus.hosts.list.push({name: obj.common.hostname, address: addr, id: obj._id});
                             } else {
-                                tabs.hosts.list.push({name: obj.common.hostname, address: '127.0.0.1', id: obj._id});
+                                menus.hosts.list.push({name: obj.common.hostname, address: '127.0.0.1', id: obj._id});
                             }
                         }
 
@@ -830,16 +834,16 @@
                     initTabs();
 
                     // If customs enabled
-                    tabs.objects.checkCustoms();
+                    menus.objects.checkCustoms();
 
                     // Detect if some script engine instance installed
-                    //                var engines = tabs.scripts.fillEngines();
+                    //                var engines = menus.scripts.fillEngines();
 
                     // Disable scripts tab if no one script engine instance found
-                    //              if (!engines || !engines.length) $('#tabs').tabs('option', 'disabled', [4]);
+                    //              if (!engines || !engines.length) $('#menus').menus('option', 'disabled', [4]);
 
                     // Show if update available
-                    tabs.hosts.initList();
+                    menus.hosts.initList();
 
                     if (typeof callback === 'function')
                         callback();
@@ -849,7 +853,7 @@
         // ----------------------------- States show and Edit ------------------------------------------------
 
         function getStates(callback) {
-            tabs.states.clear();
+            menus.states.clear();
             main.socket.emit('getStates', function (err, res) {
                 main.states = res;
                 if (typeof callback === 'function') {
@@ -866,18 +870,18 @@
             if (id && id.match(/\.messagebox$/)) {
                 main.addEventMessage(id, state);
             } else {
-                tabs.states.stateChange(id, state);
-                tabs.objects.stateChange(id, state);
-                tabs.hosts.stateChange(id, state);
+                menus.states.stateChange(id, state);
+                menus.objects.stateChange(id, state);
+                menus.hosts.stateChange(id, state);
 
                 if (main.selectId)
                     main.selectId.selectId('state', id, state);
             }
 
             // Update alive and connected of main.instances
-            tabs.instances.stateChange(id, state);
-            tabs.objects.stateChangeHistory(id, state);
-            tabs.adapters.stateChange(id, state);
+            menus.instances.stateChange(id, state);
+            menus.objects.stateChangeHistory(id, state);
+            menus.adapters.stateChange(id, state);
         }
 
         function objectChange(id, obj) {
@@ -906,12 +910,12 @@
             // update to event table
             main.addEventMessage(id, null, null, obj);
 
-            tabs.objects.objectChange(id, obj);
+            menus.objects.objectChange(id, obj);
 
             if (main.selectId)
                 main.selectId.selectId('object', id, obj);
 
-            tabs.enums.objectChange(id, obj);
+            menus.enums.objectChange(id, obj);
 
             // If system config updated
             if (id === 'system.config') {
@@ -927,8 +931,8 @@
             if (id === 'system.adapter.discovery.0')
                 main.updateWizard();
 
-            //tabs.adapters.objectChange(id, obj);
-            tabs.instances.objectChange(id, obj);
+            //menus.adapters.objectChange(id, obj);
+            menus.instances.objectChange(id, obj);
 
             if (obj && id.match(/^system\.adapter\.[\w-]+\.[0-9]+$/)) {
                 if (obj.common &&
@@ -944,18 +948,18 @@
                             id.match(/^system\.adapter\.influxdb\.[0-9]+$/) ||
                             id.match(/^system\.adapter\.sql\.[0-9]+$/)) {
                         // Update all states if customs enabled or disabled
-                        tabs.objects.reinit();
+                        menus.objects.reinit();
                     }
                 }
             }
 
-            tabs.hosts.objectChange(id, obj);
+            menus.hosts.objectChange(id, obj);
 
             // Update groups
-            tabs.groups.objectChange(id, obj);
+            menus.groups.objectChange(id, obj);
 
             // Update users
-            tabs.users.objectChange(id, obj);
+            menus.users.objectChange(id, obj);
         }
 
         function monitor() {
@@ -976,7 +980,7 @@
 
         // ---------------------------- Socket.io methods ---------------------------------------------
         main.socket.on('log', function (message) {
-            tabs.logs.add(message);
+            menus.logs.add(message);
         });
         main.socket.on('error', function (error) {
             console.log(error);
@@ -1034,8 +1038,10 @@
                 firstConnect = false;
 
                 main.socket.emit('authEnabled', function (auth, user) {
-                    if (!auth)
-                        $('#button-logout').remove();
+                    if (!auth){
+                        $('#link-logout').remove();
+                        $('#button-logout').remove();                        
+                    }
                     $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
                     if (auth) {
                         main._lastTimer = (new Date()).getTime();
@@ -1162,7 +1168,7 @@
                                                     isFloatComma: true, // Default float divider ('.' - false, ',' - true)
                                                     licenseConfirmed: false, // If license agreement confirmed,
                                                     defaultHistory: '', // Default history instance
-                                                    tabs: [// Show by default only these tabs
+                                                    menus: [// Show by default only these menus
                                                         'tab-adapters',
                                                         'tab-instances',
                                                         'tab-objects',
@@ -1182,17 +1188,17 @@
                                     }
 
                                     // Here we go!
-                                    tabs.hosts.prepare();
-                                    tabs.objects.prepare();
-                                    tabs.states.prepare();
-                                    tabs.adapters.prepare();
-                                    tabs.instances.prepare();
-                                    tabs.users.prepare();
-                                    tabs.groups.prepare();
-                                    tabs.enums.prepare();
-                                    tabs.objects.prepareCustoms();
-                                    tabs.events.prepare();
-                                    tabs.home.prepare();
+                                    menus.hosts.prepare();
+                                    menus.objects.prepare();
+                                    menus.states.prepare();
+                                    menus.adapters.prepare();
+                                    menus.instances.prepare();
+                                    menus.users.prepare();
+                                    menus.groups.prepare();
+                                    menus.enums.prepare();
+                                    menus.objects.prepareCustoms();
+                                    menus.events.prepare();
+                                    menus.home.prepare();
                                     main.systemDialog.prepare();
 
                                     getStates(getObjects);
@@ -1217,7 +1223,7 @@
         });
         main.socket.on('repoUpdated', function () {
             setTimeout(function () {
-                tabs.adapters.init(true);
+                menus.adapters.init(true);
             }, 0);
         });
 
