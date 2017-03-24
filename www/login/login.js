@@ -3,7 +3,6 @@
 /* global jQuery:false */
 /* jslint browser:true */
 /* jshint browser:true */
-/* global availableLanguages */
 /* global i18n */
 /* global systemLang */
 
@@ -19,7 +18,7 @@ $(function () {
         $('#username').attr("placeholder", $.i18n('username'));
         $('#password').attr("placeholder", $.i18n('password'));
 
-        if (window.location.search.indexOf('error') != -1) {
+        if (window.location.search.indexOf('error') !== -1) {
             $('#error').val($.i18n('wrong_key')).show();
         }
         

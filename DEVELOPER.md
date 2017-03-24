@@ -32,6 +32,7 @@ $('#element').changeTooltip('New Tooltip!');
 * Parsley 2.7.0 http://parsleyjs.org/
 * PNotify 3.0.0 https://sciactive.github.io/pnotify/
 * jQuery Inputmask 3.3.4 http://robinherbots.github.io/Inputmask/
+* Dropzone 4.3.0 http://www.dropzonejs.com/
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations

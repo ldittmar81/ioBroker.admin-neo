@@ -1,5 +1,3 @@
-/* global systemLang, availableLanguages */
-
 function Adapters(main) {
     'use strict';
 
@@ -69,6 +67,12 @@ function Adapters(main) {
 
     // ----------------------------- Adapters show and Edit ------------------------------------------------
     this.init = function (update, updateRepo) {
+        if (!this.main.objectsLoaded) {
+            setTimeout(function () {
+                that.init();
+            }, 250);
+            return;
+        }
       
     };
 

@@ -4,7 +4,6 @@
 /* global jQuery:false */
 /* jslint browser:true */
 /* jshint browser:true */
-/* global availableLanguages */
 /* global systemLang */
 /* global i18n */
 /* global PNotify */

@@ -1,6 +1,7 @@
-var availableLanguages = ['en', 'de', 'ru', 'pt'];
+var availableLanguages = {'de': 'Deutsch', 'en': 'English', 'pt': 'Português', 'ru': 'русский'};
 
 var systemLang = navigator.language || navigator.userLanguage;
-if (!(systemLang in availableLanguages))
+if (!availableLanguages.hasOwnProperty(systemLang)) {
     systemLang = "en";
+}
 var i18n = $.i18n();

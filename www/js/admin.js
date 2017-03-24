@@ -1079,7 +1079,7 @@
                                             if (!main.systemConfig.common.licenseConfirmed) {
                                                 // Show license agreement
                                                 var language = main.systemConfig.common.language || window.navigator.userLanguage || window.navigator.language;
-                                                if (!(language in availableLanguages)) {
+                                                if (!availableLanguages.hasOwnProperty(language)) {
                                                     language = 'en';
                                                 }
 

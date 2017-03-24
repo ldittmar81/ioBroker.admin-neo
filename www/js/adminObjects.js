@@ -32,6 +32,12 @@ function Objects(main) {
     }
 
     this.init = function (update) {
+        if (!main.objectsLoaded) {
+            setTimeout(function () {
+                that.init();
+            }, 250);
+            return;
+        }
     };
 
     this.edit = function (id, callback) {
