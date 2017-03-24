@@ -75,19 +75,19 @@
                         <!-- /menu footer buttons -->
                         <div class="sidebar-footer hidden-small">
                             <a id="button-edit" data-placement="top" data-i18n-tooltip="edit">
-                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                <span class="fa fa-pencil fa-lg" aria-hidden="true"></span>
                             </a>
                             <a id="button-system" data-placement="top" data-i18n-tooltip="config">
-                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                <span class="fa fa-gear fa-lg" aria-hidden="true"></span>
                             </a>
                             <a id="button-fullscreen" data-placement="top" data-i18n-tooltip="fullscreen">
-                                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                                <span class="fa fa-arrows-alt fa-lg" aria-hidden="true"></span>
                             </a>
                             <a id="button-info" data-placement="top" class="hidden" data-i18n-tooltip="info">
-                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                <span class="fa fa-info-circle fa-lg" aria-hidden="true"></span>
                             </a>
                             <a id="button-logout" data-placement="top" data-i18n-tooltip="logout">
-                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                                <span class="fa fa-sign-out fa-lg" aria-hidden="true"></span>
                             </a>
                         </div>
                         <!-- /menu footer buttons -->
@@ -126,6 +126,11 @@
                                             </a>
                                         </li>
                                         <li>
+                                            <a href="javascript:;" id="link-wizard">
+                                                <i class="fa fa-info-magic pull-right"></i> <span data-i18n="wizard">Wizard</span>
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="javascript:;" id="link-info">
                                                 <i class="fa fa-info-circle pull-right"></i> <span data-i18n="info">Info</span>
                                             </a>
@@ -141,34 +146,12 @@
                                 <li role="presentation" class="dropdown">
                                     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                                         <i class="fa fa-bell-o"></i>
-                                        <span id="log_error_count" class="badge bg-red">6</span>
+                                        <span id="log_error_count" class="badge bg-green">0</span>
                                     </a>
-                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                        <li>
-                                            <a>
-                                                <span>
-                                                    <span>John Smith</span>
-                                                    <span class="time">3 mins ago</span>
-                                                </span>
-                                                <span class="message">
-                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a>
-                                                <span>
-                                                    <span>John Smith</span>
-                                                    <span class="time">3 mins ago</span>
-                                                </span>
-                                                <span class="message">
-                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
-                                                </span>
-                                            </a>
-                                        </li>					
+                                    <ul id="log_error_list" class="dropdown-menu list-unstyled msg_list" role="menu">
                                         <li>
                                             <div class="text-center">
-                                                <a>
+                                                <a href="#logs" id="link-logs">
                                                     <strong data-i18n="see_all_logs">See All Logs</strong>
                                                     <i class="fa fa-angle-right"></i>
                                                 </a>

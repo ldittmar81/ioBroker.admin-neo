@@ -41,35 +41,6 @@
         }
     };
 
-    // Fullscreen
-    $(function () {
-        $('#button-fullscreen').on("click", function () {
-            if (!document.fullscreenElement && // alternative standard method
-                    !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen();
-                } else if (document.documentElement.msRequestFullscreen) {
-                    document.documentElement.msRequestFullscreen();
-                } else if (document.documentElement.mozRequestFullScreen) {
-                    document.documentElement.mozRequestFullScreen();
-                } else if (document.documentElement.webkitRequestFullscreen) {
-                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                }
-            }
-        });
-    });
-    // / Fullscreen
-
     $(function () {
 
         var main = {
@@ -147,80 +118,62 @@
                 });
             },
             confirmMessage: function (message, title, icon, buttons, callback) {
+                if (icon && $.type(icon) === "string") {
+                    message = "<i class='fa " + icon.text2iconClass + "'></i>&nbsp;" + message;
+                }
                 if (typeof buttons === 'function') {
                     callback = buttons;
-                    $dialogConfirm.dialog('option', 'buttons', [
-                        {
-                            text: $.i18n('ok'),
-                            click: function () {
-                                var cb = $(this).data('callback');
-                                $(this).dialog('close');
-                                if (cb)
-                                    cb(true);
+
+                    bootbox.confirm({
+                        title: title || $.i18n('message'),
+                        message: message,
+                        buttons: {
+                            confirm: {
+                                label: $.i18n('ok'),
+                                className: 'btn-primary'
+                            },
+                            cancel: {
+                                label: $.i18n('cancel'),
+                                className: 'btn-default'
                             }
                         },
-                        {
-                            text: $.i18n('cancel'),
-                            click: function () {
-                                var cb = $(this).data('callback');
-                                $(this).dialog('close');
-                                if (cb)
-                                    cb(false);
+                        callback: function (result) { /* result is a boolean; true = OK, false = Cancel*/
+                            if (typeof callback === 'function') {
+                                callback(result);
                             }
                         }
+                    });
 
-                    ]);
                 } else if (typeof buttons === 'object') {
+                    
+                    var btn = [];
                     for (var b = 0; b < buttons.length; b++) {
-                        buttons[b] = {
-                            text: buttons[b],
-                            id: 'dialog-confirm-button-' + b,
-                            click: function (e) {
-                                var id = parseInt(e.currentTarget.id.substring('dialog-confirm-button-'.length), 10);
-                                var cb = $(this).data('callback');
-                                $(this).dialog('close');
-                                if (cb)
-                                    cb(id);
+                        btn[b] = {
+                            label: buttons[b],
+                            class: "btn-default",
+                            callback: function () {
+                                callback(b);
                             }
-                        }
+                        };
                     }
-                    $dialogConfirm.dialog('option', 'buttons', buttons);
-                }
 
-                $dialogConfirm.dialog('option', 'title', title || $.i18n('message'));
-                $('#dialog-confirm-text').html(message);
-                if (icon) {
-                    $('#dialog-confirm-icon').show();
-                    $('#dialog-confirm-icon').attr('class', '');
-                    $('#dialog-confirm-icon').addClass('ui-icon ui-icon-' + icon);
-                } else {
-                    $('#dialog-confirm-icon').hide();
+                    bootbox.dialog(message, btn, {
+                        title: title || $.i18n('message')
+                    });
+
                 }
-                $dialogConfirm.data('callback', callback);
-                $dialogConfirm.dialog('open');
             },
             showMessage: function (message, title, icon, btnlabel, btnclass) {
-                if (!btnlabel) {
-                    btnlabel = $.i18n('ok');
-                }
-                if (!btnclass) {
-                    btnclass = 'btn-primary';
-                }
-                if (icon) {
-                    switch (icon) {
-                        case 'alert':
-                            icon = "fa-exclamation-triangle text-danger"
-                            break;
-                    }
-                    message = "<i class='fa " + icon + "'></i>&nbsp;" + message;
+                if (icon && $.type(icon) === "string") {
+                    message = "<i class='fa " + icon.text2iconClass + "'></i>&nbsp;" + message;
                 }
                 bootbox.alert({
-                    title: title,
+                    title: title || $.i18n('message'),
                     message: message,
                     buttons: {
                         ok: {
-                            label: btnlabel,
-                            className: btnclass
+                            label: btnlabel || $.i18n('ok'),
+                            className: btnclass || 'btn-primary'
                         }
                     }
                 });
@@ -426,7 +379,7 @@
                 if (main.objects[id]) {
                     if (leaf && leaf.children) {
                         // ask if only object must be deleted or just this one
-                        main.confirmMessage($.i18n('Do you want to delete just <span style="color: blue">one object</span> or <span style="color: red">all</span> children of %s too?', id), null, 'help', [$.i18n('_All'), $.i18n('Only one'), $.i18n('Cancel')], function (result) {
+                        main.confirmMessage($.i18n('Do you want to delete just <span style="color: blue">one object</span> or <span style="color: red">all</span> children of %s too?', id), null, 'help', [$.i18n('all'), $.i18n('onlyOne'), $.i18n('cancel')], function (result) {
                             // If all
                             if (result === 0) {
                                 main._delObjects(id, true, callback);
@@ -439,71 +392,71 @@
                     } else {
                         main.confirmMessage($.i18n('Are you sure to delete %s?', id), null, 'help', function (result) {
                             // If all
-                            if (result)
+                            if (result) {
                                 main._delObjects(id, true, callback);
+                            }
                         });
                     }
                 } else if (leaf && leaf.children) {
                     main.confirmMessage($.i18n('Are you sure to delete all children of %s?', id), null, 'help', function (result) {
                         // If all
-                        if (result)
+                        if (result) {
                             main._delObjects(id, true, callback);
+                        }
                     });
                 } else {
                     main.showMessage($.i18n('Object "<b>%s</b>" does not exists. Update the page.', id), null, 'help', function (result) {
                         // If all
-                        if (result)
+                        if (result) {
                             main._delObjects(id, true, callback);
+                        }
                     });
                 }
             },
             initSelectId: function () {
-                if (main.selectId)
+                if (main.selectId) {
                     return main.selectId;
+                }
                 main.selectId = $('#dialog-select-member').selectId('init', {
                     objects: main.objects,
                     states: main.states,
                     filter: {type: 'state'},
                     name: 'admin-select-member',
                     texts: {
-                        select: $.i18n('Select'),
-                        cancel: $.i18n('Cancel'),
-                        all: $.i18n('All'),
-                        id: $.i18n('ID'),
-                        name: $.i18n('Name'),
-                        role: $.i18n('Role'),
-                        room: $.i18n('Room'),
-                        value: $.i18n('Value'),
-                        selectid: $.i18n('Select ID'),
-                        from: $.i18n('From'),
-                        lc: $.i18n('Last changed'),
-                        ts: $.i18n('Time stamp'),
-                        wait: $.i18n('Processing...'),
-                        ack: $.i18n('Acknowledged')
+                        select: $.i18n('select'),
+                        cancel: $.i18n('cancel'),
+                        all: $.i18n('all'),
+                        id: $.i18n('id'),
+                        name: $.i18n('name'),
+                        role: $.i18n('role'),
+                        room: $.i18n('room'),
+                        value: $.i18n('value'),
+                        selectid: $.i18n('selectID'),
+                        from: $.i18n('from'),
+                        lc: $.i18n('lastchanged'),
+                        ts: $.i18n('timestamp'),
+                        wait: $.i18n('processing'),
+                        ack: $.i18n('acknowledged')
                     },
                     columns: ['image', 'name', 'role', 'room', 'value']
                 });
                 return main.selectId;
             },
-            fillContent: function(selector) {
+            fillContent: function (selector) {
                 if ($pageContent.children().length > 0) {
                     $pageContent.first().appendTo($hiddenObjects);
                 }
                 $(selector).prependTo($pageContent);
             },
             updateWizard: function () {
-                var $wizard = $('#button-wizard');
+                var $wizard = $('#link-wizard');
                 if (main.objects['system.adapter.discovery.0']) {
                     if (!$wizard.data('inited')) {
                         $wizard.data('inited', true);
-                        $wizard.button({
-                            icons: {primary: ' ui-icon-search'},
-                            text: false
-                        }).click(function () {
-                            //$('#menus').menus('option', 'active', 1);
-                            // open configuration dialog
+                        $wizard.click(function () {
+                            // TODO open configuration dialog
                             main.menus.instances.showConfigDialog('system.adapter.discovery.0');
-                        }).attr('title', $.i18n('Device discovery'));
+                        });
                     }
                     $wizard.show();
                 } else {
@@ -1048,7 +1001,7 @@
                     if (!auth) {
                         $('#link-logout').remove();
                         $('#button-logout').remove();
-                        $('#button-info').show();
+                        $('#button-info').removeClass('hidden');
                     }
                     $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
                     if (auth) {
@@ -1252,6 +1205,10 @@
         $('#menu-logs').on("click", function () {
             menus.logs.init();
         });
+        $('#link-logs').on("click", function () {
+           $('#menu-logs').click();
+           $('.side-menu').find('a[href="#logs"]').parent().addClass('active');
+        });
         $('#menu-objects').on("click", function () {
             menus.objects.init();
         });
@@ -1268,6 +1225,33 @@
             menus.hosts.init();
         });
         // / open links
+
+        // Fullscreen
+        $('#button-fullscreen').on("click", function () {
+            if (!document.fullscreenElement && // alternative standard method
+                    !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        });
+        // / Fullscreen
 
         if (window.location.hash) {
             var menu = 'menu-' + window.location.hash.slice(1);

@@ -203,13 +203,8 @@ function showMessage(message, title, icon, btnlabel, btnclass) {
     if (!btnclass) {
         btnclass = 'btn-primary';
     }
-    if (icon) {
-        switch (icon) {
-            case 'alert':
-                icon = "fa-exclamation-triangle text-danger"
-                break;
-        }
-        message = "<i class='fa " + icon + "'></i>&nbsp;" + message;
+    if (icon && $.type(icon) === "string") {
+        message = "<i class='fa " + icon.text2iconClass + "'></i>&nbsp;" + message;
     }
     bootbox.alert({
         title: title,
@@ -224,25 +219,47 @@ function showMessage(message, title, icon, btnlabel, btnclass) {
 }
 
 function confirmMessage(message, title, icon, buttons, callback) {
-    bootbox.confirm({
-        title: title,
-        message: message,
-        buttons: {
-            confirm: {
-                label: $.i18n('ok'),
-                className: 'btn-primary'
+    if (icon && $.type(icon) === "string") {
+        message = "<i class='fa " + icon.text2iconClass + "'></i>&nbsp;" + message;
+    }
+    if (typeof buttons === 'function') {
+        callback = buttons;
+        bootbox.confirm({
+            title: title,
+            message: message,
+            buttons: {
+                confirm: {
+                    label: $.i18n('ok'),
+                    className: 'btn-primary'
+                },
+                cancel: {
+                    label: $.i18n('cancel'),
+                    className: 'btn-default'
+                }
             },
-            cancel: {
-                label: $.i18n('cancel'),
-                className: 'btn-default'
+            callback: function (result) { /* result is a boolean; true = OK, false = Cancel*/
+                if (typeof callback === 'function') {
+                    callback(result);
+                }
             }
-        },
-        callback: function (result) { /* result is a boolean; true = OK, false = Cancel*/
-            if (typeof callback === 'function') {
-                callback(result);
-            }
+        });
+    } else if (typeof buttons === 'object') {
+
+        var btn = [];
+        for (var b = 0; b < buttons.length; b++) {
+            btn[b] = {
+                label: buttons[b],
+                class: "btn-default",
+                callback: function () {
+                    callback(b);
+                }
+            };
         }
-    });
+
+        bootbox.dialog(message, btn, {
+            title: title || $.i18n('message')
+        });
+    }
 }
 
 function getObject(id, callback) {

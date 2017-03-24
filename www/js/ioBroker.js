@@ -32,6 +32,30 @@ jQuery.fn.changeTooltip = function (newValue) {
     return this;
 };
 
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (searchString, position) {
+        position = position || 0;
+        return this.indexOf(searchString, position) === position;
+    };
+}
+
+String.prototype.text2iconClass = function () {
+    if(this.startsWith('fa-')){
+        return this;
+    }
+    if (this.substr())
+        switch (this) {
+            case 'alert':
+                return "fa-exclamation-triangle text-danger";
+            case 'help':
+                return "fa-question-circle text-info";
+            case 'notice':
+                return "fa-exclamation-circle text-info";
+            default:
+                return "fa-" + this;
+        }
+};
+
 /**
  * Resize function without multiple trigger
  * 

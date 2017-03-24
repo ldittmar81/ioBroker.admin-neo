@@ -15,6 +15,27 @@
 $('#element').changeTooltip('New Tooltip!');
 ```
 
+### Icons -> fa-icons at showMessage and confirmMessage
+
+```
+"alert".text2iconClass      // "fa-exclamation-triangle text-danger"
+"help".text2iconClass       // "fa-question-circle text-info"
+"notice".text2iconClass     // "fa-exclamation-circle text-info"
+
+"test".text2iconClass       //"fa-test"
+"fa-test".text2iconClass    //"fa-test"
+```
+
+### "test".startsWith("te") -> true
+
+```
+var str = 'ioBroker ist einfach super';
+
+console.log(str.startsWith('ioBroker ist'));    // true
+console.log(str.startsWith('einfach'));         // false
+console.log(str.startsWith('einfach', 13));     // true
+```
+
 ## Bibliotheken
 
 ### CSS
