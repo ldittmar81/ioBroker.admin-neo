@@ -544,7 +544,7 @@
             }
 
             // Build the standard menus together
-            $('.admin-tab').each(function () {
+            /*$('.side-menu li').each(function () {
                 list.push($(this).attr('id'));
                 if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
                     text += '<li><a href="#' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</a><button class="tab-close" data-tab="' + $(this).attr('id') + '"></button></li>\n';
@@ -559,11 +559,11 @@
                     }
                     showTabs += '<option value="' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</option>';
                 }
-            });
+            });*/
 
             // Look for adapter menus
             for (var a = 0; a < addTabs.length; a++) {
-                var name = 'tab-' + main.objects[addTabs[a]].common.name;
+                var name = main.objects[addTabs[a]].common.name;
                 var link = main.objects[addTabs[a]].common.adminTab.link || '/adapter/' + main.objects[addTabs[a]].common.name + '/tab.html';
                 var parts = addTabs[a].split('.');
                 var buttonName;
@@ -610,8 +610,11 @@
                         isReplace = link.indexOf('%') !== -1;
                     }
 
-                    text += '<li><a href="#' + name + '">' + buttonName + '</a><button class="tab-close" data-tab="' + name + '"></button></li>\n';
+                    //       <li><a href="#hosts" id="menu-hosts"><i class="fa fa-server"></i> <span data-i18n="hosts">Hosts</span> </a></li>
+                    var icon = main.objects[addTabs[a]].common.adminTab['fa-icon'] || 'fa-cog';
+                    text += '<li><a href="#' + name + '" id="menu-' + name + '"><i class="fa ' + icon + '"></i><span data-i18n="' + buttonName + '">' + buttonName + '</a><button class="tab-close" data-tab="' + name + '" style="display: none"></button></li>\n';
 
+                    //noinspection JSJQueryEfficiency
                     if (!$('#' + name).length) {
                         var div = '<div id="' + name + '" class="tab-custom ' + (isReplace ? 'link-replace' : '') + '" data-adapter="' + parts[2] + '" data-instance="' + parts[3] + '" data-src="' + link + '">' +
                                 '<iframe class="iframe-in-tab" style="border: 0; solid #FFF; display:block; left: 0; top: 0; width: 100%;"></iframe></div>';
@@ -624,16 +627,16 @@
                     showTabs += '<option value="' + name + '">' + buttonName + '</option>';
                 }
             }
+
             $('.tab-custom').each(function () {
                 if (list.indexOf($(this).attr('id')) === -1) {
-                    $('#' + $(this).attr('id')).remove();
+                    $(this).remove();
                 }
             });
 
+            if (!main.systemConfig.common.menus) main.systemConfig.common.menus = list;
 
-            if (!main.systemConfig.common.menus)
-                main.systemConfig.common.menus = list;
-            $('#menus-ul').html(text);
+            $('.side-menu').append(text);
 
             $('.tab-close').button({
                 icons: {primary: 'ui-icon-close'},

@@ -174,11 +174,27 @@ html , body{
     font-size: 27px;
     margin: 13px 0 0 3px
 }
-.site_title i {
-    border: 1px solid #EAEAEA;
+.site_title img {
+    /*border: 1px solid #EAEAEA;*/
     padding: 5px 6px;
-    border-radius: 50%
+    /*border-radius: 50%;*/
 }
+.site_title .logo-full {
+    margin-left: 20px;
+    display: block;
+}
+.site_title .logo-small {
+    margin-left: 5px;
+    display: none;
+}
+.nav-sm .site_title .logo-full {
+    display: none;
+}
+.nav-sm .site_title .logo-small {
+    display: block;
+}
+
+
 .nav-sm .main_container .top_nav {
     display: block;
     margin-left: 70px;
