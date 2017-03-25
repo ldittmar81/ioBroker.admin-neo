@@ -3,6 +3,9 @@
 function System(main) {
     'use strict';
     var that = this;
+    
+    var $dialogSystem;
+    
     var editingCerts = [];
     var editingRepos = [];
 
@@ -117,7 +120,7 @@ function System(main) {
     this.init = function () {
         if (!main.systemConfig.error) {
             $('#button-system, #link-system').click(function () {
-
+                
                 $('#system_activeRepo').html('');
                 if (that.systemRepos && that.systemRepos.native.repositories) {
                     for (var repo in that.systemRepos.native.repositories) {
@@ -178,22 +181,24 @@ function System(main) {
                     }
                 });
 
-                $dialogSystem.dialog('open');
+                $dialogSystem.modal();
             });
         } else {
-            $('#button-system').hide();
+            $('#button-system').prop('disabled', true);
             $('#link-system').hide();
         }
     };
 
     this.prepare = function () {
-        $('#dialog-system').load("templates/dialogs.html #tabs-system", function () {
+        $('#dialog-system').load("templates/dialogs.html #modal-system", function () {
             restartFunctions('dialog-system');
 
             for (var lang in availableLanguages) {
                 $('#system_language')
                         .append('<option value="' + lang + '">' + availableLanguages[lang] + '</option>');
             }
+            
+            $dialogSystem = $('#modal-system');
 
             initRepoGrid();
             initCertsGrid();

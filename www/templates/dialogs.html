@@ -1,4 +1,4 @@
-<div id="tabs-system" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tabs-system" aria-hidden="true" >
+<div id="modal-system" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-system" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="" role="tabpanel">
@@ -87,7 +87,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="system_activeRepo" class="col-sm-2 control-label">
                                     <span data-i18="activeRepo">Active repository</span>:
@@ -97,7 +97,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="system_country" class="col-sm-2 control-label">
                                     <span data-i18="country">Country</span>:
@@ -353,8 +353,8 @@
                                     </select>
                                 </div>
                             </div>
-                            
-                             <div class="form-group">
+
+                            <div class="form-group">
                                 <label for="system_city" class="col-sm-2 control-label">
                                     <span data-i18="city">City</span>:
                                 </label>
@@ -362,8 +362,8 @@
                                     <input id="system_city" class="form-control system-settings value" />
                                 </div>
                             </div>
-                            
-                             <div class="form-group">
+
+                            <div class="form-group">
                                 <label for="system_latitude" class="col-sm-2 control-label">
                                     <span data-i18="lat">Latitude</span>:
                                 </label>
@@ -371,7 +371,7 @@
                                     <input id="system_latitude" class="form-control system-settings value" />
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="system_longitude" class="col-sm-2 control-label">
                                     <span data-i18="lon">Longitude</span>:
@@ -380,7 +380,7 @@
                                     <input id="system_longitude" class="form-control system-settings value" />
                                 </div>
                             </div>
-                    
+
                         </div>
 
                         <div id="tab-system-repo" role="tabpanel" class="tab-pane fade">
@@ -443,55 +443,56 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div id="dialog-install-url" title="Install from custom URL">
-        <div id="install-tabs">
-            <ul>
-                <li><a href="#install-github">From github</a></li>
-                <li><a href="#install-custom">Custom</a></li>
-            </ul>
-            <div id="install-github" style="display: inline-block">
-                <div style="display: inline-block">Select adapter:</div>
-                <select id="install-github-link" style="display: inline-block"></select>
-                <br>
-                <label for="install-github-debug">Debug outputs:</label>
-                <input id="install-github-debug" type="checkbox" />
-            </div>
-            <div id="install-custom">
-                <table style="width: 100%">
-                    <tr>
-                        <td><label for="install-url-link">URL or file path:</label></td>
-                        <td><input id="install-url-link" type="text" style="width: 100%"/></td>
-                    </tr>
-                    <tr>
-                        <td><label for="install-url-debug">Debug outputs:</label></td>
-                        <td><input id="install-url-debug" type="checkbox" /></td>
-                    </tr>
-                </table>
-            </div>
+<div id="dialog-install-url" title="Install from custom URL">
+    <div id="install-tabs">
+        <ul>
+            <li><a href="#install-github">From github</a></li>
+            <li><a href="#install-custom">Custom</a></li>
+        </ul>
+        <div id="install-github" style="display: inline-block">
+            <div style="display: inline-block">Select adapter:</div>
+            <select id="install-github-link" style="display: inline-block"></select>
+            <br>
+            <label for="install-github-debug">Debug outputs:</label>
+            <input id="install-github-debug" type="checkbox" />
+        </div>
+        <div id="install-custom">
+            <table style="width: 100%">
+                <tr>
+                    <td><label for="install-url-link">URL or file path:</label></td>
+                    <td><input id="install-url-link" type="text" style="width: 100%"/></td>
+                </tr>
+                <tr>
+                    <td><label for="install-url-debug">Debug outputs:</label></td>
+                    <td><input id="install-url-debug" type="checkbox" /></td>
+                </tr>
+            </table>
         </div>
     </div>
+</div>
 
-    <div id="dialog-message" title="Message">
-        <p>
-            <span id="dialog-message-icon" class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-            <span id="dialog-message-text"></span>
-        </p>
-    </div>
+<div id="dialog-message" title="Message">
+    <p>
+        <span id="dialog-message-icon" class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+        <span id="dialog-message-text"></span>
+    </p>
+</div>
 
-    <div id="dialog-confirm" title="Question">
-        <p>
-            <span id="dialog-confirm-icon" class="ui-icon ui-icon-circle-check" style="float: left; margin:0 7px 50px 0;"></span>
-            <span id="dialog-confirm-text"></span>
-        </p>
-    </div>
+<div id="dialog-confirm" title="Question">
+    <p>
+        <span id="dialog-confirm-icon" class="ui-icon ui-icon-circle-check" style="float: left; margin:0 7px 50px 0;"></span>
+        <span id="dialog-confirm-text"></span>
+    </p>
+</div>
 
-    <div id="dialog-host-update" title="Instructions">
-        <p><span>update-part1</span></p>
-        <p>You can check changelog here</p>
-        <textarea readonly id="dialog-host-update-instructions" style="width: 100%; height: 100px; resize: none;"></textarea>
-    </div>
+<div id="dialog-host-update" title="Instructions">
+    <p><span>update-part1</span></p>
+    <p>You can check changelog here</p>
+    <textarea readonly id="dialog-host-update-instructions" style="width: 100%; height: 100px; resize: none;"></textarea>
+</div>
 
-    <div id="dialog-cron">
-        <div id="div-cron"></div>
-    </div>
+<div id="dialog-cron">
+    <div id="div-cron"></div>
+</div>

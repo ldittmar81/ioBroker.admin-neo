@@ -13,36 +13,34 @@
 
 'use strict';
 
+Array.prototype.remove = function () {
+    var what;
+    var a = arguments;
+    var L = a.length;
+    var ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+
+var $iframeDialog = null; // used in adapter settings window
+var defaults = {};
+var adapterRedirect = function (redirect, timeout) {
+    if (redirect) {
+        setTimeout(function () {
+            redirect += document.location.pathname;
+            redirect += document.location.hash;
+            document.location.href = redirect;
+        }, timeout || 5000);
+    }
+};
+
 (function ($) {
-
-    Array.prototype.remove = function () {
-        var what;
-        var a = arguments;
-        var L = a.length;
-        var ax;
-        while (L && this.length) {
-            what = a[--L];
-            while ((ax = this.indexOf(what)) !== -1) {
-                this.splice(ax, 1);
-            }
-        }
-        return this;
-    };
-
-    var $iframeDialog = null; // used in adapter settings window
-    var defaults = {};
-    var adapterRedirect = function (redirect, timeout) {
-        if (redirect) {
-            setTimeout(function () {
-                redirect += document.location.pathname;
-                redirect += document.location.hash;
-                document.location.href = redirect;
-            }, timeout || 5000);
-        }
-    };
-
     $(function () {
-
         var main = {
             objects: {},
             states: {},
@@ -145,7 +143,7 @@
                     });
 
                 } else if (typeof buttons === 'object') {
-                    
+
                     var btn = [];
                     for (var b = 0; b < buttons.length; b++) {
                         btn[b] = {
@@ -523,8 +521,9 @@
             var addTabs = [];
             for (var i = 0; i < main.instances.length; i++) {
                 if (!main.objects[main.instances[i]].common ||
-                        !main.objects[main.instances[i]].common.adminTab)
+                        !main.objects[main.instances[i]].common.adminTab) {
                     continue;
+                }
 
                 if (main.objects[main.instances[i]].common.adminTab.singleton) {
                     var isFound = false;
@@ -1209,8 +1208,8 @@
             menus.logs.init();
         });
         $('#link-logs').on("click", function () {
-           $('#menu-logs').click();
-           $('.side-menu').find('a[href="#logs"]').parent().addClass('active');
+            $('#menu-logs').click();
+            $('.side-menu').find('a[href="#logs"]').parent().addClass('active');
         });
         $('#menu-objects').on("click", function () {
             menus.objects.init();
