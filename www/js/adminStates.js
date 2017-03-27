@@ -2,6 +2,7 @@ function States(main) {
     "use strict";
 
     var that = this;
+    this.menuIcon = 'fa-bolt';
 
     this.main = main;
 

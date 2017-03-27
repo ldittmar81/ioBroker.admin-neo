@@ -445,7 +445,21 @@
     </div>
 </div>
 
-<div id="dialog-install-url" title="Install from custom URL">
+<div id="modal-license" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-license" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="license_language_label">
+                <label for="license_language" data-i18n="selectLanguage">Select language</label>
+                <select id="license_language"></select>
+            </div>
+            <input id="license_diag" type="checkbox"/><span id="license_checkbox" class="text-danger" data-i18n="license_checkbox">license_checkbox</span>
+            <h3 id="license_terms" data-i18n="license_terms">License terms</h3>
+            <div id="license_text" data-i18n="license"></div>
+        </div>
+    </div>
+</div>
+
+<div id="dialog-install-url">
     <div id="install-tabs">
         <ul>
             <li><a href="#install-github">From github</a></li>
@@ -518,14 +532,14 @@
     </p>
 </div>
 
-<div id="dialog-confirm" title="Question">
+<div id="dialog-confirm">
     <p>
         <span id="dialog-confirm-icon" class="ui-icon ui-icon-circle-check" style="float: left; margin:0 7px 50px 0;"></span>
         <span id="dialog-confirm-text"></span>
     </p>
 </div>
 
-<div id="dialog-host-update" title="Instructions">
+<div id="dialog-host-update">
     <p><span>update-part1</span></p>
     <p>You can check changelog here</p>
     <textarea readonly id="dialog-host-update-instructions" style="width: 100%; height: 100px; resize: none;"></textarea>

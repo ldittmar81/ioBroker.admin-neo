@@ -2,7 +2,8 @@ function Objects(main) {
     'use strict';
 
     var that = this;
-
+    this.menuIcon = 'fa-gears';
+   
     this.main = main;
     this.customEnabled = null;
     this.currentCustoms = null; // Id of the currently shown customs dialog

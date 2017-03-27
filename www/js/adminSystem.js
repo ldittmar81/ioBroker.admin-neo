@@ -1,11 +1,12 @@
 /* global availableLanguages */
+/* global systemLang */
 
 function System(main) {
     'use strict';
     var that = this;
-    
+
     var $dialogSystem;
-    
+
     var editingCerts = [];
     var editingRepos = [];
 
@@ -21,7 +22,7 @@ function System(main) {
         }
         var lines = [];
         if (str.substring(0, '-----BEGIN RSA PRIVATE KEY-----'.length) == '-----BEGIN RSA PRIVATE KEY-----') {
-            if (str.substring(str.length -  '-----END RSA PRIVATE KEY-----'.length) != '-----END RSA PRIVATE KEY-----') {
+            if (str.substring(str.length - '-----END RSA PRIVATE KEY-----'.length) != '-----END RSA PRIVATE KEY-----') {
                 main.showMessage(_('Certificate "%s" must end with "-----END RSA PRIVATE KEY-----".', name), '', 'notice');
                 return '';
             }
@@ -34,7 +35,7 @@ function System(main) {
             }
             return '-----BEGIN RSA PRIVATE KEY-----\r\n' + lines.join('\r\n') + '\r\n-----END RSA PRIVATE KEY-----\r\n';
         } else if (str.substring(0, '-----BEGIN PRIVATE KEY-----'.length) == '-----BEGIN PRIVATE KEY-----') {
-            if (str.substring(str.length -  '-----END PRIVATE KEY-----'.length) != '-----END PRIVATE KEY-----') {
+            if (str.substring(str.length - '-----END PRIVATE KEY-----'.length) != '-----END PRIVATE KEY-----') {
                 main.showMessage(_('Certificate "%s" must end with "-----BEGIN PRIVATE KEY-----".', name), '', 'notice');
                 return '';
             }
@@ -46,12 +47,12 @@ function System(main) {
                 str = str.substring(64);
             }
             return '-----BEGIN PRIVATE KEY-----\r\n' + lines.join('\r\n') + '\r\n-----END PRIVATE KEY-----\r\n';
-        }else {
+        } else {
             if (str.substring(0, '-----BEGIN CERTIFICATE-----'.length) != '-----BEGIN CERTIFICATE-----') {
                 main.showMessage(_('Certificate "%s" must start with "-----BEGIN CERTIFICATE-----".', name), '', 'notice');
                 return '';
             }
-            if (str.substring(str.length -  '-----END CERTIFICATE-----'.length) != '-----END CERTIFICATE-----') {
+            if (str.substring(str.length - '-----END CERTIFICATE-----'.length) != '-----END CERTIFICATE-----') {
                 main.showMessage(_('Certificate "%s" must end with "-----END CERTIFICATE-----".', name), '', 'notice');
                 return '';
             }
@@ -78,7 +79,7 @@ function System(main) {
     }
 
     function cert2string(cert) {
-         var res = cert.replace(/(?:\\[rn]|[\r\n]+)+/g, '');
+        var res = cert.replace(/(?:\\[rn]|[\r\n]+)+/g, '');
         return res;
     }
 
@@ -99,7 +100,7 @@ function System(main) {
     function initRepoButtons() {
     }
     function updateRepoListSelect() {
-        
+
     }
 
     function fileHandler(event) {
@@ -120,7 +121,7 @@ function System(main) {
     this.init = function () {
         if (!main.systemConfig.error) {
             $('#button-system, #link-system').click(function () {
-                
+
                 $('#system_activeRepo').html('');
                 if (that.systemRepos && that.systemRepos.native.repositories) {
                     for (var repo in that.systemRepos.native.repositories) {
@@ -195,9 +196,9 @@ function System(main) {
 
             for (var lang in availableLanguages) {
                 $('#system_language')
-                        .append('<option value="' + lang + '">' + availableLanguages[lang] + '</option>');
+                        .append('<option value="' + lang + '" ' + (systemLang === lang ? "selected" : "") + '>' + availableLanguages[lang] + '</option>');
             }
-            
+
             $dialogSystem = $('#modal-system');
 
             initRepoGrid();

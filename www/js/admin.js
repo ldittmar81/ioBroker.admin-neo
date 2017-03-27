@@ -180,8 +180,9 @@ var adapterRedirect = function (redirect, timeout) {
                 main.showMessage($.i18n(error), $.i18n('error'), 'alert');
             },
             formatDate: function (dateObj, justTime) {
-                if (!dateObj)
+                if (!dateObj) {
                     return '';
+                }
                 var text = typeof dateObj;
                 if (text === 'string') {
                     if (justTime) {
@@ -329,10 +330,10 @@ var adapterRedirect = function (redirect, timeout) {
                     }
                     list.push(rootId);
                     list.sort();
-                    var len = list.length;
                     this._delObject(list, function () {
-                        if (callback)
+                        if (callback) {
                             callback();
+                        }
                     });
                 }
             },
@@ -457,7 +458,7 @@ var adapterRedirect = function (redirect, timeout) {
                         });
                     }
                     $wizard.show();
-                    
+
                     // Show wizard dialog
                     if (!main.systemConfig.common.wizard && main.systemConfig.common.licenseConfirmed) {
                         $wizard.click();
@@ -517,7 +518,64 @@ var adapterRedirect = function (redirect, timeout) {
             }
         }
 
-        function initTabs() {
+        function initHtmlMenus(showMenus) {
+
+            $(document.body).on("click", ".main-menu", function () {
+                var id = $(this).attr('id').slice(5);
+                switch (id) {
+                    case 'adapters':
+                        menus.hosts.initList();
+                        menus.adapters.enableColResize();
+                        break;                   
+                    default:
+                        menus[id].init();
+                }
+            });
+
+            if (showMenus) {
+                $('#menus-show').html('<option value="">' + $.i18n('Show...') + '</option>' + showMenus).show();
+
+                $('#menus-show').on('change', function () {
+                    if ($(this).val()) {
+                        main.systemConfig.common.tabs.push($(this).val());
+                        // save
+                        main.socket.emit('setObject', 'system.config', main.systemConfig, function (err) {
+                            if (err) {
+                                main.showError(err);
+                                return;
+                            }
+                        });
+                        initTabs();
+                    }
+                });
+            } else {
+                $('#tabs-show').html('').hide();
+            }
+
+            main.updateWizard();
+
+            if (!main.editTabs) {
+                $('.menu-close').hide();
+                $('#menus-show-button').hide();
+            } else {
+                $('#button-edit-menus').addClass('text-danger');
+            }
+
+            main.systemDialog.init();
+
+            main.socket.emit('authEnabled', function (auth, user) {
+                if (!auth)
+                    $('#button-logout').remove();
+                $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
+            });
+
+            $('#events_threshold').click(function () {
+                main.socket.emit('eventsThreshold', false);
+            });
+
+        }
+
+        function initMenus() {
             // extract all additional instances
             var text = '';
             var list = [];
@@ -548,20 +606,14 @@ var adapterRedirect = function (redirect, timeout) {
             }
 
             // Build the standard menus together
-            $('.side-menu li').each(function () {
-                list.push($(this).attr('id'));
+            $("#hiddenObjects div[id^='menu']").each(function () {
+                var id = $(this).attr('id').substring(5, $(this).attr('id').length - 4);
+                list.push(id);
                 if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
-                    text += '<li><a href="#' + $(this).attr('id') + '" id="menu-' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</a><button class="menu-close"></button></li>\n';
+                    text += '<li><a class="main-menu" href="#' + id + '" id="menu-' + id + '"><i class="fa ' + menus[id].menuIcon + '"></i> ' + $.i18n(id) + '</a><a class="menu-close"><i class="fa fa-times"></i></a></li>\n';
                     $(this).show().appendTo($('#menus'));
                 } else {
-                    if ($(this).parent().prop('tagName') !== 'BODY') {
-                        $(this).appendTo($('body'));
-                        var $t = $(this);
-                        setTimeout(function () {
-                            $t.hide()
-                        }, 100);
-                    }
-                    showMenus += '<option value="' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</option>';
+                    showMenus += '<option value="' + id + '">' + $.i18n(id) + '</option>';
                 }
             });
 
@@ -651,7 +703,7 @@ var adapterRedirect = function (redirect, timeout) {
                         }
                     });
                 }
-                initTabs();
+                initMenus();
             });
 
             if ($('.link-replace').length) {
@@ -660,7 +712,7 @@ var adapterRedirect = function (redirect, timeout) {
                 // If some objects cannot be read => go by timeout
                 var loadTimeout = setTimeout(function () {
                     loadTimeout = null;
-                    initHtmlTabs(showMenus);
+                    initHtmlMenus(showMenus);
                 }, 1000);
 
                 $('.link-replace').each(function () {
@@ -673,12 +725,12 @@ var adapterRedirect = function (redirect, timeout) {
                                 clearTimeout(loadTimeout);
                                 loadTimeout = null;
                             }
-                            initHtmlTabs(showMenus);
+                            initHtmlMenus(showMenus);
                         }
                     });
                 });
             } else {
-                initHtmlTabs(showMenus);
+                initHtmlMenus(showMenus);
             }
         }
 
@@ -696,36 +748,43 @@ var adapterRedirect = function (redirect, timeout) {
 
                         obj = main.objects[id];
 
-                        if (obj.type === 'instance')
-                            main.instances.push(id);
-                        if (obj.type === 'enum')
-                            menus.enums.list.push(id);
-                        if (obj.type === 'user')
-                            menus.users.list.push(id);
-                        if (obj.type === 'group')
-                            menus.groups.list.push(id);
-                        if (obj.type === 'adapter')
-                            menus.adapters.list.push(id);
-                        if (obj.type === 'host') {
-                            var addr = null;
-                            // Find first non internal IP and use it as identifier
-                            if (obj.native.hardware && obj.native.hardware.networkInterfaces) {
-                                for (var eth in obj.native.hardware.networkInterfaces) {
-                                    for (var num = 0; num < obj.native.hardware.networkInterfaces[eth].length; num++) {
-                                        if (!obj.native.hardware.networkInterfaces[eth][num].internal) {
-                                            addr = obj.native.hardware.networkInterfaces[eth][num].address;
-                                            break;
+                        switch (obj.type) {
+                            case 'instance':
+                                main.instances.push(id);
+                                break;
+                            case 'enum':
+                                menus.enums.list.push(id);
+                                break;
+                            case 'user':
+                                menus.users.list.push(id);
+                                break;
+                            case 'group':
+                                menus.groups.list.push(id);
+                                break;
+                            case 'adapter':
+                                menus.adapters.list.push(id);
+                                break;
+                            case 'host':
+                                var addr = null;
+                                // Find first non internal IP and use it as identifier
+                                if (obj.native.hardware && obj.native.hardware.networkInterfaces) {
+                                    for (var eth in obj.native.hardware.networkInterfaces) {
+                                        for (var num = 0; num < obj.native.hardware.networkInterfaces[eth].length; num++) {
+                                            if (!obj.native.hardware.networkInterfaces[eth][num].internal) {
+                                                addr = obj.native.hardware.networkInterfaces[eth][num].address;
+                                                break;
+                                            }
                                         }
+                                        if (addr)
+                                            break;
                                     }
-                                    if (addr)
-                                        break;
                                 }
-                            }
-                            if (addr) {
-                                menus.hosts.list.push({name: obj.common.hostname, address: addr, id: obj._id});
-                            } else {
-                                menus.hosts.list.push({name: obj.common.hostname, address: '127.0.0.1', id: obj._id});
-                            }
+                                if (addr) {
+                                    menus.hosts.list.push({name: obj.common.hostname, address: addr, id: obj._id});
+                                } else {
+                                    menus.hosts.list.push({name: obj.common.hostname, address: '127.0.0.1', id: obj._id});
+                                }
+                                break;
                         }
 
                         // convert obj.history into obj.custom
@@ -733,20 +792,13 @@ var adapterRedirect = function (redirect, timeout) {
                             obj.common.custom = JSON.parse(JSON.stringify(obj.common.history));
                             delete obj.common.history;
                         }
-                        //treeInsert(id);
                     }
                     main.objectsLoaded = true;
 
-                    initTabs();
+                    initMenus();
 
                     // If customs enabled
                     menus.objects.checkCustoms();
-
-                    // Detect if some script engine instance installed
-                    //                var engines = menus.scripts.fillEngines();
-
-                    // Disable scripts tab if no one script engine instance found
-                    //              if (!engines || !engines.length) $('#menus').menus('option', 'disabled', [4]);
 
                     // Show if update available
                     menus.hosts.initList();
@@ -831,7 +883,7 @@ var adapterRedirect = function (redirect, timeout) {
                 }
 
                 main.systemConfig = obj;
-                initTabs();
+                initMenus();
             }
 
             if (id === 'system.adapter.discovery.0')
@@ -845,7 +897,7 @@ var adapterRedirect = function (redirect, timeout) {
                         obj.common.adminTab &&
                         !obj.common.adminTab.ignoreConfigUpdate
                         ) {
-                    initTabs();
+                    initMenus();
                 }
 
                 if (obj && obj.type === 'instance') {
@@ -969,7 +1021,10 @@ var adapterRedirect = function (redirect, timeout) {
                                         main.systemConfig = {common: {language: systemLang}, error: 'permissionError'};
                                     } else {
                                         if (!errConfig && main.systemConfig && main.systemConfig.common) {
-                                            systemLang = main.systemConfig.common.language || systemLang;
+                                            if (main.systemConfig.common.language !== systemLang) {
+                                                systemLang = main.systemConfig.common.language || systemLang;
+                                                changeLanguage(systemLang);
+                                            }
                                             main.systemConfig.common.city = main.systemConfig.common.city || '';
                                             main.systemConfig.common.country = main.systemConfig.common.country || '';
                                             main.systemConfig.common.longitude = main.systemConfig.common.longitude || '';
@@ -977,86 +1032,30 @@ var adapterRedirect = function (redirect, timeout) {
 
                                             if (!main.systemConfig.common.licenseConfirmed) {
                                                 // Show license agreement
-                                                var language = main.systemConfig.common.language || window.navigator.userLanguage || window.navigator.language;
-                                                if (!availableLanguages.hasOwnProperty(language)) {
-                                                    language = 'en';
-                                                }
 
-                                                $('#license_text').html($.i18n('license'));
-                                                $('#license_language_label').html(translateWord('Select language', language));
+                                                $('#dialog-license').load("templates/dialogs.html #modal-license", function () {
+                                                    restartFunctions('dialog-license');
 
-                                                $('#license_checkbox')
-                                                        .show()
-                                                        .html(translateWord('license_checkbox', language));
-
-                                                $('#license_agree .ui-button-text').html(translateWord('agree', language));
-                                                $('#license_non_agree .ui-button-text').html(translateWord('not agree', language));
-                                                $('#license_terms').html(translateWord('License terms', language));
-
-                                                $('#license_language')
-                                                        .data('licenseConfirmed', false)
-                                                        .val(language)
-                                                        .show()
-                                                        .change(function () {
-                                                            language = $(this).val();
-                                                            $('#license_language_label').html(translateWord('Select language', language));
-                                                            $('#license_text').html($.i18n('license'));
-                                                            $('#license_checkbox').html(translateWord('license_checkbox', language));
-                                                            $('#license_agree .ui-button-text').html(translateWord('agree', language));
-                                                            $('#license_non_agree .ui-button-text').html(translateWord('not agree', language));
-                                                            $('#license_terms').html(translateWord('License terms', language));
-                                                            $dialogLicense.dialog('option', 'title', translateWord('license agreement', language));
-                                                        });
-
-                                                $('#license_diag').change(function () {
-                                                    if ($(this).prop('checked')) {
-                                                        $('#license_agree').button('enable');
-                                                    } else {
-                                                        $('#license_agree').button('disable');
+                                                    for (var lang in availableLanguages) {
+                                                        $('#license_language')
+                                                                .append('<option value="' + lang + '" ' + (systemLang === lang ? "selected" : "") + '>' + availableLanguages[lang] + '</option>');
                                                     }
-                                                });
-                                                $dialogLicense.css({'z-index': 200});
-                                                $dialogLicense.dialog({
-                                                    autoOpen: true,
-                                                    modal: true,
-                                                    width: 600,
-                                                    height: 400,
-                                                    title: translateWord('license agreement', language),
-                                                    buttons: [
-                                                        {
-                                                            text: translateWord('agree', language),
-                                                            click: function () {
-                                                                $('#license_language').data('licenseConfirmed', true);
 
-                                                                main.socket.emit('extendObject', 'system.config', {
-                                                                    common: {
-                                                                        licenseConfirmed: true,
-                                                                        language: language
-                                                                    }
-                                                                }, function () {
-                                                                    $dialogLicense.dialog('close');
-                                                                    $('#license_language').hide();
-                                                                });
-                                                            },
-                                                            id: 'license_agree'
-                                                        },
-                                                        {
-                                                            text: translateWord('not agree', language),
-                                                            click: function () {
-                                                                location.reload();
-                                                            },
-                                                            id: 'license_non_agree'
+                                                    $('#license_diag').change(function () {
+                                                        if ($(this).prop('checked')) {
+                                                            $('#license_agree').prop('disable', false);
+                                                        } else {
+                                                            $('#license_agree').prop('disable', true);
                                                         }
-                                                    ],
-                                                    beforeClose: function (event, ui) {
-                                                        return $('#license_language').data('licenseConfirmed');
-                                                    },
-                                                    open: function (event) {
-                                                        $(event.target).parent().find('.ui-dialog-titlebar-close .ui-button-text').html('');
-                                                        $(event.target).parent().find('.ui-dialog-titlebar-close').hide();
-                                                        $('#license_checkbox').prop('checked', false);
-                                                        $('#license_agree').button('disable');
-                                                    }
+                                                    });
+
+                                                    $('#license_language').change(function () {
+                                                        var language = $(this).val();
+                                                        changeLanguage(language);
+                                                    });
+
+                                                    $('#dialog-license').modal();
+
                                                 });
                                             }
                                         } else {
@@ -1086,11 +1085,7 @@ var adapterRedirect = function (redirect, timeout) {
                                                     ]
                                                 }
                                             };
-                                            main.systemConfig.common.language = window.navigator.userLanguage || window.navigator.language;
-
-                                            if (!(main.systemConfig.common.language in availableLanguages)) {
-                                                main.systemConfig.common.language = 'en';
-                                            }
+                                            main.systemConfig.common.language = systemLang;
                                         }
                                     }
 
@@ -1106,6 +1101,7 @@ var adapterRedirect = function (redirect, timeout) {
                                     menus.objects.prepareCustoms();
                                     menus.events.prepare();
                                     menus.home.prepare();
+
                                     main.systemDialog.prepare();
 
                                     getStates(getObjects);
@@ -1133,44 +1129,36 @@ var adapterRedirect = function (redirect, timeout) {
                 menus.adapters.init(true);
             }, 0);
         });
-
         main.socket.on('reauthenticate', function () {
             location.reload();
         });
 
-        // open links
-        $('#menu-home').on("click", function () {
-            menus.home.init();
-        });
-        $('#menu-adapter').on("click", function () {
-            menus.adapters.init();
-        });
-        $('#menu-instances').on("click", function () {
-            menus.instances.init();
-        });
-        $('#menu-logs').on("click", function () {
-            menus.logs.init();
-        });
+        // open links        
         $('#link-logs').on("click", function () {
             $('#menu-logs').click();
             $('.side-menu').find('a[href="#logs"]').parent().addClass('active');
         });
-        $('#menu-objects').on("click", function () {
-            menus.objects.init();
+        $('#link-users').on("click", function () {
+            menus.users.init();
         });
-        $('#menu-states').on("click", function () {
-            menus.states.init();
-        });
-        $('#menu-events').on("click", function () {
-            menus.events.init();
-        });
-        $('#menu-enums').on("click", function () {
-            menus.enums.init();
-        });
-        $('#menu-hosts').on("click", function () {
-            menus.hosts.init();
+        $('#link-groups').on("click", function () {
+            menus.groups.init();
         });
         // / open links
+
+        $('#button-edit-menus').on("click", function () {
+            if (main.editTabs) {
+                $('.menu-close').hide();
+                $('#menus-show-button').hide();
+                main.editTabs = false;
+                $(this).removeClass('ui-state-error');
+            } else {
+                $('.menu-close').show();
+                $('#menus-show-button').show();
+                $(this).addClass('ui-state-error');
+                main.editTabs = true;
+            }
+        });
 
         // Fullscreen
         $('#button-fullscreen').on("click", function () {
@@ -1206,5 +1194,4 @@ var adapterRedirect = function (redirect, timeout) {
         }
 
     });
-
 })(jQuery);

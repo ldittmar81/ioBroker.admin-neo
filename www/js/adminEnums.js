@@ -2,6 +2,7 @@ function Enums(main) {
     'use strict';
 
     var that = this;
+    this.menuIcon = 'fa-list-ol';
     this.main = main;
     this.list = [];
     this.enumEdit = null;

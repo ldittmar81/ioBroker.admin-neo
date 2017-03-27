@@ -6,6 +6,7 @@ function Adapters(main) {
     this.curRepository = null;
     this.curRepoLastUpdate = null;
     this.curInstalled = null;
+    this.menuIcon = 'fa-plug';
     this.list = [];
     this.main = main;
     this.tree = [];

@@ -3,6 +3,8 @@ function Events(main) {
 
     var that = this;
     this.main = main;
+    
+    this.menuIcon = 'fa-tint';
   
     var eventsLinesCount = 0;
     var eventsLinesStart = 0;

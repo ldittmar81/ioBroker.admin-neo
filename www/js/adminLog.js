@@ -2,6 +2,7 @@ function Logs(main) {
     'use strict';
 
     var that = this;
+    this.menuIcon = 'fa-file-text-o';
     this.main = main;
     this.logLimit = 2000; //const
 

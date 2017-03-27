@@ -40,7 +40,7 @@ if (!String.prototype.startsWith) {
 }
 
 String.prototype.text2iconClass = function () {
-    if(this.startsWith('fa-')){
+    if (this.startsWith('fa-')) {
         return this;
     }
     if (this.substr())
@@ -205,7 +205,7 @@ String.prototype.text2iconClass = function () {
         $(".expand").on("click", function () {
             $(this).next().slideToggle(200);
             $expand = $(this).find(">:first-child");
-            if ($expand.text() == "+") {
+            if ($expand.text() === "+") {
                 $expand.text("-");
             } else {
                 $expand.text("+");
@@ -222,17 +222,7 @@ String.prototype.text2iconClass = function () {
 
     // Translation/Tooltip
     $(function () {
-        i18n.locale = systemLang;
-        i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
-            $("[data-i18n]").i18n();
-            $("[data-i18n-tooltip]").each(function () {
-                var $this = $(this);
-                $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
-            });
-            $('[data-toggle="tooltip"]').tooltip({
-                container: 'body'
-            });
-        });
+        changeLanguage(systemLang);        
     });
     // / Translation/Tooltip
 
@@ -243,6 +233,20 @@ String.prototype.text2iconClass = function () {
     // / Others
 
 })(jQuery);
+
+function changeLanguage(lang) {
+    i18n.locale = lang;
+    i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
+        $("[data-i18n]").i18n();
+        $("[data-i18n-tooltip]").each(function () {
+            var $this = $(this);
+            $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
+        });
+        $('[data-toggle="tooltip"]').tooltip({
+            container: 'body'
+        });
+    });
+}
 
 function restartFunctions(id) {
     $('#' + id + ' input[type=checkbox], #' + id + ' input[type=radio]').iCheck({

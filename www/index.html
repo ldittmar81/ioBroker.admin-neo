@@ -60,36 +60,27 @@
                         <!-- sidebar menu -->
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
-                                <ul class="nav side-menu">
-                                    <li><a href="#home" id="menu-home"><i class="fa fa-home"></i> <span data-i18n="home">Home</span> </a></li>
-                                    <li><a href="#adapters" id="menu-adapter"><i class="fa fa-plug"></i> <span data-i18n="adapters">Adapters</span> </a></li>
-                                    <li><a href="#instances" id="menu-instances"><i class="fa fa-object-group"></i> <span data-i18n="instances">Instances</span> </a></li>
-                                    <li><a href="#objects" id="menu-objects"><i class="fa fa-gears"></i> <span data-i18n="objects">Objects</span> </a></li>
-                                    <li><a href="#logs" id="menu-logs"><i class="fa fa-file-text-o"></i> <span data-i18n="log">Log</span> </a></li>
-                                    <li><a href="#states" id="menu-states"><i class="fa fa-bolt"></i> <span data-i18n="states">States</span> </a></li>
-                                    <li><a href="#events" id="menu-events"><i class="fa fa-tint"></i> <span data-i18n="events">Events</span> </a></li>
-                                    <li><a href="#enums" id="menu-enums"><i class="fa fa-list-ol"></i> <span data-i18n="enums">Enums</span> </a></li>
-                                    <li><a href="#hosts" id="menu-hosts"><i class="fa fa-server"></i> <span data-i18n="hosts">Hosts</span> </a></li>
-                                </ul>
+                                <ul class="nav side-menu"></ul>
                             </div>
+                            <select id="menus-show"></select>
                         </div>
                         <!-- /sidebar menu -->
 
                         <!-- /menu footer buttons -->
                         <div class="sidebar-footer hidden-small">
-                            <a id="button-edit" data-placement="top" data-i18n-tooltip="edit">
+                            <a id="button-edit-menus" href="javascript:;" data-placement="top" data-i18n-tooltip="edit">
                                 <span class="fa fa-pencil fa-lg" aria-hidden="true"></span>
                             </a>
-                            <a id="button-system" data-placement="top" data-i18n-tooltip="config">
+                            <a id="button-system" href="javascript:;" data-placement="top" data-i18n-tooltip="config">
                                 <span class="fa fa-gear fa-lg" aria-hidden="true"></span>
                             </a>
-                            <a id="button-fullscreen" data-placement="top" data-i18n-tooltip="fullscreen">
+                            <a id="button-fullscreen" href="javascript:;" data-placement="top" data-i18n-tooltip="fullscreen">
                                 <span class="fa fa-arrows-alt fa-lg" aria-hidden="true"></span>
                             </a>
-                            <a id="button-info" data-placement="top" class="hidden" data-i18n-tooltip="info">
+                            <a id="button-info" href="javascript:;" data-placement="top" class="hidden" data-i18n-tooltip="info">
                                 <span class="fa fa-info-circle fa-lg" aria-hidden="true"></span>
                             </a>
-                            <a id="button-logout" data-placement="top" data-i18n-tooltip="logout">
+                            <a id="button-logout" href="/logout/" data-placement="top" data-i18n-tooltip="logout">
                                 <span class="fa fa-sign-out fa-lg" aria-hidden="true"></span>
                             </a>
                         </div>
@@ -139,7 +130,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:;" id="link-logout">
+                                            <a href="/logout/" id="link-logout">
                                                 <i class="fa fa-sign-out pull-right"></i> <span data-i18n="logout">Log Out</span>
                                             </a>
                                         </li>
@@ -187,14 +178,21 @@
 
         <!-- hidden objects -->
         <div id="hiddenObjects" class="hidden">
+            <div id="menu-home-div"></div>
+            <div id="menu-adapters-div"></div>
+            <div id="menu-instances-div"></div>
+            <div id="menu-objects-div"></div>
             <div id="menu-logs-div"></div>
+            <div id="menu-states-div"></div>
             <div id="menu-events-div"></div>
             <div id="menu-enums-div"></div>
-            <div id="menu-states-div"></div>
-            <div id="menu-objects-div"></div>
+            <div id="menu-hosts-div"></div>
+           
+            
             <div id="dialog-groups"></div>
             <div id="dialog-users"></div>
             <div id="dialog-system"></div>
+            <div id="dialog-license"></div>
             <div id="dialog-object"></div>
             <div id="dialog-customs"></div>
             <div id="dialog-command"><textarea class="command" id="stdout" disabled="disabled" cols="120" rows="30"></textarea></div>
