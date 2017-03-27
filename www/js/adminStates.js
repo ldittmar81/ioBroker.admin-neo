@@ -69,6 +69,8 @@ function States(main) {
             }, 250);
             return;
         }
+        
+        this.main.fillContent('#menu-states-div');
     };
 
     this.clear = function () {

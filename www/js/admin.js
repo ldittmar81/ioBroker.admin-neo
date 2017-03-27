@@ -389,7 +389,7 @@ var adapterRedirect = function (redirect, timeout) {
                             } // else do nothing
                         });
                     } else {
-                        main.confirmMessage($.i18n('Are you sure to delete %s?', id), null, 'help', function (result) {
+                        main.confirmMessage($.i18n('Are you sure to delete $1?', id), null, 'help', function (result) {
                             // If all
                             if (result) {
                                 main._delObjects(id, true, callback);
@@ -397,14 +397,14 @@ var adapterRedirect = function (redirect, timeout) {
                         });
                     }
                 } else if (leaf && leaf.children) {
-                    main.confirmMessage($.i18n('Are you sure to delete all children of %s?', id), null, 'help', function (result) {
+                    main.confirmMessage($.i18n('Are you sure to delete all children of $1?', id), null, 'help', function (result) {
                         // If all
                         if (result) {
                             main._delObjects(id, true, callback);
                         }
                     });
                 } else {
-                    main.showMessage($.i18n('Object "<b>%s</b>" does not exists. Update the page.', id), null, 'help', function (result) {
+                    main.showMessage($.i18n('Object "<b>$1</b>" does not exists. Update the page.', id), null, 'help', function (result) {
                         // If all
                         if (result) {
                             main._delObjects(id, true, callback);
@@ -443,7 +443,7 @@ var adapterRedirect = function (redirect, timeout) {
             },
             fillContent: function (selector) {
                 if ($pageContent.children().length > 0) {
-                    $pageContent.first().appendTo($hiddenObjects);
+                    $pageContent.children(":first").appendTo($hiddenObjects);
                 }
                 $(selector).prependTo($pageContent);
             },
@@ -522,18 +522,13 @@ var adapterRedirect = function (redirect, timeout) {
 
             $(document.body).on("click", ".main-menu", function () {
                 var id = $(this).attr('id').slice(5);
-                switch (id) {
-                    case 'adapters':
-                        menus.hosts.initList();
-                        menus.adapters.enableColResize();
-                        break;                   
-                    default:
-                        menus[id].init();
-                }
+                menus[id].init();
+                $('.side-menu li.active').removeClass('active');
+                $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
             });
 
             if (showMenus) {
-                $('#menus-show').html('<option value="">' + $.i18n('Show...') + '</option>' + showMenus).show();
+                $('#menus-show').html('<option value="" data-i18n="show">' + $.i18n('show') + '</option>' + showMenus).show();
 
                 $('#menus-show').on('change', function () {
                     if ($(this).val()) {
@@ -562,6 +557,8 @@ var adapterRedirect = function (redirect, timeout) {
             }
 
             main.systemDialog.init();
+
+            navigation();
 
             main.socket.emit('authEnabled', function (auth, user) {
                 if (!auth)
@@ -610,7 +607,7 @@ var adapterRedirect = function (redirect, timeout) {
                 var id = $(this).attr('id').substring(5, $(this).attr('id').length - 4);
                 list.push(id);
                 if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
-                    text += '<li><a class="main-menu" href="#' + id + '" id="menu-' + id + '"><i class="fa ' + menus[id].menuIcon + '"></i> ' + $.i18n(id) + '</a><a class="menu-close"><i class="fa fa-times"></i></a></li>\n';
+                    text += '<li><a class="main-menu" href="#' + id + '" id="menu-' + id + '"><i class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a><a class="menu-close"><i class="fa fa-times"></i></a></li>\n';
                     $(this).show().appendTo($('#menus'));
                 } else {
                     showMenus += '<option value="' + id + '">' + $.i18n(id) + '</option>';
@@ -799,9 +796,6 @@ var adapterRedirect = function (redirect, timeout) {
 
                     // If customs enabled
                     menus.objects.checkCustoms();
-
-                    // Show if update available
-                    menus.hosts.initList();
 
                     if (typeof callback === 'function')
                         callback();
@@ -1187,10 +1181,15 @@ var adapterRedirect = function (redirect, timeout) {
         });
         // / Fullscreen
 
-        if (window.location.hash) {
-            var menu = 'menu-' + window.location.hash.slice(1);
-            $('#' + menu).click();
-            $('.side-menu').find('a[href="' + window.location.hash + '"]').parent().addClass('active');
+        function navigation() {
+            var id;
+            if (window.location.hash) {
+                id = window.location.hash.slice(1);
+            } else {
+                id = "home";
+            }
+            menus[id].init();
+            $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
         }
 
     });

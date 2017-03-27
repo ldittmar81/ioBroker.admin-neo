@@ -86,12 +86,12 @@ function Hosts(main) {
 
         if (that.main.currentHost) {
             $selHosts.val(that.main.currentHost);
-            that.main.tabs.adapters.init(true);
-            that.main.tabs.instances.init(true);
+            that.main.menus.adapters.init(true);
+            that.main.menus.instances.init(true);
         } else if ($selHosts.val() !== that.main.currentHost) {
             that.main.currentHost = $selHosts.val();
-            that.main.tabs.adapters.init(true);
-            that.main.tabs.instances.init(true);
+            that.main.menus.adapters.init(true);
+            that.main.menus.instances.init(true);
         }
 
         $selHosts.unbind('change').change(function () {
@@ -198,6 +198,8 @@ function Hosts(main) {
             }, 250);
             return;
         }
+        
+        this.main.fillContent('#menu-hosts-div');
 
     };
 

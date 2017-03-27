@@ -189,6 +189,8 @@ function Objects(main) {
             }, 250);
             return;
         }
+        
+        this.main.fillContent('#menu-objects-div');
     };
 
     this.edit = function (id, callback) {

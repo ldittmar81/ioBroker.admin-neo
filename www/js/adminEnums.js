@@ -30,6 +30,7 @@ function Enums(main) {
     };
 
     this.init = function (update, expandId) {
+        this.main.fillContent('#menu-enums-div');
     };
 
     this.objectChange = function (id, obj) {

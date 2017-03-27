@@ -237,6 +237,8 @@ function Instances(main) {
     };
 
     this.init = function (update) {
+        
+        this.main.fillContent('#menu-instances-div');
     };
 
     this.stateChange = function (id, state) {
