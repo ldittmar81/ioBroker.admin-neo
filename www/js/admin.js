@@ -452,11 +452,16 @@ var adapterRedirect = function (redirect, timeout) {
                     if (!$wizard.data('inited')) {
                         $wizard.data('inited', true);
                         $wizard.click(function () {
-                            // TODO open configuration dialog
+                            // open configuration dialog
                             main.menus.instances.showConfigDialog('system.adapter.discovery.0');
                         });
                     }
                     $wizard.show();
+                    
+                    // Show wizard dialog
+                    if (!main.systemConfig.common.wizard && main.systemConfig.common.licenseConfirmed) {
+                        $wizard.click();
+                    }
                 } else {
                     $wizard.hide();
                 }
@@ -516,9 +521,9 @@ var adapterRedirect = function (redirect, timeout) {
             // extract all additional instances
             var text = '';
             var list = [];
-            var showTabs = '';
+            var showMenus = '';
 
-            var addTabs = [];
+            var addMenus = [];
             for (var i = 0; i < main.instances.length; i++) {
                 if (!main.objects[main.instances[i]].common ||
                         !main.objects[main.instances[i]].common.adminTab) {
@@ -528,25 +533,25 @@ var adapterRedirect = function (redirect, timeout) {
                 if (main.objects[main.instances[i]].common.adminTab.singleton) {
                     var isFound = false;
                     var inst1 = main.instances[i].replace(/\.(\d+)$/, '.');
-                    for (var j = 0; j < addTabs.length; j++) {
-                        var inst2 = addTabs[j].replace(/\.(\d+)$/, '.');
+                    for (var j = 0; j < addMenus.length; j++) {
+                        var inst2 = addMenus[j].replace(/\.(\d+)$/, '.');
                         if (inst1 === inst2) {
                             isFound = true;
                             break;
                         }
                     }
                     if (!isFound)
-                        addTabs.push(main.instances[i]);
+                        addMenus.push(main.instances[i]);
                 } else {
-                    addTabs.push(main.instances[i]);
+                    addMenus.push(main.instances[i]);
                 }
             }
 
             // Build the standard menus together
-            /*$('.side-menu li').each(function () {
+            $('.side-menu li').each(function () {
                 list.push($(this).attr('id'));
                 if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
-                    text += '<li><a href="#' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</a><button class="tab-close" data-tab="' + $(this).attr('id') + '"></button></li>\n';
+                    text += '<li><a href="#' + $(this).attr('id') + '" id="menu-' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</a><button class="menu-close"></button></li>\n';
                     $(this).show().appendTo($('#menus'));
                 } else {
                     if ($(this).parent().prop('tagName') !== 'BODY') {
@@ -556,34 +561,34 @@ var adapterRedirect = function (redirect, timeout) {
                             $t.hide()
                         }, 100);
                     }
-                    showTabs += '<option value="' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</option>';
+                    showMenus += '<option value="' + $(this).attr('id') + '">' + $.i18n($(this).data('name')) + '</option>';
                 }
-            });*/
+            });
 
             // Look for adapter menus
-            for (var a = 0; a < addTabs.length; a++) {
-                var name = main.objects[addTabs[a]].common.name;
-                var link = main.objects[addTabs[a]].common.adminTab.link || '/adapter/' + main.objects[addTabs[a]].common.name + '/tab.html';
-                var parts = addTabs[a].split('.');
+            for (var a = 0; a < addMenus.length; a++) {
+                var name = main.objects[addMenus[a]].common.name;
+                var link = main.objects[addMenus[a]].common.adminTab.link || '/adapter/' + main.objects[addMenus[a]].common.name + '/tab.html';
+                var parts = addMenus[a].split('.');
                 var buttonName;
 
-                if (main.objects[addTabs[a]].common.adminTab.name) {
-                    if (typeof main.objects[addTabs[a]].common.adminTab.name === 'object') {
-                        if (main.objects[addTabs[a]].common.adminTab.name[systemLang]) {
-                            buttonName = main.objects[addTabs[a]].common.adminTab.name[systemLang];
-                        } else if (main.objects[addTabs[a]].common.adminTab.name.en) {
-                            buttonName = $.i18n(main.objects[addTabs[a]].common.adminTab.name.en);
+                if (main.objects[addMenus[a]].common.adminTab.name) {
+                    if (typeof main.objects[addMenus[a]].common.adminTab.name === 'object') {
+                        if (main.objects[addMenus[a]].common.adminTab.name[systemLang]) {
+                            buttonName = main.objects[addMenus[a]].common.adminTab.name[systemLang];
+                        } else if (main.objects[addMenus[a]].common.adminTab.name.en) {
+                            buttonName = $.i18n(main.objects[addMenus[a]].common.adminTab.name.en);
                         } else {
-                            buttonName = $.i18n(main.objects[addTabs[a]].common.name);
+                            buttonName = $.i18n(main.objects[addMenus[a]].common.name);
                         }
                     } else {
-                        buttonName = $.i18n(main.objects[addTabs[a]].common.adminTab.name);
+                        buttonName = $.i18n(main.objects[addMenus[a]].common.adminTab.name);
                     }
                 } else {
-                    buttonName = $.i18n(main.objects[addTabs[a]].common.name);
+                    buttonName = $.i18n(main.objects[addMenus[a]].common.name);
                 }
 
-                if (!main.objects[addTabs[a]].common.adminTab.singleton) {
+                if (!main.objects[addMenus[a]].common.adminTab.singleton) {
                     if (link.indexOf('?') !== -1) {
                         link += '&instance=' + parts[3];
                     } else {
@@ -602,16 +607,12 @@ var adapterRedirect = function (redirect, timeout) {
                     if (!link) {
                         link = '/adapter/' + parts[2] + '/tab.html';
                     } else {
-                        // convert "http://%ip%:%port%" to "http://localhost:1880"
-                        /*main.menus.instances._replaceLinks(link, parts[2], parts[3], name, function (link, adapter, instance, arg) {
-                         $('#' + arg).data('src', link);
-                         });*/
                         isReplace = link.indexOf('%') !== -1;
                     }
 
                     //       <li><a href="#hosts" id="menu-hosts"><i class="fa fa-server"></i> <span data-i18n="hosts">Hosts</span> </a></li>
-                    var icon = main.objects[addTabs[a]].common.adminTab['fa-icon'] || 'fa-cog';
-                    text += '<li><a href="#' + name + '" id="menu-' + name + '"><i class="fa ' + icon + '"></i><span data-i18n="' + buttonName + '">' + buttonName + '</a><button class="tab-close" data-tab="' + name + '" style="display: none"></button></li>\n';
+                    var icon = main.objects[addMenus[a]].common.adminTab['fa-icon'] || 'fa-cog';
+                    text += '<li><a href="#' + name + '" id="menu-' + name + '"><i class="fa ' + icon + '"></i><span data-i18n="' + buttonName + '">' + buttonName + '</a><button class="menu-close" data-tab="' + name + '" style="display: none"></button></li>\n';
 
                     //noinspection JSJQueryEfficiency
                     if (!$('#' + name).length) {
@@ -623,7 +624,7 @@ var adapterRedirect = function (redirect, timeout) {
                     }
                 } else {
                     $('#' + name).hide().appendTo($('body'));
-                    showTabs += '<option value="' + name + '">' + buttonName + '</option>';
+                    showMenus += '<option value="' + name + '">' + buttonName + '</option>';
                 }
             }
 
@@ -633,14 +634,12 @@ var adapterRedirect = function (redirect, timeout) {
                 }
             });
 
-            if (!main.systemConfig.common.menus) main.systemConfig.common.menus = list;
+            if (!main.systemConfig.common.menus)
+                main.systemConfig.common.menus = list;
 
             $('.side-menu').append(text);
 
-            $('.tab-close').button({
-                icons: {primary: 'ui-icon-close'},
-                text: false
-            }).unbind('click').click(function () {
+            $('.menu-close').click(function () {
                 var pos = main.systemConfig.common.menus.indexOf($(this).data('tab'));
                 if (pos !== -1) {
                     main.systemConfig.common.menus.splice(pos, 1);
@@ -653,7 +652,7 @@ var adapterRedirect = function (redirect, timeout) {
                     });
                 }
                 initTabs();
-            }).css({width: 16, height: 16});
+            });
 
             if ($('.link-replace').length) {
                 var countLink = 0;
@@ -661,6 +660,7 @@ var adapterRedirect = function (redirect, timeout) {
                 // If some objects cannot be read => go by timeout
                 var loadTimeout = setTimeout(function () {
                     loadTimeout = null;
+                    initHtmlTabs(showMenus);
                 }, 1000);
 
                 $('.link-replace').each(function () {
@@ -673,69 +673,13 @@ var adapterRedirect = function (redirect, timeout) {
                                 clearTimeout(loadTimeout);
                                 loadTimeout = null;
                             }
+                            initHtmlTabs(showMenus);
                         }
                     });
                 });
+            } else {
+                initHtmlTabs(showMenus);
             }
-        }
-
-        function initAllDialogs() {
-
-            $dialogCommand.dialog({
-                autoOpen: false,
-                modal: true,
-                width: 920,
-                height: 480,
-                closeOnEscape: false,
-                open: function (event, ui) {
-                    $(event.target).parent().find('.ui-dialog-titlebar-close .ui-button-text').html('');
-                    $('#stdout').width($(this).width() - 10).height($(this).height() - 20);
-                },
-                resize: function (event, ui) {
-                    $('#stdout').width($(this).width() - 10).height($(this).height() - 20);
-                }
-            });
-
-            $dialogMessage.dialog({
-                autoOpen: false,
-                modal: true,
-                buttons: [
-                    {
-                        text: $.i18n('Ok'),
-                        click: function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                ]
-            });
-
-            $dialogConfirm.dialog({
-                autoOpen: false,
-                modal: true,
-                width: 450,
-                height: 200,
-                buttons: [
-                    {
-                        text: $.i18n('Ok'),
-                        click: function () {
-                            var cb = $(this).data('callback');
-                            $(this).dialog('close');
-                            if (cb)
-                                cb(true);
-                        }
-                    },
-                    {
-                        text: $.i18n('Cancel'),
-                        click: function () {
-                            var cb = $(this).data('callback');
-                            $(this).dialog('close');
-                            if (cb)
-                                cb(false);
-                        }
-                    }
-
-                ]
-            });
         }
 
         menus.logs.prepare();

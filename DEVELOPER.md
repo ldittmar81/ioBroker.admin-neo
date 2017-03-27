@@ -54,6 +54,7 @@ console.log(str.startsWith('einfach', 13));     // true
 * PNotify 3.0.0 https://sciactive.github.io/pnotify/
 * jQuery Inputmask 3.3.4 http://robinherbots.github.io/Inputmask/
 * Dropzone 4.3.0 http://www.dropzonejs.com/
+* ACE 1.2.6 https://ace.c9.io/
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations
