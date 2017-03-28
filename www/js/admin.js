@@ -607,7 +607,7 @@ var adapterRedirect = function (redirect, timeout) {
                 var id = $(this).attr('id').substring(5, $(this).attr('id').length - 4);
                 list.push(id);
                 if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
-                    text += '<li><a class="main-menu" href="#' + id + '" id="menu-' + id + '"><i class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a><a class="menu-close"><i class="fa fa-times"></i></a></li>\n';
+                    text += '<li class="text-nowrap"><a class="main-menu" href="#' + id + '" id="menu-' + id + '"><i class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a><a class="menu-close"><i class="fa fa-times"></i></a></li>\n';
                     $(this).show().appendTo($('#menus'));
                 } else {
                     showMenus += '<option value="' + id + '">' + $.i18n(id) + '</option>';

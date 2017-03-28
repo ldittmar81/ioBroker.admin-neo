@@ -9,6 +9,12 @@
 <i class="fa fa-question-circle" data-i18n-tooltip="tooltip_lePort"></i>
 ```
 
+### Custom attribute with translation
+
+```
+<input type="text" placeholder="hallo" data-i18n-attr="tooltip_lePort|placeholder"></i>
+```
+
 ### Change tooltips
 
 ```
@@ -55,6 +61,7 @@ console.log(str.startsWith('einfach', 13));     // true
 * jQuery Inputmask 3.3.4 http://robinherbots.github.io/Inputmask/
 * Dropzone 4.3.0 http://www.dropzonejs.com/
 * ACE 1.2.6 https://ace.c9.io/
+* Showdown 1.6.3 https://github.com/showdownjs/showdown
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations

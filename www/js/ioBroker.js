@@ -222,9 +222,24 @@ String.prototype.text2iconClass = function () {
 
     // Translation/Tooltip
     $(function () {
-        changeLanguage(systemLang);        
+        changeLanguage(systemLang);
     });
     // / Translation/Tooltip
+
+    // Clearable input
+    function tog(v) {
+        return v ? 'addClass' : 'removeClass';
+    }
+    $(document).on('input', '.clearable', function () {
+        $(this)[tog(this.value)]('x');
+    }).on('mousemove', '.x', function (e) {
+        $(this)[tog(this.offsetWidth - 18 < e.clientX - this.getBoundingClientRect().left)]('onX');
+    }).on('touchstart click', '.onX', function (ev) {
+        ev.preventDefault();
+        $(this).removeClass('x onX').val('').change();
+    });
+    // / Clearable input
+
 
     // Others
     $(function () {
@@ -238,6 +253,11 @@ function changeLanguage(lang) {
     i18n.locale = lang;
     i18n.load('i18n/' + i18n.locale + '/translations.json', i18n.locale).done(function () {
         $("[data-i18n]").i18n();
+        $("[data-i18n-attr]").each(function () {
+            var $this = $(this);
+            var data = $this.data('i18n-attr').split("|");
+            $this.attr(data[1], $.i18n(data[0]));
+        });
         $("[data-i18n-tooltip]").each(function () {
             var $this = $(this);
             $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");

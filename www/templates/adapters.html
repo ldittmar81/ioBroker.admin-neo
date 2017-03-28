@@ -1,50 +1,51 @@
 <div id="adapterTemplate">
-    
-    <table><tr>
-            <td></td>
-            <td><button id="btn_filter_adapters" class="translateT" title="installed adapters"></button></td>
-            <td><button id="btn_filter_updates" class="translateT" title="adapter with updates"></button></td>
-            <td><button id="btn_filter_custom_url" class="translateT" title="Install from custom URL"></button></td>
-            <td><button id="btn_upgrade_all" class="translateT" title="Upgrade all adapters"></button></td>
-            <td><button id="btn-adapters-expert-mode"></button></td>
-            <td style="width:30px"></td>
-            <td><button id="btn_refresh_adapters" class="translateT" title="update adapter information"></button></td>
-            <td><button id="btn_list_adapters" class="translateT" title="list"></button></td>
-            <td><button id="btn_collapse_adapters" class="translateT" title="collapse all"></button></td>
-            <td><button id="btn_expand_adapters" class="translateT" title="expand all"></button></td>
-            <td><div style="padding-left: 120px"><label class="translate" for="host-adapters">Host:</label> <select id="host-adapters"></select></div></td>
-            <td><div style="padding-left: 100px"><label class="translate" for="adapters-filter">Filter:</label> <input id="adapters-filter" style="width: 100px;margin-right:3px"/><button id="adapters-filter-clear"></button></div></td>
-        </tr>
-    </table>
-
-    <!-- Accordion -->
-    <div id="adapterTemplateAccordion">
-        <div class="page-title">
-            <div class="title_left">
-                <h3 data-i18n="adapters">Adapters</h3>
-            </div>
-            <div class="title_right">
-                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="searchField" placeholder="Search for...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" data-i18n="">Go!</button>
-                        </span>
-                    </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <button id="btn_filter_adapters" data-i18n-tooltip="installed adapters"><i class="fa fa-star"></i></button>
+            <button id="btn_filter_updates" data-i18n-tooltip="adapter with updates"><i class="fa fa-plus-circle"></i></button>
+            <button id="btn_filter_custom_url" data-i18n-tooltip="Install from custom URL"><i class="fa fa-github"></i></button>
+            <button id="btn_upgrade_all" data-i18n-tooltip="Upgrade all adapters"><i class="fa fa-refresh"></i></button>
+            <button id="btn-adapters-expert-mode" data-i18n-tooltip="expert-mode"><i class="fa fa-flask"></i></button>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <button id="btn_refresh_adapters" data-i18n-tooltip="update adapter information"><i class="fa fa-info-circle"></i></button>
+            <button id="btn_list_adapters" data-i18n-tooltip="list"><i class="fa fa-list"></i></button>
+            <button id="btn_collapse_adapters" data-i18n-tooltip="collapse all"><i class="fa fa-folder"></i></button>
+            <button id="btn_expand_adapters" data-i18n-tooltip="expand all"><i class="fa fa-folder-open"></i></button>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" data-i18n-tooltip="host"><i class="fa fa-server"></i></span>
+            <label for="host-adapters"><span data-i18n="host">Host</span></label>
+            <select id="host-adapters"></select>
+        </div>
+    </div>
+    <div class="page-title">
+        <div class="title_left">
+            <h3 data-i18n="adapters">Adapters</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input-group">
+                    <input type="text" class="form-control clearable" id="adapters-filter" placeholder="Filter..." data-i18-attr="filter|placeholder">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-i18n="go">Go!</button>
+                    </span>
                 </div>
             </div>
         </div>
-        <div class="clearfix"></div>    
     </div>
-    <!-- / Accordion -->
+    <div class="clearfix"></div>
+</div>
 
-    <!-- Group -->
-    <div id="adapterTemplateGroup" class="row">
+
+<!-- Group -->
+<div id="adapterTemplateGroup" class="hidden">
+    <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel" style="height:600px;">
+            <div class="x_panel">
                 <div class="x_title">
-                    <img id="adapterTemplateGroupImage" src="img/groups/common.png"/>
-                    <h2 id="adapterTemplateGroupTitle">Adapter-Group</h2>
+                    <img src="img/groups/common.png" alt="Group"/>
+                    <h2>Adapter-Group</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -53,59 +54,67 @@
                     <div class="clearfix"></div>
                 </div>
 
-                <div class="x_content">
-                    <div class="row">
-                        <div class="col-md-12">
-
-                        </div>                        
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- / Group -->
-
-    <!-- Adapter -->
-    <div id="adapterTemplateAdapter" class="col-md-3 col-sm-6 col-xs-12">
-        <div class="pricing">
-
-        </div>
-    </div>
-    <!-- / Adapter -->
-
-    <!-- New Adapter -->
-    <div id="adapterTemplateNewAdapter" class="col-md-3 col-sm-6 col-xs-12">
-        <div class="pricing ui-ribbon-container">
-            <div class="ui-ribbon-wrapper">
-                <div class="ui-ribbon">
-                    NEW!
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!-- / New Adapter -->
-
-    <!-- Adapter inside -->
-    <div id="adapterTemplateAdapterInside">
-        <div class="title">
-            <img id="adapterTemplateAdapterImage" src="" alt="ioBroker Admin" />
-            <h2 id="adapterTemplateAdapterTitle">ioBroker Admin</h2>
-        </div>
-        <div class="x_content">
-            <div class="">
-                <div class="pricing_features">
+                <div class="row adapter_content">
 
                 </div>
-            </div>
-            <div class="pricing_footer">
-                <a href="javascript:void(0);" class="btn btn-default"><span class="fa fa-plus"></span></a>
-                <a href="javascript:void(0);" class="btn btn-default"><span class="fa fa-question"></span></a>
-                <a href="javascript:void(0);" class="btn btn-default"><span class="fa fa-trash"></span></a>
+
             </div>
         </div>
     </div>
-    <!-- / Adapter inside -->    
-    
 </div>
+<!-- / Group -->
+
+<!-- Adapter -->
+<div id="adapterTemplateAdapter" class="hidden">
+    <div class="col-md-3 col-xs-12 widget widget_tally_box">
+        <div class="x_panel fixed_height_390">
+            <div class="x_content">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Adapter -->
+
+<!-- New Adapter -->
+<div id="adapterTemplateNewAdapter" class="hidden">
+    <div class="col-md-3 col-xs-12 widget widget_tally_box">
+        <div class="x_panel ui-ribbon-container fixed_height_390">
+            <div class="ui-ribbon-wrapper">
+                <div class="ui-ribbon">NEW!</div>
+            </div>
+            <div class="x_content">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / New Adapter -->
+
+<!-- Adapter inside -->
+<div id="adapterTemplateAdapterInside" class="hidden">
+    <div class="flex">
+        <ul class="list-inline widget_profile_box">
+            <li>
+                <a>
+                    <i class="fa fa-plus"></i>
+                </a>
+            </li>
+            <li>
+                <img src="img/smallLogo.png" alt="..." class="img-circle profile_img">
+            </li>
+            <li>
+                <a>
+                    <i class="fa fa-question"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <h3 class="name">ioBroker Admin</h3>
+    <p class="description">Opens a webserver for the ioBroker admin UI</p>
+    <h3 class="text-center">
+        <span class="version">1.7.0</span>&nbsp;
+        <small class="newVersion">1.7.3</small>
+    </h3>    
+</div>
+<!-- / Adapter inside -->    
