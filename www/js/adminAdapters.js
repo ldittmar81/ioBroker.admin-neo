@@ -194,7 +194,7 @@ function Adapters(main) {
                 var url = $(this).data('readme-url');
                 $.get(url, function (data) {
                     var link = url.match(/([^/]*\/){6}/);
-                    var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'src="' + link[0]);
+                    var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'class="img-responsive" src="' + link[0]);
                     bootbox.alert({
                         size: 'large',
                         backdrop: true,
