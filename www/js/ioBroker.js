@@ -32,6 +32,14 @@ jQuery.fn.changeTooltip = function (newValue) {
     return this;
 };
 
+jQuery.fn.switchClass = function (a, b) {
+    this.each(function () {
+        var t = $(this).hasClass(a);
+        $(this).addClass(t ? b : a).removeClass(t ? a : b);
+    });
+    return this;
+}
+
 if (!String.prototype.startsWith) {
     String.prototype.startsWith = function (searchString, position) {
         position = position || 0;
@@ -274,11 +282,7 @@ function restartFunctions(id) {
         radioClass: 'iradio_flat-green'
     });
     $('#' + id + ' select').selectpicker();
-    $("#" + id + " [data-i18n]").i18n();
-    $("#" + id + " [data-i18n-tooltip]").each(function () {
-        var $this = $(this);
-        $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
-    });
+    changeLanguage(systemLang);
     $('#' + id + ' [data-toggle="tooltip"]').tooltip({
         container: 'body'
     });

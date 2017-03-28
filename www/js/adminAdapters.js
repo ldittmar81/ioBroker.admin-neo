@@ -6,6 +6,8 @@ function Adapters(main) {
 
     var that = this;
 
+    var $groupTemplate, $adapterTemplate, $adapterNewTemplate, $adapterTemplateInside, $adapterContainer;
+
     this.curRepository = null;
     this.curRepoLastUpdate = null;
     this.curInstalled = null;
@@ -49,6 +51,12 @@ function Adapters(main) {
         $('#menu-adapters-div').load("templates/adapters.html", function () {
             restartFunctions('menu-adapters-div');
 
+            $adapterContainer = $('#adapter-container');
+            $groupTemplate = $('#adapterTemplateGroup');
+            $adapterTemplate = $('#adapterTemplateAdapter');
+            $adapterNewTemplate = $('#adapterTemplateNewAdapter');
+            $adapterTemplateInside = $('#adapterTemplateAdapterInside');
+
             $('#btn_collapse_adapters').click(function () {
             });
             $('#btn_expand_adapters').click(function () {
@@ -56,12 +64,12 @@ function Adapters(main) {
             $('#btn_list_adapters').click(function () {
                 that.isList = !that.isList;
                 if (that.isList) {
-                    $('#btn_list_adapters').addClass('text-danger');
+                    $('#btn_list_adapters').switchClass('btn-default', 'btn-primary');
                     $('#btn_expand_adapters').hide();
                     $('#btn_collapse_adapters').hide();
                     $(this).attr('title', $.i18n('list'));
                 } else {
-                    $('#btn_list_adapters').removeClass('text-danger');
+                    $('#btn_list_adapters').switchClass('btn-default', 'btn-primary');
                     $('#btn_expand_adapters').show();
                     $('#btn_collapse_adapters').show();
                     $(this).attr('title', $.i18n('tree'));
@@ -76,9 +84,9 @@ function Adapters(main) {
             $('#btn_filter_adapters').click(function () {
                 that.onlyInstalled = !that.onlyInstalled;
                 if (that.onlyInstalled) {
-                    $('#btn_filter_adapters').addClass('text-danger');
+                    $('#btn_filter_adapters').switchClass('btn-default', 'btn-primary');
                 } else {
-                    $('#btn_filter_adapters').removeClass('text-danger');
+                    $('#btn_filter_adapters').switchClass('btn-default', 'btn-primary');
                 }
                 that.main.saveConfig('adaptersOnlyInstalled', that.onlyInstalled);
 
@@ -90,10 +98,10 @@ function Adapters(main) {
             $('#btn_filter_updates').click(function () {
                 that.onlyUpdatable = !that.onlyUpdatable;
                 if (that.onlyUpdatable) {
-                    $('#btn_filter_updates').addClass('text-danger');
+                    $('#btn_filter_updates').switchClass('btn-default', 'btn-primary');
                     $('#btn_upgrade_all').show();
                 } else {
-                    $('#btn_filter_updates').removeClass('text-danger');
+                    $('#btn_filter_updates').switchClass('btn-default', 'btn-primary');
                     $('#btn_upgrade_all').hide();
                 }
                 that.main.saveConfig('adaptersOnlyUpdatable', that.onlyUpdatable);
@@ -121,7 +129,7 @@ function Adapters(main) {
                 that.main.tabs.instances.updateExpertMode();
             });
             if (that.main.config.expertMode) {
-                $('#btn-adapters-expert-mode').addClass('text-danger');
+                $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
             }
 
             // save last selected adapter
@@ -143,18 +151,19 @@ function Adapters(main) {
             $('#adapters-filter').val(that.currentFilter);
 
             if (that.isList) {
-                $('#btn_list_adapters').addClass('text-danger').attr('title', $.i18n('tree'));
+                $('#btn_list_adapters').attr('title', $.i18n('tree')).switchClass('btn-default', 'btn-primary');
                 $('#btn_expand_adapters').hide();
                 $('#btn_collapse_adapters').hide();
             }
 
             if (that.onlyInstalled) {
-                $('#btn_filter_adapters').addClass('text-danger');
+                $('#btn_filter_adapters').switchClass('btn-default', 'btn-primary');
             }
 
             if (that.onlyUpdatable || that.main.config.expertMode) {
-                if (that.onlyUpdatable)
-                    $('#btn_filter_updates').addClass('text-danger');
+                if (that.onlyUpdatable) {
+                    $('#btn_filter_updates').switchClass('btn-default', 'btn-primary');
+                }
                 $('#btn_upgrade_all').show();
             } else {
                 $('#btn_upgrade_all').hide();
@@ -186,10 +195,10 @@ function Adapters(main) {
     this.updateExpertMode = function () {
         this.init(true);
         if (that.main.config.expertMode) {
-            $('#btn-adapters-expert-mode').addClass('btn-danger');
+            $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
             $('#btn_upgrade_all').show();
         } else {
-            $('#btn-adapters-expert-mode').removeClass('btn-danger');
+            $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
 
             if (that.onlyUpdatable) {
                 $('#btn_upgrade_all').show();
@@ -331,13 +340,16 @@ function Adapters(main) {
 
         for (var adapter in adapters) {
             if (adapter === 'js-controller') {
-                if (!semver.satisfies(that.main.objects['system.host.' + that.main.currentHost].common.installedVersion, adapters[adapter]))
+                if (!semver.satisfies(that.main.objects['system.host.' + that.main.currentHost].common.installedVersion, adapters[adapter])) {
                     return $.i18n('Invalid version of $1. Required $2', adapter, adapters[adapter]);
+                }
             } else {
-                if (!that.main.objects['system.adapter.' + adapter] || !that.main.objects['system.adapter.' + adapter].common || !that.main.objects['system.adapter.' + adapter].common.installedVersion)
+                if (!that.main.objects['system.adapter.' + adapter] || !that.main.objects['system.adapter.' + adapter].common || !that.main.objects['system.adapter.' + adapter].common.installedVersion) {
                     return $.i18n('No version of $1', adapter);
-                if (!semver.satisfies(that.main.objects['system.adapter.' + adapter].common.installedVersion, adapters[adapter]))
+                }
+                if (!semver.satisfies(that.main.objects['system.adapter.' + adapter].common.installedVersion, adapters[adapter])) {
                     return $.i18n('Invalid version of $1', adapter);
+                }
             }
         }
         return '';
@@ -352,6 +364,8 @@ function Adapters(main) {
             return;
         }
 
+        $adapterContainer.html('');
+
         this.getAdaptersInfo(this.main.currentHost, update, updateRepo, function (repository, installedList) {
 
             var obj;
@@ -364,28 +378,33 @@ function Adapters(main) {
 
             if (installedList) {
                 for (adapter in installedList) {
-                    if (!installedList.hasOwnProperty(adapter))
+                    if (!installedList.hasOwnProperty(adapter)) {
                         continue;
+                    }
                     obj = installedList[adapter];
-                    if (!obj || obj.controller || adapter === 'hosts')
+                    if (!obj || obj.controller || adapter === 'hosts') {
                         continue;
+                    }
                     listInstalled.push(adapter);
                 }
                 listInstalled.sort();
             }
 
             that.urls = {};
-            // List of adapters for repository
+            // List of adapters from repository
             for (adapter in repository) {
-                if (!repository.hasOwnProperty(adapter))
+                if (!repository.hasOwnProperty(adapter)) {
                     continue;
+                }
                 that.urls[adapter] = repository[adapter].meta;
                 obj = repository[adapter];
-                if (!obj || obj.controller)
+                if (!obj || obj.controller) {
                     continue;
+                }
                 version = '';
-                if (installedList && installedList[adapter])
+                if (installedList && installedList[adapter]) {
                     continue;
+                }
                 listUnsinstalled.push(adapter);
             }
             listUnsinstalled.sort();
@@ -445,9 +464,9 @@ function Adapters(main) {
                         }
                     }
                     if (_instances) {
-                        installed += '<td style="border: 0; padding: 0; width:40px">[<span title="' + _('Installed instances') + '">' + _instances + '</span>';
+                        installed += '<td style="border: 0; padding: 0; width:40px">[<span title="' + $.i18n('Installed instances') + '">' + _instances + '</span>';
                         if (_enabled) {
-                            installed += '/<span title="' + _('Active instances') + '" class="true">' + _enabled + '</span>';
+                            installed += '/<span title="' + $.i18n('Active instances') + '" class="true">' + _enabled + '</span>';
                         }
                         installed += ']</td>';
                     } else {
@@ -456,7 +475,7 @@ function Adapters(main) {
 
                     tmp = installed.split('.');
                     if (updatable) {
-                        installed += '<td style="border: 0; padding: 0; width: 30px"><button class="adapter-update-submit" data-adapter-name="' + adapter + '" ' + (updatableError ? ' disabled title="' + updatableError + '"' : 'title="' + _('update') + '"') + '></button></td>';
+                        installed += '<td style="border: 0; padding: 0; width: 30px"><button class="adapter-update-submit" data-adapter-name="' + adapter + '" ' + (updatableError ? ' disabled title="' + updatableError + '"' : 'title="' + $.i18n('update') + '"') + '></button></td>';
                         version = version.replace('class="', 'class="updateReady ');
                         $('a[href="#tab-adapters"]').addClass('updateReady');
                     } else if (that.onlyUpdatable) {
@@ -468,15 +487,15 @@ function Adapters(main) {
                 if (version) {
                     tmp = version.split('.');
                     if (tmp[0] === '0' && tmp[1] === '0' && tmp[2] === '0') {
-                        version = '<span class="planned" title="' + _("planned") + '">' + version + '</span>';
+                        version = '<span class="planned" title="' + $.i18n("planned") + '">' + version + '</span>';
                     } else if (tmp[0] === '0' && tmp[1] === '0') {
-                        version = '<span class="alpha" title="' + _("alpha") + '">' + version + '</span>';
+                        version = '<span class="alpha" title="' + $.i18n("alpha") + '">' + version + '</span>';
                     } else if (tmp[0] === '0') {
-                        version = '<span class="beta" title="' + _("beta") + '">' + version + '</span>';
+                        version = '<span class="beta" title="' + $.i18n("beta") + '">' + version + '</span>';
                     } else if (version === 'npm error') {
-                        version = '<span class="error" title="' + _("Cannot read version from NPM") + '">' + _('npm error') + '</span>';
+                        version = '<span class="error" title="' + $.i18n("Cannot read version from NPM") + '">' + $.i18n('npm error') + '</span>';
                     } else {
-                        version = '<span class="stable" title="' + _("stable") + '">' + version + '</span>';
+                        version = '<span class="stable" title="' + $.i18n("stable") + '">' + version + '</span>';
                     }
                 }
 
@@ -485,7 +504,7 @@ function Adapters(main) {
                 desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
 
                 that.data[adapter] = {
-                    image: icon ? '<img src="' + icon + '" width="22px" height="22px" />' : '',
+                    image: icon ? icon : '',
                     name: adapter,
                     title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
                     desc: desc,
@@ -493,10 +512,10 @@ function Adapters(main) {
                     version: version,
                     installed: installed,
                     bold: obj.highlight || false,
-                    install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit" title="' + _('add instance') + '"></button>' +
-                            '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + 'data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit" title="' + _('readme') + '"></button>' +
-                            '<button ' + (installed ? '' : 'disabled="disabled" ') + 'data-adapter-name="' + adapter + '" class="adapter-delete-submit" title="' + _('delete adapter') + '"></button>' +
-                            ((that.main.config.expertMode) ? '<button data-adapter-name="' + adapter + '" class="adapter-update-custom-submit" title="' + _('install specific version') + '"></button>' : ''),
+                    install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit" title="' + $.i18n('add instance') + '"></button>' +
+                            '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + 'data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit" title="' + $.i18n('readme') + '"></button>' +
+                            '<button ' + (installed ? '' : 'disabled="disabled" ') + 'data-adapter-name="' + adapter + '" class="adapter-delete-submit" title="' + $.i18n('delete adapter') + '"></button>' +
+                            ((that.main.config.expertMode) ? '<button data-adapter-name="' + adapter + '" class="adapter-update-custom-submit" title="' + $.i18n('install specific version') + '"></button>' : ''),
                     platform: obj.platform,
                     group: group,
                     license: obj.license || '',
@@ -520,7 +539,7 @@ function Adapters(main) {
                     }
                     if (igroup < 0) {
                         that.tree.push({
-                            title: _(that.data[adapter].group),
+                            title: $.i18n(that.data[adapter].group),
                             desc: showUploadProgress(group),
                             key: that.data[adapter].group,
                             folder: true,
@@ -549,11 +568,11 @@ function Adapters(main) {
                     adapter = listUnsinstalled[i];
 
                     obj = repository[adapter];
-                    if (!obj || obj.controller){
+                    if (!obj || obj.controller) {
                         continue;
                     }
                     version = '';
-                    if (installedList && installedList[adapter]){
+                    if (installedList && installedList[adapter]) {
                         continue;
                     }
 
@@ -561,15 +580,15 @@ function Adapters(main) {
                         version = repository[adapter].version;
                         tmp = version.split('.');
                         if (tmp[0] === '0' && tmp[1] === '0' && tmp[2] === '0') {
-                            version = '<span class="planned" title="' + _("planned") + '">' + version + '</span>';
+                            version = '<span class="planned" title="' + $.i18n("planned") + '">' + version + '</span>';
                         } else if (tmp[0] === '0' && tmp[1] === '0') {
-                            version = '<span class="alpha" title="' + _("alpha") + '">' + version + '</span>';
+                            version = '<span class="alpha" title="' + $.i18n("alpha") + '">' + version + '</span>';
                         } else if (tmp[0] === '0') {
-                            version = '<span class="beta" title="' + _("beta") + '">' + version + '</span>';
+                            version = '<span class="beta" title="' + $.i18n("beta") + '">' + version + '</span>';
                         } else if (version === 'npm error') {
-                            version = '<span class="error" title="' + _("Cannot read version from NPM") + '">' + _('npm error') + '</span>';
+                            version = '<span class="error" title="' + $.i18n("Cannot read version from NPM") + '">' + $.i18n('npm error') + '</span>';
                         } else {
-                            version = '<span class="stable" title="' + _("stable") + '">' + version + '</span>';
+                            version = '<span class="stable" title="' + $.i18n("stable") + '">' + version + '</span>';
                         }
                     }
 
@@ -586,20 +605,20 @@ function Adapters(main) {
                         version: version,
                         bold: obj.highlight,
                         installed: '',
-                        install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit">' + _('add instance') + '</button>' +
-                                '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + ' data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit">' + _('readme') + '</button>' +
-                                '<button disabled="disabled" data-adapter-name="' + adapter + '" class="adapter-delete-submit">' + _('delete adapter') + '</button>' +
-                                ((that.main.config.expertMode) ? '<button data-adapter-name="' + adapter + '" class="adapter-update-custom-submit" title="' + _('install specific version') + '"></button>' : ''),
+                        install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit">' + $.i18n('add instance') + '</button>' +
+                                '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + ' data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit">' + $.i18n('readme') + '</button>' +
+                                '<button disabled="disabled" data-adapter-name="' + adapter + '" class="adapter-delete-submit">' + $.i18n('delete adapter') + '</button>' +
+                                ((that.main.config.expertMode) ? '<button data-adapter-name="' + adapter + '" class="adapter-update-custom-submit" title="' + $.i18n('install specific version') + '"></button>' : ''),
                         platform: obj.platform,
                         license: obj.license || '',
                         licenseUrl: obj.licenseUrl || '',
                         group: group
                     };
 
-                    if (!obj.type){
+                    if (!obj.type) {
                         console.log('"' + adapter + '": "common adapters",');
                     }
-                    if (obj.type && that.types[adapter]){
+                    if (obj.type && that.types[adapter]) {
                         console.log('Adapter "' + adapter + '" has own type. Remove from admin.');
                     }
 
@@ -613,7 +632,7 @@ function Adapters(main) {
                         }
                         if (igroup < 0) {
                             that.tree.push({
-                                title: _(that.data[adapter].group),
+                                title: $.i18n(that.data[adapter].group),
                                 key: that.data[adapter].group,
                                 folder: true,
                                 expanded: !that.isCollapsed[that.data[adapter].group],
@@ -639,7 +658,31 @@ function Adapters(main) {
             }
         });
 
+        this.createAdapterList();
+
         this.main.fillContent('#menu-adapters-div');
+    };
+
+    this.createAdapterList = function () {
+        for (var group in this.tree) {
+            var $tempGroup = $groupTemplate.children().clone(true, true);
+            $tempGroup.find('.group_title').text(group.title);
+            $tempGroup.find('.group_img').attr('src', group.icon).attr('alt', group.title);
+            
+            for (var adapters in group.children){
+                var $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
+                var $tempAdapterInner = $adapterTemplateInside.children().clone(true, true);
+                
+                $tempAdapterInner.find('.profile_img').attr('src', adapters.icon);
+                $tempAdapterInner.find('.name').text(adapters.title);
+                $tempAdapterInner.find('.description').text(adapters.desc);
+                
+                $tempAdapterBorder.find('.x_content').append($tempAdapterInner);
+                $tempGroup.find('.adapterList').append($tempAdapterBorder);
+            }
+
+            $adapterContainer.append($tempGroup);
+        }
     };
 
     function showLicenseDialog(adapter, callback) {

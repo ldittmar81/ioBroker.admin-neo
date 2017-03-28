@@ -42,6 +42,18 @@ console.log(str.startsWith('einfach'));         // false
 console.log(str.startsWith('einfach', 13));     // true
 ```
 
+### SwitchClass for jQuery
+
+```
+<div id="hallo" class="test"></div>
+$('#hallo').switchClass('test','test2');
+...
+<div id="hallo" class="test2"></div>
+$('#hallo').switchClass('test2','yellow');
+...
+<div id="hallo" class="yellow"></div>
+```
+
 ## Bibliotheken
 
 ### CSS

@@ -797,6 +797,9 @@ var adapterRedirect = function (redirect, timeout) {
                     // If customs enabled
                     menus.objects.checkCustoms();
 
+                    // Show if update available
+                    menus.hosts.initList();
+
                     if (typeof callback === 'function')
                         callback();
                 }, 0);
