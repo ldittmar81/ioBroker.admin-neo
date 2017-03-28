@@ -1,5 +1,5 @@
 <div id="adapterTemplate">
-    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar">
+    <div class="btn-toolbar col-xs-12" role="toolbar" aria-label="Toolbar">
         <div class="btn-group mr-2" role="group" aria-label="First group">
             <button id="btn_filter_adapters" class="btn btn-default" data-i18n-tooltip="installed adapters"><i class="fa fa-star"></i></button>
             <button id="btn_filter_updates" class="btn btn-default" data-i18n-tooltip="adapter with updates"><i class="fa fa-plus-circle"></i></button>
@@ -44,9 +44,8 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-                <div class="x_title">
-                    <img class="group_img" src="img/groups/common.png" alt="Group"/>
-                    <h2 class="group_title">Adapter-Group</h2>
+                <div class="x_title">                   
+                    <h2><img class="group_img" src="img/groups/common.png" alt="Group"/> <span class="group_title">Adapter-Group</span></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -94,28 +93,30 @@
 
 <!-- Adapter inside -->
 <div id="adapterTemplateAdapterInside" class="hidden">
-    <div class="flex">
-        <ul class="list-inline widget_profile_box">
-            <li>
-                <a>
-                    <i class="fa fa-plus"></i>
-                </a>
-            </li>
-            <li>
-                <img src="img/smallLogo.png" alt="..." class="img-circle profile_img">
-            </li>
-            <li>
-                <a>
-                    <i class="fa fa-question"></i>
-                </a>
-            </li>
-        </ul>
+    <div>
+        <div class="flex">
+            <ul class="list-inline widget_profile_box">
+                <li>
+                    <a class="adapter-install-submit" data-i18n-tooltip="add_instance">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </li>
+                <li>
+                    <img src="img/smallLogo.png" alt="..." class="img-circle profile_img">
+                </li>
+                <li>
+                    <a class="adapter-readme-submit" data-i18n-tooltip="readme">
+                        <i class="fa fa-question"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <h3 class="name">ioBroker Admin</h3>
+        <p class="description">Opens a webserver for the ioBroker admin UI</p>
+        <h3 class="text-center">
+            <span class="version">1.7.0</span>&nbsp;
+            <small class="hidden newVersion">1.7.3</small>
+        </h3>
     </div>
-    <h3 class="name">ioBroker Admin</h3>
-    <p class="description">Opens a webserver for the ioBroker admin UI</p>
-    <h3 class="text-center">
-        <span class="version">1.7.0</span>&nbsp;
-        <small class="newVersion">1.7.3</small>
-    </h3>    
 </div>
 <!-- / Adapter inside -->    

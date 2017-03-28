@@ -1,5 +1,7 @@
 /* global systemLang */
 /* global semver */
+/* global bootbox */
+/* global showdown */
 
 function Adapters(main) {
     'use strict';
@@ -18,22 +20,22 @@ function Adapters(main) {
     this.data = {};
     this.urls = {};
     this.groupImages = {
-        'common adapters_group': 'img/group/common.png',
-        'hardware_group': 'img/group/hardware.png', //will be deleted after split
-        'platform_group': 'img/group/platform.png',
-        'kitchen&home_group': 'img/group/kitchen.png',
-        'garden_group': 'img/group/garden.png',
-        'cameras': 'img/group/camera.png',
-        'alarm': 'img/group/alarm.png',
-        'script_group': 'img/group/script.png',
-        'media_group': 'img/group/media.png',
-        'communication_group': 'img/group/communication.png',
-        'visualisation_group': 'img/group/visualisation.png',
-        'storage_group': 'img/group/storage.png',
-        'weather_group': 'img/group/weather.png',
-        'schedule_group': 'img/group/schedule.png',
-        'vis_group': 'img/group/vis.png',
-        'service_group': 'img/group/service.png'
+        'common adapters_group': 'img/groups/common.png',
+        'hardware_group': 'img/groups/hardware.png', //will be deleted after split
+        'platform_group': 'img/groups/platform.png',
+        'kitchen&home_group': 'img/groups/kitchen.png',
+        'garden_group': 'img/groups/garden.png',
+        'cameras': 'img/groups/camera.png',
+        'alarm': 'img/groups/alarm.png',
+        'script_group': 'img/groups/script.png',
+        'media_group': 'img/groups/media.png',
+        'communication_group': 'img/groups/communication.png',
+        'visualisation_group': 'img/groups/visualisierung.png',
+        'storage_group': 'img/groups/storage.png',
+        'weather_group': 'img/groups/weather.png',
+        'schedule_group': 'img/groups/schedule.png',
+        'vis_group': 'img/groups/vis.png',
+        'service_group': 'img/groups/service.png'
     };
 
     this.isList = false;
@@ -64,15 +66,15 @@ function Adapters(main) {
             $('#btn_list_adapters').click(function () {
                 that.isList = !that.isList;
                 if (that.isList) {
-                    $('#btn_list_adapters').switchClass('btn-default', 'btn-primary');
+                    $('#btn_list_adapters i').switchClass('fa-list', 'fa-window-maximize');
                     $('#btn_expand_adapters').hide();
                     $('#btn_collapse_adapters').hide();
-                    $(this).attr('title', $.i18n('list'));
+                    $(this).changeTooltip($.i18n('list'));
                 } else {
-                    $('#btn_list_adapters').switchClass('btn-default', 'btn-primary');
+                    $('#btn_list_adapters i').switchClass('fa-list', 'fa-window-maximize');
                     $('#btn_expand_adapters').show();
                     $('#btn_collapse_adapters').show();
-                    $(this).attr('title', $.i18n('tree'));
+                    $(this).changeTooltip($.i18n('tiles'));
                 }
                 that.main.saveConfig('adaptersIsList', that.isList);
 
@@ -186,6 +188,19 @@ function Adapters(main) {
                     that.main.saveConfig('adaptersCurrentFilter', that.currentFilter);
                     //that.$grid.fancytree('getTree').filterNodes(customFilter, false);
                 }, 400);
+            });
+
+            $(document.body).on('click', '.adapter-readme-submit', function () {
+                var url = $(this).data('readme-url');
+                $.get(url, function (data) {
+                    var link = url.match(/([^/]*\/){6}/);
+                    var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'src="' + link[0]);
+                    bootbox.alert({
+                        size: 'large',
+                        backdrop: true,
+                        message: html
+                    }).off("shown.bs.modal");
+                });
             });
 
         });
@@ -370,6 +385,7 @@ function Adapters(main) {
 
             var obj;
             var version;
+            var state;
             var tmp;
             var adapter;
 
@@ -484,24 +500,14 @@ function Adapters(main) {
 
                     installed += '</tr></table>';
                 }
-                if (version) {
-                    tmp = version.split('.');
-                    if (tmp[0] === '0' && tmp[1] === '0' && tmp[2] === '0') {
-                        version = '<span class="planned" title="' + $.i18n("planned") + '">' + version + '</span>';
-                    } else if (tmp[0] === '0' && tmp[1] === '0') {
-                        version = '<span class="alpha" title="' + $.i18n("alpha") + '">' + version + '</span>';
-                    } else if (tmp[0] === '0') {
-                        version = '<span class="beta" title="' + $.i18n("beta") + '">' + version + '</span>';
-                    } else if (version === 'npm error') {
-                        version = '<span class="error" title="' + $.i18n("Cannot read version from NPM") + '">' + $.i18n('npm error') + '</span>';
-                    } else {
-                        version = '<span class="stable" title="' + $.i18n("stable") + '">' + version + '</span>';
-                    }
-                }
 
                 var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
                 var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
                 desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
+
+                if (obj.readme) {
+                    obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
+                }
 
                 that.data[adapter] = {
                     image: icon ? icon : '',
@@ -510,6 +516,7 @@ function Adapters(main) {
                     desc: desc,
                     keywords: obj.keywords ? obj.keywords.join(' ') : '',
                     version: version,
+                    readme: obj.readme,
                     installed: installed,
                     bold: obj.highlight || false,
                     install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit" title="' + $.i18n('add instance') + '"></button>' +
@@ -578,32 +585,26 @@ function Adapters(main) {
 
                     if (repository[adapter] && repository[adapter].version) {
                         version = repository[adapter].version;
-                        tmp = version.split('.');
-                        if (tmp[0] === '0' && tmp[1] === '0' && tmp[2] === '0') {
-                            version = '<span class="planned" title="' + $.i18n("planned") + '">' + version + '</span>';
-                        } else if (tmp[0] === '0' && tmp[1] === '0') {
-                            version = '<span class="alpha" title="' + $.i18n("alpha") + '">' + version + '</span>';
-                        } else if (tmp[0] === '0') {
-                            version = '<span class="beta" title="' + $.i18n("beta") + '">' + version + '</span>';
-                        } else if (version === 'npm error') {
-                            version = '<span class="error" title="' + $.i18n("Cannot read version from NPM") + '">' + $.i18n('npm error') + '</span>';
-                        } else {
-                            version = '<span class="stable" title="' + $.i18n("stable") + '">' + version + '</span>';
-                        }
+
                     }
 
                     var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
                     var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
                     desc += showUploadProgress(adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
 
+                    if (obj.readme) {
+                        obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
+                    }
+
                     that.data[adapter] = {
-                        image: repository[adapter].extIcon ? '<img src="' + repository[adapter].extIcon + '" width="22px" height="22px" />' : '',
+                        image: repository[adapter].extIcon ? repository[adapter].extIcon : '',
                         name: adapter,
                         title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
                         desc: desc,
                         keywords: obj.keywords ? obj.keywords.join(' ') : '',
                         version: version,
                         bold: obj.highlight,
+                        readme: obj.readme,
                         installed: '',
                         install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit">' + $.i18n('add instance') + '</button>' +
                                 '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + ' data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit">' + $.i18n('readme') + '</button>' +
@@ -634,19 +635,13 @@ function Adapters(main) {
                             that.tree.push({
                                 title: $.i18n(that.data[adapter].group),
                                 key: that.data[adapter].group,
-                                folder: true,
                                 expanded: !that.isCollapsed[that.data[adapter].group],
                                 children: [],
                                 icon: that.groupImages[that.data[adapter].group]
                             });
                             igroup = that.tree.length - 1;
                         }
-                        that.tree[igroup].children.push({
-                            title: that.data[adapter].title || adapter,
-                            icon: repository[adapter].extIcon,
-                            desc: showUploadProgress(group),
-                            key: adapter
-                        });
+                        that.tree[igroup].children.push(adapter);
                     } else {
                         that.tree.push({
                             icon: repository[adapter].extIcon,
@@ -664,21 +659,56 @@ function Adapters(main) {
     };
 
     this.createAdapterList = function () {
-        for (var group in this.tree) {
+        for (var i in this.tree) {
+            var group = this.tree[i];
             var $tempGroup = $groupTemplate.children().clone(true, true);
             $tempGroup.find('.group_title').text(group.title);
             $tempGroup.find('.group_img').attr('src', group.icon).attr('alt', group.title);
-            
-            for (var adapters in group.children){
-                var $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
-                var $tempAdapterInner = $adapterTemplateInside.children().clone(true, true);
-                
-                $tempAdapterInner.find('.profile_img').attr('src', adapters.icon);
-                $tempAdapterInner.find('.name').text(adapters.title);
-                $tempAdapterInner.find('.description').text(adapters.desc);
-                
-                $tempAdapterBorder.find('.x_content').append($tempAdapterInner);
-                $tempGroup.find('.adapterList').append($tempAdapterBorder);
+
+            for (var z in group.children) {
+                var adapter = that.data[group.children[z]];
+                if (adapter) {
+                    var $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
+                    var $tempAdapterInner = $adapterTemplateInside.children().clone(true, true);
+
+                    $tempAdapterInner.find('.profile_img').attr('src', adapter.image);
+                    $tempAdapterInner.find('.name').text(adapter.name);
+                    $tempAdapterInner.find('.description').text(adapter.desc);
+
+                    var bgColor;
+                    var state;
+                    if (adapter.version) {
+                        var tmp = adapter.version.split('.');
+                        if (tmp[0] === '0' && tmp[1] === '0' && tmp[2] === '0') {
+                            state = "planned";
+                            bgColor = "bg-info";
+                        } else if (tmp[0] === '0' && tmp[1] === '0') {
+                            state = "alpha";
+                            bgColor = "bg-danger";
+                        } else if (tmp[0] === '0') {
+                            state = "beta";
+                            bgColor = "bg-warning";
+                        } else if (adapter.version === 'npm error') {
+                            state = "error";
+                            bgColor = "";
+                            adapter.version = $.i18n('npm error');
+                        } else {
+                            state = "stable";
+                            bgColor = "bg-success";
+                        }
+                    }
+
+                    $tempAdapterInner.find('.version').text(adapter.version).parent().addClass(bgColor);
+                    $tempAdapterInner.find('.adapter-install-submit').attr('data-adapter-name', adapter.name);
+                    if (adapter.readme) {
+                        $tempAdapterInner.find('.adapter-readme-submit').attr('data-readme-url', adapter.readme);
+                    } else {
+                        $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled');
+                    }
+
+                    $tempAdapterBorder.find('.x_content').append($tempAdapterInner);
+                    $tempGroup.find('.adapterList').append($tempAdapterBorder);
+                }
             }
 
             $adapterContainer.append($tempGroup);
@@ -688,10 +718,6 @@ function Adapters(main) {
     function showLicenseDialog(adapter, callback) {
 
     }
-
-    this.initButtons = function (adapter) {
-
-    };
 
     this.objectChange = function (id, obj) {
     };
