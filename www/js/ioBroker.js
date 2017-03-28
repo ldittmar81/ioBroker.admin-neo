@@ -282,7 +282,16 @@ function restartFunctions(id) {
         radioClass: 'iradio_flat-green'
     });
     $('#' + id + ' select').selectpicker();
-    changeLanguage(systemLang);
+    $("#" + id + " [data-i18n]").i18n();
+    $("#" + id + " [data-i18n-attr]").each(function () {
+        var $this = $(this);
+        var data = $this.data('i18n-attr').split("|");
+        $this.attr(data[1], $.i18n(data[0]));
+    });
+    $("#" + id + " [data-i18n-tooltip]").each(function () {
+        var $this = $(this);
+        $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
+    }); 
     $('#' + id + ' [data-toggle="tooltip"]').tooltip({
         container: 'body'
     });

@@ -2834,8 +2834,8 @@ ul.widget_profile_box li a {
     padding: 0px
 }
 ul.widget_profile_box li a:hover {
-    color: #1ABB9C !important;
-    border: 1px solid #26b99a
+    color: #1ABB9C;
+    border: 1px solid #26b99a;
 }
 ul.widget_profile_box li .profile_img {
     width: 85px;
@@ -4219,4 +4219,10 @@ ul.notifications {
     .modal-lg {
         width: 50% !important;
     }
+}
+
+a.disabled, a.disabled:hover{
+    color: gray !important;
+    border: 1px solid gray !important;
+    pointer-events: none;
 }

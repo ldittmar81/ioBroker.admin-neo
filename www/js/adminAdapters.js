@@ -51,8 +51,6 @@ function Adapters(main) {
 
     this.prepare = function () {
         $('#menu-adapters-div').load("templates/adapters.html", function () {
-            restartFunctions('menu-adapters-div');
-
             $adapterContainer = $('#adapter-container');
             $groupTemplate = $('#adapterTemplateGroup');
             $adapterTemplate = $('#adapterTemplateAdapter');
@@ -60,8 +58,30 @@ function Adapters(main) {
             $adapterTemplateInside = $('#adapterTemplateAdapterInside');
 
             $('#btn_collapse_adapters').click(function () {
+                $('.collapse-link').each(function () {
+                    var $ICON = $(this).find('i');
+                    if ($ICON.hasClass('fa-chevron-up')) {
+                        var $BOX_PANEL = $(this).closest('.x_panel');
+                        var $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+                        $BOX_CONTENT.slideToggle(200);
+                        $BOX_PANEL.css('height', 'auto');
+                        $ICON.toggleClass('fa-chevron-up fa-chevron-down');
+                    }
+
+                });                
             });
             $('#btn_expand_adapters').click(function () {
+                $('.collapse-link').each(function () {
+                    var $ICON = $(this).find('i');
+                    if ($ICON.hasClass('fa-chevron-down')) {
+                        var $BOX_PANEL = $(this).closest('.x_panel');
+                        var $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+                        $BOX_CONTENT.slideToggle(200);
+                        $BOX_PANEL.css('height', 'auto');
+                        $ICON.toggleClass('fa-chevron-up fa-chevron-down');
+                    }
+
+                });    
             });
             $('#btn_list_adapters').click(function () {
                 that.isList = !that.isList;
@@ -655,6 +675,7 @@ function Adapters(main) {
 
         this.createAdapterList();
 
+        restartFunctions('menu-adapters-div');
         this.main.fillContent('#menu-adapters-div');
     };
 
@@ -703,7 +724,7 @@ function Adapters(main) {
                     if (adapter.readme) {
                         $tempAdapterInner.find('.adapter-readme-submit').attr('data-readme-url', adapter.readme);
                     } else {
-                        $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled');
+                        $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled').prop('disabled', true);
                     }
 
                     $tempAdapterBorder.find('.x_content').append($tempAdapterInner);
