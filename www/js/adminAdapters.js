@@ -138,8 +138,9 @@ function Adapters(main) {
                 that.main.confirmMessage($.i18n('Do you want to upgrade all adapters?'), $.i18n('Question'), 'help', function (result) {
                     if (result) {
                         that.main.cmdExec(null, 'upgrade', function (exitCode) {
-                            if (!exitCode)
+                            if (!exitCode){
                                 that.init(true);
+                            }
                         });
                     }
                 });
@@ -149,7 +150,7 @@ function Adapters(main) {
                 that.main.config.expertMode = !that.main.config.expertMode;
                 that.main.saveConfig('expertMode', that.main.config.expertMode);
                 that.updateExpertMode();
-                that.main.tabs.instances.updateExpertMode();
+                that.main.menus.instances.updateExpertMode();
             });
             if (that.main.config.expertMode) {
                 $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
@@ -236,7 +237,7 @@ function Adapters(main) {
                         $issueElement.find('.created').text(issue.created_at);                        
                         
                         for(var label in issue.labels){
-                            $issueElement.find('.tags').append('<span data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '">' + label.name + '</span>');                            
+                            $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '"><span>' + label.name + '</span></a>');                            
                         }
                         
                         $table.find('.timeline').append($issueElement);
