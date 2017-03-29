@@ -4225,8 +4225,7 @@ ul.notifications {
 }
 
 a.disabled, a.disabled:hover{
-    color: gray !important;
-    border: 1px solid gray !important;
+    color: #bebebe !important;    
     pointer-events: none;
 }
 
@@ -4235,4 +4234,27 @@ a.disabled, a.disabled:hover{
     bottom: 0;
     left: 0;
     width: 100%;
-  }
+}
+
+.sidebar-footer-50 {
+    bottom: 50px;
+    clear: both;
+    display: block;
+    padding: 5px 0 0 0;
+    position: fixed;
+    width: 230px;
+    background: #2A3F54;
+    z-index:999;
+}
+
+@media (max-width: 768px){
+    .navbar-left {
+        float: left!important;
+    }
+    .navbar-nav{
+        margin: 0;
+    }
+    .top_nav .navbar-right{
+        width: 40% !important;
+    }
+}

@@ -212,8 +212,8 @@ function Adapters(main) {
                 }, 400);
             });
 
-            $(document.body).on('click', '.adapter-readme-submit', function () {
-                var url = $(this).data('readme-url');
+            $(document.body).on('click', '.show-md', function () {
+                var url = $(this).data('md-url');
                 $.get(url, function (data) {
                     var link = url.match(/([^/]*\/){6}/);
                     var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'class="img-responsive" src="' + link[0]);
@@ -228,28 +228,29 @@ function Adapters(main) {
             $(document.body).on('click', '.adapter-issue-submit', function () {
                 $.getJSON($(this).data('issue-url'), function (data) {
                     var $table = $('#issueTable').children().clone(true, true);
-                    
+
                     var bug = false;
                     for (var i in data) {
-                        if (i !== "remove") {
-                            bug = true;
-                            var issue = data[i];
-                            var $issueElement = $('#issueTableElement').children().clone(true, true);
-                            $issueElement.find('.title').text(issue.title).attr('href', issue.html_url);
-                            $issueElement.find('.user').text(issue.user.login);
-                            $issueElement.find('.description').text(issue.body);
-                            $issueElement.find('.created').text(issue.created_at);
-
-                            for (var label in issue.labels) {
-                                $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '"><span>' + label.name + '</span></a>');
-                            }
-
-                            $table.find('.timeline').append($issueElement);
+                        if (i === "remove") {
+                            break;
                         }
+                        bug = true;
+                        var issue = data[i];
+                        var $issueElement = $('#issueTableElement').children().clone(true, true);
+                        $issueElement.find('.title').text(issue.title).attr('href', issue.html_url);
+                        $issueElement.find('.user').text(issue.user.login);
+                        $issueElement.find('.description').text(issue.body);
+                        $issueElement.find('.created').text(issue.created_at);
+
+                        for (var label in issue.labels) {
+                            $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '"><span>' + label.name + '</span></a>');
+                        }
+
+                        $table.find('.timeline').append($issueElement);
                     }
-                    
-                    if(!bug){                      
-                            $table.find('.timeline').append($('<li><h2>' + $.i18n('noBug') + '</h2></li>'));
+
+                    if (!bug) {
+                        $table.find('.timeline').append($('<li><h2>' + $.i18n('noBug') + '</h2></li>'));
                     }
 
                     bootbox.confirm({
@@ -515,7 +516,14 @@ function Adapters(main) {
                 if (!obj || obj.controller || adapter === 'hosts') {
                     continue;
                 }
-                var installed = '';
+                var installed = {};
+                installed.instances = 0;
+                installed.active = 0;
+                installed.news = "";
+                installed.version = obj.version;
+                installed.updatable = false;
+                installed.updatableError = "";
+
                 var icon = obj.icon;
                 var issue = '';
                 version = '';
@@ -531,16 +539,15 @@ function Adapters(main) {
                 }
 
                 if (obj.version) {
-                    var news = '';
                     var updatable = false;
                     var updatableError = '';
                     if (!that.main.upToDate(version, obj.version)) {
-                        news = getNews(obj.version, repository[adapter]);
+                        installed.news = getNews(obj.version, repository[adapter]);
                         // check if version is compatible with current adapters and js-controller
                         updatable = true;
-                        updatableError = checkDependencies(repository[adapter].dependencies);
+                        installed.updatableError = checkDependencies(repository[adapter].dependencies);
                     }
-                    installed = '<table style="border: 0; border-collapse: collapse;' + (news ? 'font-weight: bold;' : '') + '" cellspacing="0" cellpadding="0" class="ui-widget"><tr><td style="border: 0; padding: 0; width: 50px" title="' + news + '">' + obj.version + '</td>';
+                    installed.updatable = updatable;
 
                     var _instances = 0;
                     var _enabled = 0;
@@ -554,25 +561,11 @@ function Adapters(main) {
                         }
                     }
                     if (_instances) {
-                        installed += '<td style="border: 0; padding: 0; width:40px">[<span title="' + $.i18n('Installed instances') + '">' + _instances + '</span>';
+                        installed.instances = _instances;
                         if (_enabled) {
-                            installed += '/<span title="' + $.i18n('Active instances') + '" class="true">' + _enabled + '</span>';
+                            installed.active = _enabled;
                         }
-                        installed += ']</td>';
-                    } else {
-                        installed += '<td style="border: 0; padding: 0; width: 40px"></td>';
                     }
-
-                    tmp = installed.split('.');
-                    if (updatable) {
-                        installed += '<td style="border: 0; padding: 0; width: 30px"><button class="adapter-update-submit" data-adapter-name="' + adapter + '" ' + (updatableError ? ' disabled title="' + updatableError + '"' : 'title="' + $.i18n('update') + '"') + '></button></td>';
-                        version = version.replace('class="', 'class="updateReady ');
-                        $('a[href="#tab-adapters"]').addClass('updateReady');
-                    } else if (that.onlyUpdatable) {
-                        continue;
-                    }
-
-                    installed += '</tr></table>';
                 }
 
                 var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
@@ -581,6 +574,9 @@ function Adapters(main) {
 
                 if (obj.readme) {
                     obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
+                }
+                if (obj.licenseUrl) {
+                    obj.licenseUrl = obj.licenseUrl.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
                 }
 
                 that.data[adapter] = {
@@ -594,14 +590,11 @@ function Adapters(main) {
                     issue: issue,
                     installed: installed,
                     bold: obj.highlight || false,
-                    install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit" title="' + $.i18n('add instance') + '"></button>' +
-                            '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + 'data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit" title="' + $.i18n('readme') + '"></button>' +
-                            '<button ' + (installed ? '' : 'disabled="disabled" ') + 'data-adapter-name="' + adapter + '" class="adapter-delete-submit" title="' + $.i18n('delete adapter') + '"></button>' +
-                            ((that.main.config.expertMode) ? '<button data-adapter-name="' + adapter + '" class="adapter-update-custom-submit" title="' + $.i18n('install specific version') + '"></button>' : ''),
                     platform: obj.platform,
                     group: group,
                     license: obj.license || '',
-                    licenseUrl: obj.licenseUrl || ''
+                    licenseUrl: obj.licenseUrl || '',
+                    authors: obj.authors
                 };
 
                 if (!obj.type) {
@@ -678,6 +671,9 @@ function Adapters(main) {
                     if (obj.readme) {
                         obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
                     }
+                    if (obj.licenseUrl) {
+                        obj.licenseUrl = obj.licenseUrl.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
+                    }
 
                     that.data[adapter] = {
                         image: icon,
@@ -690,14 +686,11 @@ function Adapters(main) {
                         readme: obj.readme,
                         issue: issue,
                         installed: '',
-                        install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit">' + $.i18n('add instance') + '</button>' +
-                                '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + ' data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit">' + $.i18n('readme') + '</button>' +
-                                '<button disabled="disabled" data-adapter-name="' + adapter + '" class="adapter-delete-submit">' + $.i18n('delete adapter') + '</button>' +
-                                ((that.main.config.expertMode) ? '<button data-adapter-name="' + adapter + '" class="adapter-update-custom-submit" title="' + $.i18n('install specific version') + '"></button>' : ''),
                         platform: obj.platform,
                         license: obj.license || '',
                         licenseUrl: obj.licenseUrl || '',
-                        group: group
+                        group: group,
+                        authors: obj.authors
                     };
 
                     if (!obj.type) {
@@ -745,6 +738,9 @@ function Adapters(main) {
 
     this.createAdapterList = function () {
         for (var i in this.tree) {
+            if (i === "remove") {
+                break;
+            }
             var group = this.tree[i];
             var $tempGroup = $groupTemplate.children().clone(true, true);
             $tempGroup.find('.group_title').text(group.title);
@@ -753,15 +749,15 @@ function Adapters(main) {
             for (var z in group.children) {
                 var adapter = that.data[group.children[z]];
                 if (adapter) {
-                    var $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
+                    var $tempAdapterBorder;
                     var $tempAdapterInner = $adapterTemplateInside.children().clone(true, true);
 
                     $tempAdapterInner.find('.profile_img').attr('src', adapter.image);
                     $tempAdapterInner.find('.name').text(adapter.name);
                     $tempAdapterInner.find('.description').text(adapter.desc);
 
-                    var bgColor;
-                    var state;
+                    var bgColor = '';
+                    var state = '';
                     if (adapter.version) {
                         var tmp = adapter.version.split('.');
                         if (tmp[0] === '0' && tmp[1] === '0' && tmp[2] === '0') {
@@ -781,16 +777,50 @@ function Adapters(main) {
                             state = "stable";
                             bgColor = "bg-success";
                         }
+
+                        if (adapter.installed && adapter.version !== adapter.installed.version) {
+                            $tempAdapterBorder = $adapterNewTemplate.children().clone(true, true);
+                            $adapterNewTemplate.find('.ui-ribbon').text('UPDATE');
+                        } else {
+                            $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
+                        }
+
+                    } else {
+                        $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
                     }
 
                     $tempAdapterInner.find('.version').text(adapter.version).parent().addClass(bgColor);
                     $tempAdapterInner.find('.adapter-install-submit').attr('data-adapter-name', adapter.name);
                     if (adapter.readme) {
-                        $tempAdapterInner.find('.adapter-readme-submit').attr('data-readme-url', adapter.readme);
+                        $tempAdapterInner.find('.adapter-readme-submit').attr('data-md-url', adapter.readme);
                     } else {
                         $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled').prop('disabled', true);
                     }
                     $tempAdapterInner.find('.adapter-issue-submit').attr('data-issue-url', adapter.issue);
+                    $tempAdapterInner.find('.license').text(adapter.license);
+                    if (adapter.licenseUrl) {
+                        $tempAdapterInner.find('.license').attr('data-md-url', adapter.licenseUrl);
+                    } else {
+                        $tempAdapterInner.find('.license').addClass('disabled').prop('disabled', true);
+                    }
+
+                    if (adapter.authors) {
+                        var authors = "";
+                        for (var i in adapter.authors) {
+                            if (i === "remove") {
+                                break;
+                            }
+                            var author = adapter.authors[i];
+                            var mail = "";
+                            if (author.indexOf('<') > -1 && author.indexOf('>') > -1 && author.indexOf('@') > -1) {
+                                mail = author.substring(author.lastIndexOf("<") + 1, author.lastIndexOf(">"));
+                                authors += "<a href='mailto:" + mail + "'>" + author.substring(0, author.lastIndexOf("<") -1) + "</a>, ";
+                            } else {
+                                authors += author + ", ";
+                            }
+                        }
+                        $tempAdapterInner.find('.authors').html(authors ? authors.slice(0, -2) : '');
+                    }
 
                     $tempAdapterBorder.find('.x_content').append($tempAdapterInner);
                     $tempGroup.find('.adapterList').append($tempAdapterBorder);

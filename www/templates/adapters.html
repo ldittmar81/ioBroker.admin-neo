@@ -1,6 +1,6 @@
 <div id="adapterTemplate">
-    <div class="row">
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar">
+    <div class="page-title">
+        <div class="title_left">
             <div class="btn-group" role="group" aria-label="First group">
                 <button id="btn_filter_adapters" class="btn btn-default" data-i18n-tooltip="installed adapters"><i class="fa fa-star"></i></button>
                 <button id="btn_filter_updates" class="btn btn-default" data-i18n-tooltip="adapter with updates"><i class="fa fa-plus-circle"></i></button>
@@ -14,19 +14,12 @@
                 <button id="btn_collapse_adapters" class="btn btn-default" data-i18n-tooltip="collapse all"><i class="fa fa-folder"></i></button>
                 <button id="btn_expand_adapters" class="btn btn-default" data-i18n-tooltip="expand all"><i class="fa fa-folder-open"></i></button>
             </div>
-            <div class="input-group">
-                <span class="input-group-addon" data-i18n-tooltip="host"><i class="fa fa-server"></i></span>
-                <label for="host-adapters"><span data-i18n="host">Host</span></label>
-                <select id="host-adapters"></select>
-            </div>
-        </div>
-    </div>
-    <div class="page-title">
-        <div class="title_left">
-            <h3 data-i18n="adapters">Adapters</h3>
-        </div>
+            <label for="host-adapters"><span data-i18n="host">Host</span></label>
+            <select id="host-adapters"></select>         
+        </div>       
         <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+
                 <div class="input-group">
                     <input type="text" class="form-control clearable" id="adapters-filter" placeholder="Filter..." data-i18-attr="filter|placeholder">
                     <span class="input-group-btn">
@@ -107,7 +100,7 @@
                     <img src="img/smallLogo.png" alt="..." class="img-circle profile_img">
                 </li>
                 <li>
-                    <a href="javascript:;" class="adapter-readme-submit" data-i18n-tooltip="readme">
+                    <a href="javascript:;" class="adapter-readme-submit show-md" data-i18n-tooltip="readme">
                         <i class="fa fa-question"></i>
                     </a>
                 </li>
@@ -128,9 +121,9 @@
                 <button class="adapter-issue-submit btn btn-default" data-i18n-tooltip="issue_adapter"><i class="fa fa-bug"></i></button>
                 <button class="adapter-delete-submit btn btn-default" data-i18n-tooltip="delete_adapter"><i class="fa fa-trash"></i></button>
             </p>
-            <p>
-                <span class="autor pull-left">ldittmar81</span>
-                <span class="license pull-right">MIT</span>
+            <p style="min-height: 15px;">
+                <span class="pull-left"><small class="authors"></small></span>
+                <span class="pull-right"><a href="javascript:;" class="license show-md">MIT</a></span>
             </p>
         </div>
     </div>

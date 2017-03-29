@@ -523,6 +523,7 @@ var adapterRedirect = function (redirect, timeout) {
             $(document.body).on("click", ".main-menu", function () {
                 var id = $(this).attr('id').slice(5);
                 menus[id].init();
+                $("#menu-title").text($.i18n(id));
                 $('.side-menu li.active').removeClass('active');
                 $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
             });
