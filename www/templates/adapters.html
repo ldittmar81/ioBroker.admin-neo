@@ -113,10 +113,55 @@
         </div>
         <h3 class="name">ioBroker Admin</h3>
         <p class="description">Opens a webserver for the ioBroker admin UI</p>
-        <h3 class="text-center">
-            <span class="version">1.7.0</span>&nbsp;
-            <small class="hidden newVersion">1.7.3</small>
-        </h3>
+        <div class="tiles-footer">
+            <h3 class="text-center">
+                <span class="version">1.7.0</span>&nbsp;
+                <small class="hidden">
+                    <strong class="newVersion">1.7.3</strong>&nbsp;
+                    <a href="javascript:;" class="notesVersion"><i class="fa fa-info-circle text-info"></i></a>
+                </small>
+            </h3>
+            <p class="text-center">
+                <button class="adapter-update-submit btn btn-default" data-i18n-tooltip="update_adapter"><i class="fa fa-download"></i></button>
+                <button class="adapter-issue-submit btn btn-default" data-i18n-tooltip="issue_adapter"><i class="fa fa-bug"></i></button>
+                <button class="adapter-delete-submit btn btn-default" data-i18n-tooltip="delete_adapter"><i class="fa fa-trash"></i></button>
+            </p>
+            <p>
+                <span class="autor">ldittmar81</span>
+                <span class="license pull-right">MIT</span>
+            </p>
+        </div>
     </div>
 </div>
-<!-- / Adapter inside -->    
+<!-- / Adapter inside -->
+
+<!-- Issue Table -->
+<div id="issueTable" class="hidden">
+    <div class="x_content">
+        <ul class="list-unstyled timeline">
+        </ul>
+    </div>
+</div>
+<!-- / Issue Table -->
+
+<!-- Issue Table -->
+<ul id="issueTableElement" class="hidden">
+    <li>
+        <div class="block">
+            <div class="tags">                
+            </div>
+            <div class="block_content">
+                <h2>
+                    <a target="_blank" class="title">Something is wrong!</a>
+                </h2>
+                <div class="byline">
+                    <span class="created">2017-01-06T20:33:28Z</span> by <span class="user">Jane Smith</span>
+                </div>
+                <p class="description">
+                    I dont know
+                </p>
+            </div>
+        </div>
+    </li>
+</ul>
+<!-- / Issue Table -->

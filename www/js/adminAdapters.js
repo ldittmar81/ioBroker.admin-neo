@@ -51,6 +51,7 @@ function Adapters(main) {
 
     this.prepare = function () {
         $('#menu-adapters-div').load("templates/adapters.html", function () {
+
             $adapterContainer = $('#adapter-container');
             $groupTemplate = $('#adapterTemplateGroup');
             $adapterTemplate = $('#adapterTemplateAdapter');
@@ -68,7 +69,7 @@ function Adapters(main) {
                         $ICON.toggleClass('fa-chevron-up fa-chevron-down');
                     }
 
-                });                
+                });
             });
             $('#btn_expand_adapters').click(function () {
                 $('.collapse-link').each(function () {
@@ -81,7 +82,7 @@ function Adapters(main) {
                         $ICON.toggleClass('fa-chevron-up fa-chevron-down');
                     }
 
-                });    
+                });
             });
             $('#btn_list_adapters').click(function () {
                 that.isList = !that.isList;
@@ -219,6 +220,47 @@ function Adapters(main) {
                         size: 'large',
                         backdrop: true,
                         message: html
+                    }).off("shown.bs.modal");
+                });
+            });
+
+            $(document.body).on('click', '.adapter-issue-submit', function () {
+                $.getJSON($(this).data('issue-url'), function (data) {
+                    var $table = $('#issueTable').children().clone(true, true);
+                    
+                    for (var issue in data) {
+                        var $issueElement = $('#issueTableElement').children().clone(true, true);
+                        $issueElement.find('.title').text(issue.title).attr('href', issue.html_url);
+                        $issueElement.find('.user').text(issue.user.login);
+                        $issueElement.find('.description').text(issue.body);
+                        $issueElement.find('.created').text(issue.created_at);                        
+                        
+                        for(var label in issue.labels){
+                            $issueElement.find('.tags').append('<span data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '">' + label.name + '</span>');                            
+                        }
+                        
+                        $table.find('.timeline').append($issueElement);
+                    }
+
+                    bootbox.confirm({
+                        size: 'large',
+                        backdrop: true,
+                        message: $table.toString(),
+                        buttons: {
+                            confirm: {
+                                label: $.i18n('close'),
+                                className: 'btn-default'
+                            },
+                            cancel: {
+                                label: $.i18n('add'),
+                                className: 'btn-success'
+                            }
+                        },
+                        callback: function (result) { /* result is a boolean; true = OK, false = Cancel*/
+                            if(!result){
+                                //TODO create issue
+                            }
+                        }
                     }).off("shown.bs.modal");
                 });
             });
@@ -405,7 +447,6 @@ function Adapters(main) {
 
             var obj;
             var version;
-            var state;
             var tmp;
             var adapter;
 
@@ -466,6 +507,7 @@ function Adapters(main) {
                 }
                 var installed = '';
                 var icon = obj.icon;
+                var issue = '';
                 version = '';
 
                 if (repository[adapter] && repository[adapter].version) {
@@ -474,6 +516,8 @@ function Adapters(main) {
 
                 if (repository[adapter] && repository[adapter].extIcon) {
                     icon = repository[adapter].extIcon;
+                    var tmp = icon.split('/');
+                    issue = 'https://api.github.com/repos/' + tmp[3] + "/" + tmp[4] + "/issues";
                 }
 
                 if (obj.version) {
@@ -537,6 +581,7 @@ function Adapters(main) {
                     keywords: obj.keywords ? obj.keywords.join(' ') : '',
                     version: version,
                     readme: obj.readme,
+                    issue: issue,
                     installed: installed,
                     bold: obj.highlight || false,
                     install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit" title="' + $.i18n('add instance') + '"></button>' +
@@ -605,7 +650,15 @@ function Adapters(main) {
 
                     if (repository[adapter] && repository[adapter].version) {
                         version = repository[adapter].version;
+                    }
 
+                    var icon = '';
+                    var issue = '';
+
+                    if (repository[adapter] && repository[adapter].extIcon) {
+                        icon = repository[adapter].extIcon;
+                        var tmp = icon.split('/');
+                        issue = 'https://api.github.com/repos/' + tmp[3] + "/" + tmp[4] + "/issues";
                     }
 
                     var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
@@ -617,7 +670,7 @@ function Adapters(main) {
                     }
 
                     that.data[adapter] = {
-                        image: repository[adapter].extIcon ? repository[adapter].extIcon : '',
+                        image: icon,
                         name: adapter,
                         title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
                         desc: desc,
@@ -625,6 +678,7 @@ function Adapters(main) {
                         version: version,
                         bold: obj.highlight,
                         readme: obj.readme,
+                        issue: issue,
                         installed: '',
                         install: '<button data-adapter-name="' + adapter + '" class="adapter-install-submit">' + $.i18n('add instance') + '</button>' +
                                 '<button ' + (obj.readme ? '' : 'disabled="disabled" ') + ' data-adapter-name="' + adapter + '" data-adapter-url="' + obj.readme + '" class="adapter-readme-submit">' + $.i18n('readme') + '</button>' +
@@ -726,6 +780,7 @@ function Adapters(main) {
                     } else {
                         $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled').prop('disabled', true);
                     }
+                    $tempAdapterInner.find('.adapter-issue-submit').attr('data-issue-url', adapter.issue);
 
                     $tempAdapterBorder.find('.x_content').append($tempAdapterInner);
                     $tempGroup.find('.adapterList').append($tempAdapterBorder);

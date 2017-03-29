@@ -32,6 +32,15 @@ jQuery.fn.changeTooltip = function (newValue) {
     return this;
 };
 
+jQuery.fn.toString = function () {
+    var out;
+    out = [];
+    $.each(this, function (k, v) {
+        return out.push($(v)[0].outerHTML);
+    });
+    return out.join("\n");
+};
+
 jQuery.fn.switchClass = function (a, b) {
     this.each(function () {
         var t = $(this).hasClass(a);
@@ -291,7 +300,7 @@ function restartFunctions(id) {
     $("#" + id + " [data-i18n-tooltip]").each(function () {
         var $this = $(this);
         $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
-    }); 
+    });
     $('#' + id + ' [data-toggle="tooltip"]').tooltip({
         container: 'body'
     });

@@ -4226,3 +4226,9 @@ a.disabled, a.disabled:hover{
     border: 1px solid gray !important;
     pointer-events: none;
 }
+
+.tiles-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
