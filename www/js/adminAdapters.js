@@ -138,7 +138,7 @@ function Adapters(main) {
                 that.main.confirmMessage($.i18n('Do you want to upgrade all adapters?'), $.i18n('Question'), 'help', function (result) {
                     if (result) {
                         that.main.cmdExec(null, 'upgrade', function (exitCode) {
-                            if (!exitCode){
+                            if (!exitCode) {
                                 that.init(true);
                             }
                         });
@@ -229,18 +229,27 @@ function Adapters(main) {
                 $.getJSON($(this).data('issue-url'), function (data) {
                     var $table = $('#issueTable').children().clone(true, true);
                     
-                    for (var issue in data) {
-                        var $issueElement = $('#issueTableElement').children().clone(true, true);
-                        $issueElement.find('.title').text(issue.title).attr('href', issue.html_url);
-                        $issueElement.find('.user').text(issue.user.login);
-                        $issueElement.find('.description').text(issue.body);
-                        $issueElement.find('.created').text(issue.created_at);                        
-                        
-                        for(var label in issue.labels){
-                            $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '"><span>' + label.name + '</span></a>');                            
+                    var bug = false;
+                    for (var i in data) {
+                        if (i !== "remove") {
+                            bug = true;
+                            var issue = data[i];
+                            var $issueElement = $('#issueTableElement').children().clone(true, true);
+                            $issueElement.find('.title').text(issue.title).attr('href', issue.html_url);
+                            $issueElement.find('.user').text(issue.user.login);
+                            $issueElement.find('.description').text(issue.body);
+                            $issueElement.find('.created').text(issue.created_at);
+
+                            for (var label in issue.labels) {
+                                $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '"><span>' + label.name + '</span></a>');
+                            }
+
+                            $table.find('.timeline').append($issueElement);
                         }
-                        
-                        $table.find('.timeline').append($issueElement);
+                    }
+                    
+                    if(!bug){                      
+                            $table.find('.timeline').append($('<li><h2>' + $.i18n('noBug') + '</h2></li>'));
                     }
 
                     bootbox.confirm({
@@ -258,7 +267,7 @@ function Adapters(main) {
                             }
                         },
                         callback: function (result) { /* result is a boolean; true = OK, false = Cancel*/
-                            if(!result){
+                            if (!result) {
                                 //TODO create issue
                             }
                         }

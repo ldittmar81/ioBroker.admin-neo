@@ -539,6 +539,9 @@ body {
 .fixed_height_390 {
     height: 390px
 }
+.fixed_height_360 {
+    height: 360px
+}
 .fixed_height_200 {
     height: 200px
 }
@@ -4231,4 +4234,5 @@ a.disabled, a.disabled:hover{
     position: absolute;
     bottom: 0;
     left: 0;
+    width: 100%;
   }
