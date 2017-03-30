@@ -74,6 +74,11 @@ $('#hallo').switchClass('test2','yellow');
 * Dropzone 4.3.0 http://www.dropzonejs.com/
 * ACE 1.2.6 https://ace.c9.io/
 * Showdown 1.6.3 https://github.com/showdownjs/showdown
+* Bootstrap Table 1.11.1 http://bootstrap-table.wenzhixin.net.cn/
+* Bootstrap Table - Editable 1.1.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable
+* Bootstrap Table - Context 1.1.5 https://github.com/prograhammer/bootstrap-table-contextmenu
+* Bootstrap Table - Sticky Header 1.0.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/sticky-header
+* Bootstrap Table - Mobile 1.0.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/mobile
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations
