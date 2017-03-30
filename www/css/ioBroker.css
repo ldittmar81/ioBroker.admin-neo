@@ -4258,3 +4258,8 @@ a.disabled, a.disabled:hover{
         width: 40% !important;
     }
 }
+
+.info-position{
+    position: relative;
+    top: -15px;
+}

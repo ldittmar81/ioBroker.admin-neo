@@ -117,19 +117,28 @@
         <h3 class="name">ioBroker Admin</h3>
         <p class="description">Opens a webserver for the ioBroker admin UI</p>
         <div class="tiles-footer">
-            <h3 class="text-center">
-                <span class="version">1.7.0</span>&nbsp;
-                <small class="hidden">
-                    <strong class="newVersion">1.7.3</strong>&nbsp;
-                    <a href="javascript:;" class="notesVersion"><i class="fa fa-info-circle text-info"></i></a>
+            <h3 class="text-center bg-info">
+                <span class="pull-left">
+                    <small class="hidden installedInstanceSpan">
+                        [<span class="installedInstances"></span>/<span class="activeInstances"></span>]
+                    </small>
+                </span>
+                <span class="version">0.0.0</span>
+                <small class="info-position">
+                    <a href="javascript:;" class="hidden notesVersion" data-toggle="tooltip" title="infos"><i class="fa fa-info-circle text-info"></i></a>
                 </small>
+                <span class="pull-right">
+                    <small>
+                        <strong class="hidden installedVersion">0.0.0</strong>&nbsp;                    
+                    </small>                    
+                </span>
             </h3>
             <p class="text-center">
-                <button class="adapter-update-submit btn btn-default" data-i18n-tooltip="update_adapter"><i class="fa fa-download"></i></button>
+                <button class="adapter-update-submit btn btn-default" disabled data-i18n-tooltip="update_adapter"><i class="fa fa-download"></i></button>
                 <button class="adapter-issue-submit btn btn-default" data-i18n-tooltip="issue_adapter"><i class="fa fa-bug"></i></button>
-                <button class="adapter-delete-submit btn btn-default" data-i18n-tooltip="delete_adapter"><i class="fa fa-trash"></i></button>
+                <button class="adapter-delete-submit btn btn-default" disabled data-i18n-tooltip="delete_adapter"><i class="fa fa-trash"></i></button>
             </p>
-            <p style="min-height: 15px;">
+            <p style="min-height: 12px;">
                 <span class="pull-left"><small class="authors"></small></span>
                 <span class="pull-right"><a href="javascript:;" class="license show-md">MIT</a></span>
             </p>

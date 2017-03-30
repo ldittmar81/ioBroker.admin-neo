@@ -417,15 +417,15 @@ function Adapters(main) {
         return '';
     }
 
-    function fillData(list, repository, isInstalled) {
+    function fillData(list, installedList, repository, isInstalled) {
 
         for (var i = 0; i < list.length; i++) {
 
             var adapter = list[i];
-            var obj = isInstalled ? (list ? list[adapter] : null) : repository[adapter];
+            var obj = isInstalled ? (installedList ? installedList[adapter] : null) : repository[adapter];
 
             if (obj && isInstalled) {
-                that.urls[adapter] = list[adapter].readme || list[adapter].extIcon || list[adapter].licenseUrl;
+                that.urls[adapter] = installedList[adapter].readme || installedList[adapter].extIcon || installedList[adapter].licenseUrl;
                 if (!that.urls[adapter]) {
                     delete that.urls[adapter];
                 }
@@ -452,7 +452,7 @@ function Adapters(main) {
             }
 
             var installed;
-            if (isInstalled) {
+            if (!isInstalled) {
                 installed = "";
             } else {
                 installed = {};
@@ -610,10 +610,10 @@ function Adapters(main) {
             that.data = {};
 
             // list of the installed adapters
-            fillData(listInstalled, repository, true);
+            fillData(listInstalled, installedList, repository, installedList);
 
             if (!that.onlyInstalled && !that.onlyUpdatable) {
-                fillData(listUnsinstalled, repository, false);
+                fillData(listUnsinstalled, installedList, repository, null);
             }
         });
         if (that.isList) {
@@ -676,7 +676,9 @@ function Adapters(main) {
                         $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
                     }
 
-                    $tempAdapterInner.find('.version').text(adapter.version).parent().addClass(bgColor);
+                    if (adapter.version) {
+                        $tempAdapterInner.find('.version').text(adapter.version).parent().removeClass('bg-info').addClass(bgColor);
+                    }
                     $tempAdapterInner.find('.adapter-install-submit').attr('data-adapter-name', adapter.name);
                     if (adapter.readme) {
                         $tempAdapterInner.find('.adapter-readme-submit').attr('data-md-url', adapter.readme);
@@ -689,6 +691,24 @@ function Adapters(main) {
                         $tempAdapterInner.find('.license').attr('data-md-url', adapter.licenseUrl);
                     } else {
                         $tempAdapterInner.find('.license').addClass('disabled').prop('disabled', true);
+                    }
+                    if (adapter.installed) {
+                        $tempAdapterInner.find('.adapter-delete-submit').prop('disabled', false);
+                        $tempAdapterInner.find('.installedInstanceSpan').removeClass('hidden');
+                        $tempAdapterInner.find('.installedInstances').text(adapter.installed.instances);
+                        $tempAdapterInner.find('.activeInstances').text(adapter.installed.active);
+                        if (adapter.installed.version !== adapter.version) {
+                            $tempAdapterInner.find('.installedVersion').removeClass('hidden').text(adapter.installed.version);
+                            if (adapter.installed.news) {
+                                $tempAdapterInner.find('.notesVersion').removeClass('hidden').attr('title', adapter.installed.news);
+                            }
+                            if (adapter.installed.updatable) {
+                                $tempAdapterInner.find('.adapter-update-submit').prop('disabled', false);
+                            }
+                            if (adapter.installed.updatableError) {
+                                $tempAdapterInner.find('.adapter-update-submit').attr('title', adapter.installed.updatableError);
+                            }
+                        }
                     }
 
                     if (adapter.authors) {
