@@ -423,6 +423,7 @@ function Adapters(main) {
 
             var adapter = list[i];
             var obj = isInstalled ? (list ? list[adapter] : null) : repository[adapter];
+
             if (obj && isInstalled) {
                 that.urls[adapter] = list[adapter].readme || list[adapter].extIcon || list[adapter].licenseUrl;
                 if (!that.urls[adapter]) {
@@ -488,69 +489,73 @@ function Adapters(main) {
                         installed.active = _enabled;
                     }
                 }
-            }
-        }
 
-        var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
-        var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
-        desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
-        if (obj.readme) {
-            obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
-        }
-        if (obj.licenseUrl) {
-            obj.licenseUrl = obj.licenseUrl.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
-        }
-
-        that.data[adapter] = {
-            image: icon ? icon : '',
-            name: adapter,
-            title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
-            desc: desc,
-            keywords: obj.keywords ? obj.keywords.join(' ') : '',
-            bold: obj.highlight || false,
-            version: version,
-            readme: obj.readme,
-            issue: issue,
-            installed: installed,
-            platform: obj.platform,
-            group: group,
-            license: obj.license || '',
-            licenseUrl: obj.licenseUrl || '',
-            authors: obj.authors
-        };
-        if (!obj.type) {
-            console.log('"' + adapter + '": "common adapters",');
-        }
-        if (obj.type && that.types[adapter]) {
-            console.log('Adapter "' + adapter + '" has own type. Remove from admin.');
-        }
-
-        if (!that.isList) {
-            var igroup = -1;
-            for (var j = 0; j < that.tree.length; j++) {
-                if (that.tree[j].key === that.data[adapter].group) {
-                    igroup = j;
-                    break;
+                if (!updatable && that.onlyUpdatable) {
+                    continue;
                 }
             }
-            if (igroup < 0) {
-                that.tree.push({
-                    title: $.i18n(that.data[adapter].group),
-                    key: that.data[adapter].group,
-                    expanded: !that.isCollapsed[that.data[adapter].group],
-                    children: [],
-                    icon: that.groupImages[that.data[adapter].group]
-                });
-                igroup = that.tree.length - 1;
+
+            var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
+            var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
+            desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
+            if (obj.readme) {
+                obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
             }
-            that.tree[igroup].children.push(adapter);
-        } else {
-            that.tree.push({
-                title: that.data[adapter].name,
-                desc: that.data[adapter].desc,
-                group: that.data[adapter].group,
-                version: that.data[adapter].version
-            });
+            if (obj.licenseUrl) {
+                obj.licenseUrl = obj.licenseUrl.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
+            }
+
+            that.data[adapter] = {
+                image: icon ? icon : '',
+                name: adapter,
+                title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
+                desc: desc,
+                keywords: obj.keywords ? obj.keywords.join(' ') : '',
+                bold: obj.highlight || false,
+                version: version,
+                readme: obj.readme,
+                issue: issue,
+                installed: installed,
+                platform: obj.platform,
+                group: group,
+                license: obj.license || '',
+                licenseUrl: obj.licenseUrl || '',
+                authors: obj.authors
+            };
+            if (!obj.type) {
+                console.log('"' + adapter + '": "common adapters",');
+            }
+            if (obj.type && that.types[adapter]) {
+                console.log('Adapter "' + adapter + '" has own type. Remove from admin.');
+            }
+
+            if (!that.isList) {
+                var igroup = -1;
+                for (var j = 0; j < that.tree.length; j++) {
+                    if (that.tree[j].key === that.data[adapter].group) {
+                        igroup = j;
+                        break;
+                    }
+                }
+                if (igroup < 0) {
+                    that.tree.push({
+                        title: $.i18n(that.data[adapter].group),
+                        key: that.data[adapter].group,
+                        expanded: !that.isCollapsed[that.data[adapter].group],
+                        children: [],
+                        icon: that.groupImages[that.data[adapter].group]
+                    });
+                    igroup = that.tree.length - 1;
+                }
+                that.tree[igroup].children.push(adapter);
+            } else {
+                that.tree.push({
+                    title: that.data[adapter].name,
+                    desc: that.data[adapter].desc,
+                    group: that.data[adapter].group,
+                    version: that.data[adapter].version
+                });
+            }
         }
     }
 
@@ -564,10 +569,11 @@ function Adapters(main) {
         }
 
         $adapterContainer.html('');
-        this.getAdaptersInfo(this.main.currentHost, update, updateRepo, function (repository, installedList) {
 
+        this.getAdaptersInfo(this.main.currentHost, update, updateRepo, function (repository, installedList) {
             var listInstalled = [];
             var listUnsinstalled = [];
+
             if (installedList) {
                 for (var adapter in installedList) {
                     if (!installedList.hasOwnProperty(adapter)) {
@@ -593,19 +599,21 @@ function Adapters(main) {
                 if (!obj || obj.controller) {
                     continue;
                 }
-                version = '';
                 if (installedList && installedList[adapter]) {
                     continue;
                 }
                 listUnsinstalled.push(adapter);
             }
             listUnsinstalled.sort();
+
             that.tree = [];
             that.data = {};
+
             // list of the installed adapters
             fillData(listInstalled, repository, true);
+
             if (!that.onlyInstalled && !that.onlyUpdatable) {
-                fillData(listInstalled, repository, false);
+                fillData(listUnsinstalled, repository, false);
             }
         });
         if (that.isList) {
@@ -617,6 +625,7 @@ function Adapters(main) {
         restartFunctions('menu-adapters-div');
         this.main.fillContent('#menu-adapters-div');
     };
+
     this.createAdapterTiles = function () {
         for (var i in this.tree) {
             if (i === "remove") {
@@ -710,7 +719,7 @@ function Adapters(main) {
     };
     this.createAdapterTable = function () {
         var $tempTable = $groupTemplate.children().clone(true, true);
-        
+
         $('#adapterTable').bootstrapTable({
             columns: [{
                     field: 'title',
@@ -730,7 +739,7 @@ function Adapters(main) {
 
         $adapterContainer.append($tempTable);
     };
-    
+
     function showLicenseDialog(adapter, callback) {
 
     }
