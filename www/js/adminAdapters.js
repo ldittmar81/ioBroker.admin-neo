@@ -5,11 +5,8 @@
 
 function Adapters(main) {
     'use strict';
-
     var that = this;
-
-    var $groupTemplate, $adapterTemplate, $adapterNewTemplate, $adapterTemplateInside, $adapterContainer;
-
+    var $tableTemplate, $groupTemplate, $adapterTemplate, $adapterNewTemplate, $adapterTemplateInside, $adapterContainer;
     this.curRepository = null;
     this.curRepoLastUpdate = null;
     this.curInstalled = null;
@@ -37,27 +34,24 @@ function Adapters(main) {
         'vis_group': 'img/groups/vis.png',
         'service_group': 'img/groups/service.png'
     };
-
     this.isList = false;
     this.filterVals = {length: 0};
     this.onlyInstalled = false;
     this.onlyUpdatable = false;
     this.currentFilter = '';
     this.isCollapsed = {};
-
     this.types = {
         occ: 'schedule'
     };
-
     this.prepare = function () {
         $('#menu-adapters-div').load("templates/adapters.html", function () {
 
             $adapterContainer = $('#adapter-container');
+            $tableTemplate = $('#adapterTemplateTable');
             $groupTemplate = $('#adapterTemplateGroup');
             $adapterTemplate = $('#adapterTemplateAdapter');
             $adapterNewTemplate = $('#adapterTemplateNewAdapter');
             $adapterTemplateInside = $('#adapterTemplateAdapterInside');
-
             $('#btn_collapse_adapters').click(function () {
                 $('.collapse-link').each(function () {
                     var $ICON = $(this).find('i');
@@ -98,12 +92,10 @@ function Adapters(main) {
                     $(this).changeTooltip($.i18n('tiles'));
                 }
                 that.main.saveConfig('adaptersIsList', that.isList);
-
                 setTimeout(function () {
                     that.init(true);
                 }, 200);
             });
-
             $('#btn_filter_adapters').click(function () {
                 that.onlyInstalled = !that.onlyInstalled;
                 if (that.onlyInstalled) {
@@ -112,12 +104,10 @@ function Adapters(main) {
                     $('#btn_filter_adapters').switchClass('btn-default', 'btn-primary');
                 }
                 that.main.saveConfig('adaptersOnlyInstalled', that.onlyInstalled);
-
                 setTimeout(function () {
                     that.init(true);
                 }, 200);
             });
-
             $('#btn_filter_updates').click(function () {
                 that.onlyUpdatable = !that.onlyUpdatable;
                 if (that.onlyUpdatable) {
@@ -128,12 +118,10 @@ function Adapters(main) {
                     $('#btn_upgrade_all').hide();
                 }
                 that.main.saveConfig('adaptersOnlyUpdatable', that.onlyUpdatable);
-
                 setTimeout(function () {
                     that.init(true);
                 }, 200);
             });
-
             $('#btn_upgrade_all').click(function () {
                 that.main.confirmMessage($.i18n('Do you want to upgrade all adapters?'), $.i18n('Question'), 'help', function (result) {
                     if (result) {
@@ -145,7 +133,6 @@ function Adapters(main) {
                     }
                 });
             });
-
             $('#btn-adapters-expert-mode').click(function () {
                 that.main.config.expertMode = !that.main.config.expertMode;
                 that.main.saveConfig('expertMode', that.main.config.expertMode);
@@ -165,7 +152,6 @@ function Adapters(main) {
                     $('#dialog-install-url-button').trigger('click');
                 }
             });
-
             // Load settings
             that.isList = that.main.config.adaptersIsList || false;
             that.onlyInstalled = that.main.config.adaptersOnlyInstalled || false;
@@ -173,7 +159,6 @@ function Adapters(main) {
             that.currentFilter = that.main.config.adaptersCurrentFilter || '';
             that.isCollapsed = that.main.config.adaptersIsCollapsed ? JSON.parse(that.main.config.adaptersIsCollapsed) : {};
             $('#adapters-filter').val(that.currentFilter);
-
             if (that.isList) {
                 $('#btn_list_adapters').attr('title', $.i18n('tree')).switchClass('btn-default', 'btn-primary');
                 $('#btn_expand_adapters').hide();
@@ -196,7 +181,6 @@ function Adapters(main) {
             $('#btn_refresh_adapters').click(function () {
                 that.init(true, true);
             });
-
             // add filter processing
             $('#adapters-filter').keyup(function () {
                 $(this).trigger('change');
@@ -211,7 +195,6 @@ function Adapters(main) {
                     //that.$grid.fancytree('getTree').filterNodes(customFilter, false);
                 }, 400);
             });
-
             $(document.body).on('click', '.show-md', function () {
                 var url = $(this).data('md-url');
                 $.get(url, function (data) {
@@ -224,11 +207,9 @@ function Adapters(main) {
                     }).off("shown.bs.modal");
                 });
             });
-
             $(document.body).on('click', '.adapter-issue-submit', function () {
                 $.getJSON($(this).data('issue-url'), function (data) {
                     var $table = $('#issueTable').children().clone(true, true);
-
                     var bug = false;
                     for (var i in data) {
                         if (i === "remove") {
@@ -241,7 +222,6 @@ function Adapters(main) {
                         $issueElement.find('.user').text(issue.user.login);
                         $issueElement.find('.description').text(issue.body);
                         $issueElement.find('.created').text(issue.created_at);
-
                         for (var label in issue.labels) {
                             $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '"><span>' + label.name + '</span></a>');
                         }
@@ -275,11 +255,8 @@ function Adapters(main) {
                     }).off("shown.bs.modal");
                 });
             });
-
         });
-
     };
-
     this.updateExpertMode = function () {
         this.init(true);
         if (that.main.config.expertMode) {
@@ -287,7 +264,6 @@ function Adapters(main) {
             $('#btn_upgrade_all').show();
         } else {
             $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
-
             if (that.onlyUpdatable) {
                 $('#btn_upgrade_all').show();
             } else {
@@ -295,7 +271,6 @@ function Adapters(main) {
             }
         }
     };
-
     function customFilter(node) {
 
         if (that.currentFilter) {
@@ -326,7 +301,7 @@ function Adapters(main) {
             throw 'Callback cannot be null or undefined';
         }
         if (update) {
-            // Do not update too often
+// Do not update too often
             if (!this.curRepoLastUpdate || ((new Date()).getTime() - this.curRepoLastUpdate > 1000)) {
                 this.curRepository = null;
                 this.curInstalled = null;
@@ -392,7 +367,6 @@ function Adapters(main) {
             this.curRunning = [callback];
         }
     };
-
     function getNews(actualVersion, adapter) {
         var text = '';
         if (adapter.news) {
@@ -443,7 +417,144 @@ function Adapters(main) {
         return '';
     }
 
-    // ----------------------------- Adapters show and Edit ------------------------------------------------
+    function fillData(list, repository, isInstalled) {
+
+        for (var i = 0; i < list.length; i++) {
+
+            var adapter = list[i];
+            var obj = isInstalled ? (list ? list[adapter] : null) : repository[adapter];
+            if (obj && isInstalled) {
+                that.urls[adapter] = list[adapter].readme || list[adapter].extIcon || list[adapter].licenseUrl;
+                if (!that.urls[adapter]) {
+                    delete that.urls[adapter];
+                }
+            }
+
+            if (!obj || obj.controller || (isInstalled && adapter === 'hosts')) {
+                continue;
+            }
+
+            var version = '';
+            if (repository[adapter] && repository[adapter].version) {
+                version = repository[adapter].version;
+            }
+
+            var issue = '';
+            var icon = '';
+            if (repository[adapter] && repository[adapter].extIcon) {
+                icon = repository[adapter].extIcon;
+                var tmp = icon.split('/');
+                issue = 'https://api.github.com/repos/' + tmp[3] + "/" + tmp[4] + "/issues";
+            }
+            if (isInstalled) {
+                icon = obj.icon;
+            }
+
+            var installed;
+            if (isInstalled) {
+                installed = "";
+            } else {
+                installed = {};
+                installed.instances = 0;
+                installed.active = 0;
+                installed.news = "";
+                installed.version = obj.version;
+                installed.updatable = false;
+                installed.updatableError = "";
+            }
+
+            if (isInstalled && obj.version) {
+                var updatable = false;
+                if (!that.main.upToDate(version, obj.version)) {
+                    installed.news = getNews(obj.version, repository[adapter]);
+                    // check if version is compatible with current adapters and js-controller
+                    updatable = true;
+                    installed.updatableError = checkDependencies(repository[adapter].dependencies);
+                }
+                installed.updatable = updatable;
+                var _instances = 0;
+                var _enabled = 0;
+                // Show information about installed and enabled instances
+                for (var z = 0; z < that.main.instances.length; z++) {
+                    if (main.objects[that.main.instances[z]].common.name === adapter) {
+                        _instances++;
+                        if (main.objects[that.main.instances[z]].common.enabled)
+                            _enabled++;
+                    }
+                }
+                if (_instances) {
+                    installed.instances = _instances;
+                    if (_enabled) {
+                        installed.active = _enabled;
+                    }
+                }
+            }
+        }
+
+        var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
+        var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
+        desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
+        if (obj.readme) {
+            obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
+        }
+        if (obj.licenseUrl) {
+            obj.licenseUrl = obj.licenseUrl.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
+        }
+
+        that.data[adapter] = {
+            image: icon ? icon : '',
+            name: adapter,
+            title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
+            desc: desc,
+            keywords: obj.keywords ? obj.keywords.join(' ') : '',
+            bold: obj.highlight || false,
+            version: version,
+            readme: obj.readme,
+            issue: issue,
+            installed: installed,
+            platform: obj.platform,
+            group: group,
+            license: obj.license || '',
+            licenseUrl: obj.licenseUrl || '',
+            authors: obj.authors
+        };
+        if (!obj.type) {
+            console.log('"' + adapter + '": "common adapters",');
+        }
+        if (obj.type && that.types[adapter]) {
+            console.log('Adapter "' + adapter + '" has own type. Remove from admin.');
+        }
+
+        if (!that.isList) {
+            var igroup = -1;
+            for (var j = 0; j < that.tree.length; j++) {
+                if (that.tree[j].key === that.data[adapter].group) {
+                    igroup = j;
+                    break;
+                }
+            }
+            if (igroup < 0) {
+                that.tree.push({
+                    title: $.i18n(that.data[adapter].group),
+                    key: that.data[adapter].group,
+                    expanded: !that.isCollapsed[that.data[adapter].group],
+                    children: [],
+                    icon: that.groupImages[that.data[adapter].group]
+                });
+                igroup = that.tree.length - 1;
+            }
+            that.tree[igroup].children.push(adapter);
+        } else {
+            that.tree.push({
+                title: that.data[adapter].name,
+                desc: that.data[adapter].desc,
+                group: that.data[adapter].group,
+                version: that.data[adapter].version
+            });
+        }
+    }
+
+// ----------------------------- Adapters show and Edit ------------------------------------------------
     this.init = function (update, updateRepo) {
         if (!this.main.objectsLoaded) {
             setTimeout(function () {
@@ -453,23 +564,16 @@ function Adapters(main) {
         }
 
         $adapterContainer.html('');
-
         this.getAdaptersInfo(this.main.currentHost, update, updateRepo, function (repository, installedList) {
-
-            var obj;
-            var version;
-            var tmp;
-            var adapter;
 
             var listInstalled = [];
             var listUnsinstalled = [];
-
             if (installedList) {
-                for (adapter in installedList) {
+                for (var adapter in installedList) {
                     if (!installedList.hasOwnProperty(adapter)) {
                         continue;
                     }
-                    obj = installedList[adapter];
+                    var obj = installedList[adapter];
                     if (!obj || obj.controller || adapter === 'hosts') {
                         continue;
                     }
@@ -480,12 +584,12 @@ function Adapters(main) {
 
             that.urls = {};
             // List of adapters from repository
-            for (adapter in repository) {
+            for (var adapter in repository) {
                 if (!repository.hasOwnProperty(adapter)) {
                     continue;
                 }
                 that.urls[adapter] = repository[adapter].meta;
-                obj = repository[adapter];
+                var obj = repository[adapter];
                 if (!obj || obj.controller) {
                     continue;
                 }
@@ -496,241 +600,24 @@ function Adapters(main) {
                 listUnsinstalled.push(adapter);
             }
             listUnsinstalled.sort();
-
             that.tree = [];
             that.data = {};
-
             // list of the installed adapters
-            for (var i = 0; i < listInstalled.length; i++) {
-                adapter = listInstalled[i];
-
-                obj = installedList ? installedList[adapter] : null;
-
-                if (obj) {
-                    that.urls[adapter] = installedList[adapter].readme || installedList[adapter].extIcon || installedList[adapter].licenseUrl;
-                    if (!that.urls[adapter]) {
-                        delete that.urls[adapter];
-                    }
-                }
-
-                if (!obj || obj.controller || adapter === 'hosts') {
-                    continue;
-                }
-                var installed = {};
-                installed.instances = 0;
-                installed.active = 0;
-                installed.news = "";
-                installed.version = obj.version;
-                installed.updatable = false;
-                installed.updatableError = "";
-
-                var icon = obj.icon;
-                var issue = '';
-                version = '';
-
-                if (repository[adapter] && repository[adapter].version) {
-                    version = repository[adapter].version;
-                }
-
-                if (repository[adapter] && repository[adapter].extIcon) {
-                    icon = repository[adapter].extIcon;
-                    var tmp = icon.split('/');
-                    issue = 'https://api.github.com/repos/' + tmp[3] + "/" + tmp[4] + "/issues";
-                }
-
-                if (obj.version) {
-                    var updatable = false;
-                    var updatableError = '';
-                    if (!that.main.upToDate(version, obj.version)) {
-                        installed.news = getNews(obj.version, repository[adapter]);
-                        // check if version is compatible with current adapters and js-controller
-                        updatable = true;
-                        installed.updatableError = checkDependencies(repository[adapter].dependencies);
-                    }
-                    installed.updatable = updatable;
-
-                    var _instances = 0;
-                    var _enabled = 0;
-
-                    // Show information about installed and enabled instances
-                    for (var z = 0; z < that.main.instances.length; z++) {
-                        if (main.objects[that.main.instances[z]].common.name === adapter) {
-                            _instances++;
-                            if (main.objects[that.main.instances[z]].common.enabled)
-                                _enabled++;
-                        }
-                    }
-                    if (_instances) {
-                        installed.instances = _instances;
-                        if (_enabled) {
-                            installed.active = _enabled;
-                        }
-                    }
-                }
-
-                var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
-                var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
-                desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
-
-                if (obj.readme) {
-                    obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
-                }
-                if (obj.licenseUrl) {
-                    obj.licenseUrl = obj.licenseUrl.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
-                }
-
-                that.data[adapter] = {
-                    image: icon ? icon : '',
-                    name: adapter,
-                    title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
-                    desc: desc,
-                    keywords: obj.keywords ? obj.keywords.join(' ') : '',
-                    version: version,
-                    readme: obj.readme,
-                    issue: issue,
-                    installed: installed,
-                    bold: obj.highlight || false,
-                    platform: obj.platform,
-                    group: group,
-                    license: obj.license || '',
-                    licenseUrl: obj.licenseUrl || '',
-                    authors: obj.authors
-                };
-
-                if (!obj.type) {
-                    console.log('"' + adapter + '": "common adapters",');
-                }
-                if (obj.type && that.types[adapter]) {
-                    console.log('Adapter "' + adapter + '" has own type. Remove from admin.');
-                }
-
-                if (!that.isList) {
-                    var igroup = -1;
-                    for (var j = 0; j < that.tree.length; j++) {
-                        if (that.tree[j].key === that.data[adapter].group) {
-                            igroup = j;
-                            break;
-                        }
-                    }
-                    if (igroup < 0) {
-                        that.tree.push({
-                            title: $.i18n(that.data[adapter].group),
-                            key: that.data[adapter].group,
-                            expanded: !that.isCollapsed[that.data[adapter].group],
-                            children: [],
-                            icon: that.groupImages[that.data[adapter].group]
-                        });
-                        igroup = that.tree.length - 1;
-                    }
-                    that.tree[igroup].children.push(adapter);
-                } else {
-                    that.tree.push({
-                        icon: icon,
-                        title: that.data[adapter].title || adapter,
-                        key: adapter
-                    });
-                }
-            }
-
+            fillData(listInstalled, repository, true);
             if (!that.onlyInstalled && !that.onlyUpdatable) {
-                for (i = 0; i < listUnsinstalled.length; i++) {
-                    adapter = listUnsinstalled[i];
-
-                    obj = repository[adapter];
-                    if (!obj || obj.controller) {
-                        continue;
-                    }
-                    version = '';
-                    if (installedList && installedList[adapter]) {
-                        continue;
-                    }
-
-                    if (repository[adapter] && repository[adapter].version) {
-                        version = repository[adapter].version;
-                    }
-
-                    var icon = '';
-                    var issue = '';
-
-                    if (repository[adapter] && repository[adapter].extIcon) {
-                        icon = repository[adapter].extIcon;
-                        var tmp = icon.split('/');
-                        issue = 'https://api.github.com/repos/' + tmp[3] + "/" + tmp[4] + "/issues";
-                    }
-
-                    var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
-                    var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
-                    desc += showUploadProgress(adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
-
-                    if (obj.readme) {
-                        obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
-                    }
-                    if (obj.licenseUrl) {
-                        obj.licenseUrl = obj.licenseUrl.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
-                    }
-
-                    that.data[adapter] = {
-                        image: icon,
-                        name: adapter,
-                        title: (obj.title || '').replace('ioBroker Visualisation - ', ''),
-                        desc: desc,
-                        keywords: obj.keywords ? obj.keywords.join(' ') : '',
-                        version: version,
-                        bold: obj.highlight,
-                        readme: obj.readme,
-                        issue: issue,
-                        installed: '',
-                        platform: obj.platform,
-                        license: obj.license || '',
-                        licenseUrl: obj.licenseUrl || '',
-                        group: group,
-                        authors: obj.authors
-                    };
-
-                    if (!obj.type) {
-                        console.log('"' + adapter + '": "common adapters",');
-                    }
-                    if (obj.type && that.types[adapter]) {
-                        console.log('Adapter "' + adapter + '" has own type. Remove from admin.');
-                    }
-
-                    if (!that.isList) {
-                        var igroup = -1;
-                        for (var j = 0; j < that.tree.length; j++) {
-                            if (that.tree[j].key === that.data[adapter].group) {
-                                igroup = j;
-                                break;
-                            }
-                        }
-                        if (igroup < 0) {
-                            that.tree.push({
-                                title: $.i18n(that.data[adapter].group),
-                                key: that.data[adapter].group,
-                                expanded: !that.isCollapsed[that.data[adapter].group],
-                                children: [],
-                                icon: that.groupImages[that.data[adapter].group]
-                            });
-                            igroup = that.tree.length - 1;
-                        }
-                        that.tree[igroup].children.push(adapter);
-                    } else {
-                        that.tree.push({
-                            icon: repository[adapter].extIcon,
-                            title: that.data[adapter].title || adapter,
-                            key: adapter
-                        });
-                    }
-                }
+                fillData(listInstalled, repository, false);
             }
         });
-
-        this.createAdapterList();
+        if (that.isList) {
+            this.createAdapterTable();
+        } else {
+            this.createAdapterTiles();
+        }
 
         restartFunctions('menu-adapters-div');
         this.main.fillContent('#menu-adapters-div');
     };
-
-    this.createAdapterList = function () {
+    this.createAdapterTiles = function () {
         for (var i in this.tree) {
             if (i === "remove") {
                 break;
@@ -739,17 +626,14 @@ function Adapters(main) {
             var $tempGroup = $groupTemplate.children().clone(true, true);
             $tempGroup.find('.group_title').text(group.title);
             $tempGroup.find('.group_img').attr('src', group.icon).attr('alt', group.title);
-
             for (var z in group.children) {
                 var adapter = that.data[group.children[z]];
                 if (adapter) {
                     var $tempAdapterBorder;
                     var $tempAdapterInner = $adapterTemplateInside.children().clone(true, true);
-
                     $tempAdapterInner.find('.profile_img').attr('src', adapter.image);
                     $tempAdapterInner.find('.name').text(adapter.name);
                     $tempAdapterInner.find('.description').text(adapter.desc);
-
                     var bgColor = '';
                     var state = '';
                     if (adapter.version) {
@@ -808,7 +692,7 @@ function Adapters(main) {
                             var mail = "";
                             if (author.indexOf('<') > -1 && author.indexOf('>') > -1 && author.indexOf('@') > -1) {
                                 mail = author.substring(author.lastIndexOf("<") + 1, author.lastIndexOf(">"));
-                                authors += "<a href='mailto:" + mail + "'>" + author.substring(0, author.lastIndexOf("<") -1) + "</a>, ";
+                                authors += "<a href='mailto:" + mail + "'>" + author.substring(0, author.lastIndexOf("<") - 1) + "</a>, ";
                             } else {
                                 authors += author + ", ";
                             }
@@ -824,14 +708,35 @@ function Adapters(main) {
             $adapterContainer.append($tempGroup);
         }
     };
+    this.createAdapterTable = function () {
+        var $tempTable = $groupTemplate.children().clone(true, true);
+        
+        $('#adapterTable').bootstrapTable({
+            columns: [{
+                    field: 'title',
+                    title: 'Name'
+                }, {
+                    field: 'desc',
+                    title: 'Beschreibnung'
+                }, {
+                    field: 'group',
+                    title: 'Gruppe'
+                }, {
+                    field: 'version',
+                    title: 'Version'
+                }],
+            data: that.tree
+        });
 
+        $adapterContainer.append($tempTable);
+    };
+    
     function showLicenseDialog(adapter, callback) {
 
     }
 
     this.objectChange = function (id, obj) {
     };
-
     function showUploadProgress(group, adapter, percent) {
 
     }
