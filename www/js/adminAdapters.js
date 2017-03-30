@@ -615,20 +615,14 @@ function Adapters(main) {
                     if (igroup < 0) {
                         that.tree.push({
                             title: $.i18n(that.data[adapter].group),
-                            desc: showUploadProgress(group),
                             key: that.data[adapter].group,
-                            folder: true,
                             expanded: !that.isCollapsed[that.data[adapter].group],
                             children: [],
                             icon: that.groupImages[that.data[adapter].group]
                         });
                         igroup = that.tree.length - 1;
                     }
-                    that.tree[igroup].children.push({
-                        icon: icon,
-                        title: that.data[adapter].title || adapter,
-                        key: adapter
-                    });
+                    that.tree[igroup].children.push(adapter);
                 } else {
                     that.tree.push({
                         icon: icon,
