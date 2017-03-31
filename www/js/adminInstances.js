@@ -180,8 +180,11 @@ function Instances(main) {
             var percent = Math.round((host.val / that.totalmem) * 100);
 
             if (host.val.toString() !== $('#freeMem').text()) {
-                $('#freeMem').html('<span class="highlight ' + (percent < 10 ? 'high-mem' : '') + '">' + host.val + '</span>');
-                $('#freeMemPercent').html('<span class="highlight">(' + percent + '%)</span>');
+                $('#freeMemPercent').text(percent + ' %');
+                $("#freeMemSparkline").sparkline([that.totalmem - host.val, host.val], {
+                    type: 'pie',
+                    sliceColors: ['red', 'green']
+                });
             }
         } else {
             $('.free-mem-label').hide();
@@ -212,33 +215,345 @@ function Instances(main) {
     function applyFilter(filter) {
     }
 
+
     function onQuickEditField(e) {
+        var $this = $(this);
+        var id = $this.data('instance-id');
+        var attr = $this.data('name');
+        var options = $this.data('options');
+        var oldVal = $this.data('value');
+        var textAlign = $this.css('text-align');
+        $this.css('text-align', 'left');
+
+        $this.unbind('click').removeClass('select-id-quick-edit').css('position', 'relative');
+
+        var css = 'cursor: pointer; position: absolute;width: 16px; height: 16px; top: 2px; border-radius: 6px; z-index: 3; background-color: lightgray';
+        var type = 'text';
+        var text;
+
+        if (options) {
+            var opt = options.split(';');
+            text = '<select style="width: calc(100% - 50px); z-index: 2">';
+            for (var i = 0; i < opt.length; i++) {
+                var parts = opt[i].split(':');
+                text += '<option value="' + parts[0] + '">' + (parts[1] || parts[0]) + '</option>';
+            }
+            text += '</select>';
+        }
+        text = text || '<input style="' + (type !== 'checkbox' ? 'width: 100%;' : '') + ' z-index: 2" type="' + type + '"/>';
+
+        var timeout = null;
+
+        $this.html(text +
+                '<div class="ui-icon ui-icon-check        select-id-quick-edit-ok"     style="margin-top: 0.45em;' + css + ';right: 22px"></div>' +
+                '<div class="cancel ui-icon ui-icon-close select-id-quick-edit-cancel" style="margin-top: 0.45em;' + css + ';right: 2px" title="' + _('cancel') + '" ></div>');
+
+        var $input = (options) ? $this.find('select') : $this.find('input');
+
+        $this.find('.select-id-quick-edit-cancel').click(function (e) {
+            if (timeout)
+                clearTimeout(timeout);
+            timeout = null;
+            e.preventDefault();
+            e.stopPropagation();
+            if (oldVal === undefined)
+                oldVal = '';
+            $this.html(oldVal)
+                    .click(onQuickEditField)
+                    .addClass('select-id-quick-edit')
+                    .css('text-align', textAlign);
+        });
+
+        $this.find('.select-id-quick-edit-ok').click(function () {
+            $this.trigger('blur');
+        });
+
+        $input.val(oldVal);
+
+        $input.blur(function () {
+            timeout = setTimeout(function () {
+                var val = $(this).val();
+
+                if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
+                    var obj = {common: {}};
+                    obj.common[attr] = $(this).val();
+                    that.main.socket.emit('extendObject', id, obj, function (err) {
+                        if (err)
+                            that.main.showError(err);
+                    });
+
+                    oldVal = '<span style="color: pink">' + oldVal + '</span>';
+                }
+                $this.html(oldVal)
+                        .click(onQuickEditField)
+                        .addClass('select-id-quick-edit')
+                        .css('text-align', textAlign);
+            }.bind(this), 100);
+        }).keyup(function (e) {
+            if (e.which === 13)
+                $(this).trigger('blur');
+            if (e.which === 27) {
+                if (oldVal === undefined) {
+                    oldVal = '';
+                }
+                $this.html(oldVal)
+                        .click(onQuickEditField)
+                        .addClass('select-id-quick-edit')
+                        .css('text-align', textAlign);
+            }
+        });
+
+        if (typeof e === 'object') {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        setTimeout(function () {
+            $input.focus().select();
+        }, 100);
     }
 
     function showCronDialog(value, cb) {
     }
 
     this.prepare = function () {
+        $('#menu-instances-div').load("templates/instances.html", function () {
+
+            $('#instances-filter').change(function () {
+                that.main.saveConfig('instancesFilter', $(this).val());
+                applyFilter($(this).val());
+            }).keyup(function () {
+                if (that.filterTimeout)
+                    clearTimeout(that.filterTimeout);
+                that.filterTimeout = setTimeout(function () {
+                    $('#instances-filter').trigger('change');
+                }, 300);
+            });
+            if (that.main.config.instancesFilter && that.main.config.instancesFilter[0] !== '{') {
+                $('#instances-filter').val(that.main.config.instancesFilter);
+            }
+
+            $('#btn-instances-expert-mode').click(function () {
+                that.main.config.expertMode = !that.main.config.expertMode;
+                that.main.saveConfig('expertMode', that.main.config.expertMode);
+                that.updateExpertMode();
+                that.main.tabs.adapter.updateExpertMode();
+            });
+            if (that.main.config.expertMode) {
+                $('#btn-instances-expert-mode').switchClass('btn-default', 'btn-primary');
+            }
+
+            $('#btn-instances-reload').click(function () {
+                that.init(true);
+            });
+
+            $('.clearable').click(function () {
+                $('#instances-filter').val('').trigger('change');
+            });
+
+        });
     };
 
     this.updateExpertMode = function () {
+        that.init(true);
+        $('#btn-instances-expert-mode').switchClass('btn-default', 'btn-primary');
     };
 
     this.replaceLink = function (_var, adapter, instance, elem) {
+        _var = _var.replace(/%/g, '');
+        if (_var.match(/^native_/)) {
+            _var = _var.substring(7);
+        }
+        // like web.0_port
+        var parts;
+        if (_var.indexOf('_') === -1) {
+            parts = [
+                adapter + '.' + instance,
+                _var
+            ]
+        } else {
+            parts = _var.split('_');
+            // add .0 if not defined
+            if (!parts[0].match(/\.[0-9]+$/)) {
+                parts[0] += '.0';
+            }
+        }
+
+        if (parts[1] === 'protocol') {
+            parts[1] = 'secure';
+        }
+
+        if (_var === 'instance') {
+            setTimeout(function () {
+                var link;
+                if (elem) {
+                    link = $('#' + elem).data('src');
+                } else {
+                    link = $('#a_' + adapter + '_' + instance).attr('href');
+                }
+
+                link = link.replace('%instance%', instance);
+                if (elem) {
+                    $('#' + elem).data('src', link);
+                } else {
+                    $('#a_' + adapter + '_' + instance).attr('href', link);
+                }
+            }, 0);
+            return;
+        }
+
+        this.main.socket.emit('getObject', 'system.adapter.' + parts[0], function (err, obj) {
+            if (obj) {
+                setTimeout(function () {
+                    var link;
+                    if (elem) {
+                        link = $('#' + elem).data('src');
+                    } else {
+                        link = $('#a_' + adapter + '_' + instance).attr('href');
+                    }
+                    if (link) {
+                        if (parts[1] === 'secure') {
+                            link = link.replace('%' + _var + '%', obj.native[parts[1]] ? 'https' : 'http');
+                        } else {
+                            if (link.indexOf('%' + _var + '%') === -1) {
+                                link = link.replace('%native_' + _var + '%', obj.native[parts[1]]);
+                            } else {
+                                link = link.replace('%' + _var + '%', obj.native[parts[1]]);
+                            }
+                        }
+                        if (elem) {
+                            $('#' + elem).data('src', link);
+                        } else {
+                            $('#a_' + adapter + '_' + instance).attr('href', link);
+                        }
+                    }
+                }, 0);
+            }
+        });
     };
 
     this.replaceLinks = function (vars, adapter, instance, elem) {
+        if (typeof vars !== 'object')
+            vars = [vars];
+        for (var t = 0; t < vars.length; t++) {
+            this.replaceLink(vars[t], adapter, instance, elem);
+        }
     };
 
     this._replaceLink = function (link, _var, adapter, instance, callback) {
+        // remove %%
+        _var = _var.replace(/%/g, '');
+
+        if (_var.match(/^native_/)) {
+            _var = _var.substring(7);
+        }
+        // like web.0_port
+        var parts;
+        if (_var.indexOf('_') === -1) {
+            parts = [adapter + '.' + instance, _var];
+        } else {
+            parts = _var.split('_');
+            // add .0 if not defined
+            if (!parts[0].match(/\.[0-9]+$/)) {
+                parts[0] += '.0';
+            }
+        }
+
+        if (parts[1] === 'protocol') {
+            parts[1] = 'secure';
+        }
+
+        this.main.socket.emit('getObject', 'system.adapter.' + parts[0], function (err, obj) {
+            if (obj && link) {
+                if (parts[1] === 'secure') {
+                    link = link.replace('%' + _var + '%', obj.native[parts[1]] ? 'https' : 'http');
+                } else {
+                    if (link.indexOf('%' + _var + '%') === -1) {
+                        link = link.replace('%native_' + _var + '%', obj.native[parts[1]]);
+                    } else {
+                        link = link.replace('%' + _var + '%', obj.native[parts[1]]);
+                    }
+                }
+            } else {
+                console.log('Cannot get link ' + parts[1]);
+                link = link.replace('%' + _var + '%', '');
+            }
+            setTimeout(function () {
+                callback(link, adapter, instance);
+            }, 0);
+        });
     };
 
     this._replaceLinks = function (link, adapter, instance, arg, callback) {
+        if (!link) {
+            return callback(link, adapter, instance, arg);
+        }
+        var vars = link.match(/%(\w+)%/g);
+        if (!vars) {
+            return callback(link, adapter, instance, arg);
+        }
+        if (vars[0] === '%ip%') {
+            link = link.replace('%ip%', location.hostname);
+            this._replaceLinks(link, adapter, instance, arg, callback);
+            return;
+        }
+        if (vars[0] === '%instance%') {
+            link = link.replace('%instance%', instance);
+            this._replaceLinks(link, adapter, instance, arg, callback);
+            return;
+        }
+        this._replaceLink(link, vars[0], adapter, instance, function (link, adapter, instance) {
+            this._replaceLinks(link, adapter, instance, arg, callback);
+        }.bind(this));
     };
 
     this.init = function (update) {
-        
+        if (!this.main.objectsLoaded) {
+            setTimeout(function () {
+                that.init();
+            }, 250);
+            return;
+        }
+
+        if (this.main.currentHost && typeof this.$grid !== 'undefined' && (!this.$grid.data('inited') || update)) {
+            this.list.sort();
+            var onlyWWW = [];
+            // move all adapters with not onlyWWW and noConfig to the bottom
+            for (var l = this.list.length - 1; l >= 0; l--) {
+                if (this.main.objects[this.list[l]] &&
+                        this.main.objects[this.list[l]].common &&
+                        !this.main.objects[this.list[l]].common.localLink &&
+                        !this.main.objects[this.list[l]].common.localLinks &&
+                        this.main.objects[this.list[l]].common.noConfig
+                        ) {
+                    onlyWWW.push(this.list[l]);
+                    this.list.splice(l, 1);
+                }
+            }
+            this.list.sort();
+            onlyWWW.sort();
+            for (l = 0; l < onlyWWW.length; l++) {
+                this.list.push(onlyWWW[l]);
+            }
+
+            createHead();
+
+            for (var i = 0; i < this.list.length; i++) {
+                var obj = this.main.objects[this.list[i]];
+                if (!obj)
+                    continue;
+                showOneAdapter(this.$grid, this.list[i], this.main.config.instanceForm);
+            }
+            applyFilter();
+
+            $('#currentHost').html(this.main.currentHost);
+            calculateTotalRam();
+            calculateFreeMem();
+        }
+
+        restartFunctions('menu-instances-div');
         this.main.fillContent('#menu-instances-div');
+
     };
 
     this.stateChange = function (id, state) {

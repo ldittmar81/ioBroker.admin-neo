@@ -1,20 +1,119 @@
-<table style="width: 100%; height: 30px">
-    <tr>
-        <td><button id="btn-instances-expert-mode"></button></td>
-        <td><button id="btn-instances-reload"></button></td>
-        <td style="padding-left: 100px"><label class="translate" style="display: inline-block" for="instances-filter">Filter:</label></td>
-        <td><input style="display: inline-block; width: 100px; margin-right: 3px" id="instances-filter"></td>
-        <td><button style="display: inline-block" id="instances-filter-clear"></button></td>
-        <td style="width: 100%"></td>
-        <td style="white-space: nowrap"><span class="translate">RAM total usage:</span> <span id="totalRam" style="font-weight: bold"></span> <span class="translate">MB</span> <span class="free-mem-label">/</span> <span class="translate free-mem-label">Free RAM:</span> <span id="freeMem" style="font-weight: bold"></span> <span class="translate free-mem-label">MB</span> <span id="freeMemPercent" style="font-weight: bold"></span> [<span class="translate">Host</span>: <span id="currentHost" style="font-weight: bold"></span> - <span id="running_processes"></span>]</td>
-    </tr>
-</table>
+<div id="instancesTemplate">
+    <div class="page-title">
+        <div class="title_left">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button id="btn-instances-expert-mode" class="btn btn-default" data-i18n-tooltip="_Toggle expert mode"><i class="fa fa-flask"></i></button>
+                <button id="btn-instances-reload" class="btn btn-default" data-i18n-tooltip="Update"><i class="fa fa-plus-refresh"></i></button>
+                <button id="btn-list-instances" class="btn btn-default" data-i18n-tooltip="listInstances"><i class="fa fa-list"></i></button>
+            </div>  
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input-group">
+                    <input type="text" class="form-control clearable" id="instances-filter" placeholder="Filter..." data-i18-attr="filter|placeholder">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-i18n="go">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div style="width: 100%; height: calc(100% - 30px); overflow: auto">
-    <table class="instance-table" style="width: 100%;">
-        <thead id="grid-instances-head">
-        </thead>
-        <tbody id="grid-instances">
-        </tbody>
-    </table>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="">
+                <div class="x_content">
+
+                    <div class="row">
+                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="tile-stats">
+                                <div class="icon"><i class="fa fa-microchip"></i>
+                                </div>
+                                <div class="count">
+                                    <span id="freeMemPercent">10%</span>
+                                    <span id="freeMemSparkline"></span>
+                                </div>
+                                <h3 data-i18n="freeMem">free RAM</h3>
+                                <p>
+                                    <span id="totalRamText">Von 900 MB RAM sind noch 120 MB frei.</span> 
+                                </p>
+                            </div>
+                        </div>            
+                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="tile-stats">
+                                <div class="icon"><i class="fa fa-fa-tasks"></i>
+                                </div>
+                                <div class="count" id="running_processes"></div>
+                                <h3 data-i18n="running_processes">running processes</h3>
+                                <p>
+                                    <span data-i18n="host">Host</span>: 
+                                    <span id="currentHost"></span>
+                                </p>
+                            </div>
+                        </div>                       
+                    </div>
+
+                    <div id="instances-container" class="row">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Table -->
+<div id="instancesTemplateTable" class="hidden">
+    <div class="row">
+        <table class="adapterTable"></table>
+    </div>
+</div>
+<!-- / Table -->
+
+<!-- Instances -->
+<div id="instancesTemplateTile" class="hidden">
+    <div class="col-md-3 col-xs-12 widget widget_tally_box">
+        <div class="x_panel fixed_height_390">
+            <div class="x_content">
+                <div class="fixed_height_360">
+                    <div class="flex">
+                        <ul class="list-inline widget_profile_box">
+                            <li>
+                                <a href="javascript:;" class="adapter-install-submit" data-i18n-tooltip="add_instance">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <img src="img/smallLogo.png" alt="..." class="img-circle profile_img" onerror="this.src='img/no-image.png'" />
+                            </li>
+                            <li>
+                                <a href="javascript:;" class="adapter-readme-submit show-md" data-i18n-tooltip="readme">
+                                    <i class="fa fa-question"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <h3 class="name">admin.0</h3>
+                    <p class="description">ioBroker Admin</p>
+                    <div class="tiles-footer">
+                        <p class="text-center">
+                            <button class="adapter-update-submit btn btn-default" disabled data-i18n-tooltip="update_adapter"><i class="fa fa-pause"></i></button>
+                            <button class="adapter-issue-submit btn btn-default" data-i18n-tooltip="issue_adapter"><i class="fa fa-gear"></i></button>
+                            <button class="adapter-delete-submit btn btn-default" disabled data-i18n-tooltip="delete_adapter"><i class="fa fa-repeat"></i></button>
+                            <button class="adapter-delete-submit btn btn-default" disabled data-i18n-tooltip="delete_adapter"><i class="fa fa-trash"></i></button>
+                            <button class="adapter-delete-submit btn btn-default" disabled data-i18n-tooltip="delete_adapter"><i class="fa fa-window-restore"></i></button>
+                        </p>
+                        <p class="tiles-footer-footer" style="min-height: 12px;">
+                            <span class="pull-left"><small class="authors"></small></span>
+                            <span class="pull-right"><a href="javascript:;" class="license show-md">MIT</a></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Instances -->

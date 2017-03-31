@@ -79,6 +79,7 @@ $('#hallo').switchClass('test2','yellow');
 * Bootstrap Table - Context 1.1.5 https://github.com/prograhammer/bootstrap-table-contextmenu
 * Bootstrap Table - Sticky Header 1.0.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/sticky-header
 * Bootstrap Table - Mobile 1.0.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/mobile
+* jQuery Sparkline 2.1.2 http://omnipotent.net/jquery.sparkline/#s-about
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations
