@@ -292,9 +292,9 @@ String.prototype.text2iconClass = function () {
 })(jQuery);
 
 // Clock
-var secInterval, hourInterval, minInterval;
+var secInterval, hourInterval, minInterval, isClockOn = false;
 function startClock() {
-
+    isClockOn = true;
     secInterval = setInterval(function () {
         var seconds = new Date().getSeconds();
         var sdegree = seconds * 6;
@@ -327,6 +327,7 @@ function startClock() {
 }
 
 function stopClock() {
+    isClockOn = false;
     clearInterval(secInterval);
     clearInterval(hourInterval);
     clearInterval(minInterval);
@@ -353,6 +354,9 @@ function changeLanguage(lang) {
 }
 
 function restartFunctions(id) {
+    if(isClockOn && id !== 'menu-home-div'){
+        stopClock();
+    }
     $('#' + id + ' input[type=checkbox], #' + id + ' input[type=radio]').iCheck({
         checkboxClass: 'icheckbox_flat-green',
         radioClass: 'iradio_flat-green'

@@ -677,7 +677,7 @@ function Adapters(main) {
                         if (adapter.newAdapter || (adapter.installed && adapter.version !== adapter.installed.version)) {
                             $tempAdapterBorder = $adapterNewTemplate.children().clone(true, true);
                             if (adapter.newAdapter) {
-                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('new'));
+                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('newAdapter'));
                             } else {
                                 $tempAdapterBorder.find('.ui-ribbon').text($.i18n('update'));
                             }

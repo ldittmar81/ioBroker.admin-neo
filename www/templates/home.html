@@ -9,53 +9,110 @@
     </div>
     <div class="clearfix"></div>
     <div id="home-container">
-        
-        <div class="row">
-            
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+
+        <div class="row justify-content-start">
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
+                    <div class="icon"><i class="fa fa-microchip"></i></div>
+                    <div class="count">
+                        <span id="homeFreeMemPercent">10%</span>
+                        <span id="homeFreeMemSparkline"></span>
+                    </div>
+                    <h3 data-i18n="freeMem">free RAM</h3>
+                    <p>
+                        <span id="homeTotalRamText">Von 900 MB RAM sind noch 120 MB frei.</span> 
+                    </p>
+                </div>
+            </div>      
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                    <div class="icon"><i class="fa fa-tasks"></i></div>
+                    <div class="count" id="homeRunning_processes">200</div>
+                    <h3 data-i18n="running_processes">running processes</h3>
+                    <p>
+                        <span data-i18n="host">Host</span>: 
+                        <span id="homeCurrentHost"></span>
+                    </p>
+                </div>
+            </div>
+           
+            <div class="col-lg-3 col-lg-offset-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="tile-stats overflow_visible">
+                    <div class="count specialclock" id="date_now">23. Januar 2017</div>
                     <ul id="cssClock">
                         <li id="cssSec"></li>
                         <li id="cssHour"></li>
                         <li id="cssMin"></li>
-                    </ul>   
-                </div>
-            </div>
-            
-        </div>
-        
-        <div class="row">
-
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Update List <small>Instances to be updated</small></h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <div class="">
-                            <ul class="to_do">
-                                <li>
-                                    <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> fronius adapter 0.0.6 <i class="fa fa-arrow-right"></i> <strong>0.1.0</strong></p> 
-                                </li>
-                                <li>
-                                    <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> vis adapter 1.0.6 <i class="fa fa-arrow-right"></i> <strong>2.1.0</strong></p> 
-                                </li>
-                                <li>
-                                    <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> homematic adapter 0.5.6 <i class="fa fa-arrow-right"></i> <strong>0.9.0</strong></p> 
-                                </li>                    
-                            </ul>
-                        </div>
-                    </div>
+                    </ul>                    
                 </div>
             </div>
 
         </div>
-        
     </div>
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Update List <small>Instances to be updated</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <ul class="to_do">
+                            <li>
+                                <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> fronius adapter 0.0.6 <i class="fa fa-arrow-right"></i> <strong>0.1.0</strong></p> 
+                            </li>
+                            <li>
+                                <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> vis adapter 1.0.6 <i class="fa fa-arrow-right"></i> <strong>2.1.0</strong></p> 
+                            </li>
+                            <li>
+                                <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> homematic adapter 0.5.6 <i class="fa fa-arrow-right"></i> <strong>0.9.0</strong></p> 
+                            </li>                    
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>New Adapters <small>The newest adapters</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <ul class="to_do">
+                            <li>
+                                <p><a class="btn btn-default"><i class="fa fa-plus"></i></a> fronius adapter 0.0.6 <i class="fa fa-arrow-right"></i> <strong>0.1.0</strong></p> 
+                            </li>
+                            <li>
+                                <p><a class="btn btn-default"><i class="fa fa-plus"></i></a> vis adapter 1.0.6 <i class="fa fa-arrow-right"></i> <strong>2.1.0</strong></p> 
+                            </li>
+                            <li>
+                                <p><a class="btn btn-default"><i class="fa fa-plus"></i></a> homematic adapter 0.5.6 <i class="fa fa-arrow-right"></i> <strong>0.9.0</strong></p> 
+                            </li>                    
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 </div>

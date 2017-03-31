@@ -161,16 +161,13 @@ function Instances(main) {
                 processes++;
             }
         }
-        mem = Math.round(mem);
-        var $totalRam = $('#totalRam');
-        if (mem.toString() !== $totalRam.text()) {
-            $totalRam.html('<span class="highlight">' + mem + '</span>');
-        }
         var text = $.i18n('countProcesses', processes);
         var $running_processes = $('#running_processes');
         if (text !== $running_processes.text()) {
             $running_processes.html('<span class="highlight">' + text + '</span>')
         }
+        
+        return Math.round(mem);
     }
 
     function calculateFreeMem() {
@@ -183,14 +180,17 @@ function Instances(main) {
                 $('#freeMemPercent').text(percent + ' %');
                 $("#freeMemSparkline").sparkline([that.totalmem - host.val, host.val], {
                     type: 'pie',
-                    sliceColors: ['red', 'green'],
+                    sliceColors: ["#F78181","#088A29"],
                     height: "40px",
                     width: "40px"
                 });
+                $('#freeMemSparkline > canvas').css('vertical-align', 'middle');
             }
         } else {
             $('.free-mem-label').hide();
         }
+        
+        return Math.round(host.val);
     }
 
     function calculateRam(instanceId) {
@@ -549,8 +549,9 @@ function Instances(main) {
             applyFilter();
 
             $('#currentHost').html(this.main.currentHost);
-            calculateTotalRam();
-            calculateFreeMem();
+            var totalRam = calculateTotalRam();
+            var freeRam = calculateFreeMem();
+            $('#totalRamText').text($.i18n('totalRamText', totalRam, freeRam));
         }
 
         restartFunctions('menu-instances-div');

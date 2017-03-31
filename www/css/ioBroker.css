@@ -4297,9 +4297,9 @@ ul#cssClock li{
 
 #cssClock {
     position: relative;
-    width: 185px;
-    height: 185px;
-    margin: -95px auto 0;
+    height: 155px;
+    left: calc(100% - 155px);
+    margin: -55px auto 0;
     background: url(../img/clock/clockface.png) no-repeat;
     list-style: none;
 }
@@ -4308,8 +4308,8 @@ ul#cssClock li{
     position: absolute;
     width: 15px;
     height: 185px;
-    top: 0px;
-    left: 83px;
+    top: -15px;
+    left: 73px;
 }
 
 #cssSec {
@@ -4326,4 +4326,12 @@ ul#cssClock li{
 #cssHour {
     background: url(../img/clock/hourhand.png);
     z-index: 1;
+}
+
+.specialclock{
+    position: absolute !important;
+}
+
+.overflow_visible{
+    overflow: visible !important;
 }

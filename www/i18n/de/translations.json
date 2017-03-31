@@ -34,6 +34,7 @@
   "states": "Zustände",
   "system": "System",
   "title": "Titel",
+  "totalRamText": "Von $1 MB Arbeitspeicher sind noch $2 MB verfügbar.",
   "true": "wahr",
   "users": "Benutzer"
 }
