@@ -166,7 +166,7 @@ function Instances(main) {
         if (mem.toString() !== $totalRam.text()) {
             $totalRam.html('<span class="highlight">' + mem + '</span>');
         }
-        var text = $.i18n('%s processes', processes);
+        var text = $.i18n('countProcesses', processes);
         var $running_processes = $('#running_processes');
         if (text !== $running_processes.text()) {
             $running_processes.html('<span class="highlight">' + text + '</span>')
@@ -183,7 +183,9 @@ function Instances(main) {
                 $('#freeMemPercent').text(percent + ' %');
                 $("#freeMemSparkline").sparkline([that.totalmem - host.val, host.val], {
                     type: 'pie',
-                    sliceColors: ['red', 'green']
+                    sliceColors: ['red', 'green'],
+                    height: "40px",
+                    width: "40px"
                 });
             }
         } else {
@@ -515,7 +517,7 @@ function Instances(main) {
             return;
         }
 
-        if (this.main.currentHost && typeof this.$grid !== 'undefined' && (!this.$grid.data('inited') || update)) {
+        if (this.main.currentHost) {
             this.list.sort();
             var onlyWWW = [];
             // move all adapters with not onlyWWW and noConfig to the bottom

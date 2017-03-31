@@ -436,7 +436,7 @@ function Adapters(main) {
             }
 
             var isNew = false;
-            if (repository[adapter].published && (now - new Date(repository[adapter].published)) < 3600000 * 24 * 31) {
+            if (repository[adapter] && repository[adapter].published && (now - new Date(repository[adapter].published)) < 3600000 * 24 * 31) {
                 isNew = true;
             }
 
