@@ -15,6 +15,7 @@ function Home(main) {
     
     this.init = function () {
         this.main.fillContent('#menu-home-div');
+        startClock();
     };
     
 }

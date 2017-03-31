@@ -4290,3 +4290,40 @@ a.disabled, a.disabled:hover{
     top: -15px;
     left: -5px;
 }
+
+ul#cssClock li{
+    border: none;
+}
+
+#cssClock {
+    position: relative;
+    width: 185px;
+    height: 185px;
+    margin: -95px auto 0;
+    background: url(../img/clock/clockface.png) no-repeat;
+    list-style: none;
+}
+
+#cssSec, #cssMin, #cssHour {
+    position: absolute;
+    width: 15px;
+    height: 185px;
+    top: 0px;
+    left: 83px;
+}
+
+#cssSec {
+    background: url(../img/clock/sechand.png);
+    z-index: 3;
+    overflow: hidden;
+}
+
+#cssMin {
+    background: url(../img/clock/minhand.png);
+    z-index: 2;
+}
+
+#cssHour {
+    background: url(../img/clock/hourhand.png);
+    z-index: 1;
+}

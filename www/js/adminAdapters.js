@@ -418,7 +418,7 @@ function Adapters(main) {
     }
 
     function fillData(list, installedList, repository, isInstalled) {
-
+        var now = new Date();
         for (var i = 0; i < list.length; i++) {
 
             var adapter = list[i];
@@ -433,6 +433,11 @@ function Adapters(main) {
 
             if (!obj || obj.controller || (isInstalled && adapter === 'hosts')) {
                 continue;
+            }
+
+            var isNew = false;
+            if (repository[adapter].published && (now - new Date(repository[adapter].published)) < 3600000 * 24 * 31) {
+                isNew = true;
             }
 
             var version = '';
@@ -520,7 +525,8 @@ function Adapters(main) {
                 group: group,
                 license: obj.license || '',
                 licenseUrl: obj.licenseUrl || '',
-                authors: obj.authors
+                authors: obj.authors,
+                newAdapter: isNew
             };
             if (!obj.type) {
                 console.log('"' + adapter + '": "common adapters",');
@@ -589,14 +595,11 @@ function Adapters(main) {
             }
 
             that.urls = {};
-            var now = new Date();
+
             // List of adapters from repository
             for (var adapter in repository) {
                 if (!repository.hasOwnProperty(adapter)) {
                     continue;
-                }
-                if (repository[adapter].published && (now - new Date(repository[adapter].published)) < 3600000 * 24 * 31) {
-                    console.warn('NEW ADAPTER DETECTED: ' + adapter);
                 }
 
                 that.urls[adapter] = repository[adapter].meta;
@@ -640,6 +643,7 @@ function Adapters(main) {
             var $tempGroup = $groupTemplate.children().clone(true, true);
             $tempGroup.find('.group_title').text(group.title);
             $tempGroup.find('.group_img').attr('src', group.icon).attr('alt', group.title);
+            
             for (var z in group.children) {
                 var adapter = that.data[group.children[z]];
                 if (adapter) {
@@ -670,9 +674,13 @@ function Adapters(main) {
                             bgColor = "bg-success";
                         }
 
-                        if (adapter.installed && adapter.version !== adapter.installed.version) {
+                        if (adapter.newAdapter || (adapter.installed && adapter.version !== adapter.installed.version)) {
                             $tempAdapterBorder = $adapterNewTemplate.children().clone(true, true);
-                            $adapterNewTemplate.find('.ui-ribbon').text('UPDATE'); // translate ??
+                            if (adapter.newAdapter) {
+                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('new'));
+                            } else {
+                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('update'));
+                            }
                         } else {
                             $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
                         }

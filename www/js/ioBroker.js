@@ -183,6 +183,31 @@ String.prototype.text2iconClass = function () {
     });
     // /Sidebar
 
+    // Alert
+    $(function () {
+        var _alert;
+        function consume_alert() {
+            if (_alert) {
+                return;
+            }
+            _alert = window.alert;
+            window.alert = function (message) {
+                new PNotify({
+                    title: 'Alert',
+                    text: message,
+                    opacity: .8,
+                    animate: {
+                        animate: true,
+                        in_class: "rubberBand",
+                        out_class: "bounceOut"
+                    }
+                });
+            };
+        }
+        consume_alert();
+    });
+    // / Alert
+
     // Panel toolbox
     $(function () {
         $(document.body).on('click', '.x_panel .x_title', function () {
@@ -265,6 +290,48 @@ String.prototype.text2iconClass = function () {
     // / Others
 
 })(jQuery);
+
+// Clock
+var secInterval, hourInterval, minInterval;
+function startClock() {
+
+    secInterval = setInterval(function () {
+        var seconds = new Date().getSeconds();
+        var sdegree = seconds * 6;
+        var srotate = "rotate(" + sdegree + "deg)";
+
+        $("#cssSec").css({"-moz-transform": srotate, "-webkit-transform": srotate});
+
+    }, 1000);
+
+
+    hourInterval = setInterval(function () {
+        var hours = new Date().getHours();
+        var mins = new Date().getMinutes();
+        var hdegree = hours * 30 + (mins / 2);
+        var hrotate = "rotate(" + hdegree + "deg)";
+
+        $("#cssHour").css({"-moz-transform": hrotate, "-webkit-transform": hrotate});
+
+    }, 1000);
+
+
+    minInterval = setInterval(function () {
+        var mins = new Date().getMinutes();
+        var mdegree = mins * 6;
+        var mrotate = "rotate(" + mdegree + "deg)";
+
+        $("#cssMin").css({"-moz-transform": mrotate, "-webkit-transform": mrotate});
+
+    }, 1000);
+}
+
+function stopClock() {
+    clearInterval(secInterval);
+    clearInterval(hourInterval);
+    clearInterval(minInterval);
+}
+// / Clock
 
 function changeLanguage(lang) {
     i18n.locale = lang;
