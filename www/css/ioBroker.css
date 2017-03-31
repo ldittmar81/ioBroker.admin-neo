@@ -548,8 +548,7 @@ body {
     position: absolute
 }
 .fixed_height_360 {
-    height: 360px;
-    position: absolute
+    height: 360px; 
 }
 .fixed_height_200 {
     height: 200px;

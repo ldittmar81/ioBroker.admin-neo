@@ -25,6 +25,9 @@ function Events(main) {
     // ----------------------------- Show events ------------------------------------------------
     this.addEventMessage = function (id, state, rowData, obj) {
     };
+    
+    this.init = function () {
+    };
 
     function filterEvents() {
     }
