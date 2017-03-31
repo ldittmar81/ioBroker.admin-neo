@@ -324,6 +324,12 @@ html , body{
 .nav-sm .menu_section {
     margin: 0
 }
+.nav-sm .menu_section .side-menu .text-nowrap {
+    white-space: normal
+}
+.nav-sm .sidebar-footer-50 {
+    display: none /* or just adjust the width */
+}
 .nav-sm span.fa,
 .nav-sm .menu_section h3 {
     display: none
@@ -534,16 +540,20 @@ body {
     margin: 10px 0
 }
 .fixed_height_320 {
-    height: 320px
+    height: 320px;
+    position: absolute
 }
 .fixed_height_390 {
-    height: 390px
+    height: 390px;
+    position: absolute
 }
 .fixed_height_360 {
-    height: 360px
+    height: 360px;
+    position: absolute
 }
 .fixed_height_200 {
-    height: 200px
+    height: 200px;
+    position: absolute
 }
 .overflow_hidden {
     overflow: hidden
@@ -1080,7 +1090,8 @@ h2 {
 .x_title {
     border-bottom: 2px solid #E6E9ED;
     padding: 1px 5px 6px;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    cursor: pointer
 }
 .x_title .filter {
     width: 40%;
@@ -1111,6 +1122,20 @@ h2 {
 .x_content h4 {
     font-size: 16px;
     font-weight: 500
+}
+.tiles-footer-footer .pull-left {
+    width: calc(100% - 100px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: left;
+}
+.tiles-footer-footer .pull-right {
+    width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: right;
 }
 legend {
     padding-bottom: 7px
@@ -3080,7 +3105,8 @@ ul.project_files li a i {
     width: 85px;
     height: 88px;
     top: -3px;
-    right: -3px
+    right: -3px;
+    z-index: 1
 }
 .ui-ribbon-container.ui-ribbon-primary .ui-ribbon {
     background-color: #5b90bf
@@ -4262,4 +4288,5 @@ a.disabled, a.disabled:hover{
 .info-position{
     position: relative;
     top: -15px;
+    left: -5px;
 }

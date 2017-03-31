@@ -589,11 +589,16 @@ function Adapters(main) {
             }
 
             that.urls = {};
+            var now = new Date();
             // List of adapters from repository
             for (var adapter in repository) {
                 if (!repository.hasOwnProperty(adapter)) {
                     continue;
                 }
+                if (repository[adapter].published && (now - new Date(repository[adapter].published)) < 3600000 * 24 * 31) {
+                    console.warn('NEW ADAPTER DETECTED: ' + adapter);
+                }
+
                 that.urls[adapter] = repository[adapter].meta;
                 var obj = repository[adapter];
                 if (!obj || obj.controller) {
@@ -667,7 +672,7 @@ function Adapters(main) {
 
                         if (adapter.installed && adapter.version !== adapter.installed.version) {
                             $tempAdapterBorder = $adapterNewTemplate.children().clone(true, true);
-                            $adapterNewTemplate.find('.ui-ribbon').text('UPDATE');
+                            $adapterNewTemplate.find('.ui-ribbon').text('UPDATE'); // translate ??
                         } else {
                             $tempAdapterBorder = $adapterTemplate.children().clone(true, true);
                         }
@@ -686,7 +691,11 @@ function Adapters(main) {
                         $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled').prop('disabled', true);
                     }
                     $tempAdapterInner.find('.adapter-issue-submit').attr('data-issue-url', adapter.issue);
-                    $tempAdapterInner.find('.license').text(adapter.license);
+                    if (adapter.license) {
+                        $tempAdapterInner.find('.license').text(adapter.license);
+                    } else {
+                        $tempAdapterInner.find('.license').parent().html('&nbsp;');
+                    }
                     if (adapter.licenseUrl) {
                         $tempAdapterInner.find('.license').attr('data-md-url', adapter.licenseUrl);
                     } else {

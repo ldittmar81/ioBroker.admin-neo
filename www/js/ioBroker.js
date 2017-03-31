@@ -185,7 +185,7 @@ String.prototype.text2iconClass = function () {
 
     // Panel toolbox
     $(function () {
-        $(document.body).on('click', '.collapse-link', function () {
+        $(document.body).on('click', '.x_panel .x_title', function () {
             var $BOX_PANEL = $(this).closest('.x_panel'),
                     $ICON = $(this).find('i'),
                     $BOX_CONTENT = $BOX_PANEL.find('.x_content');
