@@ -123,8 +123,9 @@ function Logs(main) {
                     $('#log-size').html(($.i18n('logsize') + ': ' + ((size / (1024 * 1024)).toFixed(2) + ' MB ')).replace(/ /g, '&nbsp;'));
                 }
                 for (var i = 0; i < lines.length; i++) {
-                    if (!lines[i])
+                    if (!lines[i]) {
                         continue;
+                    }
                     // 2014-12-05 14:47:10.739 - info: iobroker  ERR! network In most cases you are behind a proxy or have bad network settings.npm ERR! network
                     if (lines[i][4] === '-' && lines[i][7] === '-') {
                         lines[i] = lines[i].replace(/(\[[0-9]+m)/g, '');
@@ -133,10 +134,12 @@ function Logs(main) {
 
                         var pos = lines[i].indexOf(':');
                         message.severity = lines[i].substring(0, pos);
-                        if (message.severity.charCodeAt(message.severity.length - 1) === 27)
+                        if (message.severity.charCodeAt(message.severity.length - 1) === 27) {
                             message.severity = message.severity.substring(0, message.severity.length - 1);
-                        if (message.severity.charCodeAt(0) === 27)
+                        }
+                        if (message.severity.charCodeAt(0) === 27) {
                             message.severity = message.severity.substring(1);
+                        }
 
                         lines[i] = lines[i].substring(pos + 2);
                         pos = lines[i].indexOf(' ');

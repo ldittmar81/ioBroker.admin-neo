@@ -45,6 +45,11 @@ function Hosts(main) {
             }, 250);
             return;
         }
+        if ($('.side-menu li.active').children('#menu-hosts').length === 0) {
+            $("#menu-title").text($.i18n('hosts'));
+            $('.side-menu li.active').removeClass('active');
+            $('.side-menu').find('a[href="#hosts"]').parent().addClass('active');
+        }
 
         // fill the host list (select) on adapter tab
         var $selHosts = $('#host-adapters');
@@ -98,7 +103,7 @@ function Hosts(main) {
             if (!that.main.states['system.host.' + $(this).val() + '.alive'] ||
                     !that.main.states['system.host.' + $(this).val() + '.alive'].val ||
                     that.main.states['system.host.' + $(this).val() + '.alive'].val === 'null') {
-                that.main.showMessage(_('Host %s is offline', $(this).val()));
+                that.main.showMessage($.i18n('Host %s is offline', $(this).val()));
                 $(this).val(that.main.currentHost);
                 return;
             }
@@ -106,8 +111,8 @@ function Hosts(main) {
             that.main.currentHost = $(this).val();
 
             that.main.saveConfig('currentHost', that.main.currentHost);
-            that.main.tabs.adapters.init(true);
-            that.main.tabs.instances.init(true);
+            that.main.menus.adapters.init(true);
+            that.main.menus.instances.init(true);
         });
         that.init();
     };
@@ -185,9 +190,43 @@ function Hosts(main) {
     }
 
     function showOneHost(index) {
-    }
+        var obj = main.objects[that.list[index].id];
+        var alive = main.states[obj._id + '.alive'] && main.states[obj._id + '.alive'].val && main.states[obj._id + '.alive'].val !== 'null';
 
-    function showHosts() {
+        var text = '<tr class="hosts-host " data-host-id="' + obj._id + '">';
+        //LED
+        text += '<td><div class="hosts-led ' + (alive ? 'led-green' : 'led-red') + '" style="margin-left: 0.5em; width: 1em; height: 1em;" data-host-id="' + obj._id + '"></div></td>';
+        // name
+        text += '<td class="hosts-name" style="font-weight: bold">' + obj.common.hostname +
+                '<button class="host-restart-submit" style="float: right; ' + (alive ? '' : 'display: none') + '" data-host-id="' + obj._id + '" title="' + $.i18n('restart') + '"></button></td>' +
+                +'</td>';
+        // type
+        text += '<td>' + obj.common.type + '</td>';
+        // description
+        text += '<td>' + obj.common.title + '</td>';
+        // platform
+        text += '<td>' + obj.common.platform + '</td>';
+        // OS
+        text += '<td>' + obj.native.os.platform + '</td>';
+        // Available
+        text += '<td><span data-host-id="' + obj._id + '" data-type="' + obj.common.type + '" class="hosts-version-available"></span>' +
+                '<button class="host-update-submit" data-host-name="' + obj.common.hostname + '" style="display: none; opacity: 0; float: right" title="' + $.i18n('update') + '"></button>' +
+                '<button class="host-update-hint-submit" data-host-name="' + obj.common.hostname + '" style="display: none; float: right" title="' + $.i18n('update') + '"></button>' +
+                '</td>';
+
+        // installed
+        text += '<td class="hosts-version-installed" data-host-id="' + obj._id + '">' + obj.common.installedVersion + '</td>';
+
+        // event rates
+        if (that.main.states[obj._id + '.inputCount']) {
+            text += '<td style="text-align: center"><span title="in" data-host-id="' + obj._id + '" class="host-in">&#x21E5;' + that.main.states[obj._id + '.inputCount'].val + '</span> / <span title="out" data-host-id="' + obj._id + '"  class="host-out">&#x21A6;' + that.main.states[obj._id + '.outputCount'].val + '</span></td>';
+        } else {
+            text += '<td style="text-align: center"><span title="in" data-host-id="' + obj._id + '" class="host-in"></span> / <span title="out" data-host-id="' + obj._id + '" class="host-out"></span></td>';
+        }
+
+        text += '</tr>';
+
+        return text;
     }
 
     this.init = function (update, updateRepo, callback) {
@@ -198,7 +237,78 @@ function Hosts(main) {
             }, 250);
             return;
         }
-        
+
+        for (var i = 0; i < that.list.length; i++) {
+            showOneHost(i);
+        }
+
+        applyFilter($('#hosts-filter').val());
+
+        var timer = setTimeout(function () {
+            console.warn('Timeout for repository');
+            timer = null;
+            that.initButtons();
+        }, 2000);
+
+        var host = that.main.currentHost;
+        if (!host) {
+            // find alive host
+            for (var i = 0; i < that.list.length; i++) {
+                if (that.main.states[that.list[i].id + '.alive'] && that.main.states[that.list[i].id + '.alive'].val) {
+                    host = that.list[i].id;
+                    break;
+                }
+            }
+        }
+
+        that.main.menus.adapters.getAdaptersInfo(host, update, updateRepo, function (repository, installedList) {
+            if (!installedList || !installedList.hosts)
+                return;
+
+            for (var id in installedList.hosts) {
+                if (!installedList.hosts.hasOwnProperty(id))
+                    continue;
+                var obj = main.objects['system.host.' + id];
+                var installed = installedList.hosts[id].version;
+                if (installed !== installedList.hosts[id].runningVersion)
+                    installed += '(' + $.i18n('Running: ') + installedList.hosts[id].runningVersion + ')';
+                if (!installed && obj.common && obj.common.installedVersion)
+                    installed = obj.common.installedVersion;
+
+                id = 'system.host.' + id.replace(/ /g, '_');
+                $('.hosts-version-installed[data-host-id="' + id + '"]').html(installed);
+            }
+
+            $('.hosts-host').each(function () {
+                var id = $(this).data('host-id');
+                var obj = that.main.objects[id];
+                var installedVersion = obj.common.installedVersion;
+                var availableVersion = obj.common ? (repository && repository[obj.common.type] ? repository[obj.common.type].version : '') : '';
+                if (installedVersion && availableVersion) {
+                    if (!main.upToDate(availableVersion, installedVersion)) {
+                        // show button
+                        if (that.main.states[id + '.alive'] && that.main.states[id + '.alive'].val && that.main.states[id + '.alive'].val !== 'null') {
+                            $(this).find('.host-update-submit').show();
+                            $(this).find('.host-update-hint-submit').show();
+                            $(this).find('.hosts-version-installed').addClass('updateReady');
+                            $('a[href="#tab-hosts"]').addClass('updateReady');
+                        }
+                    }
+                }
+                if (availableVersion) {
+                    $(this).find('.hosts-version-available').html(availableVersion);
+                }
+            });
+
+            if (timer) {
+                clearTimeout(timer);
+                timer = null;
+            }
+            that.initButtons();
+            if (callback)
+                callback();
+        });
+
         this.main.fillContent('#menu-hosts-div');
 
     };

@@ -6,7 +6,7 @@
 function Adapters(main) {
     'use strict';
     var that = this;
-    var $tableTemplate, $groupTemplate, $adapterTemplate, $adapterNewTemplate, $adapterTemplateInside, $adapterContainer;
+    var $adapterTableTemplate, $adapterGroupTemplate, $adapterTemplate, $adapterNewTemplate, $adapterTemplateInside, $adapterContainer;
     this.curRepository = null;
     this.curRepoLastUpdate = null;
     this.curInstalled = null;
@@ -47,8 +47,8 @@ function Adapters(main) {
         $('#menu-adapters-div').load("templates/adapters.html", function () {
 
             $adapterContainer = $('#adapter-container');
-            $tableTemplate = $('#adapterTemplateTable');
-            $groupTemplate = $('#adapterTemplateGroup');
+            $adapterTableTemplate = $('#adapterTemplateTable');
+            $adapterGroupTemplate = $('#adapterTemplateGroup');
             $adapterTemplate = $('#adapterTemplateAdapter');
             $adapterNewTemplate = $('#adapterTemplateNewAdapter');
             $adapterTemplateInside = $('#adapterTemplateAdapterInside');
@@ -640,7 +640,7 @@ function Adapters(main) {
                 break;
             }
             var group = this.tree[i];
-            var $tempGroup = $groupTemplate.children().clone(true, true);
+            var $tempGroup = $adapterGroupTemplate.children().clone(true, true);
             $tempGroup.find('.group_title').text(group.title);
             $tempGroup.find('.group_img').attr('src', group.icon).attr('alt', group.title);
             
@@ -755,7 +755,7 @@ function Adapters(main) {
         }
     };
     this.createAdapterTable = function () {
-        var $tempTable = $groupTemplate.children().clone(true, true);
+        var $tempTable = $adapterGroupTemplate.children().clone(true, true);
 
         $('#adapterTable').bootstrapTable({
             columns: [{

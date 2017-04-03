@@ -3,7 +3,7 @@ function Instances(main) {
 
     var that = this;
 
-    var $tableTemplate, $tileTemplate, $instanceContainer;
+    var $instancesTableTemplate, $instancesTileTemplate, $instanceContainer;
 
     this.main = main;
     this.menuIcon = 'fa-object-group';
@@ -145,12 +145,10 @@ function Instances(main) {
         }
     }
 
-    function updateLed(instanceId) {
+    function updateLed(instanceId, $led) {
         var tmp = instanceId.split('.');
         var adapter = tmp[2];
         var instance = tmp[3];
-
-        var $led = $('.instance-led[data-instance-id="' + instanceId + '"]');
 
         var common = that.main.objects[instanceId] ? that.main.objects[instanceId].common || {} : {};
         var state = (common.mode === 'daemon') ? 'green' : 'blue';
@@ -228,9 +226,7 @@ function Instances(main) {
             title += '</table>';
         }
 
-        state = (state === 'blue') ? '' : state;
-
-        $led.removeClass('led-red led-green led-orange led-blue').addClass('led-' + state).data('title', title);
+        $led.attr('src', 'img/leds/led_' + state + '.png').attr('alt', state).data('title', title);
 
         if (!$led.data('inited') && state !== 'gray') {
             $led.data('inited', true);
@@ -331,126 +327,26 @@ function Instances(main) {
         return mem;
     }
 
-    function showOneAdapter(rootElem, instanceId, form, justContent) {
-        var text;
+    function showOneAdapter(instanceId) {
+
         var common = that.main.objects[instanceId] ? that.main.objects[instanceId].common || {} : {};
         var tmp = instanceId.split('.');
         var adapter = tmp[2];
         var instance = tmp[3];
 
-        if (form === 'tile') {
-            text = justContent ? '' : '<div class="instance-adapter" data-instance-id="' + instanceId + '">';
-            text += justContent ? '' : '</div>';
+        if (!that.main.config.instanceFormList) {
+            var $instanceTile = $instancesTileTemplate.children().clone(true, true);
+
+            $instanceTile.find('.instance-led').attr('data-instance-id', instanceId);
+            //$instanceTile.find('.profile_img').attr('src', 'adapter/' + adapter + '/' + common.icon).attr('alt', adapter);
+            $instanceTile.find('.name').text(adapter + '.' + instance);
+
+            updateLed(instanceId, $instanceTile.find('.instance-led'));
+
+            $instanceContainer.append($instanceTile);
         } else {
-            // table
-            text = justContent ? '' : '<tr class="instance-adapter" data-instance-id="' + instanceId + '">';
 
-            var link = common.localLinks || common.localLink || '';
-            var url = link ? replaceInLink(link, adapter, instance) : '';
-            if (link) {
-                if (typeof url === 'object') {
-                    link = '<a href="' + url.__first + '" target="_blank">';
-                } else {
-                    link = '<a href="' + url + '" target="_blank">';
-                }
-            }
-
-            // State -
-            //             red - adapter is not connected or not alive,
-            //             orange - adapter is connected and alive, but device is not connected,
-            //             green - adapter is connected and alive, device is connected or no device,
-            text += '<td class="instance-state" style="text-align: center"><div class="instance-led" style="margin-left: 0.5em; width: 1em; height: 1em;" data-instance-id="' + instanceId + '"></div></td>';
-
-            // icon
-            text += '<td>' + (common.icon ? link + '<img src="adapter/' + adapter + '/' + common.icon + '" style="width: 2em; height: 2em" class="instance-image" data-instance-id="' + instanceId + '"/>' : '') + (link ? '</a>' : '') + '</td>';
-
-            // name and instance
-            text += '<td style="padding-left: 0.5em" data-instance-id="' + instanceId + '" class="instance-name"><b>' + adapter + '.' + instance + '</b></td>';
-
-            var isRun = common.onlyWWW || common.enabled;
-            // buttons
-            text += '<td style="text-align: left; padding-left: 1em;">' +
-                    (!common.onlyWWW ? '<button style="display: inline-block" data-instance-id="' + instanceId + '" class="instance-stop-run"></button>' : '<div class="ui-button" style="display: inline-block; width: 2em">&nbsp;</div>') +
-                    '<button style="display: inline-block" data-instance-id="' + instanceId + '" class="instance-settings"></button>' +
-                    (!common.onlyWWW ? '<button ' + (isRun ? '' : 'disabled ') + 'style="display: inline-block" data-instance-id="' + instanceId + '" class="instance-reload"></button>' : '<div class="ui-button" style="display: inline-block; width: 2em">&nbsp;</div>') +
-                    '<button style="display: inline-block" data-instance-id="' + instanceId + '" class="instance-del"></button>' +
-                    (url ? '<button ' + (isRun ? '' : 'disabled ') + 'style="display: inline-block" data-link="' + (typeof url !== 'object' ? url : '') + '" data-instance-id="' + instanceId + '" class="instance-web"></button>' : '') +
-                    '</td>';
-
-            // title
-            text += '<td title="' + (link ? $.i18n('Click on icon') : '') + '" style="padding-left: 0.5em" data-name="title" data-value="' + (common.title || '') + '" class="instance-editable" data-instance-id="' + instanceId + '">' + (common.title || '') + '</td>';
-
-            // host - hide it if only one host
-            if (that.main.menus.hosts.list.length > 1) {
-                if (!that.hostsText) {
-                    that.hostsText = '';
-                    for (var h = 0; h < that.main.menus.hosts.list.length; h++) {
-                        var host = that.main.menus.hosts.list[h] || '';
-                        that.hostsText += (that.hostsText ? ';' : '') + host.name;
-                    }
-                }
-                text += '<td  style="padding-left: 0.5em" data-name="host" data-value="' + (common.host || '') + '" class="instance-editable" data-instance-id="' + instanceId + '" data-options="' + that.hostsText + '">' + (common.host || '') + '</td>';
-            }
-
-            // schedule
-            text += '<td data-name="schedule" data-value="' + (common.mode === 'schedule' ? (common.schedule || '') : '') + '" style="text-align: center" class="' + (common.mode === 'schedule' ? 'instance-schedule' : '') + '" data-instance-id="' + instanceId + '">' + (common.mode === 'schedule' ? (common.schedule || '') : '') + '</td>';
-
-            // scheduled restart (only experts)
-            if (that.main.config.expertMode) {
-                text += '<td data-name="restartSchedule" data-value="' + (common.restartSchedule || '') + '"  style="text-align: center" class="instance-schedule" data-instance-id="' + instanceId + '">' + (common.restartSchedule || '') + '</td>';
-                // debug level (only experts)
-                text += '<td data-name="loglevel" data-value="' + (common.loglevel || '') + '"  style="text-align: center" class="instance-editable" data-instance-id="' + instanceId + '" data-options="debug:debug;info:info;warn:warn;error:error">' + (common.loglevel || '') + '</td>';
-                // Max RAM  (only experts)
-                text += '<td data-name="memoryLimitMB" data-value="' + (common.memoryLimitMB || '') + '" style="text-align: center" class="instance-editable" data-instance-id="' + instanceId + '">' + (common.memoryLimitMB || '') + '</td>';
-                // Max RAM  (only experts)
-                if (isRun && that.main.states[instanceId + '.inputCount'] && that.main.states[instanceId + '.outputCount']) {
-                    text += '<td style="text-align: center"><span title="in" data-instance-id="' + instanceId + '" class="instance-in">&#x21E5;' + that.main.states[instanceId + '.inputCount'].val + '</span> / <span title="out" data-instance-id="' + instanceId + '" class="instance-out">&#x21A6;' + that.main.states[instanceId + '.outputCount'].val + '</span></td>';
-                } else {
-                    text += '<td style="text-align: center"><span title="in" data-instance-id="' + instanceId + '" class="instance-in"></span> / <span title="out" data-instance-id="' + instanceId + '" class="instance-out"></span></td>';
-                }
-            }
-
-            text += '<td class="memUsage" style="text-align: center" data-instance-id="' + instanceId + '">' + calculateRam(instanceId) + '</td>';
-
-            text += justContent ? '' : '</tr>';
         }
-        if (!justContent) {
-            rootElem.append(text);
-        } else {
-            $('.instance-adapter[data-instance-id="' + instanceId + '"]').html(text);
-        }
-        // init buttons
-        that.initButtons(instanceId, url);
-        updateLed(instanceId);
-        // init links
-        $('.instance-editable[data-instance-id="' + instanceId + '"]')
-                .click(onQuickEditField)
-                .addClass('select-id-quick-edit');
-
-        // init schedule editor
-        $('.instance-schedule[data-instance-id="' + instanceId + '"]').each(function () {
-            if (!$(this).find('button').length) {
-                $(this).append('<button class="instance-schedule-button" data-instance-id="' + instanceId + '" data-name="' + $(this).data('name') + '">...</button>');
-                $(this).find('button').button().css('width', 16).click(function () {
-                    var attr = $(this).data('name');
-                    var _instanceId = $(this).data('instance-id');
-                    showCronDialog(that.main.objects[_instanceId].common[attr] || '', function (newValue) {
-                        if (newValue !== null) {
-                            var obj = {common: {}};
-                            obj.common[attr] = newValue;
-                            that.main.socket.emit('extendObject', _instanceId, obj, function (err) {
-                                if (err)
-                                    that.main.showError(err);
-                            });
-                        }
-                    })
-                });
-            }
-        });
-
-        $('.instance-name[data-instance-id="' + instanceId + '"]').click(function () {
-            $('.instance-settings[data-instance-id="' + $(this).data('instance-id') + '"]').trigger('click');
-        });
     }
 
     function applyFilter(filter) {
@@ -560,15 +456,15 @@ function Instances(main) {
     this.prepare = function () {
         $('#menu-instances-div').load("templates/instances.html", function () {
 
-            $tableTemplate = $('#instancesTemplateTable');
-            $tileTemplate = $('#instancesTemplateTile');
+            $instancesTableTemplate = $('#instancesTemplateTable');
+            $instancesTileTemplate = $('#instancesTemplateTile');
             $instanceContainer = $('#instances-container');
 
             $('#instances-filter').change(function () {
                 that.main.saveConfig('instancesFilter', $(this).val());
                 applyFilter($(this).val());
             }).keyup(function () {
-                if (that.filterTimeout){
+                if (that.filterTimeout) {
                     clearTimeout(that.filterTimeout);
                 }
                 that.filterTimeout = setTimeout(function () {
@@ -592,6 +488,16 @@ function Instances(main) {
             $('#btn-instances-reload').click(function () {
                 that.init(true);
             });
+
+            $('#btn-instances-form').click(function () {
+                that.main.config.instanceFormList = !that.main.config.instanceFormList;
+                that.main.saveConfig('instanceForm', that.main.config.instanceFormList);
+                that.init(true);
+            });
+            if (that.main.config.instanceFormList) {
+                $('#btn-instances-form i').switchClass('fa-list', 'fa-window-maximize');
+                $(this).changeTooltip($.i18n('tiles'));
+            }
 
             $('.clearable').click(function () {
                 $('#instances-filter').val('').trigger('change');
@@ -761,6 +667,8 @@ function Instances(main) {
             return;
         }
 
+        $instanceContainer.html('');
+
         if (this.main.currentHost) {
             this.list.sort();
             var onlyWWW = [];
@@ -784,12 +692,13 @@ function Instances(main) {
 
             for (var i = 0; i < this.list.length; i++) {
                 var obj = this.main.objects[this.list[i]];
-                if (!obj)
+                if (!obj) {
                     continue;
-                $instanceContainer.append($tileTemplate.children().clone(true, true));
-                //showOneAdapter($tableTemplate, this.list[i], this.main.config.instanceForm);
+                }
+
+                showOneAdapter(this.list[i]);
             }
-          
+
             $('#currentHost').html(this.main.currentHost);
             var totalRam = calculateTotalRam();
             var freeRam = calculateFreeMem();
