@@ -677,9 +677,9 @@ function Adapters(main) {
                         if (adapter.newAdapter || (adapter.installed && adapter.version !== adapter.installed.version)) {
                             $tempAdapterBorder = $adapterNewTemplate.children().clone(true, true);
                             if (adapter.newAdapter) {
-                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('newAdapter'));
+                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('newAdapter')).addClass('x_new_adapter');
                             } else {
-                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('update'));
+                                $tempAdapterBorder.find('.ui-ribbon').text($.i18n('update')).addClass('x_update_adapter');
                             }
                         } else {
                             $tempAdapterBorder = $adapterTemplate.children().clone(true, true);

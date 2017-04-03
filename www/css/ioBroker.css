@@ -2997,6 +2997,12 @@ ul.user_data li .progress {
 .projects .list-inline {
     margin: 0
 }
+.list-inline .fa-plus {
+    margin-top: 8px
+}
+.list-inline .fa-question {
+    margin-top: 7px
+}
 .profile_title {
     background: #F5F7FA;
     border: 0;
@@ -3123,8 +3129,12 @@ ul.project_files li a i {
     top: 15px;
     width: 120px;
     line-height: 20px;
-    background-color: #555;
+    /*background-color: #555;*/
+    background-color: #337ab7;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.3)
+}
+.x_new_adapter {
+    background-color: #3db782 !important;
 }
 .ui-ribbon-container.ui-ribbon-primary .ui-ribbon:after,
 .ui-ribbon-container.ui-ribbon-primary .ui-ribbon:before {
