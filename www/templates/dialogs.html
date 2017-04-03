@@ -459,6 +459,134 @@
     </div>
 </div>
 
+<div id="modal-cron" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-cron" aria-hidden="true">
+    <input type="text" class="cron-input" value="* * * * * *" size="80"/>
+    <br/>
+    <div class="cron-text"></div><br>
+    <div><span data-i18n="useseconds">Use seconds</span>:<input type="checkbox" class="cron-checkbox-seconds"></div>
+    <div class="cron-main-tab">
+        <ul>
+            <li><a href="#cron-tabs-second" data-i18n="second">Second</a></li>
+            <li><a href="#cron-tabs-minute" data-i18n="minute">Minute</a></li>
+            <li><a href="#cron-tabs-hour" data-i18n="hour">Hour</a></li>
+            <li><a href="#cron-tabs-day" data-i18n="dayofmonth">Day of Month</a></li>
+            <li><a href="#cron-tabs-month" data-i18n="month">Month</a></li>
+            <li><a href="#cron-tabs-week" data-i18n="dayofweek">Day of Week</a></li>
+        </ul>
+        <div id="cron-tabs-second" class="cron-tab-page cron-tab-second">
+            <div class="cron-tabs">
+                <ul>
+                    <li id="cron-button-second-every"><a href="#cron-tabs-second-every" data-i18n="croneverysecond">CRON Every second</a></li>
+                    <li id="cron-button-second-n"><a href="#cron-tabs-second-n" data-i18n="everynseconds">Every n seconds</a></li>
+                    <li id="cron-button-second-each"><a href="#cron-tabs-second-each" data-i18n="eachselectedsecond">Each selected second</a></li>
+                </ul>
+                <div id="cron-tabs-second-every" class="cron-preview">
+                    <div>*</div>
+                    <div data-i18n="croneverysecond">CRON Every second</div>
+                </div>
+                <div id="cron-tabs-second-n">
+                    <div class="cron-preview-every" data-i18n="croneverysecond">CRON Every second</div>
+                    <div class="cron-slider" data-arg="0"></div>
+                </div>
+                <div id="cron-tabs-second-each" class="cron-preview-n">
+                    <div data-i18n="eachselectedsecond">Each selected second</div><br/>
+                    <div class="cron-tabs-format"></div>
+                </div>
+            </div>
+        </div>
+        <div id="cron-tabs-minute" class="cron-tab-page cron-tab-minute">
+            <div class="cron-tabs">
+                <ul>
+                    <li id="cron-button-minute-every"><a href="#cron-tabs-minute-every" data-i18n="croneveryminute">CRON Every minute</a></li>
+                    <li id="cron-button-minute-n"><a href="#cron-tabs-minute-n" data-i18n="everynmenutes">Every n minutes</a></li>
+                    <li id="cron-button-minute-each"><a href="#cron-tabs-minute-each" data-i18n="everyselectedminute">Each selected minute</a></li>
+                </ul>
+                <div id="cron-tabs-minute-every" class="cron-preview">
+                    <div>*</div>
+                    <div data-i18n="croneveryminute">CRON Every minute</div>
+                </div>
+                <div id="cron-tabs-minute-n">
+                    <div class="cron-preview-every" data-i18n="croneveryminute">CRON Every minute</div>
+                    <div class="cron-slider" data-arg="1"></div>
+                </div>
+                <div id="cron-tabs-minute-each" class="cron-preview-n">
+                    <div data-i18n="eachselectedminute">Each selected minute</div><br/>
+                    <div class="cron-tabs-format"></div>
+                </div>
+            </div>
+        </div>
+        <div id="cron-tabs-hour" class="cron-tab-page cron-tab-hour">
+            <div class="cron-tabs">
+                <ul>
+                    <li id="cron-button-hour-every"><a href="#cron-tabs-hour-every" data-i18n="croneveryhour">CRON Every hour</a></li>
+                    <li id="cron-button-hour-n"><a href="#cron-tabs-hour-n" data-i18n="everynhours">Every n hours</a></li>
+                    <li id="cron-button-hour-each"><a href="#cron-tabs-hour-each" data-i18n="eachselectedhour">Each selected hour</a></li>
+                </ul>
+                <div id="cron-tabs-hour-every" class="cron-preview">
+                    <div>*</div>
+                    <div data-i18n="croneveryhour">CRON Every hour</div>
+                </div>
+                <div id="cron-tabs-hour-n">
+                    <div class="cron-preview-every" data-i18n="croneveryhour">CRON Every hour</div>
+                    <div class="cron-slider" data-arg="2"></div>
+                </div>
+                <div id="cron-tabs-hour-each" class="cron-preview-n">
+                    <div data-i18n="">Each selected hour</div><br/>
+                    <div class="cron-tabs-format"></div>
+                </div>
+            </div>
+        </div>
+        <div id="cron-tabs-day" class="cron-tab-page cron-tab-day">
+            <div class="cron-tabs">
+                <ul>
+                    <li id="cron-button-day-every"><a href="#cron-tabs-day-every" data-i18n="croneveryday">CRON Every day</a></li>
+                    <li id="cron-button-day-each"><a href="#cron-tabs-day-each" data-i18n="eachselectedday">Each selected day</a></li>
+                </ul>
+                <div id="cron-tabs-day-every" class="cron-preview">
+                    <div>*</div>
+                    <div data-i18n="croneveryday">CRON Every day</div>
+                </div>
+                <div id="cron-tabs-day-each" class="cron-preview-n">
+                    <div data-i18n="eachselectedday">Each selected day</div><br/>
+                    <div class="cron-tabs-format"></div>
+                </div>
+            </div>
+        </div>
+        <div id="cron-tabs-month" class="cron-tab-page cron-tab-month">
+            <div class="cron-tabs">
+                <ul>
+                    <li id="cron-button-month-every"><a href="#cron-tabs-month-every" data-i18n="croneverymonth">CRON Every month</a></li>
+                    <li id="cron-button-month-each"><a href="#cron-tabs-month-each" data-i18n="eachselectedmonth">Each selected month</a></li>
+                </ul>
+                <div id="cron-tabs-month-every" class="cron-preview">
+                    <div>*</div>
+                    <div data-i18n="croneverymonth">CRON Every month</div>
+                </div>
+                <div id="cron-tabs-month-each" class="cron-preview-n">
+                    <div data-i18n="eachselectedmonth">Each selected month</div><br/>
+                    <div class="cron-tabs-format"></div>
+                </div>
+            </div>
+        </div>
+        <div id="cron-tabs-week" class="cron-tab-page cron-tab-week">
+            <div class="cron-tabs">
+                <ul>
+                    <li id="cron-button-week-every"><a href="#cron-tabs-week-every" data-i18n="croneveryweedday">CRON Every week day</a></li>
+                    <li id="cron-button-week-each"><a href="#cron-tabs-week-each" data-i18n="eachselectedweekday">Each selected week day</a></li>
+                </ul>
+                <div id="cron-tabs-week-every" class="cron-preview">
+                    <div>*</div>
+                    <div data-i18n="croneveryweedday">CRON Every week day</div>
+                </div>
+                <div id="cron-tabs-week-each" class="cron-preview-n">
+                    <div data-i18n="eachselectedweekday">Each selected week day</div><br/>
+                    <div class="cron-tabs-format"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="dialog-install-url">
     <div id="install-tabs">
         <ul>
@@ -489,16 +617,16 @@
 
 <div id="tabs-customs">
     <ul>
-        <li><a href="#tab-customs-settings" class="translate">Settings</a></li>
-        <li><a href="#tab-customs-table" class="translate">Table</a></li>
-        <li><a href="#tab-customs-chart" class="translate">Chart</a></li>
+        <li><a href="#tab-customs-settings" data-i18n="">Settings</a></li>
+        <li><a href="#tab-customs-table" data-i18n="">Table</a></li>
+        <li><a href="#tab-customs-chart" data-i18n="">Chart</a></li>
     </ul>
     <div id="tab-customs-settings" style="height: calc(100% - 65px)">
         <div id="customs-tabs" style="width: 100%"></div>
         <div style="display: none" id="customs-templates"></div>
     </div>
     <div id="tab-customs-table" style="height: calc(100% - 65px); overflow-y: scroll">
-        <div><label class="translate" for="history-table-instance">Show values of instance</label><select id="history-table-instance"></select></div>
+        <div><label data-i18n="" for="history-table-instance">Show values of instance</label><select id="history-table-instance"></select></div>
         <table id="grid-history" style="width: 100%; max-height: calc(100% - 30px)">
             <thead>
             <col width="160" valign="top">
@@ -519,7 +647,7 @@
         </table>
     </div>
     <div id="tab-customs-chart" style="height: calc(100% - 65px)">
-        <div><label class="translate" for="history-chart-instance">Show values of instance</label><select id="history-chart-instance"></select></div>
+        <div><label data-i18n="" for="history-chart-instance">Show values of instance</label><select id="history-chart-instance"></select></div>
         <iframe id="iframe-history-chart" style="border: 0; overflow: hidden"></iframe>
     </div>
 </div>
