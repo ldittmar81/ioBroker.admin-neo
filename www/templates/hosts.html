@@ -1,32 +1,91 @@
-<div class="row">
+<div id="hostsTemplate">
     <div class="page-title">
         <div class="title_left">
-            <h3 data-i18n="hosts">Hosts</h3>
+            <div class="btn-group" role="group" aria-label="First group">
+                <button id="btn-hosts-reload" class="btn btn-default" data-i18n-tooltip="update"><i class="fa fa-refresh"></i></button>
+            </div>  
         </div>
-
-        <button id="btn-hosts-reload" class="btn btn-default" data-i18n-tooltip="update"><i class="fa fa-refresh fa-lg"></i></button>
-        <div>
-            <label class="translate" style="display: inline-block" for="hosts-filter">Filter:</label>
-            <input style="display: inline-block; width: 100px; margin-right: 3px" id="hosts-filter">
-            <button style="display: inline-block" id="hosts-filter-clear"></button>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input-group">
+                    <input type="text" class="form-control clearable" id="hosts-filter" placeholder="Filter..." data-i18-attr="filter|placeholder">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-i18n="go">Go!</button>
+                    </span>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <table class="hosts-table">
-            <thead id="grid-hosts-head">
-                <tr>
-                    <th class="translate ui-widget-header"></th>
-                    <th class="translate ui-widget-header">name</th>
-                    <th class="translate ui-widget-header">type</th>
-                    <th class="translate ui-widget-header">title</th>
-                    <th class="translate ui-widget-header">platform</th>
-                    <th class="translate ui-widget-header">os</th>
-                    <th class="translate ui-widget-header">available</th>
-                    <th class="translate ui-widget-header">installed</th>
-                    <th class="translate ui-widget-header">events</th>
-                </tr>
-            </thead>
-            <tbody id="grid-hosts">
-            </tbody>
-        </table>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="">
+                <div class="x_content">
+
+                    <div id="hosts-container" class="row">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Host -->
+<div id="hostsTemplateTile" class="hidden">
+    <div class="col-md-3 col-xs-12 widget widget_tally_box">
+        <div class="x_panel fixed_height_390">
+            <div class="x_content">
+                <div class="fixed_height_360">
+                    <div class="flex">
+                        <ul class="list-inline widget_profile_box">
+                            <li>
+                                <img class="host-led" src="img/leds/led_grey.png" alt="off" />
+                            </li>
+                            <li>
+                                <i class="fa fa-4x host-image img-circle profile_img" ></i>
+                            </li>
+                            <li>
+                                <img class="host-led" src="img/leds/led_grey.png" alt="off" />
+                            </li>
+                        </ul>
+                    </div>
+                    <h3 class="name">host0</h3>
+                    <p class="title">ioBroker Admin</p>
+                    <h3>
+                        <span class="pull-left" data-i18n-tooltip="event-in"><i class="fa fa-sign-in"></i>&nbsp;<span class="event-in"></span></span>
+                        <span class="pull-right" data-i18n-tooltip="event-out"><i class="fa fa-sign-out"></i>&nbsp;<span class="event-out"></span></span>
+                    </h3>
+                    <div class="tiles-footer">
+                        <h3 class="text-center bg-info">
+                            <span class="pull-left">
+                            </span>
+                            <span class="hosts-version-available">0.0.0</span>
+                            <small class="info-position">
+                                <a href="javascript:;" class="hidden notesVersion" data-toggle="tooltip" title="infos"><i class="fa fa-info-circle text-info"></i></a>
+                            </small>
+                            <span class="pull-right">
+                                <small>
+                                    <strong class="hidden installed">0.0.0</strong>&nbsp;                    
+                                </small>                    
+                            </span>
+                        </h3>
+                        <p class="text-center">
+                            <button class="host-restart-submit btn btn-default" disabled data-i18n-tooltip="restart_host"><i class="fa fa-refresh"></i></button>
+                            <button class="host-update-submit btn btn-default hidden" data-i18n-tooltip="update_host"><i class="fa fa-download"></i></button>
+                            <button class="host-update-hint-submit btn btn-default hidden" data-i18n-tooltip="update_host"><i class="fa fa-download"></i></button>
+                        </p>
+                        <p class="tiles-footer-footer" style="min-height: 12px;">
+                            <span class="pull-left"><small class="type"></small></span>
+                            <span class="pull-right"><small class="platform"></small></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Host -->

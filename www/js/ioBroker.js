@@ -305,83 +305,15 @@ String.prototype.text2iconClass = function () {
 })(jQuery);
 
 // Clock
-var secInterval, hourInterval, minInterval, isClockOn = false;
-function startClock() {
-    isClockOn = true;
-    secInterval = setInterval(function () {
-        var seconds = new Date().getSeconds();
-        var sdegree = seconds * 6;
-        var srotate = "rotate(" + sdegree + "deg)";
+    var secInterval, hourInterval, minInterval, isClockOn = false;
 
-        $("#cssSec").css({"-moz-transform": srotate, "-webkit-transform": srotate});
-
-    }, 1000);
-
-
-    hourInterval = setInterval(function () {
-        var hours = new Date().getHours();
-        if(hours === 0){
-            getActualDate();
-        }
-        var mins = new Date().getMinutes();
-        var hdegree = hours * 30 + (mins / 2);
-        var hrotate = "rotate(" + hdegree + "deg)";
-
-        $("#cssHour").css({"-moz-transform": hrotate, "-webkit-transform": hrotate});
-
-    }, 1000);
-
-
-    minInterval = setInterval(function () {
-        var mins = new Date().getMinutes();
-        var mdegree = mins * 6;
-        var mrotate = "rotate(" + mdegree + "deg)";
-
-        $("#cssMin").css({"-moz-transform": mrotate, "-webkit-transform": mrotate});
-
-    }, 1000);
-    
-    getActualDate();
-    
-    $(window).on('resize', checkWindowSize);
-    checkWindowSize();
-}
-
-function getActualDate(){
-    var MONTH = [
-            'january',
-            'february',
-            'march',
-            'april',
-            'may',
-            'june',
-            'july',
-            'august',
-            'september',
-            'october',
-            'november',
-            'december'
-        ];
-    var date = new Date();
-    $('#date_now').text(date.getDate() + ". " + $.i18n(MONTH[date.getMonth()]) + " " + date.getFullYear())
-}
-
-function checkWindowSize(){
-    var windowsize = $(window).width();
-    if(windowsize < 992){
-        $('.clock').prependTo('.justify-content-start');
-    }else{
-        $('.clock').appendTo('.justify-content-start');
+    function stopClock() {
+        isClockOn = false;
+        clearInterval(secInterval);
+        clearInterval(hourInterval);
+        clearInterval(minInterval);
+        $(window).off('resize');
     }
-}
-
-function stopClock() {
-    isClockOn = false;
-    clearInterval(secInterval);
-    clearInterval(hourInterval);
-    clearInterval(minInterval);
-    $(window).off('resize');
-}
 // / Clock
 
 function changeLanguage(lang) {

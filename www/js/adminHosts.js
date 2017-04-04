@@ -6,13 +6,19 @@ function Hosts(main) {
     this.menuIcon = 'fa-server';
     this.list = [];
 
+    var $hostsTileTemplate, $hostsContainer;
+
     this.prepare = function () {
         $('#menu-hosts-div').load("templates/hosts.html", function () {
+
+            $hostsTileTemplate = $('#hostsTemplateTile');
+            $hostsContainer = $('#hosts-container');
+
             $('#btn-hosts-reload').click(function () {
                 that.init(true);
             });
 
-            $('#hosts-filter-clear').click(function () {
+            $('.clearable').click(function () {
                 $('#hosts-filter').val('').trigger('change');
             });
 
@@ -191,40 +197,42 @@ function Hosts(main) {
         var obj = main.objects[that.list[index].id];
         var alive = main.states[obj._id + '.alive'] && main.states[obj._id + '.alive'].val && main.states[obj._id + '.alive'].val !== 'null';
 
-        var text = '<tr class="hosts-host " data-host-id="' + obj._id + '">';
-        //LED
-        text += '<td><div class="hosts-led ' + (alive ? 'led-green' : 'led-red') + '" style="margin-left: 0.5em; width: 1em; height: 1em;" data-host-id="' + obj._id + '"></div></td>';
-        // name
-        text += '<td class="hosts-name" style="font-weight: bold">' + obj.common.hostname +
-                '<button class="host-restart-submit" style="float: right; ' + (alive ? '' : 'display: none') + '" data-host-id="' + obj._id + '" title="' + $.i18n('restart') + '"></button></td>' +
-                +'</td>';
-        // type
-        text += '<td>' + obj.common.type + '</td>';
-        // description
-        text += '<td>' + obj.common.title + '</td>';
-        // platform
-        text += '<td>' + obj.common.platform + '</td>';
-        // OS
-        text += '<td>' + obj.native.os.platform + '</td>';
-        // Available
-        text += '<td><span data-host-id="' + obj._id + '" data-type="' + obj.common.type + '" class="hosts-version-available"></span>' +
-                '<button class="host-update-submit" data-host-name="' + obj.common.hostname + '" style="display: none; opacity: 0; float: right" title="' + $.i18n('update') + '"></button>' +
-                '<button class="host-update-hint-submit" data-host-name="' + obj.common.hostname + '" style="display: none; float: right" title="' + $.i18n('update') + '"></button>' +
-                '</td>';
+        var $hostTile = $hostsTileTemplate.children().clone(true, true);
 
-        // installed
-        text += '<td class="hosts-version-installed" data-host-id="' + obj._id + '">' + obj.common.installedVersion + '</td>';
+        $hostTile.find('.widget_tally_box').data('host-id', obj._id);
+        $hostTile.find('.name').text(obj.common.hostname);
+        $hostTile.find('.title').text(obj.common.title);
+        $hostTile.find('.host-led').attr('src', 'img/leds/led_' + (alive ? 'green' : 'red') + '.png').attr('alt', alive);
+        $hostTile.find('.host-restart-submit').prop('disabled', !alive).data('host-id', obj._id);
+        $hostTile.find('.type').text(obj.common.type);
+        $hostTile.find('.platform').text(obj.common.platform);
+        var icon;
+        switch (obj.native.os.platform) {
+            case "linux":
+                icon = "fa-linux";
+                break;
+            case "win32":
+                icon = "fa-windows";
+                break;
+            case "osx":
+                icon = "fa-apple";
+                break;
+            default:
+                icon = "fa-server";
+        }
+        $hostTile.find('.hosts-version-available').data("host-id", obj._id).data("type", obj.common.type);
+        $hostTile.find('.installed').text(obj.common.installedVersion);
+        $hostTile.find('.profile_img').addClass(icon).attr('data-i18n-tooltip', obj.native.os.platform);
 
-        // event rates
         if (that.main.states[obj._id + '.inputCount']) {
-            text += '<td style="text-align: center"><span title="in" data-host-id="' + obj._id + '" class="host-in">&#x21E5;' + that.main.states[obj._id + '.inputCount'].val + '</span> / <span title="out" data-host-id="' + obj._id + '"  class="host-out">&#x21A6;' + that.main.states[obj._id + '.outputCount'].val + '</span></td>';
+            $hostTile.find('.event-in').data("host-id", obj._id).text(that.main.states[obj._id + '.inputCount'].val);
+            $hostTile.find('.event-out').data("host-id", obj._id).text(that.main.states[obj._id + '.outputCount'].val);
         } else {
-            text += '<td style="text-align: center"><span title="in" data-host-id="' + obj._id + '" class="host-in"></span> / <span title="out" data-host-id="' + obj._id + '" class="host-out"></span></td>';
+            $hostTile.find('.event-in').data("host-id", obj._id);
+            $hostTile.find('.event-out').data("host-id", obj._id);
         }
 
-        text += '</tr>';
-
-        return text;
+        $hostsContainer.append($hostTile);
     }
 
     this.init = function (update, updateRepo, callback) {
@@ -235,6 +243,8 @@ function Hosts(main) {
             }, 250);
             return;
         }
+
+        $hostsContainer.html('');
 
         for (var i = 0; i < that.list.length; i++) {
             showOneHost(i);
@@ -264,8 +274,9 @@ function Hosts(main) {
                 return;
 
             for (var id in installedList.hosts) {
-                if (!installedList.hosts.hasOwnProperty(id))
+                if (!installedList.hosts.hasOwnProperty(id)){
                     continue;
+                }
                 var obj = main.objects['system.host.' + id];
                 var installed = installedList.hosts[id].version;
                 if (installed !== installedList.hosts[id].runningVersion)
