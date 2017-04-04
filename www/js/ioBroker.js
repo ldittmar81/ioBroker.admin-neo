@@ -363,7 +363,7 @@ function getActualDate(){
             'december'
         ];
     var date = new Date();
-    $('#date_now').text(date.getDay() + ". " + $.i18n(MONTH[date.getMonth() - 1]) + " " + date.getFullYear())
+    $('#date_now').text(date.getDate() + ". " + $.i18n(MONTH[date.getMonth()]) + " " + date.getFullYear())
 }
 
 function checkWindowSize(){
