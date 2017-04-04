@@ -54,6 +54,16 @@ $('#hallo').switchClass('test2','yellow');
 <div id="hallo" class="yellow"></div>
 ```
 
+### Alert message
+
+alert(message, type, title);
+
+type = notice, error, success, info
+
+```
+alert('Hello World'); // == alert('Hello World', 'notice', $.i18n('notice');
+```
+
 ## Bibliotheken
 
 ### CSS
@@ -80,6 +90,7 @@ $('#hallo').switchClass('test2','yellow');
 * Bootstrap Table - Sticky Header 1.0.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/sticky-header
 * Bootstrap Table - Mobile 1.0.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/mobile
 * jQuery Sparkline 2.1.2 http://omnipotent.net/jquery.sparkline/#s-about
+* clipboard.js 1.6.1 https://clipboardjs.com/
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations

@@ -184,17 +184,37 @@ String.prototype.text2iconClass = function () {
                 return;
             }
             _alert = window.alert;
-            window.alert = function (message) {
-                new PNotify({
-                    title: 'Alert',
+            window.alert = function (message, type, title) {
+                if (!type || (type !== 'error' && type !== 'info' && type !== 'success')) {
+                    type = "notice";
+                }
+                if (!title) {
+                    title = $.i18n(type);
+                }
+                var opts = {
+                    title: title,
                     text: message,
-                    opacity: .8,
+                    type: type,
                     animate: {
                         animate: true,
                         in_class: "rubberBand",
                         out_class: "bounceOut"
                     }
-                });
+                };
+                switch (type) {
+                    case 'error':
+                        opts.icon = "fa fa-exclamation-triangle";
+                        break;
+                    case 'info':
+                        opts.icon = "fa fa-info-circle";
+                        break;
+                    case 'success':
+                        opts.icon = "fa fa-check-circle";
+                        break;
+                    default:
+                        opts.icon = "fa fa-sticky-note";
+                }
+                new PNotify(opts);
             };
         }
         consume_alert();
@@ -368,9 +388,7 @@ function restartFunctions(selector) {
             container: selector
         });
     });
-
     $(selector).find('[data-toggle="tooltip"]').tooltip({
         container: selector
     });
-
 }

@@ -2,8 +2,9 @@ function Logs(main) {
     'use strict';
 
     var that = this;
-    this.menuIcon = 'fa-file-text-o';
     this.main = main;
+
+    this.menuIcon = 'fa-file-text-o';
     this.logLimit = 2000; //const
 
     this.logLinesCount = 0;
@@ -26,7 +27,7 @@ function Logs(main) {
     this.prepare = function () {
 
         $('#menu-logs-div').load("templates/log.html", function () {
-       
+
             that.$logFilterSeverity = $('#log-filter-severity');
             that.$logFilterHost = $('#log-filter-host');
             that.$logFilterMessage = $('#log-filter-message');
@@ -82,23 +83,16 @@ function Logs(main) {
                 that.clear(false);
             });
 
-            $('#log-copy-text').click(function () {
-                $('#log-copy-text').hide().html('');
-                $('#tabs').show();
+            new Clipboard('#log-copy').on('success', function (e) {
+                alert($.i18n('log-copy-success'), 'success');
+                e.clearSelection();
+            }).on('error', function (e) {
+                alert($.i18n('log-copy-error'), 'error');
             });
-
-            $('#log-copy').click(function () {
-                var text = '<span class="text-danger">' + $.i18n('copy note') + '</span>';
-                $('#tabs').hide();
-                $('#log-copy-text').show().html(text + '<br><table style="width: 100%; font-size:12px" id="log-copy-table">' + $('#log-table').html() + '</table>');
-                var lines = $('#log-copy-table .log-column-4');
-                for (var t = 0; t < lines.length; t++) {
-                    var q = $(lines[t]);
-                    q.html(q.attr('title'));
-                    q.attr('title', '');
-                }
-            })
-
+            
+            $('#log-outer').find('[data-i18n]').i18n();
+            $('#log-outer').bootstrapTable();
+            
         });
 
     };
@@ -113,6 +107,7 @@ function Logs(main) {
         }
 
         $('#log-table').html('');
+        
         this.main.socket.emit('sendToHost', this.main.currentHost, 'getLogs', 200, function (lines) {
             setTimeout(function () {
                 var message = {message: '', severity: 'debug', from: '', ts: ''};
@@ -155,6 +150,7 @@ function Logs(main) {
                 that.logFilterSeverity = that.$logFilterSeverity.val();
             }, 0);
         });
+
         this.main.fillContent('#menu-logs-div');
     };
 
@@ -170,10 +166,7 @@ function Logs(main) {
 
             if (this.logPauseCounter > this.logLimit) {
                 if (!this.logPauseOverflow) {
-                    $('#log-pause')
-                            .removeClass('btn-default')
-                            .addClass('btn-danger')
-                            .changeTooltip($.i18n('mboLosing'));
+                    $('#log-pause').switchClass('btn-default', 'btn-danger').changeTooltip($.i18n('mboLosing'));
                     this.logPauseOverflow = true;
                 }
                 this.logPauseList.shift();
@@ -181,6 +174,55 @@ function Logs(main) {
             this.logPauseCounterSpan.html(this.logPauseCounter);
             return;
         }
+        //message = {message: msg, severity: level, from: this.namespace, ts: (new Date()).getTime()}
+        if (this.logLinesCount >= this.logLimit) {
+            var line = document.getElementById('log-line-' + (this.logLinesStart + 1));
+            if (line)
+                line.outerHTML = '';
+            this.logLinesStart++;
+        } else {
+            this.logLinesCount++;
+        }
+
+        if (message.from && this.logHosts.indexOf(message.from) === -1) {
+            this.logHosts.push(message.from);
+            this.logHosts.sort();
+            this.$logFilterHost.html('<option value="">' + $.i18n('all') + '</option>');
+            for (var i = 0; i < this.logHosts.length; i++) {
+                this.$logFilterHost.append('<option value="' + this.logHosts[i].replace(/\./g, '-') + '" ' + ((this.logHosts[i] === this.logFilterHost) ? 'selected' : '') + '>' + this.logHosts[i] + '</option>');
+            }
+        }
+        var visible = '';
+        var from = message.from ? message.from.replace(/\./g, '-') : '';
+
+        if (this.logFilterHost && this.logFilterHost !== from)
+            visible = 'display: none';
+
+        if (!visible && this.logFilterSeverity) {
+            if (this.logFilterSeverity === 'info' && message.severity === 'debug') {
+                visible = 'display: none';
+            } else if (this.logFilterSeverity === 'warn' && message.severity !== 'warn' && message.severity !== 'error') {
+                visible = 'display: none';
+            } else if (this.logFilterSeverity === 'error' && message.severity !== 'error') {
+                visible = 'display: none';
+            }
+        }
+
+        if (!visible && this.logFilterMessage && message.message.indexOf(that.logFilterMessage) === -1) {
+            visible = 'display: none';
+        }
+
+        if (message.severity === 'error'){
+            $('a[href="#tab-log"]').addClass('errorLog');
+        }
+       
+        var text = '<tr id="log-line-' + (this.logLinesStart + this.logLinesCount) + '" class="log-line log-severity-' + message.severity + ' ' + (from ? 'log-from-' + from : '') + '" style="' + visible + '">';
+        text += '<td class="log-column-1">' + (message.from || '') + '</td>';
+        text += '<td class="log-column-2">' + this.main.formatDate(message.ts) + '</td>';
+        text += '<td class="log-column-3">' + message.severity + '</td>';
+        text += '<td class="log-column-4" title="' + message.message.replace(/"/g, "'") + '">' + message.message.substring(0, 200) + '</td></tr>';
+
+        $('#log-table').prepend(text);
     };
 
     this.filter = function () {

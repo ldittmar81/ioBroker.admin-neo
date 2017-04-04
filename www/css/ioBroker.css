@@ -952,7 +952,7 @@ footer {
 }
 .tile-stats.sparkline {
     padding: 10px;
-    text-align: center
+    text-align: center;    
 }
 .jqstooltip {
     background: #34495E !important;
@@ -1899,7 +1899,8 @@ h4.graph_title {
     border-radius: 5px;
     background-clip: padding-box;
     background: #FFF;
-    transition: all 300ms ease-in-out
+    transition: all 300ms ease-in-out;
+    min-height: 118px;
 }
 .tile-stats:hover .icon i {
     animation-name: tansformAnimation;
@@ -4110,23 +4111,19 @@ ul.verticle_bars li {
     width: 35px
 }
 .alert-success {
-    color: #ffffff;
     background-color: rgba(38, 185, 154, 0.88);
     border-color: rgba(38, 185, 154, 0.88)
 }
 .alert-info {
-    color: #E9EDEF;
     background-color: rgba(52, 152, 219, 0.88);
     border-color: rgba(52, 152, 219, 0.88)
 }
 .alert-warning {
-    color: #E9EDEF;
     background-color: rgba(243, 156, 18, 0.88);
     border-color: rgba(243, 156, 18, 0.88)
 }
 .alert-danger,
 .alert-error {
-    color: #E9EDEF;
     background-color: rgba(231, 76, 60, 0.88);
     border-color: rgba(231, 76, 60, 0.88)
 }
