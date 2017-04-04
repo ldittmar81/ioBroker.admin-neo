@@ -320,6 +320,9 @@ function startClock() {
 
     hourInterval = setInterval(function () {
         var hours = new Date().getHours();
+        if(hours === 0){
+            getActualDate();
+        }
         var mins = new Date().getMinutes();
         var hdegree = hours * 30 + (mins / 2);
         var hrotate = "rotate(" + hdegree + "deg)";
@@ -337,6 +340,39 @@ function startClock() {
         $("#cssMin").css({"-moz-transform": mrotate, "-webkit-transform": mrotate});
 
     }, 1000);
+    
+    getActualDate();
+    
+    $(window).on('resize', checkWindowSize);
+    checkWindowSize();
+}
+
+function getActualDate(){
+    var MONTH = [
+            'january',
+            'february',
+            'march',
+            'april',
+            'may',
+            'june',
+            'july',
+            'august',
+            'september',
+            'october',
+            'november',
+            'december'
+        ];
+    var date = new Date();
+    $('#date_now').text(date.getDay() + ". " + $.i18n(MONTH[date.getMonth() - 1]) + " " + date.getFullYear())
+}
+
+function checkWindowSize(){
+    var windowsize = $(window).width();
+    if(windowsize < 992){
+        $('.clock').prependTo('.justify-content-start');
+    }else{
+        $('.clock').appendTo('.justify-content-start');
+    }
 }
 
 function stopClock() {
@@ -344,6 +380,7 @@ function stopClock() {
     clearInterval(secInterval);
     clearInterval(hourInterval);
     clearInterval(minInterval);
+    $(window).off('resize');
 }
 // / Clock
 
