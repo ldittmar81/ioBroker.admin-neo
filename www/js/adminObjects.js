@@ -10,8 +10,7 @@ function Objects(main) {
 
     this.prepare = function () {
         $('#menu-objects-div').load("templates/objects.html", function () {
-            restartFunctions('menu-objects-div');
-
+         
             $('#modal-object').prependTo('#dialog-object');
 
             this.$grid = $('#grid-objects');
@@ -650,7 +649,7 @@ function Objects(main) {
 
     this.prepareCustoms = function () {
         $('#dialog-customs').load("templates/dialogs.html #tabs-customs", function () {
-            restartFunctions('dialog-customs');
+            restartFunctions('#dialog-customs');
         });
     };
 

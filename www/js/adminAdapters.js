@@ -630,7 +630,6 @@ function Adapters(main) {
             this.createAdapterTiles();
         }
 
-        restartFunctions('menu-adapters-div');
         this.main.fillContent('#menu-adapters-div');
     };
 

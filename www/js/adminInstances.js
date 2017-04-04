@@ -705,9 +705,7 @@ function Instances(main) {
             $('#totalRamText').text($.i18n('totalRamText', totalRam, freeRam));
         }
 
-        restartFunctions('menu-instances-div');
         this.main.fillContent('#menu-instances-div');
-
     };
 
     this.stateChange = function (id, state) {

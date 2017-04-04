@@ -346,26 +346,31 @@ function changeLanguage(lang) {
     });
 }
 
-function restartFunctions(id) {
-    if(isClockOn && id !== 'menu-home-div'){
+function restartFunctions(selector) {
+    if (isClockOn && selector !== '#menu-home-div') {
         stopClock();
     }
-    $('#' + id + ' input[type=checkbox], #' + id + ' input[type=radio]').iCheck({
+    $(selector).find('input[type=checkbox],input[type=radio]').iCheck({
         checkboxClass: 'icheckbox_flat-green',
         radioClass: 'iradio_flat-green'
     });
-    $('#' + id + ' select').selectpicker();
-    $("#" + id + " [data-i18n]").i18n();
-    $("#" + id + " [data-i18n-attr]").each(function () {
+    $(selector).find('select').selectpicker();
+    $(selector).find('[data-i18n]').i18n();
+    $(selector).find('[data-i18n-attr]').each(function () {
         var $this = $(this);
         var data = $this.data('i18n-attr').split("|");
         $this.attr(data[1], $.i18n(data[0]));
     });
-    $("#" + id + " [data-i18n-tooltip]").each(function () {
+    $(selector).find('[data-i18n-tooltip]').each(function () {
         var $this = $(this);
-        $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
+        $this.attr("title", $.i18n($this.data('i18n-tooltip'))).tooltip({
+            title: $.i18n($this.data('i18n-tooltip')),
+            container: selector
+        });
     });
-    $('#' + id + ' [data-toggle="tooltip"]').tooltip({
-        container: 'body'
+
+    $(selector).find('[data-toggle="tooltip"]').tooltip({
+        container: selector
     });
+
 }

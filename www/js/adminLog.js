@@ -26,8 +26,7 @@ function Logs(main) {
     this.prepare = function () {
 
         $('#menu-logs-div').load("templates/log.html", function () {
-            restartFunctions('menu-logs-div');
-
+       
             that.$logFilterSeverity = $('#log-filter-severity');
             that.$logFilterHost = $('#log-filter-host');
             that.$logFilterMessage = $('#log-filter-message');

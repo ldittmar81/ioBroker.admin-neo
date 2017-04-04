@@ -53,7 +53,6 @@ function States(main) {
 
     this.prepare = function () {
         $('#menu-states-div').load("templates/states.html", function () {
-            restartFunctions('menu-states-div');
 
             this.$grid = $('#grid-states');
 

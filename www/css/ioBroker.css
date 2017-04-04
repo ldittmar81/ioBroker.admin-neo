@@ -1,5 +1,5 @@
 html , body{
-    height:100%;
+    height:100%;    
 }
 
 .full-width {
@@ -3104,8 +3104,7 @@ ul.project_files li a i {
     width: 85px;
     height: 88px;
     top: -3px;
-    right: -3px;
-    z-index: 1
+    right: -3px;    
 }
 .ui-ribbon-container.ui-ribbon-primary .ui-ribbon {
     background-color: #5b90bf
@@ -3124,7 +3123,8 @@ ul.project_files li a i {
     width: 120px;
     line-height: 20px;
     background-color: #555;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3)
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    z-index: 2;
 }
 .ui-ribbon-container.ui-ribbon-primary .ui-ribbon:after,
 .ui-ribbon-container.ui-ribbon-primary .ui-ribbon:before {

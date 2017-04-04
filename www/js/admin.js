@@ -445,7 +445,7 @@ var adapterRedirect = function (redirect, timeout) {
                 if ($pageContent.children().length > 0) {
                     $pageContent.children(":first").appendTo($hiddenObjects);
                 }
-                $(selector).prependTo($pageContent);
+                $(selector).prependTo($pageContent, restartFunctions(selector));                
             },
             updateWizard: function () {
                 var $wizard = $('#link-wizard');
@@ -1032,7 +1032,7 @@ var adapterRedirect = function (redirect, timeout) {
                                                 // Show license agreement
 
                                                 $('#dialog-license').load("templates/dialogs.html #modal-license", function () {
-                                                    restartFunctions('dialog-license');
+                                                    restartFunctions('#dialog-license');
 
                                                     for (var lang in availableLanguages) {
                                                         $('#license_language')

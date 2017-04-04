@@ -8,8 +8,6 @@ function Hosts(main) {
 
     this.prepare = function () {
         $('#menu-hosts-div').load("templates/hosts.html", function () {
-            restartFunctions('menu-hosts-div');
-
             $('#btn-hosts-reload').click(function () {
                 that.init(true);
             });

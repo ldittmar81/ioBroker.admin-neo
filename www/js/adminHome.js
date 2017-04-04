@@ -8,9 +8,8 @@ function Home(main) {
     
     this.prepare = function () {
         $('#menu-home-div').load("templates/home.html", function () {
-            restartFunctions('menu-home-div');
-        });
-        
+            
+        });        
     };
     
     this.init = function () {

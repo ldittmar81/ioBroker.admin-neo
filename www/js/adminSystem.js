@@ -188,12 +188,12 @@ function System(main) {
             $('#button-system').prop('disabled', true);
             $('#link-system').hide();
         }
+        restartFunctions('#dialog-system');
     };
 
     this.prepare = function () {
         $('#dialog-system').load("templates/dialogs.html #modal-system", function () {
-            restartFunctions('dialog-system');
-
+       
             for (var lang in availableLanguages) {
                 $('#system_language')
                         .append('<option value="' + lang + '" ' + (systemLang === lang ? "selected" : "") + '>' + availableLanguages[lang] + '</option>');
