@@ -52,6 +52,7 @@ function Adapters(main) {
             $adapterTemplate = $('#adapterTemplateAdapter');
             $adapterNewTemplate = $('#adapterTemplateNewAdapter');
             $adapterTemplateInside = $('#adapterTemplateAdapterInside');
+            
             $('#btn_collapse_adapters').click(function () {
                 $('.collapse-link').each(function () {
                     var $ICON = $(this).find('i');

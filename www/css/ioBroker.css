@@ -4340,3 +4340,46 @@ ul#cssClock li{
 .overflow_visible{
     overflow: visible !important;
 }
+
+/* Orbitlist core */
+ul.orbit.orbitlistJS {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+/* Orbitlist satellites */
+ul.orbit.orbitlistJS li {
+    position: absolute;
+    cursor: pointer;
+}
+
+/* Style der Satelliten */
+
+.orbit li {
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
+    border: 2px solid #000;
+    background: #fff;
+    text-align: center;
+    line-height: 60px;
+    overflow: hidden;
+}
+
+ul.orbit.orbitlistJS li {
+    transition: all 0.2s linear;
+}
+
+ul.orbit.orbitlistJS li:hover {
+    background: #24d;
+}
+
+.orbit li.orbitlistJS-trace {
+    background: #1ca;
+}
+
+.orbit li.orbitlistJS-active {
+    background: #2F4;
+}

@@ -305,15 +305,15 @@ String.prototype.text2iconClass = function () {
 })(jQuery);
 
 // Clock
-    var secInterval, hourInterval, minInterval, isClockOn = false;
+var secInterval, hourInterval, minInterval, isClockOn = false;
 
-    function stopClock() {
-        isClockOn = false;
-        clearInterval(secInterval);
-        clearInterval(hourInterval);
-        clearInterval(minInterval);
-        $(window).off('resize');
-    }
+function stopClock() {
+    isClockOn = false;
+    clearInterval(secInterval);
+    clearInterval(hourInterval);
+    clearInterval(minInterval);
+    $(window).off('resize');
+}
 // / Clock
 
 function changeLanguage(lang) {
@@ -338,6 +338,11 @@ function changeLanguage(lang) {
 function restartFunctions(selector) {
     if (isClockOn && selector !== '#menu-home-div') {
         stopClock();
+    }
+    if (selector === '#menu-enums-div') {
+        $('ul.orbit').orbitlist({
+            onhover: false
+        });
     }
     $(selector).find('input[type=checkbox],input[type=radio]').iCheck({
         checkboxClass: 'icheckbox_flat-green',
