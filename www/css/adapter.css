@@ -12,3 +12,8 @@
     padding-left: 18px !important;
     padding-top: 12px !important;
 }
+
+#enums-container{
+    height: 100%;
+    padding: 0;
+}

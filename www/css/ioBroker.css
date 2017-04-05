@@ -4357,15 +4357,24 @@ ul.orbit.orbitlistJS li {
 
 /* Style der Satelliten */
 
+.orbit-container {   
+    width: 100%;
+    height: 100%;
+}
+
 .orbit li {
-    width: 60px;
-    height: 60px;
-    border-radius: 60px;
+    min-width: 80px;
+    padding: 6px;
+    height: 80px;
+    border-radius: 80px;
     border: 2px solid #000;
     background: #fff;
     text-align: center;
-    line-height: 60px;
-    overflow: hidden;
+    line-height: 62px;
+}
+
+.orbitEnd{
+    border: 3px dashed #000 !important;
 }
 
 ul.orbit.orbitlistJS li {
