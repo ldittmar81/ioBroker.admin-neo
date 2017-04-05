@@ -340,7 +340,7 @@ function restartFunctions(selector) {
         stopClock();
     }
     if (selector === '#menu-enums-div') {
-        $('ul.orbit').orbitlist({
+        $('ol.orbit').orbitlist({
             onhover: false
         });
     }

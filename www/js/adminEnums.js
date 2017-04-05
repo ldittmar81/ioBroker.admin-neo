@@ -7,7 +7,7 @@ function Enums(main) {
     this.list = [];
     this.enumEdit = null;
     this.updateTimers = null;
-    
+
     var $enumsContainer;
 
     var enumCurrentParent = '';
@@ -34,7 +34,8 @@ function Enums(main) {
                 if (tasks.length) {
                     enumRename(undefined, undefined, undefined, callback);
                 } else {
-                    if (callback) callback();
+                    if (callback)
+                        callback();
                 }
             });
         }
@@ -50,7 +51,7 @@ function Enums(main) {
 
         main.socket.emit('setObject', newId, {
             _id: newId,
-            common:   {
+            common: {
                 name: name,
                 members: []
             },
@@ -67,9 +68,9 @@ function Enums(main) {
 
     this.prepare = function () {
         $('#menu-enums-div').load("templates/enums.html", function () {
-            
+
             $enumsContainer = $('#enumsTemplate');
-            
+
         });
     };
 
@@ -78,11 +79,73 @@ function Enums(main) {
             setTimeout(that.init, 250);
             return;
         }
-        
+
+        $(window).on('resize', resizeWindow);
+        resizeWindow();
+
+        loadEnumMembers();
+
         this.main.fillContent('#menu-enums-div');
     };
 
+    function loadEnumMembers() {
+        var $orbitlist = $('.orbit');
+        var obj = {};
+        for (var key in main.objects) {
+            if (key.startsWith('enum.')) {
+                assign(obj, key, main.objects[key])
+            }
+        }
+        $orbitlist.html(createList(obj, "enum"));
+    }
+
+    function createList(obj, key) {
+        var text = "";
+        var elem = obj[key];
+        for (var k in elem) {
+            if (k !== "_id" && k !== "acl" && k !== "common" && k !== "type") {
+                var common;
+                if (Object.prototype.toString.call(elem[k]) === "[object Object]") {
+                    common = elem[k]['common'];
+                }
+                text += "<li id='" + k + "'>" + (common ? common['name'] : k);
+                text += "<ol>";
+                if(common.members.length > 0){
+                    text += "<li class='orbitEnd'>" + common.members.length + "</li>";
+                }
+                text += createList(elem, k);
+                text += "</ol>";
+                text += "</li>";
+            }
+        }
+        return text;
+    }
+
+    function assign(obj, prop, value) {
+        if (typeof prop === "string") {
+            prop = prop.split(".");
+        }
+
+        if (prop.length > 1) {
+            var e = prop.shift();
+            assign(obj[e] =
+                    Object.prototype.toString.call(obj[e]) === "[object Object]"
+                    ? obj[e]
+                    : {},
+                    prop,
+                    value);
+        } else {
+            obj[prop[0]] = value;
+        }
+    }
+
+
     this.objectChange = function (id, obj) {
     };
+
+    function resizeWindow() {
+        $('#menu-enums-div').height($('#pageContent').height());
+        $('#enumsTemplate').height($('#pageContent').height());
+    }
 
 }

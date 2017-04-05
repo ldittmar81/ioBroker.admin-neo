@@ -190,7 +190,7 @@ function Instances(main) {
             }
             title += '</table>';
         } else {
-            state = (common.mode === 'daemon') ? 'gray' : 'blue';
+            state = (common.mode === 'daemon') ? 'grey' : 'blue';
             title = '<table style="border: 0">';
             title += '<tr style="border: 0"><td style="border: 0">' + $.i18n('Connected to host: ') + '</td><td style="border: 0">';
 
@@ -228,7 +228,7 @@ function Instances(main) {
 
         $led.attr('src', 'img/leds/led_' + state + '.png').attr('alt', state).data('title', title);
 
-        if (!$led.data('inited') && state !== 'gray') {
+        if (!$led.data('inited') && state !== 'grey') {
             $led.data('inited', true);
 
             $led.hover(function () {

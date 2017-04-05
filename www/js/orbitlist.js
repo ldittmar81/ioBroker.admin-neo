@@ -61,7 +61,7 @@
         core.data('visibleHeight', 1);
 
         // Delete all sublists (now empty)
-        core.find('ul').remove();
+        core.find('ol').remove();
 
     }
 

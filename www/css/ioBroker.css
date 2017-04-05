@@ -4342,7 +4342,7 @@ ul#cssClock li{
 }
 
 /* Orbitlist core */
-ul.orbit.orbitlistJS {
+ol.orbit.orbitlistJS {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -4350,7 +4350,7 @@ ul.orbit.orbitlistJS {
 }
 
 /* Orbitlist satellites */
-ul.orbit.orbitlistJS li {
+ol.orbit.orbitlistJS li {
     position: absolute;
     cursor: pointer;
 }
@@ -4362,6 +4362,11 @@ ul.orbit.orbitlistJS li {
     height: 100%;
 }
 
+ol.orbit{
+    list-style-type: none;
+    display: block;
+}
+
 .orbit li {
     min-width: 80px;
     padding: 6px;
@@ -4371,17 +4376,19 @@ ul.orbit.orbitlistJS li {
     background: #fff;
     text-align: center;
     line-height: 62px;
+    list-style-type: none;
+    display: block;
 }
 
 .orbitEnd{
     border: 3px dashed #000 !important;
 }
 
-ul.orbit.orbitlistJS li {
+ol.orbit.orbitlistJS li {
     transition: all 0.2s linear;
 }
 
-ul.orbit.orbitlistJS li:hover {
+ol.orbit.orbitlistJS li:hover {
     background: #24d;
 }
 
