@@ -103,17 +103,19 @@ function Enums(main) {
         var text = "";
         var elem = obj[key];
         for (var k in elem) {
-            if (k !== "_id" && k !== "acl" && k !== "common" && k !== "type") {
+            if (k !== '_id' && k !== 'acl' && k !== 'common' && k !== 'type') {
                 var common;
-                if (Object.prototype.toString.call(elem[k]) === "[object Object]") {
+                if (Object.prototype.toString.call(elem[k]) === '[object Object]') {
                     common = elem[k]['common'];
                 }
                 text += "<li id='" + k + "'>" + (common ? common['name'] : k);
                 text += "<ol>";
-                if(common.members.length > 0){
-                    text += "<li class='orbitEnd'>" + common.members.length + "</li>";
+                if (common && common.members) {
+                    if (common.members.length > 0) {
+                        text += "<li class='orbitEnd'>" + common.members.length + "</li>";
+                    }
+                    text += createList(elem, k);
                 }
-                text += createList(elem, k);
                 text += "</ol>";
                 text += "</li>";
             }
