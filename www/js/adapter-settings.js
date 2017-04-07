@@ -794,7 +794,7 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
             },
             position: 'first',
             id: 'add-cert',
-            title: $.i18n('new device'),
+            title: $.i18n('new_device'),
             cursor: 'pointer'
         });
     }

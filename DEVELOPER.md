@@ -97,7 +97,7 @@ Use https://github.com/jcbvm/i18n-editor for translations
 
 Um die Übersetzungsdatein zu bearbeiten, empfehle ich die Installation des Editors, denn damit kann man gleichzeitig alle Sprachen bearbeiten. Sobal es installiert ist, klickt man auf "File > Import Project..." und wählt den i18n-Ordner aus. Das Programm untertützt zwar ein "Multilevel-System für Sprachen" (man kann Wörter verschachteln) aber unsere JS-Anbindung (jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n) nicht, also wenn man was neues hinzufügen möchte, mit der rechten Maustaste auf dem obersten Punkt "Translations" klicken und "Add translation" auswählen.
 
-Eine orangene Markierung bei der Übersetzung bedeutet, dass das Wort in irgendeine Sprache fehlt.
+Eine orangene Markierung bei der Übersetzung bedeutet, dass das Wort in irgendeine Sprache fehlt. Sollte die Übersetzung in eine Sprache fehlen, dann wird Englisch angezeigt.
 
 ## Javascript & CSS-Style nicht in der HTML
 Damit das ganze flexibler wird, sollte man möglichst alle JavaScripts und CSS-Styles in den entsprechenden Dateien auslagern. Warum? Wenn man anstatt überall style="color: #ffe6e6;" macht und auf einmal merkt man dass es zu Hell sei, dann müsste man überall wieder rein gehen und auf ein andern Wert setzen. Wenn man aber dafür eine Klasse erstellt z.B. class="danger", dann könnte man einfach die Änderung global machen.

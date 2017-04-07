@@ -265,7 +265,7 @@ var adapterRedirect = function (redirect, timeout) {
                 }
 
                 if (main.objects[id] && main.objects[id].common && main.objects[id].common['object-non-deletable']) {
-                    main.showMessage($.i18n('Cannot delete "%s" because not allowed', id), '', 'notice');
+                    main.showMessage($.i18n('delete_not_allowed', id), '', 'notice');
                     if (typeof idOrList === 'object') {
                         setTimeout(function () {
                             this._delObject(idOrList, callback);
@@ -349,7 +349,7 @@ var adapterRedirect = function (redirect, timeout) {
                     }
                 } else {
                     if (main.objects[id] && main.objects[id].common && main.objects[id].common['object-non-deletable']) {
-                        main.showMessage($.i18n('Cannot delete "%s" because not allowed', id), '', 'notice');
+                        main.showMessage($.i18n('delete_not_allowed', id), '', 'notice');
                         if (callback)
                             callback(null, id);
                     } else {
@@ -378,7 +378,7 @@ var adapterRedirect = function (redirect, timeout) {
                 if (main.objects[id]) {
                     if (leaf && leaf.children) {
                         // ask if only object must be deleted or just this one
-                        main.confirmMessage($.i18n('Do you want to delete just <span style="color: blue">one object</span> or <span style="color: red">all</span> children of %s too?', id), null, 'help', [$.i18n('all'), $.i18n('onlyOne'), $.i18n('cancel')], function (result) {
+                        main.confirmMessage($.i18n('delete_one_all', id), null, 'help', [$.i18n('all'), $.i18n('only_one'), $.i18n('cancel')], function (result) {
                             // If all
                             if (result === 0) {
                                 main._delObjects(id, true, callback);
@@ -389,7 +389,7 @@ var adapterRedirect = function (redirect, timeout) {
                             } // else do nothing
                         });
                     } else {
-                        main.confirmMessage($.i18n('Are you sure to delete $1?', id), null, 'help', function (result) {
+                        main.confirmMessage($.i18n('delete_sure', id), null, 'help', function (result) {
                             // If all
                             if (result) {
                                 main._delObjects(id, true, callback);
@@ -397,14 +397,14 @@ var adapterRedirect = function (redirect, timeout) {
                         });
                     }
                 } else if (leaf && leaf.children) {
-                    main.confirmMessage($.i18n('Are you sure to delete all children of $1?', id), null, 'help', function (result) {
+                    main.confirmMessage($.i18n('delete_all_children_sure', id), null, 'help', function (result) {
                         // If all
                         if (result) {
                             main._delObjects(id, true, callback);
                         }
                     });
                 } else {
-                    main.showMessage($.i18n('Object "<b>$1</b>" does not exists. Update the page.', id), null, 'help', function (result) {
+                    main.showMessage($.i18n('object_not_exists', id), null, 'help', function (result) {
                         // If all
                         if (result) {
                             main._delObjects(id, true, callback);
