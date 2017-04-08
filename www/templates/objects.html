@@ -1,6 +1,63 @@
-<div id="grid-objects">
-    <span class="text-center" data-i18n="loading">Loading...</span>
+<div id="objectsTemplate">
+    <div class="page-title">
+        <div class="title_left">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button id="btn_refresh_objects" class="btn btn-default" data-i18n-tooltip="refresh"><i class="fa fa-refresh"></i></button>
+                <button id="btn_custom_objects" class="btn btn-default" data-i18n-tooltip="adapter with updates"><i class="fa fa-plus"></i></button>
+                <button id="btn_download_objects" class="btn btn-default" data-i18n-tooltip="Install from custom URL"><i class="fa fa-download"></i></button>
+                <button id="btn_upload_objects" class="btn btn-default" data-i18n-tooltip="Upgrade all adapters"><i class="fa fa-upload"></i></button>
+                <button id="btn_expert_mode_objects" class="btn btn-default" data-i18n-tooltip="expert-mode"><i class="fa fa-flask"></i></button>
+            </div>
+            <div class="btn-group" role="group" aria-label="Second group">
+                <button id="btn_list_objects" class="btn btn-default" data-i18n-tooltip="list"><i class="fa fa-list"></i></button>
+                <button id="btn_collapse_objects" class="btn btn-default" data-i18n-tooltip="collapse all"><i class="fa fa-folder"></i></button>
+                <button id="btn_expand_objects" class="btn btn-default" data-i18n-tooltip="expand all"><i class="fa fa-folder-open"></i></button>
+            </div>
+            <label for="objects-view-mode"><span data-i18n="objects-view-mode">View mode</span>:</label>
+            <select id="objects-view-mode">
+                <option value="instances" data-i18n="instances">Instances</option>
+            </select>         
+        </div>       
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+
+                <div class="input-group">
+                    <input type="text" class="form-control clearable" id="objects-filter" placeholder="Filter..." data-i18-attr="filter|placeholder">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-i18n="go">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div id="objects-container"></div>
 </div>
+
+<!-- Group -->
+<div id="objectsTemplateGroup" class="hidden">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">                   
+                    <h2><img class="group_img" src="img/no-image.png" alt="Group"/> <span class="group_title">Objects-Group</span></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>            
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content objectsList">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Group -->
 
 <div id="modal-object">
     <table>

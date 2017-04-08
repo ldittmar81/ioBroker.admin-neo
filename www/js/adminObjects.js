@@ -3,17 +3,66 @@ function Objects(main) {
 
     var that = this;
     this.menuIcon = 'fa-gears';
-   
+
+    var $objectsTemplate, $objectsContainer, $objectsGroupTemplate;
+
     this.main = main;
     this.customEnabled = null;
     this.currentCustoms = null; // Id of the currently shown customs dialog
 
     this.prepare = function () {
         $('#menu-objects-div').load("templates/objects.html", function () {
-         
+
             $('#modal-object').prependTo('#dialog-object');
 
-            this.$grid = $('#grid-objects');
+            $objectsTemplate = $('#objectsTemplate');
+            $objectsContainer = $('#objects-container');
+            $objectsGroupTemplate = $('#objectsTemplateGroup');
+
+            $('#btn_collapse_objects').click(function () {
+                $('.collapse-link').each(function () {
+                    var $ICON = $(this).find('i');
+                    if ($ICON.hasClass('fa-chevron-up')) {
+                        var $BOX_PANEL = $(this).closest('.x_panel');
+                        var $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+                        $BOX_CONTENT.slideToggle(200);
+                        $BOX_PANEL.css('height', 'auto');
+                        $ICON.toggleClass('fa-chevron-up fa-chevron-down');
+                    }
+
+                });
+            });
+            $('#btn_expand_objects').click(function () {
+                $('.collapse-link').each(function () {
+                    var $ICON = $(this).find('i');
+                    if ($ICON.hasClass('fa-chevron-down')) {
+                        var $BOX_PANEL = $(this).closest('.x_panel');
+                        var $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+                        $BOX_CONTENT.slideToggle(200);
+                        $BOX_PANEL.css('height', 'auto');
+                        $ICON.toggleClass('fa-chevron-up fa-chevron-down');
+                    }
+
+                });
+            });
+            $('#btn_list_objects').click(function () {
+                that.isList = !that.isList;
+                if (that.isList) {
+                    $('#btn_list_objects i').switchClass('fa-list', 'fa-window-maximize');
+                    $('#btn_expand_objects').hide();
+                    $('#btn_collapse_objects').hide();
+                    $(this).changeTooltip($.i18n('list'));
+                } else {
+                    $('#btn_list_objects i').switchClass('fa-list', 'fa-window-maximize');
+                    $('#btn_expand_objects').show();
+                    $('#btn_collapse_objects').show();
+                    $(this).changeTooltip($.i18n('tiles'));
+                }
+                that.main.saveConfig('adaptersIsList', that.isList);
+                setTimeout(function () {
+                    that.init(true);
+                }, 200);
+            });
 
         });
     };
@@ -188,9 +237,50 @@ function Objects(main) {
             }, 250);
             return;
         }
-        
+
+        $objectsContainer.html('');
+
+        if (this.customEnabled === null) {
+            this.checkCustoms();
+        }
+
+        this.assignObjectsMembers();
+
+        this.addViewModes();
+
+        this.createObjects();
+
         this.main.fillContent('#menu-objects-div');
     };
+
+    this.addViewModes = function () {
+        $('#objects-view-mode option').not(':first').remove();
+        for (var key in that.enums.enum) {
+            var enums = that.enums.enum[key];
+
+            $('#objects-view-mode').append($('<option>', {
+                value: key,
+                text: enums.common['name']
+            }));
+        }
+        $('#objects-view-mode').selectpicker('refresh');
+    }
+
+    this.createObjects = function () {
+        for (var key in that.objs) {
+            var $tempGroup = $objectsGroupTemplate.children().clone(true, true);
+            $tempGroup.find('.group_title').text(key);
+            $objectsContainer.append($tempGroup);
+        }
+    }
+
+    this.assignObjectsMembers = function () {
+        that.objs = {};
+        that.enums = {};
+        for (var key in main.objects) {
+            assign(key.startsWith('enum.') ? that.enums : that.objs, key, main.objects[key])
+        }
+    }
 
     this.edit = function (id, callback) {
     };
@@ -345,7 +435,7 @@ function Objects(main) {
             if (this.main.objects[this.main.instances[u]].common &&
                     (this.main.objects[this.main.instances[u]].common.type === 'storage' || this.main.objects[this.main.instances[u]].common.supportCustoms) &&
                     this.main.objects[this.main.instances[u]].common.enabled) {
-                if (this.customEnabled !== null && this.customEnabled != true) {
+                if (this.customEnabled !== null && this.customEnabled !== true) {
                     this.customEnabled = true;
                     // update customs buttons
                     this.init(true);
@@ -355,7 +445,7 @@ function Objects(main) {
                 return;
             }
         }
-        if (this.customEnabled !== null && this.customEnabled != false) {
+        if (this.customEnabled !== null && this.customEnabled !== false) {
             this.customEnabled = false;
             // update custom button
             this.init(true);
