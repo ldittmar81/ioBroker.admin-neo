@@ -267,11 +267,36 @@ function Objects(main) {
     }
 
     this.createObjects = function () {
-        for (var key in that.objs) {
-            var $tempGroup = $objectsGroupTemplate.children().clone(true, true);
-            $tempGroup.find('.group_title').text(key);
-            $objectsContainer.append($tempGroup);
+        for (var key in that.objs) {           
+            if (!(key.startsWith('_design/') || key === "connected" || key === "system")) {
+                var $tempGroup = $objectsGroupTemplate.children().clone(true, true);
+                $tempGroup.find('.group_title').text(key);
+                $tempGroup.find('.objectsList').html(createObjectData(that.objs[key]));
+                $objectsContainer.append($tempGroup);
+            }
         }
+    }
+
+    function createObjectData(elem) {
+        var text = "";
+        for (var k in elem) {
+            if (k.match(/^system\.|^iobroker\.|^_|^[\w-]+$|^enum\.|^[\w-]+\.admin|^script\./)) {
+                var child = elem[k];
+                if (Object.prototype.toString.call(elem[k]) === '[object Object]') {
+                    var common = child['common'];
+                    text += "<fieldset>";
+                    text += "<legend>" + (common ? common['name'] : k) + "</legend>"
+                    text += "<div>";
+                    text += createObjectData(child);
+                    text += "</div>";
+                    text += "</fieldset>";
+                } else {
+                    text += "<p>" + k + "</p>";
+                }
+            }
+
+        }
+        return text;
     }
 
     this.assignObjectsMembers = function () {
@@ -429,7 +454,7 @@ function Objects(main) {
     this.save = function () {
     };
 
-    // ----------------------------- CUSTOMS ------------------------------------------------
+// ----------------------------- CUSTOMS ------------------------------------------------
     this.checkCustoms = function () {
         for (var u = 0; u < this.main.instances.length; u++) {
             if (this.main.objects[this.main.instances[u]].common &&
@@ -730,7 +755,7 @@ function Objects(main) {
     this.openCustomsDlg = function (ids) {
     };
 
-    // Set modified custom states
+// Set modified custom states
     this.setCustoms = function (ids, callback) {
     };
 

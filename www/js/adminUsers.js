@@ -31,7 +31,7 @@ function Users(main) {
             var obj = that.main.objects[that.list[i]];
             var select = '<select class="user-groups-edit" multiple="multiple" data-id="' + that.list[i] + '">';
 
-            var groups = that.main.tabs.groups.list;
+            var groups = that.main.menus.groups.list;
             for (var j = 0; j < groups.length; j++) {
                 var name = groups[j].substring('system.group.'.length);
                 name = name.substring(0, 1).toUpperCase() + name.substring(1);

@@ -5,7 +5,7 @@ function System(main) {
     'use strict';
     var that = this;
 
-    var $dialogSystem;
+    var $dialogSystem, $gridRepo, $gridCerts;
 
     var editingCerts = [];
     var editingRepos = [];
@@ -17,13 +17,13 @@ function System(main) {
     function string2cert(name, str) {
         // expected format: -----BEGIN CERTIFICATE-----certif...icate==-----END CERTIFICATE-----
         if (str.length < '-----BEGIN CERTIFICATE-----==-----END CERTIFICATE-----'.length) {
-            main.showMessage(_('Invalid certificate "%s". To short.', name));
+            main.showMessage($.i18n('Invalid certificate "%s". To short.', name));
             return '';
         }
         var lines = [];
-        if (str.substring(0, '-----BEGIN RSA PRIVATE KEY-----'.length) == '-----BEGIN RSA PRIVATE KEY-----') {
-            if (str.substring(str.length - '-----END RSA PRIVATE KEY-----'.length) != '-----END RSA PRIVATE KEY-----') {
-                main.showMessage(_('Certificate "%s" must end with "-----END RSA PRIVATE KEY-----".', name), '', 'notice');
+        if (str.substring(0, '-----BEGIN RSA PRIVATE KEY-----'.length) === '-----BEGIN RSA PRIVATE KEY-----') {
+            if (str.substring(str.length - '-----END RSA PRIVATE KEY-----'.length) !== '-----END RSA PRIVATE KEY-----') {
+                main.showMessage($.i18n('Certificate "%s" must end with "-----END RSA PRIVATE KEY-----".', name), '', 'notice');
                 return '';
             }
             str = str.substring('-----BEGIN RSA PRIVATE KEY-----'.length);
@@ -34,9 +34,9 @@ function System(main) {
                 str = str.substring(64);
             }
             return '-----BEGIN RSA PRIVATE KEY-----\r\n' + lines.join('\r\n') + '\r\n-----END RSA PRIVATE KEY-----\r\n';
-        } else if (str.substring(0, '-----BEGIN PRIVATE KEY-----'.length) == '-----BEGIN PRIVATE KEY-----') {
-            if (str.substring(str.length - '-----END PRIVATE KEY-----'.length) != '-----END PRIVATE KEY-----') {
-                main.showMessage(_('Certificate "%s" must end with "-----BEGIN PRIVATE KEY-----".', name), '', 'notice');
+        } else if (str.substring(0, '-----BEGIN PRIVATE KEY-----'.length) === '-----BEGIN PRIVATE KEY-----') {
+            if (str.substring(str.length - '-----END PRIVATE KEY-----'.length) !== '-----END PRIVATE KEY-----') {
+                main.showMessage($.i18n('Certificate "%s" must end with "-----BEGIN PRIVATE KEY-----".', name), '', 'notice');
                 return '';
             }
             str = str.substring('-----BEGIN PRIVATE KEY-----'.length);
@@ -48,12 +48,12 @@ function System(main) {
             }
             return '-----BEGIN PRIVATE KEY-----\r\n' + lines.join('\r\n') + '\r\n-----END PRIVATE KEY-----\r\n';
         } else {
-            if (str.substring(0, '-----BEGIN CERTIFICATE-----'.length) != '-----BEGIN CERTIFICATE-----') {
-                main.showMessage(_('Certificate "%s" must start with "-----BEGIN CERTIFICATE-----".', name), '', 'notice');
+            if (str.substring(0, '-----BEGIN CERTIFICATE-----'.length) !== '-----BEGIN CERTIFICATE-----') {
+                main.showMessage($.i18n('Certificate "%s" must start with "-----BEGIN CERTIFICATE-----".', name), '', 'notice');
                 return '';
             }
-            if (str.substring(str.length - '-----END CERTIFICATE-----'.length) != '-----END CERTIFICATE-----') {
-                main.showMessage(_('Certificate "%s" must end with "-----END CERTIFICATE-----".', name), '', 'notice');
+            if (str.substring(str.length - '-----END CERTIFICATE-----'.length) !== '-----END CERTIFICATE-----') {
+                main.showMessage($.i18n('Certificate "%s" must end with "-----END CERTIFICATE-----".', name), '', 'notice');
                 return '';
             }
             // process chained certificates
@@ -84,12 +84,14 @@ function System(main) {
     }
 
     function prepareRepos() {
+        $gridRepo = $('#grid-repos').bootstrapTable();
     }
 
     function addCert(name, text) {
     }
 
     function prepareCerts() {
+        $gridCerts = $('#grid-certs').bootstrapTable();
     }
 
     // ----------------------------- Repositories show and Edit ------------------------------------------------
@@ -123,7 +125,7 @@ function System(main) {
             $('#button-system, #link-system').click(function () {
 
                 $('#system_activeRepo').html('');
-                
+
                 if (that.systemRepos && that.systemRepos.native.repositories) {
                     for (var repo in that.systemRepos.native.repositories) {
                         $('#system_activeRepo').append('<option value="' + repo + '">' + repo + '</option>');
@@ -150,7 +152,7 @@ function System(main) {
                     }
                 }
 
-                $('.system-settings.value').each(function () {
+                $('.system-settings.value').not('.bootstrap-select').each(function () {
                     var $this = $(this);
                     var id = $this.attr('id').substring('system_'.length);
 
@@ -194,16 +196,16 @@ function System(main) {
 
     this.prepare = function () {
         $('#dialog-system').load("templates/system.html", function () {
-       
+
+            $dialogSystem = $('#modal-system');
+
             for (var lang in availableLanguages) {
                 $('#system_language')
                         .append('<option value="' + lang + '" ' + (systemLang === lang ? "selected" : "") + '>' + availableLanguages[lang] + '</option>');
             }
 
-            $dialogSystem = $('#modal-system');
-
-            initRepoGrid();
-            initCertsGrid();
+            prepareRepos();
+            prepareCerts();
 
         });
     };

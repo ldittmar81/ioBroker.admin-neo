@@ -29,7 +29,7 @@ function Groups(main) {
             var obj = that.main.objects[this.list[i]];
             var select = '<select class="group-users-edit" multiple="multiple" data-id="' + this.list[i] + '">';
 
-            var users = this.main.tabs.users.list;
+            var users = this.main.menus.users.list;
             for (var j = 0; j < users.length; j++) {
                 var name = users[j].substring('system.user.'.length);
                 select += '<option value="' + users[j] + '"';
@@ -154,7 +154,7 @@ function Groups(main) {
             }
             this.updateTimer = setTimeout(function () {
                 that.updateTimer = null;
-                that.main.tabs.users.init(true);
+                that.main.menus.users.init(true);
                 that.init(true);
             }, 200);
         }

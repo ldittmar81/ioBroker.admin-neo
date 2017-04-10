@@ -1,18 +1,27 @@
 <div id="modal-groups" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-groups" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
-            <table id="groups-table" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th data-field="_id" data-i18n="id"></th>
-                        <th data-field="name" data-i18n="name"></th>
-                        <th data-field="description" data-i18n="description"></th>
-                        <th data-field="users" data-i18n="users"></th>
-                        <th data-field="buttons" data-i18n="buttons"></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" data-i18n="groups">Groups</h4>
+            </div>
+            <div class="modal-body">
+                <table id="groups-table" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th data-field="_id" data-i18n="id"></th>
+                            <th data-field="name" data-i18n="name"></th>
+                            <th data-field="description" data-i18n="description"></th>
+                            <th data-field="users" data-i18n="users"></th>
+                            <th data-field="buttons" data-i18n="buttons"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="close">Close</button>
+            </div>
         </div>
     </div>
 </div>

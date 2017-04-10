@@ -4399,3 +4399,18 @@ ol.orbit.orbitlistJS li:hover {
 .orbit li.orbitlistJS-active {
     background: #2F4;
 }
+
+fieldset {
+    padding: 0 10px 10px;
+    border: 1px solid #666;
+    border-radius: 8px;    
+}
+legend {
+    padding: 0 4px;
+    background: #fff;  
+    border-bottom: 0;
+    width: auto;
+}
+fieldset > legend {  
+    margin-top: -20px;
+}

@@ -1,17 +1,26 @@
 <div id="modal-users" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-users" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
-            <table id="users-table" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th data-field="_id" data-i18n="id"></th>
-                        <th data-field="name" data-i18n="name"></th>
-                        <th data-field="enabled" data-i18n="enabled"></th>
-                        <th data-field="groups" data-i18n="groups"></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" data-i18n="users">Users</h4>
+            </div>
+            <div class="modal-body">
+                <table id="users-table" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th data-field="_id" data-i18n="id"></th>
+                            <th data-field="name" data-i18n="name"></th>
+                            <th data-field="enabled" data-i18n="enabled"></th>
+                            <th data-field="groups" data-i18n="groups"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="close">Close</button>
+            </div>
         </div>
     </div>
 </div>
