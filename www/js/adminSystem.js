@@ -123,6 +123,7 @@ function System(main) {
             $('#button-system, #link-system').click(function () {
 
                 $('#system_activeRepo').html('');
+                
                 if (that.systemRepos && that.systemRepos.native.repositories) {
                     for (var repo in that.systemRepos.native.repositories) {
                         $('#system_activeRepo').append('<option value="' + repo + '">' + repo + '</option>');
@@ -192,7 +193,7 @@ function System(main) {
     };
 
     this.prepare = function () {
-        $('#dialog-system').load("templates/dialogs.html #modal-system", function () {
+        $('#dialog-system').load("templates/system.html", function () {
        
             for (var lang in availableLanguages) {
                 $('#system_language')

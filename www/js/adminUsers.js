@@ -1,14 +1,21 @@
 'use strict';
 
 function Users(main) {
+    
     var that = this;
     this.list = [];
     this.main = main;
     this.userLastSelected = null;
-    
-    that.$dialog;
 
     this.prepare = function () {
+        $('#dialog-users').load("templates/users.html", function () {
+
+            that.$dialogUsers = $('#modal-users');
+            that.$table = $('#users-table');
+            
+            that.$table.bootstrapTable();
+
+        });
     };
 
     // ----------------------------- Users show and Edit ------------------------------------------------
@@ -19,6 +26,34 @@ function Users(main) {
             }, 500);
             return;
         }
+
+        for (var i = 0; i < that.list.length; i++) {
+            var obj = that.main.objects[that.list[i]];
+            var select = '<select class="user-groups-edit" multiple="multiple" data-id="' + that.list[i] + '">';
+
+            var groups = that.main.tabs.groups.list;
+            for (var j = 0; j < groups.length; j++) {
+                var name = groups[j].substring('system.group.'.length);
+                name = name.substring(0, 1).toUpperCase() + name.substring(1);
+                select += '<option value="' + groups[j] + '"';
+                if (that.main.objects[groups[j]].common && that.main.objects[groups[j]].common.members && that.main.objects[groups[j]].common.members.indexOf(that.list[i]) != -1)
+                    select += ' selected';
+                select += '>' + name + '</option>';
+            }
+
+            that.$table.bootstrapTable('insertRow', {
+                row: {
+                    _id: obj._id,
+                    name: obj.common ? obj.common.name : '',
+                    enabled: '<input class="user-enabled-edit" type="checkbox" data-id="' + that.list[i] + '" ' + (obj.common && obj.common.enabled ? 'checked' : '') + '/>',
+                    groups: select
+                }
+            });
+        }
+
+        restartFunctions('#dialog-users');
+
+        that.$dialogUsers.modal();
     };
 
     function editUser(id) {
@@ -70,12 +105,12 @@ function Users(main) {
     this.objectChange = function (id, obj) {
         if (id.match(/^system\.user\./)) {
             if (obj) {
-                if (this.list.indexOf(id) === -1){
+                if (this.list.indexOf(id) === -1) {
                     this.list.push(id);
                 }
             } else {
                 var j = this.list.indexOf(id);
-                if (j !== -1){
+                if (j !== -1) {
                     this.list.splice(j, 1);
                 }
             }

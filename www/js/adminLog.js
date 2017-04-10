@@ -110,7 +110,6 @@ function Logs(main) {
         
         this.main.socket.emit('sendToHost', this.main.currentHost, 'getLogs', 200, function (lines) {
             setTimeout(function () {
-                var message = {message: '', severity: 'debug', from: '', ts: ''};
                 var size = lines ? lines.pop() : -1;
                 if (size !== -1) {
                     size = parseInt(size);
@@ -120,6 +119,7 @@ function Logs(main) {
                     if (!lines[i]) {
                         continue;
                     }
+                    var message = {message: '', severity: 'debug', from: '', ts: ''};
                     // 2014-12-05 14:47:10.739 - info: iobroker  ERR! network In most cases you are behind a proxy or have bad network settings.npm ERR! network
                     if (lines[i][4] === '-' && lines[i][7] === '-') {
                         lines[i] = lines[i].replace(/(\[[0-9]+m)/g, '');

@@ -430,7 +430,7 @@ var adapterRedirect = function (redirect, timeout) {
                         role: $.i18n('role'),
                         room: $.i18n('room'),
                         value: $.i18n('value'),
-                        selectid: $.i18n('selectID'),
+                        selectid: $.i18n('select_id'),
                         from: $.i18n('from'),
                         lc: $.i18n('lastchanged'),
                         ts: $.i18n('timestamp'),

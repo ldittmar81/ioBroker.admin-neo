@@ -8,7 +8,7 @@ function Enums(main) {
     this.enumEdit = null;
     this.updateTimers = null;
 
-    var $enumsContainer;
+    var $enumsContainer, $enumsTable, $enumsOrbit;
 
     var enumCurrentParent = '';
     var tasks = [];
@@ -70,7 +70,12 @@ function Enums(main) {
         $('#menu-enums-div').load("templates/enums.html", function () {
 
             $enumsContainer = $('#enumsTemplate');
-
+            $enumsTable = $('#enumsTableTemplate');
+            $enumsOrbit = $('#enumsOrbitTemplate');
+            
+            
+            
+            $enumsTable.find('table').bootstrapTable();
         });
     };
 
@@ -80,15 +85,26 @@ function Enums(main) {
             return;
         }
 
-        $(window).on('resize', resizeWindow);
-        resizeWindow();
-
         loadEnumMembers();
+        //loadOrbitEnumMembers();
 
         this.main.fillContent('#menu-enums-div');
     };
 
     function loadEnumMembers() {
+        var $tmpTable = $enumsTable.children().clone(true, true);
+        
+                
+        
+        $enumsContainer.find('.enums-container').append($tmpTable);
+       
+    }
+
+    function loadOrbitEnumMembers() {
+
+        $(window).on('resize', resizeWindow);
+        resizeWindow();
+
         var $orbitlist = $('.orbit');
         var obj = {};
         for (var key in main.objects) {
@@ -96,10 +112,10 @@ function Enums(main) {
                 assign(obj, key, main.objects[key])
             }
         }
-        $orbitlist.html(createList(obj, "enum"));
+        $orbitlist.html(createOrbitList(obj, "enum"));
     }
 
-    function createList(obj, key) {
+    function createOrbitList(obj, key) {
         var text = "";
         var elem = obj[key];
         for (var k in elem) {
@@ -114,7 +130,7 @@ function Enums(main) {
                     if (common.members.length > 0) {
                         text += "<li class='orbitEnd'>" + common.members.length + "</li>";
                     }
-                    text += createList(elem, k);
+                    text += createOrbitList(elem, k);
                 }
                 text += "</ol>";
                 text += "</li>";
