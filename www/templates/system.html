@@ -1,12 +1,15 @@
 <div id="modal-system" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-system" aria-hidden="true" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" data-i18n="system">System</h4>
             </div>
+
             <div class="modal-body">
                 <div class="" role="tabpanel">
+
                     <ul class="nav nav-tabs bar_tabs" role="tablist">
                         <li role="presentation" class="active">
                             <a href="#tab-system-main" role="tab" data-toggle="tab" data-i18="mainSettings">Main settings</a>
@@ -24,7 +27,9 @@
                             <a href="#tab-system-diag" role="tab" data-toggle="tab" data-i18="statictics">Statistics</a>
                         </li>
                     </ul>
+
                     <div id="myTabContent" class="tab-content">
+
                         <div id="tab-system-main" role="tabpanel" class="tab-pane fade active in">
                             <div class="form-horizontal">
 
@@ -387,93 +392,96 @@
                                 </div>
 
                             </div>
-
-                            <div id="tab-system-repo" role="tabpanel" class="tab-pane fade">
-                                <table id="grid-repos">
-                                    <thead>
-                                        <tr>
-                                            <th data-field="_id" data-i18n="id"></th>
-                                            <th data-field="name" data-i18n="name"></th>
-                                            <th data-field="link" data-i18n="link"></th>
-                                            <th data-field="commands" data-i18n="commands"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                                <div id="pager-repos"></div>
-                            </div>
-
-                            <div id="tab-system-certs" role="tabpanel" class="tab-pane fade drop-zone">
-                                <div id="drop-zone" style="display: none"><div style="padding-top:20%" id="drop-text"></div>
-                                    <input type="file" id="drop-file" style="display: none">
-                                </div>
-                                <table id="grid-certs">
-                                    <thead>
-                                        <tr>
-                                            <th data-field="_id" data-i18n="id"></th>
-                                            <th data-field="name" data-i18n="name"></th>
-                                            <th data-field="certificate" data-i18n="certificate"></th>
-                                            <th data-field="commands" data-i18n="commands"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                                <div id="pager-certs"></div>
-                            </div>
-
-                            <div id="tab-system-letsencrypt" role="tabpanel" class="tab-pane fade">
-                                <p>letsnecrypt_help</p>
-                                <table>
-                                    <tr>
-                                        <td><label for="system_le_email">Email for account:</label></td>
-                                        <td><input id="system_le_email" class="system-le-settings value" data-name="email"/></td>
-                                        <td>letsnecrypt_help_email</td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="system_le_domains">Domains:</label></td>
-                                        <td><input id="system_le_domains" class="system-le-settings value" data-name="domains"/></td>
-                                        <td>letsnecrypt_help_domains</td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="system_le_path">Path to storage:</label></td>
-                                        <td><input id="system_le_path" class="system-le-settings value" data-name="path"/></td>
-                                        <td>letsnecrypt_help_path</td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <div id="tab-system-diag" role="tabpanel" class="tab-pane fade">
-                                <table id="table-diag">
-                                    <tr>
-                                        <td>Note:</td>
-                                        <td>diag-note</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label  for="diagMode">Statistics:</label>
-                                        </td>
-                                        <td>
-                                            <select id="diagMode">
-                                                <option value="none">none</option>
-                                                <option value="normal">normal</option>
-                                                <option value="no-city">no-city</option>
-                                                <option value="extended">extended</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: top">Sent data:</td>
-                                        <td><pre id="diagSample" style="font-size: 10px"></pre></td>
-                                    </tr>
-                                </table>
-                            </div>
                         </div>
+
+                        <div id="tab-system-repo" role="tabpanel" class="tab-pane fade">
+                            <table id="grid-repos">
+                                <thead>
+                                    <tr>
+                                        <th data-field="_id" data-i18n="id"></th>
+                                        <th data-field="name" data-i18n="name"></th>
+                                        <th data-field="link" data-i18n="link"></th>
+                                        <th data-field="commands" data-i18n="commands"></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div id="pager-repos"></div>
+                        </div>
+
+                        <div id="tab-system-certs" role="tabpanel" class="tab-pane fade drop-zone">
+                            <div id="drop-zone" style="display: none"><div style="padding-top:20%" id="drop-text"></div>
+                                <input type="file" id="drop-file" style="display: none">
+                            </div>
+                            <table id="grid-certs">
+                                <thead>
+                                    <tr>
+                                        <th data-field="_id" data-i18n="id"></th>
+                                        <th data-field="name" data-i18n="name"></th>
+                                        <th data-field="certificate" data-i18n="certificate"></th>
+                                        <th data-field="commands" data-i18n="commands"></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div id="pager-certs"></div>
+                        </div>
+
+                        <div id="tab-system-letsencrypt" role="tabpanel" class="tab-pane fade">
+                            <p>letsnecrypt_help</p>
+                            <table>
+                                <tr>
+                                    <td><label for="system_le_email">Email for account:</label></td>
+                                    <td><input id="system_le_email" class="system-le-settings value" data-name="email"/></td>
+                                    <td>letsnecrypt_help_email</td>
+                                </tr>
+                                <tr>
+                                    <td><label for="system_le_domains">Domains:</label></td>
+                                    <td><input id="system_le_domains" class="system-le-settings value" data-name="domains"/></td>
+                                    <td>letsnecrypt_help_domains</td>
+                                </tr>
+                                <tr>
+                                    <td><label for="system_le_path">Path to storage:</label></td>
+                                    <td><input id="system_le_path" class="system-le-settings value" data-name="path"/></td>
+                                    <td>letsnecrypt_help_path</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div id="tab-system-diag" role="tabpanel" class="tab-pane fade">
+                            <table id="table-diag">
+                                <tr>
+                                    <td>Note:</td>
+                                    <td>diag-note</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label  for="diagMode">Statistics:</label>
+                                    </td>
+                                    <td>
+                                        <select id="diagMode">
+                                            <option value="none">none</option>
+                                            <option value="normal">normal</option>
+                                            <option value="no-city">no-city</option>
+                                            <option value="extended">extended</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top">Sent data:</td>
+                                    <td><pre id="diagSample" style="font-size: 10px"></pre></td>
+                                </tr>
+                            </table>
+                        </div>                        
+
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="close">Close</button>
             </div>
+
         </div>
     </div>
 </div>
