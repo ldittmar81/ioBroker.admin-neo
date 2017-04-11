@@ -197,7 +197,7 @@ var adapterRedirect = function (redirect, timeout) {
             showError: function (error) {
                 main.showMessage($.i18n(error), $.i18n('error'), 'alert');
             },
-            formatDate: function (dateObj, justTime) {
+            formatDate: function (dateObj, justTime, noMilli) {
                 if (!dateObj) {
                     return '';
                 }
@@ -258,13 +258,15 @@ var adapterRedirect = function (redirect, timeout) {
                     text += ':' + v;
                 }
 
-                v = dateObj.getMilliseconds();
-                if (v < 10) {
-                    text += '.00' + v;
-                } else if (v < 100) {
-                    text += '.0' + v;
-                } else {
-                    text += '.' + v;
+                if (!noMilli) {
+                    v = dateObj.getMilliseconds();
+                    if (v < 10) {
+                        text += '.00' + v;
+                    } else if (v < 100) {
+                        text += '.0' + v;
+                    } else {
+                        text += '.' + v;
+                    }
                 }
 
                 return text;

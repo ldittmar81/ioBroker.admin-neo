@@ -222,9 +222,14 @@ function Adapters(main) {
                         $issueElement.find('.title').text(issue.title).attr('href', issue.html_url);
                         $issueElement.find('.user').text(issue.user.login);
                         $issueElement.find('.description').text(issue.body);
-                        $issueElement.find('.created').text(issue.created_at);
-                        for (var label in issue.labels) {
-                            $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + label.color + ';" title="' + label.name + '"><span>' + label.name + '</span></a>');
+                        $issueElement.find('.created').text(main.formatDate(new Date(issue.created_at), false, true));
+                        if (issue.labels.length > 0) {
+                            for (var k in issue.labels) {
+                                if (k === "remove") {
+                                    break;
+                                }
+                                $issueElement.find('.tags').append('<a data-toggle="tooltip" class="tag" style="background:#' + issue.labels[k].color + ';" title="' + issue.labels[k].name + '"><span>' + issue.labels[k].name + '</span></a>');
+                            }
                         }
 
                         $table.find('.timeline').append($issueElement);

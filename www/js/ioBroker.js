@@ -359,11 +359,11 @@ function restartFunctions(selector) {
         var $this = $(this);
         $this.attr("title", $.i18n($this.data('i18n-tooltip'))).tooltip({
             title: $.i18n($this.data('i18n-tooltip')),
-            container: selector
+            container: 'body'
         });
     });
     $(selector).find('[data-toggle="tooltip"]').tooltip({
-        container: selector
+        container: 'body'
     });
 }
 

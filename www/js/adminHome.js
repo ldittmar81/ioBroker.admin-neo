@@ -88,20 +88,23 @@ function Home(main) {
             $('#forumTime').text($forumContent.find('updated:first').text());
             $('#forum-link').attr("href", $forumContent.find('link:nth-of-type(2)').attr('href'));
 
+            $('#forumList').empty();
             $('entry', $forumContent).each(function () {
                 var $item = $('#forumEntryTemplate').children().clone(true, true);
                 $item.find('.forumClass').text($(this).find('category').eq(0).attr('label').replace('ioBroker ', ''));
                 $item.find('.titleLink').text($(this).find('title').eq(0).text())
                         .attr('href', $(this).find('link').eq(0).attr('href'));
                 $item.find('.description').html($(this).find('content').eq(0).text());
-                $item.find('.byline').text($(this).find('updated').eq(0).text());
-                $('#forumList').append($item);
+                $item.find('.byline').text(main.formatDate(new Date($(this).find('updated').eq(0).text()), false, true) + " - " + $(this).find('name').eq(0).text());
+                $('#forumList').prepend($item);
             });
         }
     };
 
     function fillList(type, list, repository, installedList) {
         var $ul = $('#' + type + 'HomeList');
+        $ul.empty();
+
         var isInstalled = type === "update";
 
         for (var i = 0; i < list.length; i++) {
