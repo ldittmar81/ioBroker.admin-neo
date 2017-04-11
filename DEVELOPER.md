@@ -74,7 +74,7 @@ alert('Hello World'); // == alert('Hello World', 'notice', $.i18n('notice');
 ### JS
 * Bootstrap 3.3.7 http://getbootstrap.com/
 * jQuery 3.3.1 https://api.jquery.com/
-* jQuery UI 1.12.1 (Drag & Drop + Blind) https://jqueryui.com/download/#!version=1.12.1&components=101000000100110000000000010000001100000000000000
+* jQuery UI 1.12.1 (Drag & Drop + Blind + Keycode) https://jqueryui.com/download/#!version=1.12.1&components=101000010100110000000000010000001100000000000000
 * jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
 * Bootbox 4.4.0 https://bootboxjs.com/
 * Bootstrap Select 1.12.2 https://silviomoreto.github.io/bootstrap-select/
