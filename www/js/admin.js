@@ -478,14 +478,15 @@ var adapterRedirect = function (redirect, timeout) {
             objects: new Objects(main),
             events: new Events(main),
             hosts: new Hosts(main),
-            users: new Users(main),
-            groups: new Groups(main),
             enums: new Enums(main)
         };
 
         main.instances = menus.instances.list;
         main.menus = menus;
         main.systemDialog = new System(main);
+        main.infoDialog = new Info(main);
+        main.usersDialog = new Users(main);
+        main.groupsDialog = new Groups(main);
 
         var children = {};
 
@@ -754,10 +755,10 @@ var adapterRedirect = function (redirect, timeout) {
                                 menus.enums.list.push(id);
                                 break;
                             case 'user':
-                                menus.users.list.push(id);
+                                main.usersDialog.list.push(id);
                                 break;
                             case 'group':
-                                menus.groups.list.push(id);
+                                main.groupsDialog.list.push(id);
                                 break;
                             case 'adapter':
                                 menus.adapters.list.push(id);
@@ -912,10 +913,10 @@ var adapterRedirect = function (redirect, timeout) {
             menus.hosts.objectChange(id, obj);
 
             // Update groups
-            menus.groups.objectChange(id, obj);
+            main.groupsDialog.objectChange(id, obj);
 
             // Update users
-            menus.users.objectChange(id, obj);
+            main.usersDialog.objectChange(id, obj);
         }
 
         function monitor() {
@@ -1093,14 +1094,15 @@ var adapterRedirect = function (redirect, timeout) {
                                     menus.states.prepare();
                                     menus.adapters.prepare();
                                     menus.instances.prepare();
-                                    menus.users.prepare();
-                                    menus.groups.prepare();
                                     menus.enums.prepare();
                                     menus.objects.prepareCustoms();
                                     menus.events.prepare();
                                     menus.home.prepare();
-
+                                    
+                                    main.usersDialog.prepare();
+                                    main.groupsDialog.prepare();
                                     main.systemDialog.prepare();
+                                    main.infoDialog.prepare();
 
                                     getStates(getObjects);
                                 }, 0);
@@ -1137,10 +1139,10 @@ var adapterRedirect = function (redirect, timeout) {
             $('.side-menu').find('a[href="#logs"]').parent().addClass('active');
         });
         $('#link-users').on("click", function () {
-            menus.users.init();
+            main.usersDialog.init();
         });
         $('#link-groups').on("click", function () {
-            menus.groups.init();
+            main.groupsDialog.init();
         });
         // / open links
 

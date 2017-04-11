@@ -366,3 +366,24 @@ function restartFunctions(selector) {
         container: selector
     });
 }
+
+function requestCrossDomain(site, callback) {
+    if (!site) {
+        alert('No site was passed.');
+        return false;
+    }
+
+    var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=xml&callback=?';
+
+    $.getJSON(yql, cbFunc);
+
+    function cbFunc(data) {
+        if (data.results[0]) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        } else {
+            throw new Error('Nothing returned from getJSON.');
+        }
+    }
+}

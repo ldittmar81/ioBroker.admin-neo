@@ -13,11 +13,34 @@ function Home(main) {
     };
 
     this.init = function () {
+
+        requestCrossDomain("http://forum.iobroker.net/feed.php?mode=topics", that.getForumData);
+
         this.main.fillContent('#menu-home-div');
         startClock();
     };
-    
-        function startClock() {
+
+    this.getForumData = function (data) {
+        var $forumContent = $($.parseXML(data['results'][0]));
+        var forumData = {};
+        
+        $('#forumTitle').text($forumContent.find('title:first').text());
+        $('#forumTime').text($forumContent.find('updated:first').text());
+        $('#forum-link').attr("href", $forumContent.find('link:nth-of-type(2)').attr('href'));
+        
+        $('entry', $forumContent).each(function () {
+            var $item = $('#forumEntryTemplate').children().clone(true, true);
+            $item.find('.forumClass').text($(this).find('category').eq(0).attr('label').replace('ioBroker ', ''));
+            $item.find('.titleLink').text($(this).find('title').eq(0).text())
+                    .attr('href', $(this).find('link').eq(0).attr('href'));
+            $item.find('.description').html($(this).find('content').eq(0).text());
+            $item.find('.byline').text($(this).find('updated').eq(0).text());
+            $('#forumList').append($item);
+        });
+       
+    };
+
+    function startClock() {
         isClockOn = true;
         secInterval = setInterval(function () {
             var seconds = new Date().getSeconds();
@@ -93,7 +116,7 @@ function Home(main) {
             $('.clock').prependTo('.justify-content-start');
         } else {
             $('.clock').appendTo('.justify-content-start');
-        }        
+        }
     }
 
 }
