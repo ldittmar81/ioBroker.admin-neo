@@ -89,12 +89,33 @@ function Logs(main) {
             }).on('error', function (e) {
                 alert($.i18n('log-copy-error'), 'error');
             });
-            
+
             $('#log-outer').find('[data-i18n]').i18n();
             $('#log-outer').bootstrapTable();
-            
+
         });
 
+    };
+
+    this.getLogSize = function () {
+        if (!this.main.currentHost) {
+            setTimeout(function () {
+                that.init();
+            }, 500);
+            return 0;
+        }
+        
+        var logSize = 0;
+
+        this.main.socket.emit('sendToHost', this.main.currentHost, 'getLogs', 200, function (lines) {
+            var size = lines ? lines.pop() : -1;
+            if (size !== -1) {
+                size = parseInt(size);
+                logSize = (size / (1024 * 1024)).toFixed(2);
+            }
+        });
+        
+        return logSize;
     };
 
     // -------------------------------- Logs ------------------------------------------------------------
@@ -107,7 +128,7 @@ function Logs(main) {
         }
 
         $('#log-table').html('');
-        
+
         this.main.socket.emit('sendToHost', this.main.currentHost, 'getLogs', 200, function (lines) {
             setTimeout(function () {
                 var size = lines ? lines.pop() : -1;
@@ -195,8 +216,9 @@ function Logs(main) {
         var visible = '';
         var from = message.from ? message.from.replace(/\./g, '-') : '';
 
-        if (this.logFilterHost && this.logFilterHost !== from)
+        if (this.logFilterHost && this.logFilterHost !== from) {
             visible = 'display: none';
+        }
 
         if (!visible && this.logFilterSeverity) {
             if (this.logFilterSeverity === 'info' && message.severity === 'debug') {
@@ -212,10 +234,10 @@ function Logs(main) {
             visible = 'display: none';
         }
 
-        if (message.severity === 'error'){
+        if (message.severity === 'error') {
             $('a[href="#tab-log"]').addClass('errorLog');
         }
-       
+
         var text = '<tr id="log-line-' + (this.logLinesStart + this.logLinesCount) + '" class="log-line log-severity-' + message.severity + ' ' + (from ? 'log-from-' + from : '') + '" style="' + visible + '">';
         text += '<td class="log-column-1">' + (message.from || '') + '</td>';
         text += '<td class="log-column-2">' + this.main.formatDate(message.ts) + '</td>';
@@ -241,14 +263,12 @@ function Logs(main) {
             $logOuter.find('.log-severity-info').hide();
             $logOuter.find('.log-severity-warn').hide();
             $logOuter.find('.log-severity-error').show();
-        } else
-        if (that.logFilterSeverity === 'warn') {
+        } else if (that.logFilterSeverity === 'warn') {
             $logOuter.find('.log-severity-debug').hide();
             $logOuter.find('.log-severity-info').hide();
             $logOuter.find('.log-severity-warn').show();
             $logOuter.find('.log-severity-error').show();
-        } else
-        if (that.logFilterSeverity === 'info') {
+        } else if (that.logFilterSeverity === 'info') {
             $logOuter.find('.log-severity-debug').hide();
             $logOuter.find('.log-severity-info').show();
             $logOuter.find('.log-severity-warn').show();
@@ -263,8 +283,7 @@ function Logs(main) {
             $logOuter.find('.log-line').each(function () {
                 if (that.logFilterHost && !$(this).hasClass('log-from-' + that.logFilterHost)) {
                     $(this).hide();
-                } else
-                if (that.logFilterMessage && $(this).html().indexOf(that.logFilterMessage) === -1) {
+                } else if (that.logFilterMessage && $(this).html().indexOf(that.logFilterMessage) === -1) {
                     $(this).hide();
                 }
             });
@@ -272,8 +291,9 @@ function Logs(main) {
     };
 
     this.clear = function (isReload) {
-        if (isReload === undefined)
+        if (isReload === undefined) {
             isReload = true;
+        }
         $('#log-table').html('');
         this.logLinesCount = 0;
         this.logLinesStart = 0;

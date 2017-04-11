@@ -261,7 +261,7 @@ function Instances(main) {
         }
     }
 
-    function calculateTotalRam() {
+    this.calculateTotalRam = function(page) {
         var host = that.main.states['system.host.' + that.main.currentHost + '.memRss'];
         var processes = 1;
         var mem = host ? host.val : 0;
@@ -278,36 +278,36 @@ function Instances(main) {
             }
         }
         var text = $.i18n('countProcesses', processes);
-        var $running_processes = $('#running_processes');
+        var $running_processes = $('#' + page + 'RunningProcesses');
         if (text !== $running_processes.text()) {
             $running_processes.html('<span class="highlight">' + text + '</span>')
         }
 
         return Math.round(mem);
-    }
+    };
 
-    function calculateFreeMem() {
+    this.calculateFreeMem = function(page) {
         var host = that.main.states['system.host.' + that.main.currentHost + '.freemem'];
         if (host) {
             that.totalmem = that.totalmem || that.main.objects['system.host.' + that.main.currentHost].native.hardware.totalmem / (1024 * 1024);
             var percent = Math.round((host.val / that.totalmem) * 100);
 
             if (host.val.toString() !== $('#freeMem').text()) {
-                $('#freeMemPercent').text(percent + ' %');
-                $("#freeMemSparkline").sparkline([that.totalmem - host.val, host.val], {
+                $('#' + page + 'FreeMemPercent').text(percent + ' %');
+                $("#" + page + "FreeMemSparkline").sparkline([that.totalmem - host.val, host.val], {
                     type: 'pie',
                     sliceColors: ["#F78181", "#088A29"],
                     height: "40px",
                     width: "40px"
                 });
-                $('#freeMemSparkline > canvas').css('vertical-align', 'middle');
+                $('#' + page + 'FreeMemSparkline > canvas').css('vertical-align', 'middle');
             }
         } else {
             $('.free-mem-label').hide();
         }
 
         return Math.round(host.val);
-    }
+    };
 
     function calculateRam(instanceId) {
         var mem;
@@ -700,8 +700,8 @@ function Instances(main) {
             }
 
             $('#currentHost').html(this.main.currentHost);
-            var totalRam = calculateTotalRam();
-            var freeRam = calculateFreeMem();
+            var totalRam = that.calculateTotalRam('instances');
+            var freeRam = that.calculateFreeMem('instances');
             $('#totalRamText').text($.i18n('totalRamText', totalRam, freeRam));
         }
 

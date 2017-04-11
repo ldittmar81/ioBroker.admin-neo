@@ -14,30 +14,40 @@ function Home(main) {
 
     this.init = function () {
 
+        if (this.main.currentHost) {
+            var totalRam = that.main.menus.instances.calculateTotalRam('home');
+            var freeRam = that.main.menus.instances.calculateFreeMem('home');
+            $('#homeTotalRamText').text($.i18n('totalRamText', totalRam, freeRam));
+
+            var logSize = that.main.menus.logs.getLogSize();
+            $('#homeLogSize').text(logSize + " MB");
+        }
+
         requestCrossDomain("http://forum.iobroker.net/feed.php?mode=topics", that.getForumData);
 
         this.main.fillContent('#menu-home-div');
+        
         startClock();
     };
 
     this.getForumData = function (data) {
-        var $forumContent = $($.parseXML(data['results'][0]));
-        var forumData = {};
-        
-        $('#forumTitle').text($forumContent.find('title:first').text());
-        $('#forumTime').text($forumContent.find('updated:first').text());
-        $('#forum-link').attr("href", $forumContent.find('link:nth-of-type(2)').attr('href'));
-        
-        $('entry', $forumContent).each(function () {
-            var $item = $('#forumEntryTemplate').children().clone(true, true);
-            $item.find('.forumClass').text($(this).find('category').eq(0).attr('label').replace('ioBroker ', ''));
-            $item.find('.titleLink').text($(this).find('title').eq(0).text())
-                    .attr('href', $(this).find('link').eq(0).attr('href'));
-            $item.find('.description').html($(this).find('content').eq(0).text());
-            $item.find('.byline').text($(this).find('updated').eq(0).text());
-            $('#forumList').append($item);
-        });
-       
+        if (data['results'] && data['results'][0]) {
+            var $forumContent = $($.parseXML(data['results'][0]));
+
+            $('#forumTitle').text($forumContent.find('title:first').text());
+            $('#forumTime').text($forumContent.find('updated:first').text());
+            $('#forum-link').attr("href", $forumContent.find('link:nth-of-type(2)').attr('href'));
+
+            $('entry', $forumContent).each(function () {
+                var $item = $('#forumEntryTemplate').children().clone(true, true);
+                $item.find('.forumClass').text($(this).find('category').eq(0).attr('label').replace('ioBroker ', ''));
+                $item.find('.titleLink').text($(this).find('title').eq(0).text())
+                        .attr('href', $(this).find('link').eq(0).attr('href'));
+                $item.find('.description').html($(this).find('content').eq(0).text());
+                $item.find('.byline').text($(this).find('updated').eq(0).text());
+                $('#forumList').append($item);
+            });
+        }
     };
 
     function startClock() {

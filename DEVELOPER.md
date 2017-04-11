@@ -74,6 +74,7 @@ alert('Hello World'); // == alert('Hello World', 'notice', $.i18n('notice');
 ### JS
 * Bootstrap 3.3.7 http://getbootstrap.com/
 * jQuery 3.3.1 https://api.jquery.com/
+* jQuery UI 1.12.1 (Drag & Drop + Blind) https://jqueryui.com/download/#!version=1.12.1&components=101000000100110000000000010000001100000000000000
 * jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
 * Bootbox 4.4.0 https://bootboxjs.com/
 * Bootstrap Select 1.12.2 https://silviomoreto.github.io/bootstrap-select/
@@ -91,6 +92,7 @@ alert('Hello World'); // == alert('Hello World', 'notice', $.i18n('notice');
 * Bootstrap Table - Mobile 1.0.0 https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/mobile
 * jQuery Sparkline 2.1.2 http://omnipotent.net/jquery.sparkline/#s-about
 * clipboard.js 1.6.1 https://clipboardjs.com/
+* Fancytree 2.22.0 https://github.com/mar10/fancytree
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations
