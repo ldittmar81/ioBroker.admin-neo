@@ -21,12 +21,62 @@ function Home(main) {
 
             var logSize = that.main.menus.logs.getLogSize();
             $('#homeLogSize').text(logSize + " MB");
+
+            that.main.menus.adapters.getAdaptersInfo(this.main.currentHost, null, null, function (repository, installedList) {
+
+                var listUpdatable = [];
+                var listNew = [];
+
+                if (installedList) {
+                    for (var adapter in installedList) {
+                        if (!installedList.hasOwnProperty(adapter)) {
+                            continue;
+                        }
+                        var obj = installedList[adapter];
+                        if (!obj || obj.controller || adapter === 'hosts' || !obj.version) {
+                            continue;
+                        }
+                        var version = '';
+                        if (repository[adapter] && repository[adapter].version) {
+                            version = repository[adapter].version;
+                        }
+                        if (!that.main.upToDate(version, obj.version)) {
+                            listUpdatable.push(adapter);
+                        }
+
+                    }
+                    listUpdatable.sort();
+                }
+                fillList('update', listUpdatable, repository, installedList);
+
+                var now = new Date();
+                for (var adapter in repository) {
+                    if (!repository.hasOwnProperty(adapter)) {
+                        continue;
+                    }
+                    var obj = repository[adapter];
+                    if (!obj || obj.controller) {
+                        continue;
+                    }
+                    if (installedList && installedList[adapter]) {
+                        continue;
+                    }
+                    if (!obj.published || !((now - new Date(obj.published)) < 3600000 * 24 * 31)) {
+                        continue;
+                    }
+                    listNew.push(adapter);
+                }
+                listNew.sort();
+
+                fillList('new', listNew, repository, installedList);
+
+            });
         }
 
         requestCrossDomain("http://forum.iobroker.net/feed.php?mode=topics", that.getForumData);
 
         this.main.fillContent('#menu-home-div');
-        
+
         startClock();
     };
 
@@ -49,6 +99,40 @@ function Home(main) {
             });
         }
     };
+
+    function fillList(type, list, repository, installedList) {
+        var $ul = $('#' + type + 'HomeList');
+        var isInstalled = type === "update";
+
+        for (var i = 0; i < list.length; i++) {
+
+            var $tmpLiElement = $('#' + type + 'HomeListTemplate').children().clone(true, true);
+
+            var adapter = list[i];
+            var obj = isInstalled ? (installedList ? installedList[adapter] : null) : repository[adapter];
+
+            $tmpLiElement.find('.title').text((obj.title || '').replace('ioBroker Visualisation - ', ''));
+            $tmpLiElement.find('.version').text(obj.version);
+
+            if (isInstalled && repository[adapter]) {
+                $tmpLiElement.find('.newVersion').text(repository[adapter].version);
+                var news = that.main.menus.adapters.getNews(obj.version, repository[adapter])
+                if (news) {
+                    $tmpLiElement.find('.notesVersion').attr('title', news);
+                } else {
+                    $tmpLiElement.find('.notesVersion').remove();
+                }
+            } else if (!isInstalled) {
+                if (obj.readme) {
+                    $tmpLiElement.find('.adapter-readme-submit').attr('data-md-url', obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', ''));
+                } else {
+                    $tmpLiElement.find('.adapter-readme-submit').remove();
+                }
+            }
+
+            $ul.append($tmpLiElement);
+        }
+    }
 
     function startClock() {
         isClockOn = true;

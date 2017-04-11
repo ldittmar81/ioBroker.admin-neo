@@ -16,12 +16,12 @@
                 <div class="tile-stats">
                     <div class="icon"><i class="fa fa-microchip"></i></div>
                     <div class="count">
-                        <span id="homeFreeMemPercent">10%</span>
+                        <span id="homeFreeMemPercent">-%</span>
                         <span id="homeFreeMemSparkline"></span>
                     </div>
                     <h3 data-i18n="freeMem">free RAM</h3>
                     <p>
-                        <span id="homeTotalRamText">Von 900 MB RAM sind noch 120 MB frei.</span> 
+                        <span id="homeTotalRamText">-</span> 
                     </p>
                 </div>
             </div>      
@@ -29,7 +29,7 @@
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                     <div class="icon"><i class="fa fa-tasks"></i></div>
-                    <div class="count" id="homeRunningProcesses">200</div>
+                    <div class="count" id="homeRunningProcesses">-</div>
                     <h3 data-i18n="running_processes">running processes</h3>
                     <p>
                         <span data-i18n="host">Host</span>: 
@@ -51,8 +51,8 @@
 
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 clock">
                 <div class="tile-stats overflow_visible">
-                    <div class="count specialclock col-lg-8 col-md-3 col-sm-6 col-xs-6" id="date_now">23. Januar 2017</div>
-                    <h3 class="specialclock" style="top: 65px;" id="weekday_now">Samstag</h3>
+                    <div class="count specialclock col-lg-8 col-md-3 col-sm-6 col-xs-6" id="date_now">-</div>
+                    <h3 class="specialclock" style="top: 65px;" id="weekday_now">-</h3>
                     <ul id="cssClock">
                         <li id="cssSec"></li>
                         <li id="cssHour"></li>
@@ -69,7 +69,9 @@
         <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Update List <small>Instances to be updated</small></h2>
+                    <h2>
+                        <span data-i18n="updateList">Update List</span> <small data-i18n="updateListText">Instances to be updated</small>
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -79,17 +81,7 @@
                 </div>
                 <div class="x_content">
                     <div class="">
-                        <ul class="to_do">
-                            <li>
-                                <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> fronius adapter 0.0.6 <i class="fa fa-arrow-right"></i> <strong>0.1.0</strong></p> 
-                            </li>
-                            <li>
-                                <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> vis adapter 1.0.6 <i class="fa fa-arrow-right"></i> <strong>2.1.0</strong></p> 
-                            </li>
-                            <li>
-                                <p><a class="btn btn-default"><i class="fa fa-refresh"></i></a> homematic adapter 0.5.6 <i class="fa fa-arrow-right"></i> <strong>0.9.0</strong></p> 
-                            </li>                    
-                        </ul>
+                        <ul id="updateHomeList"></ul>
                     </div>
                 </div>
             </div>
@@ -98,7 +90,9 @@
         <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>New Adapters <small>The newest adapters</small></h2>
+                    <h2>
+                        <span data-i18n="newList">New Adapters</span> <small data-i18n="newListText">The newest adapters</small>
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -108,17 +102,7 @@
                 </div>
                 <div class="x_content">
                     <div class="">
-                        <ul class="to_do">
-                            <li>
-                                <p><a class="btn btn-default"><i class="fa fa-plus"></i></a> fronius adapter 0.0.6 <i class="fa fa-arrow-right"></i> <strong>0.1.0</strong></p> 
-                            </li>
-                            <li>
-                                <p><a class="btn btn-default"><i class="fa fa-plus"></i></a> vis adapter 1.0.6 <i class="fa fa-arrow-right"></i> <strong>2.1.0</strong></p> 
-                            </li>
-                            <li>
-                                <p><a class="btn btn-default"><i class="fa fa-plus"></i></a> homematic adapter 0.5.6 <i class="fa fa-arrow-right"></i> <strong>0.9.0</strong></p> 
-                            </li>                    
-                        </ul>
+                        <ul id="newHomeList"></ul>
                     </div>
                 </div>
             </div>
@@ -175,3 +159,33 @@
     </li>
 </ul>
 <!-- / Forum Entry -->
+
+<!-- UpdateList -->
+<ul id="updateHomeListTemplate" class="hidden">
+    <li>
+        <p>
+            <a class="btn btn-default"><i class="fa fa-refresh"></i></a>&npsb;
+            <span class="title">fronius adapter</span>&npsb;
+            <span class="version">0.0.6</span>&npsb;
+            <i class="fa fa-arrow-right"></i>&npsb;
+            <strong class="newVersion">0.1.0</strong>&npsb;
+            <a href="javascript:;" class="notesVersion" data-toggle="tooltip" title="infos"><i class="fa fa-info-circle text-info"></i></a>
+        </p> 
+    </li>
+</ul>
+<!-- / UpdateList -->
+
+<!-- NewList -->
+<ul id="newHomeListTemplate" class="hidden">
+    <li>
+        <p>
+            <a class="btn btn-default"><i class="fa fa-plus"></i></a>&npsb;
+            <span class="title">fronius adapter</span>&npsb;
+            <span class="version">0.0.6</span>&npsb;
+            <a href="javascript:;" class="adapter-readme-submit show-md" data-i18-tooltip="clickForInfo">
+                <i class="fa fa-info-circle text-info"></i>
+            </a>
+        </p> 
+    </li>
+</ul>
+<!-- / NewList -->

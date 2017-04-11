@@ -52,7 +52,7 @@ function Adapters(main) {
             $adapterTemplate = $('#adapterTemplateAdapter');
             $adapterNewTemplate = $('#adapterTemplateNewAdapter');
             $adapterTemplateInside = $('#adapterTemplateAdapterInside');
-            
+
             $('#btn_collapse_adapters').click(function () {
                 $('.collapse-link').each(function () {
                     var $ICON = $(this).find('i');
@@ -272,6 +272,7 @@ function Adapters(main) {
             }
         }
     };
+
     function customFilter(node) {
 
         if (that.currentFilter) {
@@ -302,7 +303,7 @@ function Adapters(main) {
             throw 'Callback cannot be null or undefined';
         }
         if (update) {
-// Do not update too often
+            // Do not update too often
             if (!this.curRepoLastUpdate || ((new Date()).getTime() - this.curRepoLastUpdate > 1000)) {
                 this.curRepository = null;
                 this.curInstalled = null;
@@ -368,7 +369,8 @@ function Adapters(main) {
             this.curRunning = [callback];
         }
     };
-    function getNews(actualVersion, adapter) {
+
+    this.getNews = function (actualVersion, adapter) {
         var text = '';
         if (adapter.news) {
             for (var v in adapter.news) {
@@ -382,7 +384,7 @@ function Adapters(main) {
             }
         }
         return text;
-    }
+    };
 
     function checkDependencies(dependencies) {
         if (!dependencies)
@@ -473,7 +475,7 @@ function Adapters(main) {
             if (isInstalled && obj.version) {
                 var updatable = false;
                 if (!that.main.upToDate(version, obj.version)) {
-                    installed.news = getNews(obj.version, repository[adapter]);
+                    installed.news = that.getNews(obj.version, repository[adapter]);
                     // check if version is compatible with current adapters and js-controller
                     updatable = true;
                     installed.updatableError = checkDependencies(repository[adapter].dependencies);
@@ -633,7 +635,6 @@ function Adapters(main) {
 
         this.main.fillContent('#menu-adapters-div');
     };
-
     this.createAdapterTiles = function () {
         for (var i in this.tree) {
             if (i === "remove") {
@@ -643,7 +644,7 @@ function Adapters(main) {
             var $tempGroup = $adapterGroupTemplate.children().clone(true, true);
             $tempGroup.find('.group_title').text(group.title);
             $tempGroup.find('.group_img').attr('src', group.icon).attr('alt', group.title);
-            
+
             for (var z in group.children) {
                 var adapter = that.data[group.children[z]];
                 if (adapter) {
@@ -783,6 +784,7 @@ function Adapters(main) {
 
     this.objectChange = function (id, obj) {
     };
+
     function showUploadProgress(group, adapter, percent) {
 
     }
