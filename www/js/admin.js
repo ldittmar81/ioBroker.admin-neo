@@ -956,6 +956,7 @@ var adapterRedirect = function (redirect, timeout) {
         // ---------------------------- Socket.io methods ---------------------------------------------
         main.socket.on('log', function (message) {
             menus.logs.add(message);
+            restartFunctions('#log_error_list');
         });
         main.socket.on('error', function (error) {
             console.log(error);

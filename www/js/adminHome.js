@@ -19,7 +19,7 @@ function Home(main) {
             var freeRam = that.main.menus.instances.calculateFreeMem('home');
             $('#homeTotalRamText').text($.i18n('totalRamText', totalRam, freeRam));
 
-            var logSize = that.main.menus.logs.getLogSize();
+            var logSize = that.main.menus.logs.logSize;
             $('#homeLogSize').text(logSize + " MB");
 
             that.main.menus.adapters.getAdaptersInfo(this.main.currentHost, null, null, function (repository, installedList) {

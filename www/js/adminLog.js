@@ -9,6 +9,8 @@ function Logs(main) {
 
     this.logLinesCount = 0;
     this.logLinesStart = 0;
+    this.errorCount = 0;
+    this.logSize = 0;
     this.logHosts = [];
     this.logFilterTimeout = null;
     this.logFilterHost = '';
@@ -97,27 +99,6 @@ function Logs(main) {
 
     };
 
-    this.getLogSize = function () {
-        if (!this.main.currentHost) {
-            setTimeout(function () {
-                that.init();
-            }, 500);
-            return 0;
-        }
-        
-        var logSize = 0;
-
-        this.main.socket.emit('sendToHost', this.main.currentHost, 'getLogs', 200, function (lines) {
-            var size = lines ? lines.pop() : -1;
-            if (size !== -1) {
-                size = parseInt(size);
-                logSize = (size / (1024 * 1024)).toFixed(2);
-            }
-        });
-        
-        return logSize;
-    };
-
     // -------------------------------- Logs ------------------------------------------------------------
     this.init = function () {
         if (!this.main.currentHost) {
@@ -134,8 +115,13 @@ function Logs(main) {
                 var size = lines ? lines.pop() : -1;
                 if (size !== -1) {
                     size = parseInt(size);
-                    $('#log-size').html(($.i18n('logsize') + ': ' + ((size / (1024 * 1024)).toFixed(2) + ' MB ')).replace(/ /g, '&nbsp;'));
+                    that.logSize = (size / (1024 * 1024)).toFixed(2);
+                    $('#log-size').html($.i18n('logsize') + ': ' + (that.logSize + ' MB ').replace(/ /g, '&nbsp;'));
                 }
+
+                that.errorCount = 0;
+                $(".errorLogInfo").remove();
+
                 for (var i = 0; i < lines.length; i++) {
                     if (!lines[i]) {
                         continue;
@@ -165,6 +151,7 @@ function Logs(main) {
                     }
                     that.add(message);
                 }
+                restartFunctions('#log_error_list');
 
                 that.logFilterHost = that.$logFilterHost.val();
                 that.logFilterMessage = that.$logFilterMessage.val();
@@ -198,8 +185,9 @@ function Logs(main) {
         //message = {message: msg, severity: level, from: this.namespace, ts: (new Date()).getTime()}
         if (this.logLinesCount >= this.logLimit) {
             var line = document.getElementById('log-line-' + (this.logLinesStart + 1));
-            if (line)
+            if (line) {
                 line.outerHTML = '';
+            }
             this.logLinesStart++;
         } else {
             this.logLinesCount++;
@@ -243,6 +231,20 @@ function Logs(main) {
         text += '<td class="log-column-2">' + this.main.formatDate(message.ts) + '</td>';
         text += '<td class="log-column-3">' + message.severity + '</td>';
         text += '<td class="log-column-4" title="' + message.message.replace(/"/g, "'") + '">' + message.message.substring(0, 200) + '</td></tr>';
+
+        if (message.severity === "error") {
+            this.errorCount += 1;
+            $('#log_error_count').text(this.errorCount);
+            if (this.errorCount === 1) {
+                $('#log_error_count').removeClass('bg-green').addClass('bg-red');
+            }
+            if (this.errorCount > 10) {
+                $('#log_error_list li:nth-last-child(2)').remove();
+            }
+            var count = (message.from || '').length + message.message.length;
+            $('#log_error_list')
+                    .prepend('<li class="errorLogInfo" ' + (count > 30 ? 'title="' + message.message.substring(0, 200) + '" data-toggle="tooltip"' : '') + '><strong>' + (message.from || '') + '</strong> - ' + message.message.substring(0, 20) + (count > 30 ? '...' : '') + '</li>');
+        }
 
         $('#log-table').prepend(text);
     };
@@ -322,6 +324,7 @@ function Logs(main) {
             for (var i = 0; i < this.logPauseList.length; i++) {
                 this.add(this.logPauseList[i]);
             }
+            restartFunctions('#log_error_list');
             this.logPauseOverflow = false;
             this.logPauseList = [];
             this.logPauseCounter = 0;

@@ -12,3 +12,23 @@
     padding-left: 18px !important;
     padding-top: 12px !important;
 }
+
+.log-severity-warn{
+    background-color: #fcf8e3;
+}
+.table-striped>tbody>tr:nth-of-type(odd).log-severity-warn {
+    background-color: #fcf8e3;
+}
+.table-hover>tbody>tr.log-severity-warn:hover{
+    background-color:#fcf8e3
+}
+
+.log-severity-error{
+    background-color: #f2dede;
+}
+.table-striped>tbody>tr:nth-of-type(odd).log-severity-error {
+    background-color: #f2dede;
+}
+.table-hover>tbody>tr.log-severity-error:hover{
+    background-color:#f2dede
+}
