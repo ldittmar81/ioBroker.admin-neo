@@ -257,14 +257,16 @@ function Objects(main) {
         $('#objects-view-mode option').not(':first').remove();
         for (var key in that.enums.enum) {
             var enums = that.enums.enum[key];
+            if (enums['common']) {
+                $('#objects-view-mode').append($('<option>', {
+                    value: key,
+                    text: enums['common']['name']
+                }));
+            }
 
-            $('#objects-view-mode').append($('<option>', {
-                value: key,
-                text: enums.common['name']
-            }));
         }
         $('#objects-view-mode').selectpicker('refresh');
-    }
+    };
 
     this.createObjects = function () {
         for (var key in that.objs) {           
@@ -275,7 +277,7 @@ function Objects(main) {
                 $objectsContainer.append($tempGroup);
             }
         }
-    }
+    };
 
     function createObjectData(elem) {
         var text = "";

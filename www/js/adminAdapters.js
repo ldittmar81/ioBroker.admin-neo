@@ -507,7 +507,7 @@ function Adapters(main) {
             }
 
             var group = (obj.type || 'common adapters') + '_group';
-            if (!(group in  groupImages)) {
+            if (!(group in that.groupImages)) {
                 group = 'unknown_group';
             }
             var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
@@ -540,7 +540,7 @@ function Adapters(main) {
             if (!obj.type) {
                 console.log('"' + adapter + '": "common adapters",');
             }
-            if (obj.type && that.types[adapter]) {
+            if (obj.type && that.types && that.types[adapter]) {
                 console.log('Adapter "' + adapter + '" has own type. Remove from admin.');
             }
 
