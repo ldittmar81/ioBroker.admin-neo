@@ -22,8 +22,8 @@ function Adapters(main) {
         'platform_group': 'img/groups/platform.png',
         'kitchen&home_group': 'img/groups/kitchen.png',
         'garden_group': 'img/groups/garden.png',
-        'cameras': 'img/groups/camera.png',
-        'alarm': 'img/groups/alarm.png',
+        'cameras_group': 'img/groups/camera.png',
+        'alarm_group': 'img/groups/alarm.png',
         'script_group': 'img/groups/script.png',
         'media_group': 'img/groups/media.png',
         'communication_group': 'img/groups/communication.png',
@@ -32,7 +32,8 @@ function Adapters(main) {
         'weather_group': 'img/groups/weather.png',
         'schedule_group': 'img/groups/schedule.png',
         'vis_group': 'img/groups/vis.png',
-        'service_group': 'img/groups/service.png'
+        'service_group': 'img/groups/service.png',
+        'unknown_group': 'img/groups/unknown.png'
     };
     this.isList = false;
     this.filterVals = {length: 0};
@@ -40,9 +41,6 @@ function Adapters(main) {
     this.onlyUpdatable = false;
     this.currentFilter = '';
     this.isCollapsed = {};
-    this.types = {
-        occ: 'schedule'
-    };
     this.prepare = function () {
         $('#menu-adapters-div').load("templates/adapters.html", function () {
 
@@ -508,7 +506,10 @@ function Adapters(main) {
                 }
             }
 
-            var group = (obj.type || that.types[adapter] || 'common adapters') + '_group';
+            var group = (obj.type || 'common adapters') + '_group';
+            if (!(group in  groupImages)) {
+                group = 'unknown_group';
+            }
             var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
             desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
             if (obj.readme) {

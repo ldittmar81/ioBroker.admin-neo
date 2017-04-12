@@ -214,7 +214,7 @@ function Hosts(main) {
             case "win32":
                 icon = "fa-windows";
                 break;
-            case "osx":
+            case "darwin":
                 icon = "fa-apple";
                 break;
             default:
