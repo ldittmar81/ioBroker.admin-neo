@@ -95,6 +95,8 @@ function Home(main) {
                 $item.find('.titleLink').text($(this).find('title').eq(0).text())
                         .attr('href', $(this).find('link').eq(0).attr('href'));
                 $item.find('.description').html($(this).find('content').eq(0).text());
+                $item.find('.postimage').addClass('img-responsive');
+                $item.find('.description a').attr('target', '_blank');
                 $item.find('.byline').text(main.formatDate(new Date($(this).find('updated').eq(0).text()), false, true) + " - " + $(this).find('name').eq(0).text());
                 $('#forumList').prepend($item);
             });

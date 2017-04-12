@@ -17,23 +17,32 @@ function Adapters(main) {
     this.data = {};
     this.urls = {};
     this.groupImages = {
-        'common adapters_group': 'img/groups/common.png',
-        'hardware_group': 'img/groups/hardware.png', //will be deleted after split
-        'platform_group': 'img/groups/platform.png',
-        'kitchen&home_group': 'img/groups/kitchen.png',
-        'garden_group': 'img/groups/garden.png',
-        'cameras_group': 'img/groups/camera.png',
         'alarm_group': 'img/groups/alarm.png',
-        'script_group': 'img/groups/script.png',
-        'media_group': 'img/groups/media.png',
+        'cameras_group': 'img/groups/camera.png',
         'communication_group': 'img/groups/communication.png',
-        'visualisation_group': 'img/groups/visualisierung.png',
-        'storage_group': 'img/groups/storage.png',
-        'weather_group': 'img/groups/weather.png',
-        'schedule_group': 'img/groups/schedule.png',
+        'date_and_time_group': 'img/groups/date_and_time.png',
+        'energy_group': 'img/groups/unknown.png',
+        'garden_group': 'img/groups/garden.png',
+        'general_group': 'img/groups/general.png',
+        'hardware_group': 'img/groups/hardware.png',
+        'heating_group': 'img/groups/unknown.png',
+        'household_group': 'img/groups/household.png',
+        'iot-systems_group': 'img/groups/iot-systems.png',
+        'lighting_group': 'img/groups/unknown.png',
+        'logic_group': 'img/groups/script.png',
+        'messaging_group': 'img/groups/unknown.png',
+        'misc_group': 'img/groups/unknown.png',
+        'multimedia_group': 'img/groups/media.png',
+        'network_group': 'img/groups/unknown.png',
         'vis_group': 'img/groups/vis.png',
-        'service_group': 'img/groups/service.png',
-        'unknown_group': 'img/groups/unknown.png'
+        'vis-icons_group': 'img/groups/unknown.png',
+        'visualisation_group': 'img/groups/visualisation.png',
+        'office_group': 'img/groups/unknown.png',
+        'protocols_group': 'img/groups/unknown.png',
+        'storage_group': 'img/groups/storage.png',
+        'utility_group': 'img/groups/utility.png',
+        'weather_group': 'img/groups/weather.png',
+        'unknown_group': 'img/groups/unknown.png'        
     };
     this.isList = false;
     this.filterVals = {length: 0};
