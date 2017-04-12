@@ -278,6 +278,9 @@ String.prototype.text2iconClass = function () {
     // Translation/Tooltip
     $(function () {
         changeLanguage(systemLang);
+        $("body").tooltip({
+            selector: '[data-toggle="tooltip"]'
+        });
     });
     // / Translation/Tooltip
 
@@ -328,10 +331,7 @@ function changeLanguage(lang) {
         $("[data-i18n-tooltip]").each(function () {
             var $this = $(this);
             $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
-        });
-        $('[data-toggle="tooltip"]').tooltip({
-            container: 'body'
-        });
+        });       
     });
 }
 
@@ -357,13 +357,7 @@ function restartFunctions(selector) {
     });
     $(selector).find('[data-i18n-tooltip]').each(function () {
         var $this = $(this);
-        $this.attr("title", $.i18n($this.data('i18n-tooltip'))).tooltip({
-            title: $.i18n($this.data('i18n-tooltip')),
-            container: 'body'
-        });
-    });
-    $(selector).find('[data-toggle="tooltip"]').tooltip({
-        container: 'body'
+        $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
     });
 }
 
