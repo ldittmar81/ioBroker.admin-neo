@@ -209,8 +209,9 @@ function Objects(main) {
 
         this.assignObjectsMembers();
 
-        $objectsTable.fancytable(treeOptions);
-        $objectsTable.reload(that.objs);
+        $objectsTable.fancytree(that.treeOptions);
+        var objectTree = $objectsTable.fancytree('getTree');
+        //objectTree.reload(that.objs);
 
         this.main.fillContent('#menu-objects-div');
     };

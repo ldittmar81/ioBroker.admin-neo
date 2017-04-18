@@ -45,7 +45,7 @@ function Enums(main) {
         }
     };
 
-    var $enumsContainer, $enumsTable, $enumsOrbit;
+    var $enumsTemplate, $enumsTable, $enumsOrbit, $enumsContainer;
 
     var enumCurrentParent = '';
     var tasks = [];
@@ -106,9 +106,10 @@ function Enums(main) {
     this.prepare = function () {
         $('#menu-enums-div').load("templates/enums.html", function () {
 
-            $enumsContainer = $('#enumsTemplate');
+            $enumsTemplate = $('#enumsTemplate');
             $enumsTable = $('#enumsTableTemplate');
             $enumsOrbit = $('#enumsOrbitTemplate');
+            $enumsContainer = $('.enums-container');
 
         });
     };
@@ -118,6 +119,8 @@ function Enums(main) {
             setTimeout(that.init, 250);
             return;
         }
+        
+        $enumsContainer.html('');
 
         if (that.isOrbit) {
             loadOrbitEnumMembers();
@@ -130,7 +133,7 @@ function Enums(main) {
 
     function loadEnumMembers() {
         var $tmpTable = $enumsTable.children().clone(true, true);
-        $enumsContainer.find('.enums-container').append($tmpTable);
+        $enumsContainer.append($tmpTable);
 
         var $enumList = $tmpTable.find('.enumList');
         $enumList.fancytree(that.treeOptions);
@@ -145,8 +148,10 @@ function Enums(main) {
             assign(key.startsWith('enum.') ? that.enums : that.objs, key, main.objects[key]);
         }
 
-        $enumList.reload(that.enums);
-        $objectList.reload(that.objs);
+        var enumTree = $enumList.fancytree('getTree');
+        //enumTree.reload(that.enums);
+        var objectTree = $objectList.fancytree('getTree');
+        //objectTree.reload(that.objs);
 
     }
 
