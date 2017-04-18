@@ -9,6 +9,7 @@ function Enums(main) {
     this.updateTimers = null;
     this.isOrbit = false;
     this.treeOptions = {
+        source: [],
         extensions: ["dnd", "edit", "glyph", "wide"],
         glyph: that.main.glyph_opts,
         wide: {
@@ -142,16 +143,16 @@ function Enums(main) {
         $objectList.fancytree(that.treeOptions);
         $objectList.fancytree("option", "dnd", dndEnumObjectList);
 
-        that.objs = {};
-        that.enums = {};
+        that.objs = [];
+        that.enums = [];
         for (var key in main.objects) {
             assign(key.startsWith('enum.') ? that.enums : that.objs, key, main.objects[key]);
         }
-
+        
         var enumTree = $enumList.fancytree('getTree');
-        //enumTree.reload(that.enums);
+        enumTree.reload(convertToEnumTree(that.enums, 'enum'));
         var objectTree = $objectList.fancytree('getTree');
-        //objectTree.reload(that.objs);
+        objectTree.reload(convertToObjectTree(that.objs));
 
     }
 
