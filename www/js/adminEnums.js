@@ -7,6 +7,43 @@ function Enums(main) {
     this.list = [];
     this.enumEdit = null;
     this.updateTimers = null;
+    this.isOrbit = false;
+    this.treeOptions = {
+        extensions: ["dnd", "edit", "glyph", "wide"],
+        glyph: that.main.glyph_opts,
+        wide: {
+            iconWidth: "1em", // Adjust this if @fancy-icon-width != "16px"
+            iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
+            labelSpacing: "0.1em", // Adjust this if padding between icon and label != "3px"
+            levelOfs: "1.5em"       // Adjust this if ul padding != "16px"
+        }
+    };
+
+    var dndEnumObjectList = {
+        focusOnClick: true,
+        dragStart: function (node, data) {
+            return true;
+        },
+        dragEnter: function (node, data) {
+            return false;
+        },
+        dragDrop: function (node, data) {
+            data.otherNode.copyTo(node, data.hitMode);
+        }
+    };
+    
+    var dndEnumList = {
+        focusOnClick: true,
+        dragStart: function (node, data) {
+            return true;
+        },
+        dragEnter: function (node, data) {
+            return true;
+        },
+        dragDrop: function (node, data) {
+            data.otherNode.copyTo(node, data.hitMode);
+        }
+    };
 
     var $enumsContainer, $enumsTable, $enumsOrbit;
 
@@ -72,10 +109,7 @@ function Enums(main) {
             $enumsContainer = $('#enumsTemplate');
             $enumsTable = $('#enumsTableTemplate');
             $enumsOrbit = $('#enumsOrbitTemplate');
-            
-            
-            
-            $enumsTable.find('table').bootstrapTable();
+
         });
     };
 
@@ -85,19 +119,35 @@ function Enums(main) {
             return;
         }
 
-        loadEnumMembers();
-        //loadOrbitEnumMembers();
+        if (that.isOrbit) {
+            loadOrbitEnumMembers();
+        } else {
+            loadEnumMembers();
+        }
 
         this.main.fillContent('#menu-enums-div');
     };
 
     function loadEnumMembers() {
         var $tmpTable = $enumsTable.children().clone(true, true);
-        
-                
-        
         $enumsContainer.find('.enums-container').append($tmpTable);
-       
+
+        var $enumList = $tmpTable.find('.enumList');
+        $enumList.fancytree(that.treeOptions);
+        $enumList.fancytree("option", "dnd", dndEnumList);
+        var $objectList = $tmpTable.find(".objectListForEnum");
+        $objectList.fancytree(that.treeOptions);
+        $objectList.fancytree("option", "dnd", dndEnumObjectList);
+
+        that.objs = {};
+        that.enums = {};
+        for (var key in main.objects) {
+            assign(key.startsWith('enum.') ? that.enums : that.objs, key, main.objects[key]);
+        }
+
+        $enumList.reload(that.enums);
+        $objectList.reload(that.objs);
+
     }
 
     function loadOrbitEnumMembers() {

@@ -305,9 +305,9 @@ function Objects(main) {
         that.objs = {};
         that.enums = {};
         for (var key in main.objects) {
-            assign(key.startsWith('enum.') ? that.enums : that.objs, key, main.objects[key])
+            assign(key.startsWith('enum.') ? that.enums : that.objs, key, main.objects[key]);
         }
-    }
+    };
 
     this.edit = function (id, callback) {
     };

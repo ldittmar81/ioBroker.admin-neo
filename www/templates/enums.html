@@ -25,16 +25,49 @@
 
 <!-- Table -->
 <div id="enumsTableTemplate" class="hidden">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th data-field="_id" data-i18n="id"></th>
-                <th data-field="name" data-i18n="name"></th>
-                <th data-field="type" data-i18n="type"></th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-5 col-xs-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b data-i18n="enums">Enums</b>
+                </div>
+                <div class="enumList panel-body fancytree-colorize-hover fancytree-fade-expander">
+                </div>
+                <div class="panel-footer">
+                    <button class="btnExpandAll btn btn-xs btn-primary">Expand all</button>
+                    <button class="btnCollapseAll btn btn-xs btn-warning">Collapse all</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2">
+             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b data-i18n="enumObjects">Objects in enum</b>
+                </div>
+                <div class="enumObjectList panel-body fancytree-colorize-hover fancytree-fade-expander">
+                </div>
+                <div class="panel-footer">&nbsp;</div>
+            </div>
+        </div>
+        <div class="hidden-xs hidden-sm col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b data-i18n="objects">Objects</b>
+                </div>
+                <div class="objectListForEnum panel-body fancytree-colorize-hover fancytree-fade-expander">
+                </div>
+                <div class="panel-footer">
+                    <button class="btnExpandAll btn btn-xs btn-primary">Expand all</button>
+                    <button class="btnCollapseAll btn btn-xs btn-warning">Collapse all</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="hidden-xs hidden-sm col-md-12 text-center"> 
+            <button type="button" class="btn btn-danger btn-circle btn-xl"><i class="glyphicon glyphicon-trash"></i></button>
+        </div>
+    </div>
 </div>
 <!-- / Table -->
 
