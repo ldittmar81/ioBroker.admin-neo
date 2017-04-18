@@ -55,20 +55,20 @@ var adapterRedirect = function (redirect, timeout) {
             config: {},
             glyph_opts: {
                 map: {
-                    doc: "glyphicon glyphicon-file",
-                    docOpen: "glyphicon glyphicon-file",
-                    checkbox: "glyphicon glyphicon-unchecked",
-                    checkboxSelected: "glyphicon glyphicon-check",
-                    checkboxUnknown: "glyphicon glyphicon-share",
-                    dragHelper: "glyphicon glyphicon-play",
-                    dropMarker: "glyphicon glyphicon-arrow-right",
-                    error: "glyphicon glyphicon-warning-sign",
-                    expanderClosed: "glyphicon glyphicon-menu-right",
-                    expanderLazy: "glyphicon glyphicon-menu-right",
-                    expanderOpen: "glyphicon glyphicon-menu-down",
-                    folder: "glyphicon glyphicon-folder-close",
-                    folderOpen: "glyphicon glyphicon-folder-open",
-                    loading: "glyphicon glyphicon-refresh glyphicon-spin"
+                    doc: "fa fa-file-o",
+                    docOpen: "fa fa-file-o",
+                    checkbox: "fa fa-square-o",
+                    checkboxSelected: "fa fa-check-square-o",
+                    checkboxUnknown: "fa fa-square",
+                    dragHelper: "fa fa-arrow-right",
+                    dropMarker: "fa fa-long-arrow-right",
+                    error: "fa fa-warning",
+                    expanderClosed: "fa fa-caret-right",
+                    expanderLazy: "fa fa-angle-right",
+                    expanderOpen: "fa fa-caret-down",
+                    folder: "fa fa-folder-o",
+                    folderOpen: "fa fa-folder-open-o",
+                    loading: "fa fa-spinner fa-pulse"
                 }
             },
             addEventMessage: function (id, state, rowData) {

@@ -17,30 +17,34 @@
     <div class="clearfix"></div>
 
     <div id="log-container">
-        <select id="log-filter-host"></select>
-        <span data-i18n="ts">ts</span>
-        <select id="log-filter-severity">
-            <option value="" data-i18n="debug">debug</option>
-            <option value="info" data-i18n="info">info</option>
-            <option value="warn" data-i18n="warn">warn</option>
-            <option value="error" data-i18n="error">error</option>
-        </select>
-        <div>
-            <span data-i18n="message">message</span>
-            <input id="log-filter-message" type="text" size="10"/>
-            <button id="log-filter-message-clear" class="btn btn-default"><i class="fa fa-times fa-lg"></i></button>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <select id="log-filter-host"></select>
+                <span data-i18n="ts">ts</span>
+                <select id="log-filter-severity">
+                    <option value="" data-i18n="debug">debug</option>
+                    <option value="info" data-i18n="info">info</option>
+                    <option value="warn" data-i18n="warn">warn</option>
+                    <option value="error" data-i18n="error">error</option>
+                </select>
+                <div>
+                    <span data-i18n="message">message</span>
+                    <input id="log-filter-message" type="text" size="10"/>
+                    <button id="log-filter-message-clear" class="btn btn-default"><i class="fa fa-times fa-lg"></i></button>
+                </div>
+            </div>
+            <table id="log-outer" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th data-field="from" data-i18n="from"></th>
+                        <th data-field="ts" data-i18n="ts"></th>
+                        <th data-field="severity" data-i18n="severity"></th>
+                        <th data-field="message" data-i18n="message"></th>
+                    </tr>
+                </thead>
+                <tbody id="log-table"></tbody>
+            </table>
+            <div class="panel-footer">&nbsp;</div>
         </div>
-
-        <table id="log-outer" class="table table-striped">
-            <thead>
-                <tr>
-                    <th data-field="from" data-i18n="from"></th>
-                    <th data-field="ts" data-i18n="ts"></th>
-                    <th data-field="severity" data-i18n="severity"></th>
-                    <th data-field="message" data-i18n="message"></th>
-                </tr>
-            </thead>
-            <tbody id="log-table"></tbody>
-        </table>
     </div>
 </div>

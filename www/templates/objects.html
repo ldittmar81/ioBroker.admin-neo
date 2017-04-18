@@ -12,15 +12,10 @@
                 <button id="btn_list_objects" class="btn btn-default" data-i18n-tooltip="list"><i class="fa fa-list"></i></button>
                 <button id="btn_collapse_objects" class="btn btn-default" data-i18n-tooltip="collapse all"><i class="fa fa-folder"></i></button>
                 <button id="btn_expand_objects" class="btn btn-default" data-i18n-tooltip="expand all"><i class="fa fa-folder-open"></i></button>
-            </div>
-            <label for="objects-view-mode"><span data-i18n="objects-view-mode">View mode</span>:</label>
-            <select id="objects-view-mode">
-                <option value="instances" data-i18n="instances">Instances</option>
-            </select>         
+            </div>                
         </div>       
         <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-
                 <div class="input-group">
                     <input type="text" class="form-control clearable" id="objects-filter" placeholder="Filter..." data-i18-attr="filter|placeholder">
                     <span class="input-group-btn">
@@ -30,32 +25,33 @@
             </div>
         </div>
     </div>
+    
     <div class="clearfix"></div>
-    <div id="objects-container"></div>
-</div>
-
-<!-- Group -->
-<div id="objectsTemplateGroup" class="hidden">
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">                   
-                    <h2><img class="group_img" src="img/no-image.png" alt="Group"/> <span class="group_title">Objects-Group</span></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li>
-                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                        </li>            
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-
-                <div class="x_content objectsList"></div>
-
-            </div>
+    
+    <div id="objects-container">
+        
+        <div class="panel panel-default">
+            <div class="panel-heading"></div>
+            
+            <table id="objectstreetable" class="table table-condensed table-hover table-striped fancytree-fade-expander">
+                <thead>
+                    <tr> 
+                        <th></th> 
+                        <th>#</th> 
+                        <th></th> 
+                        <th>Key</th> 
+                        <th>Like</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            
+            <div class="panel-footer">&nbsp;</div>
         </div>
+        
     </div>
 </div>
-<!-- / Group -->
 
 <div id="modal-object">
     <table>

@@ -4,11 +4,19 @@ function Objects(main) {
     var that = this;
     this.menuIcon = 'fa-gears';
 
-    var $objectsTemplate, $objectsContainer, $objectsGroupTemplate;
+    var $objectsTemplate, $objectsContainer, $objectsTable;
 
     this.main = main;
     this.customEnabled = null;
     this.currentCustoms = null; // Id of the currently shown customs dialog
+    this.treeOptions = {
+        extensions: ["edit", "glyph", "table"],
+        glyph: that.main.glyph_opts,
+        table: {
+            indentation: 20 // indent 20px per node level
+        },
+        renderColumns: that.renderColumns
+    };
 
     this.prepare = function () {
         $('#menu-objects-div').load("templates/objects.html", function () {
@@ -17,52 +25,7 @@ function Objects(main) {
 
             $objectsTemplate = $('#objectsTemplate');
             $objectsContainer = $('#objects-container');
-            $objectsGroupTemplate = $('#objectsTemplateGroup');
-
-            $('#btn_collapse_objects').click(function () {
-                $('.collapse-link').each(function () {
-                    var $ICON = $(this).find('i');
-                    if ($ICON.hasClass('fa-chevron-up')) {
-                        var $BOX_PANEL = $(this).closest('.x_panel');
-                        var $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-                        $BOX_CONTENT.slideToggle(200);
-                        $BOX_PANEL.css('height', 'auto');
-                        $ICON.toggleClass('fa-chevron-up fa-chevron-down');
-                    }
-
-                });
-            });
-            $('#btn_expand_objects').click(function () {
-                $('.collapse-link').each(function () {
-                    var $ICON = $(this).find('i');
-                    if ($ICON.hasClass('fa-chevron-down')) {
-                        var $BOX_PANEL = $(this).closest('.x_panel');
-                        var $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-                        $BOX_CONTENT.slideToggle(200);
-                        $BOX_PANEL.css('height', 'auto');
-                        $ICON.toggleClass('fa-chevron-up fa-chevron-down');
-                    }
-
-                });
-            });
-            $('#btn_list_objects').click(function () {
-                that.isList = !that.isList;
-                if (that.isList) {
-                    $('#btn_list_objects i').switchClass('fa-list', 'fa-window-maximize');
-                    $('#btn_expand_objects').hide();
-                    $('#btn_collapse_objects').hide();
-                    $(this).changeTooltip($.i18n('list'));
-                } else {
-                    $('#btn_list_objects i').switchClass('fa-list', 'fa-window-maximize');
-                    $('#btn_expand_objects').show();
-                    $('#btn_collapse_objects').show();
-                    $(this).changeTooltip($.i18n('tiles'));
-                }
-                that.main.saveConfig('adaptersIsList', that.isList);
-                setTimeout(function () {
-                    that.init(true);
-                }, 200);
-            });
+            $objectsTable = $('#objectstreetable');
 
         });
     };
@@ -246,60 +209,19 @@ function Objects(main) {
 
         this.assignObjectsMembers();
 
-        this.addViewModes();
-
-        this.createObjects();
+        $objectsTable.fancytable(treeOptions);
+        $objectsTable.reload(that.objs);
 
         this.main.fillContent('#menu-objects-div');
     };
 
-    this.addViewModes = function () {
-        $('#objects-view-mode option').not(':first').remove();
-        for (var key in that.enums.enum) {
-            var enums = that.enums.enum[key];
-            if (enums['common']) {
-                $('#objects-view-mode').append($('<option>', {
-                    value: key,
-                    text: enums['common']['name']
-                }));
-            }
-
-        }
-        $('#objects-view-mode').selectpicker('refresh');
+    this.renderColumns = function (event, data) {
+        var node = data.node;
+        var $tdList = $(node.tr).find(">td");
+        $tdList.eq(1).text(node.getIndexHier()).addClass("alignRight");
+        $tdList.eq(3).text(node.key);
+        $tdList.eq(4).html("<input type='checkbox' name='like' value='" + node.key + "'>");
     };
-
-    this.createObjects = function () {
-        for (var key in that.objs) {           
-            if (!(key.startsWith('_design/') || key === "connected" || key === "system")) {
-                var $tempGroup = $objectsGroupTemplate.children().clone(true, true);
-                $tempGroup.find('.group_title').text(key);
-                $tempGroup.find('.objectsList').html(createObjectData(that.objs[key]));
-                $objectsContainer.append($tempGroup);
-            }
-        }
-    };
-
-    function createObjectData(elem) {
-        var text = "";
-        for (var k in elem) {
-            if (k.match(/^system\.|^iobroker\.|^_|^[\w-]+$|^enum\.|^[\w-]+\.admin|^script\./)) {
-                var child = elem[k];
-                if (Object.prototype.toString.call(elem[k]) === '[object Object]') {
-                    var common = child['common'];
-                    text += "<fieldset>";
-                    text += "<legend>" + (common ? common['name'] : k) + "</legend>"
-                    text += "<div>";
-                    text += createObjectData(child);
-                    text += "</div>";
-                    text += "</fieldset>";
-                } else {
-                    text += "<p>" + k + "</p>";
-                }
-            }
-
-        }
-        return text;
-    }
 
     this.assignObjectsMembers = function () {
         that.objs = {};
