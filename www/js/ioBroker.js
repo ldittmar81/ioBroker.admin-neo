@@ -331,7 +331,7 @@ function changeLanguage(lang) {
         $("[data-i18n-tooltip]").each(function () {
             var $this = $(this);
             $this.attr("title", $.i18n($this.data('i18n-tooltip'))).attr("data-toggle", "tooltip");
-        });       
+        });
     });
 }
 
@@ -381,3 +381,18 @@ function requestCrossDomain(site, callback) {
         }
     }
 }
+
+// Scroll to Top
+$(window).scroll(function () {
+    if ($(this).scrollTop() >= 50) {
+        $('#return-to-top').fadeIn(200);
+    } else {
+        $('#return-to-top').fadeOut(200);
+    }
+});
+$('#return-to-top').click(function () {
+    $('body,html').animate({
+        scrollTop: 0
+    }, 500);
+});
+// / Scroll to Top
