@@ -53,11 +53,7 @@ function States(main) {
 
     this.prepare = function () {
         $('#menu-states-div').load("templates/states.html", function () {
-
-            this.$grid = $('#grid-states');
-
-            var stateEdit = false;
-            var stateLastSelected;
+            
         });
     };
 
@@ -68,7 +64,19 @@ function States(main) {
             }, 250);
             return;
         }
+
+        $('#states-body').html('');
+
+        var data = [];
+        for (var key in main.states) {
+            var obj = convertState(key, main.states[key]);
+            data.push(obj);
+        }
         
+        $('#states-outer').bootstrapTable({
+            data: data
+        });
+
         this.main.fillContent('#menu-states-div');
     };
 

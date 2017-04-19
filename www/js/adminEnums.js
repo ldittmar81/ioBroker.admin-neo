@@ -135,11 +135,18 @@ function Enums(main) {
     function loadEnumMembers() {
         var $tmpTable = $enumsTable.children().clone(true, true);
         $enumsContainer.append($tmpTable);
+        
+        var boxHeight = $('#pageContent').height() * 0.7;
 
         var $enumList = $tmpTable.find('.enumList');
+        $enumList.height(boxHeight);
         $enumList.fancytree(that.treeOptions);
         $enumList.fancytree("option", "dnd", dndEnumList);
+        
+        $tmpTable.find('.enumObjectList').height(boxHeight);
+        
         var $objectList = $tmpTable.find(".objectListForEnum");
+        $objectList.height(boxHeight);
         $objectList.fancytree(that.treeOptions);
         $objectList.fancytree("option", "dnd", dndEnumObjectList);
 

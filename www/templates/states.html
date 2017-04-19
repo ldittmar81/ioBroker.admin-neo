@@ -1,22 +1,35 @@
-<div class="row">
+<div id="statesTemplate">
+
     <div class="page-title">
         <div class="title_left">
-            <h3 data-i18n="states">States</h3>
+        </div>
+        <div class="title_right">
         </div>
     </div>
-</div>
 
-<div class="clearfix"></div>
+    <div class="clearfix"></div>
 
-<div class="x_panel">
-    <div class="x_title"></div>
-    <div class="x_content">
-        <table id="states-outer" class="table table-striped">
-            <tbody id="grid-states">
-            </tbody>
-        </table>
-        <div id="pager-states"></div>
+    <div id="states-container">
+        <div class="panel panel-default">
+            <div class="panel-heading">                
+            </div>
+            <table id="states-outer" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th data-field="_id" data-i18n="id"></th>
+                        <th data-field="pname" data-i18n="parent_name"></th>
+                        <th data-field="name" data-i18n="name"></th>
+                        <th data-field="val" data-i18n="val"></th>
+                        <th data-field="ack" data-i18n="ack"></th>
+                        <th data-field="from" data-i18n="from"></th>
+                        <th data-field="ts" data-i18n="ts"></th>
+                        <th data-field="lc" data-i18n="lc"></th>
+                    </tr>
+                </thead>
+                <tbody id="states-body"></tbody>
+            </table>
+            <div class="panel-footer">&nbsp;</div>
+        </div>
     </div>
+
 </div>
-
-

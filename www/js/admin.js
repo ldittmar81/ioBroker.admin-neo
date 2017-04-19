@@ -1244,35 +1244,35 @@ function convertToEnumTree(obj, key) {
     var converted = [];
     var elem = key === null ? obj : obj[key];
     for (var k in elem) {
-        
+
         if (k !== '_id' && k !== 'acl' && k !== 'common' && k !== 'type') {
             var treeElement = {};
             var common;
             var thisElement = elem[k];
             if (Object.prototype.toString.call(thisElement) === '[object Object]') {
-                common = thisElement['common'];                
+                common = thisElement['common'];
             }
-            
+
             treeElement['title'] = common ? common['name'] : k;
             treeElement['desc'] = common ? common['desc'] : '';
-            treeElement['object-non-deletable'] = common ? common['object-non-deletable'] : false;
+            treeElement['object-non-deletable'] = common ? (common['object-non-deletable'] === undefined ? false : common['object-non-deletable']) : false;
             treeElement['key'] = k;
             treeElement['folder'] = true;
-            
+
             if (common && common.members) {
                 if (common.members.length > 0) {
                     treeElement['members'] = common.members.length;
-                }  
-                 treeElement['children'] = convertToEnumTree(elem, k);                 
-            }            
-            
+                }
+                treeElement['children'] = convertToEnumTree(elem, k);
+            }
+
             converted.push(treeElement);
         }
     }
     return converted;
 }
 
-function convertToObjectTree(obj, key){
+function convertToObjectTree(obj, key) {
     var converted = [];
     var elem = key === undefined ? obj : obj[key];
     for (var k in elem) {
