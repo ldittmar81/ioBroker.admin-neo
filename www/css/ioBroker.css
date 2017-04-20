@@ -2787,8 +2787,7 @@ ul.social li {
     margin-top: 0
 }
 .widget {
-    min-width: 250px;
-    max-width: 310px
+    width: 310px; 
 }
 .widget_tally_box .btn-group button {
     text-align: center
@@ -4481,4 +4480,12 @@ fieldset > legend {
 #return-to-top:hover i {
     color: #fff;
     top: 5px;
+}
+
+.fancytree-fade-expander {
+    overflow-y: auto;
+}
+
+ul.fancytree-container {
+    min-height: 200px;
 }

@@ -8,43 +8,78 @@ function Enums(main) {
     this.enumEdit = null;
     this.updateTimers = null;
     this.isOrbit = false;
-    this.treeOptions = {
+
+    var treeOptionsObjectListForEnum = {
         source: [],
-        extensions: ["dnd", "edit", "glyph", "wide"],
+        extensions: ["dnd", "glyph"],
         glyph: that.main.glyph_opts,
-        wide: {
-            iconWidth: "1em", // Adjust this if @fancy-icon-width != "16px"
-            iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
-            labelSpacing: "0.1em", // Adjust this if padding between icon and label != "3px"
-            levelOfs: "1.5em"       // Adjust this if ul padding != "16px"
+        dnd: {
+            focusOnClick: true,
+            dragStart: function (node, data) {
+                return true;
+            },
+            dragEnter: function (node, data) {
+                return false;
+            },
+            dragDrop: function (node, data) {
+                data.otherNode.copyTo(node, data.hitMode);
+            },
+            draggable: {// modify default jQuery draggable options
+                appendTo: "body"
+            }
         }
     };
 
-    var dndEnumObjectList = {
-        focusOnClick: true,
-        dragStart: function (node, data) {
-            return true;
+    var treeOptionsEnumList = {
+        source: [],
+        extensions: ["dnd", "edit", "glyph"],
+        glyph: that.main.glyph_opts,
+        dnd: {
+            autoExpandMS: 1000,
+            focusOnClick: true,
+            dragStart: function (node, data) {
+                return false;
+            },
+            dragEnter: function (node, data) {
+                return true;
+            },
+            dragDrop: function (node, data) {
+                data.otherNode.copyTo(node, data.hitMode);
+            },
+            draggable: {// modify default jQuery draggable options
+                appendTo: "body"
+            }
         },
-        dragEnter: function (node, data) {
-            return false;
-        },
-        dragDrop: function (node, data) {
-            data.otherNode.copyTo(node, data.hitMode);
+        activate: function (event, data) {
+            if (data.node.data.members) {
+                $(".objectCounterForEnum").text(data.node.data.members);
+            }else{
+                $(".objectCounterForEnum").text("0");
+            }
+            $(".folderTitleForEnum").text(data.node.title);
         }
     };
 
-    var dndEnumList = {
-        focusOnClick: true,
-        dragStart: function (node, data) {
-            return true;
-        },
-        dragEnter: function (node, data) {
-            return true;
-        },
-        dragDrop: function (node, data) {
-            data.otherNode.copyTo(node, data.hitMode);
+    var treeOptionsEnumObjectList = {
+        source: [],
+        extensions: ["dnd", "glyph"],
+        glyph: that.main.glyph_opts,
+        dnd: {
+            focusOnClick: true,
+            dragStart: function (node, data) {
+                return true;
+            },
+            dragEnter: function (node, data) {
+                return true;
+            },
+            dragDrop: function (node, data) {
+                data.otherNode.moveTo(node, data.hitMode);
+            },
+            draggable: {// modify default jQuery draggable options
+                appendTo: "body"
+            }
         }
-    };
+    }
 
     var $enumsTemplate, $enumsTable, $enumsOrbit, $enumsContainer, $enumList, $enumObjectList, $objectList;
 
@@ -140,14 +175,13 @@ function Enums(main) {
         $enumsContainer.append($tmpTable);
 
         $enumList = $tmpTable.find('.enumList');
-        $enumList.fancytree(that.treeOptions);
-        $enumList.fancytree("option", "dnd", dndEnumList);
+        $enumList.fancytree(treeOptionsEnumList);
 
         $enumObjectList = $tmpTable.find('.enumObjectList');
+        $enumObjectList.fancytree(treeOptionsEnumObjectList);
 
         $objectList = $tmpTable.find(".objectListForEnum");
-        $objectList.fancytree(that.treeOptions);
-        $objectList.fancytree("option", "dnd", dndEnumObjectList);
+        $objectList.fancytree(treeOptionsObjectListForEnum);
 
         that.objs = [];
         that.enums = [];
