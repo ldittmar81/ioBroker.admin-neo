@@ -32,7 +32,7 @@ function Enums(main) {
             data.otherNode.copyTo(node, data.hitMode);
         }
     };
-    
+
     var dndEnumList = {
         focusOnClick: true,
         dragStart: function (node, data) {
@@ -46,7 +46,7 @@ function Enums(main) {
         }
     };
 
-    var $enumsTemplate, $enumsTable, $enumsOrbit, $enumsContainer;
+    var $enumsTemplate, $enumsTable, $enumsOrbit, $enumsContainer, $enumList, $enumObjectList, $objectList;
 
     var enumCurrentParent = '';
     var tasks = [];
@@ -120,7 +120,7 @@ function Enums(main) {
             setTimeout(that.init, 250);
             return;
         }
-        
+
         $enumsContainer.html('');
 
         if (that.isOrbit) {
@@ -130,23 +130,22 @@ function Enums(main) {
         }
 
         this.main.fillContent('#menu-enums-div');
+
+        $(window).on('resize', resizeWindow);
+        resizeWindow();
     };
 
     function loadEnumMembers() {
         var $tmpTable = $enumsTable.children().clone(true, true);
         $enumsContainer.append($tmpTable);
-        
-        var boxHeight = $('#pageContent').height() * 0.7;
 
-        var $enumList = $tmpTable.find('.enumList');
-        $enumList.height(boxHeight);
+        $enumList = $tmpTable.find('.enumList');
         $enumList.fancytree(that.treeOptions);
         $enumList.fancytree("option", "dnd", dndEnumList);
-        
-        $tmpTable.find('.enumObjectList').height(boxHeight);
-        
-        var $objectList = $tmpTable.find(".objectListForEnum");
-        $objectList.height(boxHeight);
+
+        $enumObjectList = $tmpTable.find('.enumObjectList');
+
+        $objectList = $tmpTable.find(".objectListForEnum");
         $objectList.fancytree(that.treeOptions);
         $objectList.fancytree("option", "dnd", dndEnumObjectList);
 
@@ -155,7 +154,7 @@ function Enums(main) {
         for (var key in main.objects) {
             assign(key.startsWith('enum.') ? that.enums : that.objs, key, main.objects[key]);
         }
-        
+
         var enumTree = $enumList.fancytree('getTree');
         enumTree.reload(convertToEnumTree(that.enums, 'enum'));
         var objectTree = $objectList.fancytree('getTree');
@@ -164,10 +163,6 @@ function Enums(main) {
     }
 
     function loadOrbitEnumMembers() {
-
-        $(window).on('resize', resizeWindow);
-        resizeWindow();
-
         var $orbitlist = $('.orbit');
         var obj = {};
         for (var key in main.objects) {
@@ -206,8 +201,17 @@ function Enums(main) {
     };
 
     function resizeWindow() {
-        $('#menu-enums-div').height($('#pageContent').height());
-        $('#enumsTemplate').height($('#pageContent').height());
+        var boxHeight = $('#pageContent').height();
+        if (that.isOrbit) {
+            $('#menu-enums-div').height(boxHeight);
+            $('#enumsTemplate').height(boxHeight);
+        } else {
+            boxHeight = boxHeight * 0.7;
+            $enumList.height(boxHeight);
+            $enumObjectList.height(boxHeight);
+            $objectList.height(boxHeight);
+        }
+
     }
 
 }

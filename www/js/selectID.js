@@ -1,111 +1,111 @@
 /*
  Copyright 2014-2017 bluefox <dogafox@gmail.com>
-
- version: 1.0.1 (2016.10.14)
-
+ 
+ version: 1.0.2 (2017.04.13)
+ 
  To use this dialog as standalone in ioBroker environment include:
  <link type="text/css" rel="stylesheet" href="lib/css/redmond/jquery-ui.min.css">
  <link rel="stylesheet" type="text/css" href="lib/css/fancytree/ui.fancytree.min.css"/>
-
+ 
  <script type="text/javascript" src="lib/js/jquery-1.11.1.min.js"></script>
  <script type="text/javascript" src="lib/js/jquery-ui-1.10.3.full.min.js"></script>
  <script type="text/javascript" src="lib/js/jquery.fancytree-all.min.js"></script>
  <script type="text/javascript" src="js/translate.js"></script>
  <script type="text/javascript" src="js/words.js"></script><!--this file must be after translate.js -->
-
+ 
  <script type="text/javascript" src="js/selectID.js"></script>
-
+ 
  <script src="lib/js/socket.io.js"></script>
  <script src="/_socket/info.js"></script>
-
+ 
  To use as part, just
  <link rel="stylesheet" type="text/css" href="lib/css/fancytree/ui.fancytree.min.css"/>
  <script type="text/javascript" src="lib/js/jquery.fancytree-all.min.js"></script>
  <script type="text/javascript" src="js/selectID.js"></script>
-
+ 
  Interface:
  +  init(options) - init select ID dialog. Following options are supported
-         {
-             currentId:  '',       // Current ID or empty if nothing preselected
-             objects:    null,     // All objects that should be shown. It can be empty if connCfg used.
-             states:     null,     // All states of objects. It can be empty if connCfg used. If objects are set and no states, states will no be shown.
-             filter:     null,     // filter
-             imgPath:    'lib/css/fancytree/', // Path to images device.png, channel.png and state.png
-             connCfg:    null,     // configuration for dialog, ti read objects itself: {socketUrl: socketUrl, socketSession: socketSession}
-             onSuccess:  null,     // callback function to be called if user press "Select". Can be overwritten in "show" - function (newId, oldId, newObj)
-             onChange:   null,     // called every time the new object selected - function (newId, oldId, newObj)
-             noDialog:   false,    // do not make dialog
-             noMultiselect: false, // do not make multiselect
-             buttons:    null,     // array with buttons, that should be shown in last column
-                                   // if array is not empty it can has following fields
-                                   // [{
-                                   //   text: false, // same as jquery button
-                                   //   icons: {     // same as jquery button
-                                   //       primary: 'ui-icon-gear'
-                                   //   },
-                                   //   click: function (id) {
-                                   //                // do on click
-                                   //   },
-                                   //   match: function (id) {
-                                   //                // you have here object "this" pointing to $('button')
-                                   //   },
-                                   //   width: 26,   // same as jquery button
-                                   //   height: 20   // same as jquery button
-                                   // }],
-             panelButtons: null,   // array with buttons, that should be shown at the top of dialog (near expand all)
-             list:       false,    // tree view or list view
-             name:       null,     // name of the dialog to store filter settings
-             noCopyToClipboard: false, // do not show button for copy to clipboard
-             root:       null,     // root node, e.g. "script.js"
-             useNameAsId: false,   // use name of object as ID
-             noColumnResize: false, // do not allow column resize
-             firstMinWidth: null,  // width if ID column, default 400
-             showButtonsForNotExistingObjects: false,
-             webServer:    null,   // link to webserver, by default ":8082"
-             texts: {
-                 select:   'Select',
-                 cancel:   'Cancel',
-                 all:      'All',
-                 id:       'ID',
-                 name:     'Name',
-                 role:     'Role',
-                 type:     'Type',
-                 room:     'Room',
-                 'function': 'Function',
-                 enum:     'Members',
-                 value:    'Value',
-                 selectid: 'Select ID',
-                 from:     'From',
-                 lc:       'Last changed',
-                 ts:       'Time stamp',
-                 ack:      'Acknowledged',
-                 expand:   'Expand all nodes',
-                 collapse: 'Collapse all nodes',
-                 refresh:  'Rebuild tree',
-                 edit:     'Edit',
-                 ok:       'Ok',
-                 push:     'Trigger event'
-                 wait:     'Processing...',
-                 list:     'Show list view',
-                 tree:     'Show tree view',
-                 selectAll: 'Select all',
-                 unselectAll: 'Unselect all',
-                 invertSelection: 'Invert selection',
-                 copyToClipboard: 'Copy to clipboard',
-                 expertMode: 'Toggle expert mode'
-             },
-             columns: ['image', 'name', 'type', 'role', 'enum', 'room', 'function', 'value', 'button'],
-                                // some elements of columns could be an object {name: field, data: function (id, name){}, title: function (id, name) {}}
-             widths:    null,   // array with width for every column
-             editEnd:   null,   // function (id, newValues) for edit lines (only id and name can be edited)
-             editStart: null,   // function (id, $inputs) called after edit start to correct input fields (inputs are jquery objects),
-             zindex:    null,   // z-index of dialog or table
-             customButtonFilter: null, // if in the filter over the buttons some specific button must be shown. It has type like {icons:{primary: 'ui-icon-close'}, text: false, callback: function ()}
-             expertModeRegEx: null // list of regex with objects, that will be shown only in expert mode, like  /^system\.|^iobroker\.|^_|^[\w-]+$|^enum\.|^[\w-]+\.admin/
-             quickEdit:  null,   // list of fields with edit on click. Elements can be just names from standard list or objects like:
-                                 // {name: 'field', options: {a1: 'a111_Text', a2: 'a22_Text'}}, options can be a function (id, name), that give back such an object
-             quickEditCallback: null // function (id, attr, newValue, oldValue)
-     }
+ {
+ currentId:  '',       // Current ID or empty if nothing preselected
+ objects:    null,     // All objects that should be shown. It can be empty if connCfg used.
+ states:     null,     // All states of objects. It can be empty if connCfg used. If objects are set and no states, states will no be shown.
+ filter:     null,     // filter
+ imgPath:    'lib/css/fancytree/', // Path to images device.png, channel.png and state.png
+ connCfg:    null,     // configuration for dialog, ti read objects itself: {socketUrl: socketUrl, socketSession: socketSession}
+ onSuccess:  null,     // callback function to be called if user press "Select". Can be overwritten in "show" - function (newId, oldId, newObj)
+ onChange:   null,     // called every time the new object selected - function (newId, oldId, newObj)
+ noDialog:   false,    // do not make dialog
+ noMultiselect: false, // do not make multiselect
+ buttons:    null,     // array with buttons, that should be shown in last column
+ // if array is not empty it can has following fields
+ // [{
+ //   text: false, // same as jquery button
+ //   icons: {     // same as jquery button
+ //       primary: 'ui-icon-gear'
+ //   },
+ //   click: function (id) {
+ //                // do on click
+ //   },
+ //   match: function (id) {
+ //                // you have here object "this" pointing to $('button')
+ //   },
+ //   width: 26,   // same as jquery button
+ //   height: 20   // same as jquery button
+ // }],
+ panelButtons: null,   // array with buttons, that should be shown at the top of dialog (near expand all)
+ list:       false,    // tree view or list view
+ name:       null,     // name of the dialog to store filter settings
+ noCopyToClipboard: false, // do not show button for copy to clipboard
+ root:       null,     // root node, e.g. "script.js"
+ useNameAsId: false,   // use name of object as ID
+ noColumnResize: false, // do not allow column resize
+ firstMinWidth: null,  // width if ID column, default 400
+ showButtonsForNotExistingObjects: false,
+ webServer:    null,   // link to webserver, by default ":8082"
+ texts: {
+ select:   'Select',
+ cancel:   'Cancel',
+ all:      'All',
+ id:       'ID',
+ name:     'Name',
+ role:     'Role',
+ type:     'Type',
+ room:     'Room',
+ 'function': 'Function',
+ enum:     'Members',
+ value:    'Value',
+ selectid: 'Select ID',
+ from:     'From',
+ lc:       'Last changed',
+ ts:       'Time stamp',
+ ack:      'Acknowledged',
+ expand:   'Expand all nodes',
+ collapse: 'Collapse all nodes',
+ refresh:  'Rebuild tree',
+ edit:     'Edit',
+ ok:       'Ok',
+ push:     'Trigger event'
+ wait:     'Processing...',
+ list:     'Show list view',
+ tree:     'Show tree view',
+ selectAll: 'Select all',
+ unselectAll: 'Unselect all',
+ invertSelection: 'Invert selection',
+ copyToClipboard: 'Copy to clipboard',
+ expertMode: 'Toggle expert mode'
+ },
+ columns: ['image', 'name', 'type', 'role', 'enum', 'room', 'function', 'value', 'button'],
+ // some elements of columns could be an object {name: field, data: function (id, name){}, title: function (id, name) {}}
+ widths:    null,   // array with width for every column
+ editEnd:   null,   // function (id, newValues) for edit lines (only id and name can be edited)
+ editStart: null,   // function (id, $inputs) called after edit start to correct input fields (inputs are jquery objects),
+ zindex:    null,   // z-index of dialog or table
+ customButtonFilter: null, // if in the filter over the buttons some specific button must be shown. It has type like {icons:{primary: 'ui-icon-close'}, text: false, callback: function ()}
+ expertModeRegEx: null // list of regex with objects, that will be shown only in expert mode, like  /^system\.|^iobroker\.|^_|^[\w-]+$|^enum\.|^[\w-]+\.admin/
+ quickEdit:  null,   // list of fields with edit on click. Elements can be just names from standard list or objects like:
+ // {name: 'field', options: {a1: 'a111_Text', a2: 'a22_Text'}}, options can be a function (id, name), that give back such an object
+ quickEditCallback: null // function (id, attr, newValue, oldValue)
+ }
  +  show(currentId, filter, callback) - all arguments are optional if set by "init"
  +  clear() - clear object tree to read and build anew (used only if objects set by "init")
  +  getInfo(id) - get information about ID
@@ -117,12 +117,21 @@
 (function ($) {
     'use strict';
 
-    if ($.fn.selectId) return;
+    if ($.fn.selectId)
+        return;
 
     var instance = 0;
 
     function formatDate(dateObj) {
-        if (!dateObj) return '';
+        //return dateObj.getFullYear() + '-' +
+        //    ('0' + (dateObj.getMonth() + 1).toString(10)).slice(-2) + '-' +
+        //    ('0' + (dateObj.getDate()).toString(10)).slice(-2) + ' ' +
+        //    ('0' + (dateObj.getHours()).toString(10)).slice(-2) + ':' +
+        //    ('0' + (dateObj.getMinutes()).toString(10)).slice(-2) + ':' +
+        //    ('0' + (dateObj.getSeconds()).toString(10)).slice(-2);
+        // Following implementation is 5 times faster
+        if (!dateObj)
+            return '';
 
         var text = dateObj.getFullYear();
         var v = dateObj.getMonth() + 1;
@@ -167,28 +176,33 @@
         } else {
             text += '.' + v;
         }
-        
+
         return text;
     }
 
     function filterId(data, id) {
         if (data.rootExp) {
-            if (!data.rootExp.test(id)) return false;
+            if (!data.rootExp.test(id))
+                return false;
         }
 
         if (data.filter) {
-            if (data.filter.type && data.filter.type !== data.objects[id].type) return false;
+            if (data.filter.type && data.filter.type !== data.objects[id].type)
+                return false;
 
             if (data.filter.common && data.filter.common.custom) {
-                if (!data.objects[id].common) return false;
+                if (!data.objects[id].common)
+                    return false;
                 // todo: remove history sometime 09.2016
                 var custom = data.objects[id].common.custom || data.objects[id].common.history;
 
-                if (!custom) return false;
+                if (!custom)
+                    return false;
                 if (data.filter.common.custom === true) {
                     return true;
                 } else {
-                    if (!custom[data.filter.common.custom]) return false;
+                    if (!custom[data.filter.common.custom])
+                        return false;
                 }
             }
         }
@@ -197,21 +211,59 @@
 
     function getAllStates(data) {
         var objects = data.objects;
-        var isType  = data.columns.indexOf('type') !== -1;
-        var isRoom  = data.columns.indexOf('room') !== -1;
-        var isFunc  = data.columns.indexOf('function') !== -1;
-        var isRole  = data.columns.indexOf('role') !== -1;
-        var isHist  = data.columns.indexOf('button') !== -1;
+        var isType = data.columns.indexOf('type') !== -1;
+        var isRoom = data.columns.indexOf('room') !== -1;
+        var isFunc = data.columns.indexOf('function') !== -1;
+        var isRole = data.columns.indexOf('role') !== -1;
+        var isHist = data.columns.indexOf('button') !== -1;
+
         data.tree = {title: '', children: [], count: 0, root: true};
         data.roomEnums = [];
         data.funcEnums = [];
 
         for (var id in objects) {
 
-            if (isRoom && objects[id].type === 'enum' && data.regexEnumRooms.test(id)) data.roomEnums.push(id);
-            if (isFunc && objects[id].type === 'enum' && data.regexEnumFuncs.test(id)) data.funcEnums.push(id);
+            if (isRoom && objects[id].type === 'enum' && data.regexEnumRooms.test(id))
+                data.roomEnums.push(id);
+            if (isFunc && objects[id].type === 'enum' && data.regexEnumFuncs.test(id))
+                data.funcEnums.push(id);
+            if ((isRoom || isFunc) && objects[id].enums) {
+                for (var e in objects[id].enums) {
+                    if (isRoom && data.regexEnumRooms.test(e)) {
+                        if (data.roomEnums.indexOf(e) === -1)
+                            data.roomEnums.push(e);
 
-            if (isType && objects[id].type && data.types.indexOf(objects[id].type) === -1) data.types.push(objects[id].type);
+                        if (!objects[e]) {
+                            objects[e] = {
+                                _id: e,
+                                common: {
+                                    name: objects[id].enums[e],
+                                    members: [id]
+                                }
+                            };
+                        } else if (objects[e].common.members.indexOf(id) === -1) {
+                            objects[e].common.members.push(id);
+                        }
+                    } else if (isFunc && data.regexEnumFuncs.test(e)) {
+                        if (data.funcEnums.indexOf(e) === -1)
+                            data.funcEnums.push(e);
+                        if (!objects[e]) {
+                            objects[e] = {
+                                _id: e,
+                                common: {
+                                    name: objects[id].enums[e],
+                                    members: [id]
+                                }
+                            };
+                        } else if (objects[e].common.members.indexOf(id) === -1) {
+                            objects[e].common.members.push(id);
+                        }
+                    }
+                }
+            }
+
+            if (isType && objects[id].type && data.types.indexOf(objects[id].type) === -1)
+                data.types.push(objects[id].type);
 
             if (isRole && objects[id].common && objects[id].common.role) {
                 try {
@@ -219,7 +271,8 @@
                     var role = '';
                     for (var u = 0; u < parts.length; u++) {
                         role += (role ? '.' : '') + parts[u];
-                        if (data.roles.indexOf(role) === -1) data.roles.push(role);
+                        if (data.roles.indexOf(role) === -1)
+                            data.roles.push(role);
                     }
                 } catch (e) {
                     console.error('Cannot parse role "' + objects[id].common.role + '" by ' + id);
@@ -227,22 +280,25 @@
             }
             if (isHist && objects[id].type === 'instance' && (objects[id].common.type === 'storage' || objects[id].common.supportCustoms)) {
                 var h = id.substring('system.adapter.'.length);
-                if (data.histories.indexOf(h) === -1) data.histories.push(h);
+                if (data.histories.indexOf(h) === -1)
+                    data.histories.push(h);
             }
 
             // ignore system objects in expert mode
-            if (data.expertModeRegEx && !data.expertMode && data.expertModeRegEx.test(id)) continue;
+            if (data.expertModeRegEx && !data.expertMode && data.expertModeRegEx.test(id))
+                continue;
 
-            if (!filterId(data, id)) continue;
+            if (!filterId(data, id))
+                continue;
 
             treeInsert(data, id, data.currentId === id);
 
             if (objects[id].enums) {
                 for (var e in objects[id].enums) {
                     if (objects[e] &&
-                        objects[e].common &&
-                        objects[e].common.members &&
-                        objects[e].common.members.indexOf(id) === -1) {
+                            objects[e].common &&
+                            objects[e].common.members &&
+                            objects[e].common.members.indexOf(id) === -1) {
                         objects[e].common.members.push(id);
                     }
                 }
@@ -257,7 +313,8 @@
     }
 
     function treeSplit(data, id) {
-        if (!id) return null;
+        if (!id)
+            return null;
         if (data.root) {
             id = id.substring(data.root.length);
         }
@@ -288,7 +345,8 @@
 
     function _deleteTree(node, deletedNodes) {
         if (node.parent) {
-            if (deletedNodes && node.id) deletedNodes.push(node);
+            if (deletedNodes && node.id)
+                deletedNodes.push(node);
             var p = node.parent;
             if (p.children.length <= 1) {
                 _deleteTree(node.parent);
@@ -324,10 +382,12 @@
                 num = j;
                 break;
             }
-            if (tree.children[j].title > parts[index]) break;
+            if (tree.children[j].title > parts[index])
+                break;
         }
 
-        if (num === -1) return null;
+        if (num === -1)
+            return null;
 
         if (parts.length - 1 === index) {
             return tree.children[num];
@@ -354,11 +414,12 @@
                 num = j;
                 break;
             }
-            if (tree.children[j].title > parts[index]) break;
+            if (tree.children[j].title > parts[index])
+                break;
         }
 
         if (num === -1) {
-            tree.folder   = true;
+            tree.folder = true;
             tree.expanded = isExpanded;
 
             var fullName = '';
@@ -366,12 +427,12 @@
                 fullName += ((fullName) ? '.' : '') + parts[i];
             }
             var obj = {
-                key:      (data.root || '') + fullName,
+                key: (data.root || '') + fullName,
                 children: [],
-                title:    parts[index],
-                folder:   false,
+                title: parts[index],
+                folder: false,
                 expanded: false,
-                parent:   tree
+                parent: tree
             };
             if (j === tree.children.length) {
                 num = tree.children.length;
@@ -392,7 +453,7 @@
         }
     }
 
-    function showActive($dlg, scrollIntoView)  {
+    function showActive($dlg, scrollIntoView) {
         var data = $dlg.data('selectId');
         // Select current element
         if (data.selectedID) {
@@ -425,7 +486,7 @@
         rooms = rooms || [];
         for (var i = 0; i < data.roomEnums.length; i++) {
             if (data.objects[data.roomEnums[i]].common.members.indexOf(id) !== -1 &&
-                rooms.indexOf(data.objects[data.roomEnums[i]].common.name) === -1) {
+                    rooms.indexOf(data.objects[data.roomEnums[i]].common.name) === -1) {
                 if (!withParentInfo) {
                     rooms.push(data.objects[data.roomEnums[i]].common.name);
                 } else {
@@ -436,7 +497,8 @@
         var parts = id.split('.');
         parts.pop();
         id = parts.join('.');
-        if (data.objects[id]) findRoomsForObject(data, id, withParentInfo, rooms);
+        if (data.objects[id])
+            findRoomsForObject(data, id, withParentInfo, rooms);
 
         return rooms;
     }
@@ -445,7 +507,7 @@
         rooms = rooms || [];
         for (var i = 0; i < data.roomEnums.length; i++) {
             if (data.objects[data.roomEnums[i]].common.members.indexOf(id) !== -1 &&
-                rooms.indexOf(data.roomEnums[i]) === -1) {
+                    rooms.indexOf(data.roomEnums[i]) === -1) {
                 rooms.push(data.roomEnums[i]);
             }
         }
@@ -456,7 +518,7 @@
         funcs = funcs || [];
         for (var i = 0; i < data.funcEnums.length; i++) {
             if (data.objects[data.funcEnums[i]].common.members.indexOf(id) !== -1 &&
-                funcs.indexOf(data.objects[data.funcEnums[i]].common.name) === -1) {
+                    funcs.indexOf(data.objects[data.funcEnums[i]].common.name) === -1) {
                 if (!withParentInfo) {
                     funcs.push(data.objects[data.funcEnums[i]].common.name);
                 } else {
@@ -467,7 +529,8 @@
         var parts = id.split('.');
         parts.pop();
         id = parts.join('.');
-        if (data.objects[id]) findFunctionsForObject(data, id, withParentInfo, funcs);
+        if (data.objects[id])
+            findFunctionsForObject(data, id, withParentInfo, funcs);
 
         return funcs;
     }
@@ -476,7 +539,7 @@
         funcs = funcs || [];
         for (var i = 0; i < data.funcEnums.length; i++) {
             if (data.objects[data.funcEnums[i]].common.members.indexOf(id) !== -1 &&
-                funcs.indexOf(data.funcEnums[i]) === -1) {
+                    funcs.indexOf(data.funcEnums[i]) === -1) {
                 funcs.push(data.funcEnums[i]);
             }
         }
@@ -498,9 +561,9 @@
     function clippyShow(e) {
         if ($(this).hasClass('clippy')) {
             var text = '<button class="clippy-button ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" ' +
-                'role="button" title="' + $(this).data('copyToClipboard') + '" ' +
-                'style="position: absolute; right: 0; top: 0; width: 36px; height: 18px;z-index: 1">' +
-                '<span class="ui-button-icon-primary ui-icon ui-icon-clipboard"></span></button>';
+                    'role="button" title="' + $(this).data('copyToClipboard') + '" ' +
+                    'style="position: absolute; right: 0; top: 0; width: 36px; height: 18px;z-index: 1">' +
+                    '<span class="ui-button-icon-primary ui-icon ui-icon-clipboard"></span></button>';
 
             $(this).append(text);
             $(this).find('.clippy-button').click(clippyCopy);
@@ -512,7 +575,8 @@
     }
 
     function installColResize(data, $dlg) {
-        if (data.noColumnResize || !$.fn.colResizable) return;
+        if (data.noColumnResize || !$.fn.colResizable)
+            return;
 
         var data = $dlg.data('selectId');
         if (data.$tree.is(':visible')) {
@@ -532,8 +596,8 @@
     function getStates(data, id) {
         var states;
         if (data.objects[id] &&
-            data.objects[id].common &&
-            data.objects[id].common.states) {
+                data.objects[id].common &&
+                data.objects[id].common.states) {
             states = data.objects[id].common.states;
         }
         if (states) {
@@ -559,17 +623,18 @@
     }
 
     function onQuickEditField(e) {
-        var $this   = $(this);
-        var id      = $this.data('id');
-        var attr    = $this.data('name');
-        var data    = $this.data('selectId');
-        var type    = $this.data('type');
-        var clippy  = $this.hasClass('clippy');
+        var $this = $(this);
+        var id = $this.data('id');
+        var attr = $this.data('name');
+        var data = $this.data('selectId');
+        var type = $this.data('type');
+        var clippy = $this.hasClass('clippy');
         var options = $this.data('options');
-        var oldVal  = $this.data('old-value');
-        var states  = null;
+        var oldVal = $this.data('old-value');
+        var states = null;
 
-        if (clippy)  $this.removeClass('clippy');
+        if (clippy)
+            $this.removeClass('clippy');
 
         $this.unbind('click').removeClass('select-id-quick-edit').css('position', 'relative');
 
@@ -586,7 +651,8 @@
             if (states) {
                 text = '<select style="width: calc(100% - 50px); z-index: 2">';
                 for (var t in states) {
-                    if (typeof states[t] !== 'string') continue;
+                    if (typeof states[t] !== 'string')
+                        continue;
                     text += '<option value="' + t + '">' + states[t] + '</option>';
                 }
                 text += '</select>';
@@ -626,8 +692,8 @@
         var timeout = null;
 
         $this.html(text +
-            '<div class="ui-icon ui-icon-check        select-id-quick-edit-ok"     style="' + css + ';right: 22px"></div>' +
-            '<div class="cancel ui-icon ui-icon-close select-id-quick-edit-cancel" title="' + data.texts.cancel + '" style="' + css + ';right: 2px"></div>');
+                '<div class="ui-icon ui-icon-check        select-id-quick-edit-ok"     style="' + css + ';right: 22px"></div>' +
+                '<div class="cancel ui-icon ui-icon-close select-id-quick-edit-cancel" title="' + data.texts.cancel + '" style="' + css + ';right: 2px"></div>');
 
         var $input = (attr === 'function' || attr === 'room' || states) ? $this.find('select') : $this.find('input');
 
@@ -638,7 +704,7 @@
                     $input.trigger('blur');
                 }
             });
-        } else if (attr === 'role')  {
+        } else if (attr === 'role') {
             $input.autocomplete({
                 minLength: 0,
                 source: data.roles
@@ -647,48 +713,58 @@
             });
         }
 
-        $this.find('.select-id-quick-edit-cancel').click(function (e)  {
-            if (timeout) clearTimeout(timeout);
+        $this.find('.select-id-quick-edit-cancel').click(function (e) {
+            if (timeout)
+                clearTimeout(timeout);
             timeout = null;
             e.preventDefault();
             e.stopPropagation();
             var old = $this.data('old-value');
-            if (old === undefined) old = '';
+            if (old === undefined)
+                old = '';
             $this.html(old).click(onQuickEditField).addClass('select-id-quick-edit');
-            if (clippy) $this.addClass('clippy');
+            if (clippy)
+                $this.addClass('clippy');
         });
 
-        $this.find('.select-id-quick-edit-ok').click(function ()  {
+        $this.find('.select-id-quick-edit-ok').click(function () {
             var _$input = (attr === 'function' || attr === 'room' || states) ? $this.find('select') : $this.find('input');
             _$input.trigger('blur');
         });
         if (type === 'checkbox') {
             $input.prop('checked', oldVal);
         } else {
-            if (attr !== 'room' && attr !== 'function') $input.val(oldVal);
+            if (attr !== 'room' && attr !== 'function')
+                $input.val(oldVal);
         }
 
         $input.blur(function () {
-            if (timeout) clearTimeout(timeout);
+            if (timeout)
+                clearTimeout(timeout);
             timeout = setTimeout(function () {
                 var _oldText = $this.data('old-value');
                 var val = $(this).attr('type') === 'checkbox' ? $(this).prop('checked') : $(this).val();
-                if ((attr === 'room' || attr === 'function') && !val) val = [];
+                if ((attr === 'room' || attr === 'function') && !val)
+                    val = [];
 
                 if (attr === 'value' || JSON.stringify(val) !== JSON.stringify(_oldText)) {
                     data.quickEditCallback(id, attr, val, _oldText);
 
                     _oldText = '<span style="color: pink">' + _oldText + '</span>';
                 }
-                if (clippy) $this.addClass('clippy');
+                if (clippy)
+                    $this.addClass('clippy');
                 $this.html(_oldText).click(onQuickEditField).addClass('select-id-quick-edit');
             }.bind(this), 100);
         }).keyup(function (e) {
-            if (e.which === 13) $(this).trigger('blur');
+            if (e.which === 13)
+                $(this).trigger('blur');
             if (e.which === 27) {
-                if (clippy) $this.addClass('clippy');
+                if (clippy)
+                    $this.addClass('clippy');
                 var old = $this.data('old-value');
-                if (old === undefined) old = '';
+                if (old === undefined)
+                    old = '';
                 $this.html(old).click(onQuickEditField).addClass('select-id-quick-edit');
             }
         });
@@ -704,14 +780,20 @@
     }
 
     function quality2text(q) {
-        if (!q) return 'ok';
+        if (!q)
+            return 'ok';
         var custom = q & 0xFFFF0000;
         var text = '';
-        if (q & 0x40) text += 'device';
-        if (q & 0x80) text += 'sensor';
-        if (q & 0x01) text += ' bad';
-        if (q & 0x02) text += ' not connected';
-        if (q & 0x04) text += ' error';
+        if (q & 0x40)
+            text += 'device';
+        if (q & 0x80)
+            text += 'sensor';
+        if (q & 0x01)
+            text += ' bad';
+        if (q & 0x02)
+            text += ' not connected';
+        if (q & 0x04)
+            text += ' error';
 
         return text + (custom ? '|0x' + (custom >> 16).toString(16).toUpperCase() : '') + ' [0x' + q.toString(16).toUpperCase() + ']';
     }
@@ -734,18 +816,19 @@
         if (!data.noDialog && !data.buttonsDlg) {
             data.buttonsDlg = [
                 {
-                    id:   data.instance + '-button-ok',
+                    id: data.instance + '-button-ok',
                     text: data.texts.select,
                     click: function () {
                         var _data = $dlg.data('selectId');
-                        if (_data && _data.onSuccess) _data.onSuccess(_data.selectedID, _data.currentId, _data.objects[_data.selectedID]);
+                        if (_data && _data.onSuccess)
+                            _data.onSuccess(_data.selectedID, _data.currentId, _data.objects[_data.selectedID]);
                         _data.currentId = _data.selectedID;
                         storeSettings(data);
                         $dlg.dialog('close');
                     }
                 },
                 {
-                    id:   data.instance + '-button-cancel',
+                    id: data.instance + '-button-cancel',
                     text: data.texts.cancel,
                     click: function () {
                         storeSettings(data);
@@ -756,13 +839,16 @@
 
             $dlg.dialog({
                 autoOpen: false,
-                modal:    true,
-                width:    '90%',
-                close:    function () {
+                modal: true,
+                width: '90%',
+                open: function (event, ui) {
+                    $(event.target).parent().find('.ui-dialog-titlebar-close .ui-button-text').html('');
+                },
+                close: function () {
                     storeSettings(data);
                 },
-                height:   500,
-                buttons:  data.buttonsDlg
+                height: 500,
+                buttons: data.buttonsDlg
             });
             if (data.zindex !== null) {
                 $('div[aria-describedby="' + $dlg.attr('id') + '"]').css({'z-index': data.zindex})
@@ -773,7 +859,8 @@
         var filter = {ID: $('#filter_ID_' + data.instance).val()};
         for (var u = 0; u < data.columns.length; u++) {
             var name = data.columns[u];
-            if (typeof name === 'object') name = name.name;
+            if (typeof name === 'object')
+                name = name.name;
             filter[name] = $('#filter_' + name + '_' + data.instance).val();
         }
 
@@ -785,8 +872,10 @@
             }
             textRooms += '</select>';
         } else {
-            if (data.rooms)        delete data.rooms;
-            if (data.roomsColored) delete data.roomsColored;
+            if (data.rooms)
+                delete data.rooms;
+            if (data.roomsColored)
+                delete data.roomsColored;
         }
 
         var textFuncs;
@@ -797,8 +886,10 @@
             }
             textFuncs += '</select>';
         } else {
-            if (data.funcs)        delete data.funcs;
-            if (data.funcsColored) delete data.funcsColored;
+            if (data.funcs)
+                delete data.funcs;
+            if (data.funcsColored)
+                delete data.funcsColored;
         }
 
         var textRoles;
@@ -826,7 +917,8 @@
 
         for (c = 0; c < data.columns.length; c++) {
             var name = data.columns[c];
-            if (typeof name === 'object') name = name.name;
+            if (typeof name === 'object')
+                name = name.name;
             if (name === 'image') {
                 text += '<col width="' + (data.widths ? data.widths[c] : '20px') + '"/>';
             } else if (name === 'name') {
@@ -854,10 +946,10 @@
         text += '        </colgroup>';
         text += '        <thead>';
         text += '            <tr><th></th><th><table style="width: 100%; padding:0" cellspacing="0" cellpadding="0"><tr>';
-        text += '<td><button id="btn_refresh_'  + data.instance + '"></button></td>';
-        text += '<td><button id="btn_list_'     + data.instance + '"></button></td>';
+        text += '<td><button id="btn_refresh_' + data.instance + '"></button></td>';
+        text += '<td><button id="btn_list_' + data.instance + '"></button></td>';
         text += '<td><button id="btn_collapse_' + data.instance + '"></button></td>';
-        text += '<td><button id="btn_expand_'   + data.instance + '"></button></td><td class="select-id-custom-buttons"></td>';
+        text += '<td><button id="btn_expand_' + data.instance + '"></button></td><td class="select-id-custom-buttons"></td>';
         if (data.filter && data.filter.type === 'state' && multiselect) {
             text += '<td style="padding-left: 10px"><button id="btn_select_all_' + data.instance + '"></button></td>';
             text += '<td><button id="btn_unselect_all_' + data.instance + '"></button></td>';
@@ -878,7 +970,8 @@
 
         for (c = 0; c < data.columns.length; c++) {
             var _name = data.columns[c];
-            if (typeof _name === 'object') _name = name.name;
+            if (typeof _name === 'object')
+                _name = name.name;
             text += '<th class="ui-widget" style="font-size: medium">' + (data.texts[_name] || '') + '</th>';
         }
 
@@ -886,18 +979,19 @@
         text += '        </thead>';
         text += '        <tbody>';
         text += '            <tr><td></td>';
-        text += '               <td><table style="width: 100%"><tr><td style="width: 100%"><input style="width: 100%; padding: 0" type="text" id="filter_ID_'    + data.instance + '" class="filter_' + data.instance + '"/></td><td style="vertical-align: top;"><button data-id="filter_ID_'    + data.instance + '" class="filter_btn_' + data.instance + '"></button></td></tr></table></td>';
+        text += '               <td><table style="width: 100%"><tr><td style="width: 100%"><input style="width: 100%; padding: 0" type="text" id="filter_ID_' + data.instance + '" class="filter_' + data.instance + '"/></td><td style="vertical-align: top;"><button data-id="filter_ID_' + data.instance + '" class="filter_btn_' + data.instance + '"></button></td></tr></table></td>';
 
         for (c = 0; c < data.columns.length; c++) {
             var name = data.columns[c];
-            if (typeof name === 'object') name = name.name;
+            if (typeof name === 'object')
+                name = name.name;
             if (name === 'image') {
                 text += '<td></td>';
             } else if (name === 'name' || name === 'value' || name === 'enum') {
-                text += '<td><table style="width: 100%"><tr><td style="width: 100%"><input style="width: 100%; padding: 0" type="text" id="filter_' + data.columns[c] + '_'  + data.instance + '" class="filter_' + data.instance + '"/></td><td style="vertical-align: top;"><button data-id="filter_' + data.columns[c] + '_'  + data.instance + '" class="filter_btn_' + data.instance + '"></button></td></tr></table></td>';
+                text += '<td><table style="width: 100%"><tr><td style="width: 100%"><input style="width: 100%; padding: 0" type="text" id="filter_' + data.columns[c] + '_' + data.instance + '" class="filter_' + data.instance + '"/></td><td style="vertical-align: top;"><button data-id="filter_' + data.columns[c] + '_' + data.instance + '" class="filter_btn_' + data.instance + '"></button></td></tr></table></td>';
             } else if (name === 'type') {
                 text += '<td>' + textTypes + '</td>';
-            } else if (name== 'role') {
+            } else if (name == 'role') {
                 text += '<td>' + textRoles + '</td>';
             } else if (name === 'room') {
                 text += '<td>' + textRooms + '</td>';
@@ -906,9 +1000,9 @@
             } else if (name === 'button') {
                 text += '<td style="text-align: center">';
                 if (data.customButtonFilter) {
-                    var t = '<select id="filter_' + name + '_'  + data.instance + '" class="filter_' + data.instance + '">';
-                    t += '<option value="">'      + data.texts.all     + '</option>';
-                    t += '<option value="true">'  + data.texts.with    + '</option>';
+                    var t = '<select id="filter_' + name + '_' + data.instance + '" class="filter_' + data.instance + '">';
+                    t += '<option value="">' + data.texts.all + '</option>';
+                    t += '<option value="true">' + data.texts.with + '</option>';
                     t += '<option value="false">' + data.texts.without + '</option>';
                     for (var h = 0; h < data.histories.length; h++) {
                         t += '<option value="' + data.histories[h] + '">' + data.histories[h] + '</option>';
@@ -916,7 +1010,7 @@
 
                     t += '</select>';
 
-                    text += '<table cellpadding="0" cellspacing="0" style="border-spacing: 0 0"><tr><td>' + t + '</td>' + '<td><button id="filter_' + data.columns[c] + '_'  + data.instance + '_btn"></button></td></tr></table>'
+                    text += '<table cellpadding="0" cellspacing="0" style="border-spacing: 0 0"><tr><td>' + t + '</td>' + '<td><button id="filter_' + data.columns[c] + '_' + data.instance + '_btn"></button></td></tr></table>'
                 }
                 text += '</td>';
             } else {
@@ -930,14 +1024,15 @@
 
         //text += '<div style="width: 100%; height: ' + (data.buttons ? 100 : 85) + '%; padding:0; overflow-y: scroll">';
         text += '<div style="width: 100%; height: ' + (data.buttons ? 'calc(100% - 50px)' : 'calc(100% - 50px)') + '; padding:0; overflow-y: scroll">';
-        text +=' <table id="selectID_' + data.instance + '" style="width: calc(100% - 5px);padding:0;table-layout:fixed; overflow:hidden;white-space:nowrap" cellspacing="0" cellpadding="0">';
+        text += ' <table id="selectID_' + data.instance + '" style="width: calc(100% - 5px);padding:0;table-layout:fixed; overflow:hidden;white-space:nowrap" cellspacing="0" cellpadding="0">';
         text += '        <colgroup>';
         text += '            <col width="1px"/>';
         text += '            <col ' + (data.firstMinWidth ? ('width="' + data.firstMinWidth + '"') : 'width="400px"') + '/>';
 
         for (c = 0; c < data.columns.length; c++) {
             var name = data.columns[c];
-            if (typeof name === 'object') name = name.name;
+            if (typeof name === 'object')
+                name = name.name;
             if (name === 'image') {
                 text += '<col width="' + (data.widths ? data.widths[c] : '20px') + '"/>';
             } else if (name === 'name') {
@@ -979,17 +1074,17 @@
         data.$tree[0]._onChange = data.onSuccess || data.onChange;
 
         var foptions = {
-            titlesTabbable: true,     // Add all node titles to TAB chain
-            quicksearch:    true,
-            source:         data.tree.children,
-            extensions:     ["table", "gridnav", "filter", "themeroller"],
-            checkbox:       multiselect,
+            titlesTabbable: true, // Add all node titles to TAB chain
+            quicksearch: true,
+            source: data.tree.children,
+            extensions: ["table", "gridnav", "filter", "themeroller"],
+            checkbox: multiselect,
             table: {
                 indentation: 20,
                 nodeColumnIdx: 1
             },
             gridnav: {
-                autofocusInput:   false,
+                autofocusInput: false,
                 handleCursorKeys: true
             },
             filter: {
@@ -1004,7 +1099,8 @@
                     var _data = $dlg.data('selectId');
                     var newId = data.node.key;
 
-                    if (_data.onChange) _data.onChange(newId, _data.selectedID, _data.objects[newId]);
+                    if (_data.onChange)
+                        _data.onChange(newId, _data.selectedID, _data.objects[newId]);
 
                     _data.selectedID = newId;
                     if (!_data.noDialog) {
@@ -1024,15 +1120,16 @@
                     }
                 }
             },
-            select: function(event, data) {
+            select: function (event, data) {
                 var _data = $dlg.data('selectId');
                 var newIds = [];
                 var selectedNodes = data.tree.getSelectedNodes();
-                for	(var i = 0; i < selectedNodes.length; i++) {
+                for (var i = 0; i < selectedNodes.length; i++) {
                     newIds.push(selectedNodes[i].key);
                 }
 
-                if (_data.onChange) _data.onChange(newIds, _data.selectedID);
+                if (_data.onChange)
+                    _data.onChange(newIds, _data.selectedID);
 
                 _data.selectedID = newIds;
 
@@ -1045,7 +1142,7 @@
             },
             renderColumns: function (event, _data) {
                 var node = _data.node;
-                var $tr     = $(node.tr);
+                var $tr = $(node.tr);
                 var $tdList = $tr.find('>td');
 
                 var isCommon = data.objects[node.key] && data.objects[node.key].common;
@@ -1073,12 +1170,12 @@
 
                 if (!data.noCopyToClipboard) {
                     $firstTD
-                        .addClass('clippy')
-                        .data('clippy', node.key)
-                        .css({position: 'relative'})
-                        .data('copyToClipboard', data.texts.copyToClipboard || data.texts.copyTpClipboard)
-                        .mouseenter(clippyShow)
-                        .mouseleave(clippyHide);
+                            .addClass('clippy')
+                            .data('clippy', node.key)
+                            .css({position: 'relative'})
+                            .data('copyToClipboard', data.texts.copyToClipboard || data.texts.copyTpClipboard)
+                            .mouseenter(clippyShow)
+                            .mouseleave(clippyHide);
                 }
 
                 if (data.useNameAsId && data.objects[node.key] && data.objects[node.key].common && data.objects[node.key].common.name) {
@@ -1088,7 +1185,8 @@
                 var val;
                 for (var c = 0; c < data.columns.length; c++) {
                     var name = data.columns[c];
-                    if (typeof name === 'object') name = name.name;
+                    if (typeof name === 'object')
+                        name = name.name;
                     if (name === 'image') {
                         var icon = '';
                         var alt = '';
@@ -1120,13 +1218,13 @@
                                 }
                             } else if (data.objects[node.key].type === 'device') {
                                 icon = data.imgPath + 'device.png';
-                                alt  = 'device';
+                                alt = 'device';
                             } else if (data.objects[node.key].type === 'channel') {
                                 icon = data.imgPath + 'channel.png';
-                                alt  = 'channel';
+                                alt = 'channel';
                             } else if (data.objects[node.key].type === 'state') {
                                 icon = data.imgPath + 'state.png';
-                                alt  = 'state';
+                                alt = 'state';
                             }
                         }
                         if (icon) {
@@ -1146,7 +1244,7 @@
                         base++;
                     } else
                     if (name === 'type') {
-                        $tdList.eq(base++).text(data.objects[node.key] ? data.objects[node.key].type: '');
+                        $tdList.eq(base++).text(data.objects[node.key] ? data.objects[node.key].type : '');
                     } else
                     if (name === 'role') {
                         $elem = $tdList.eq(base);
@@ -1163,8 +1261,11 @@
                         $elem = $tdList.eq(base);
                         // Try to find room
                         if (data.roomsColored) {
-                            if (!data.roomsColored[node.key]) data.roomsColored[node.key] = findRoomsForObject(data, node.key, true);
-                            val = data.roomsColored[node.key].map(function (e) {return e.name;}).join(', ');
+                            if (!data.roomsColored[node.key])
+                                data.roomsColored[node.key] = findRoomsForObject(data, node.key, true);
+                            val = data.roomsColored[node.key].map(function (e) {
+                                return e.name;
+                            }).join(', ');
                             if (data.roomsColored[node.key].length && data.roomsColored[node.key][0].origin !== node.key) {
                                 $elem.css({color: 'gray'}).attr('title', data.roomsColored[node.key][0].origin);
                             } else {
@@ -1178,10 +1279,10 @@
                         if (data.quickEdit && data.objects[node.key] && data.quickEdit.indexOf('room') !== -1) {
                             $elem.data('old-value', val);
                             $elem.click(onQuickEditField)
-                                .data('id', node.key)
-                                .data('name', 'room')
-                                .data('selectId', data)
-                                .addClass('select-id-quick-edit');
+                                    .data('id', node.key)
+                                    .data('name', 'room')
+                                    .data('selectId', data)
+                                    .addClass('select-id-quick-edit');
                         }
                         base++;
                     } else
@@ -1189,8 +1290,11 @@
                         $elem = $tdList.eq(base);
                         // Try to find function
                         if (data.funcsColored) {
-                            if (!data.funcsColored[node.key]) data.funcsColored[node.key] = findFunctionsForObject(data, node.key, true);
-                            val = data.funcsColored[node.key].map(function (e) {return e.name;}).join(', ');
+                            if (!data.funcsColored[node.key])
+                                data.funcsColored[node.key] = findFunctionsForObject(data, node.key, true);
+                            val = data.funcsColored[node.key].map(function (e) {
+                                return e.name;
+                            }).join(', ');
                             if (data.funcsColored[node.key].length && data.funcsColored[node.key][0].origin !== node.key) {
                                 $elem.css({color: 'gray'}).attr('title', data.funcsColored[node.key][0].origin);
                             } else {
@@ -1204,10 +1308,10 @@
                         if (data.quickEdit && data.objects[node.key] && data.quickEdit.indexOf('function') !== -1) {
                             $elem.data('old-value', val);
                             $elem.click(onQuickEditField)
-                                .data('id', node.key)
-                                .data('name', 'function')
-                                .data('selectId', data)
-                                .addClass('select-id-quick-edit');
+                                    .data('id', node.key)
+                                    .data('name', 'function')
+                                    .data('selectId', data)
+                                    .addClass('select-id-quick-edit');
                         }
                         base++;
                     } else
@@ -1220,12 +1324,12 @@
                             var states = getStates(data, node.key);
                             if (!state) {
                                 state = {
-                                    val:  data.states[node.key + '.val'],
-                                    ts:   data.states[node.key + '.ts'],
-                                    lc:   data.states[node.key + '.lc'],
+                                    val: data.states[node.key + '.val'],
+                                    ts: data.states[node.key + '.ts'],
+                                    lc: data.states[node.key + '.lc'],
                                     from: data.states[node.key + '.from'],
                                     ack: (data.states[node.key + '.ack'] === undefined) ? '' : data.states[node.key + '.ack'],
-                                    q:   (data.states[node.key + '.q']   === undefined) ? 0  : data.states[node.key + '.q']
+                                    q: (data.states[node.key + '.q'] === undefined) ? 0 : data.states[node.key + '.q']
                                 };
                             } else {
                                 state = JSON.parse(JSON.stringify(state));
@@ -1235,7 +1339,7 @@
                                 state.val = state.val ? (new Date(state.val)).toString() : state.val;
                             }
                             if (states && states[state.val] !== undefined) {
-                                state.val = states[state.val]  + '(' + state.val + ')';
+                                state.val = states[state.val] + '(' + state.val + ')';
                             }
 
                             var fullVal;
@@ -1243,47 +1347,50 @@
                                 state.val = '';
                             } else {
                                 // if less 2000.01.01 00:00:00
-                                if (state.ts < 946681200000)  state.ts *= 1000;
-                                if (state.lc < 946681200000)  state.lc *= 1000;
+                                if (state.ts < 946681200000)
+                                    state.ts *= 1000;
+                                if (state.lc < 946681200000)
+                                    state.lc *= 1000;
 
-                                if (isCommon && common.unit) state.val += ' ' + common.unit;
-                                fullVal  =          data.texts.value   + ': ' + state.val;
-                                fullVal += '\x0A' + data.texts.ack     + ': ' + state.ack;
-                                fullVal += '\x0A' + data.texts.ts      + ': ' + (state.ts ? formatDate(new Date(state.ts)) : '');
-                                fullVal += '\x0A' + data.texts.lc      + ': ' + (state.lc ? formatDate(new Date(state.lc)) : '');
-                                fullVal += '\x0A' + data.texts.from    + ': ' + (state.from || '');
+                                if (isCommon && common.unit)
+                                    state.val += ' ' + common.unit;
+                                fullVal = data.texts.value + ': ' + state.val;
+                                fullVal += '\x0A' + data.texts.ack + ': ' + state.ack;
+                                fullVal += '\x0A' + data.texts.ts + ': ' + (state.ts ? formatDate(new Date(state.ts)) : '');
+                                fullVal += '\x0A' + data.texts.lc + ': ' + (state.lc ? formatDate(new Date(state.lc)) : '');
+                                fullVal += '\x0A' + data.texts.from + ': ' + (state.from || '');
                                 fullVal += '\x0A' + data.texts.quality + ': ' + quality2text(state.q || 0);
                             }
 
                             $elem.html('<span class="highlight">' + state.val + '</span>')
-                                .attr('title', fullVal)
-                                .css({position: 'relative'});
+                                    .attr('title', fullVal)
+                                    .css({position: 'relative'});
 
                             $elem.css({color: state.ack ? (state.q ? 'orange' : '') : 'red'});
 
                             if (!data.noCopyToClipboard && data.objects[node.key] && data.objects[node.key].type === 'state' && common.type !== 'file') {
                                 $elem.data('clippy', state.val)
-                                    .addClass('clippy')
-                                    .data('copyToClipboard', data.texts.copyToClipboard || data.texts.copyTpClipboard)
-                                    .mouseenter(clippyShow)
-                                    .mouseleave(clippyHide);
+                                        .addClass('clippy')
+                                        .data('copyToClipboard', data.texts.copyToClipboard || data.texts.copyTpClipboard)
+                                        .mouseenter(clippyShow)
+                                        .mouseleave(clippyHide);
                             }
 
                         } else {
                             $elem.text('')
-                                .attr('title', '')
-                                .removeClass('clippy');
+                                    .attr('title', '')
+                                    .removeClass('clippy');
                         }
                         $elem.dblclick(function (e) {
                             e.preventDefault();
                         });
 
                         if (data.quickEdit &&
-                            data.objects[node.key] &&
-                            data.objects[node.key].type === 'state' &&
-                            data.quickEdit.indexOf('value') !== -1  &&
-                            (data.expertMode || data.objects[node.key].common.write !== false)
-                        ) {
+                                data.objects[node.key] &&
+                                data.objects[node.key].type === 'state' &&
+                                data.quickEdit.indexOf('value') !== -1 &&
+                                (data.expertMode || data.objects[node.key].common.write !== false)
+                                ) {
                             if (data.objects[node.key].common.role === 'button' && !data.expertMode) {
                                 $tdList.eq(base).html('<button data-id="' + node.key + '" class="select-button-push"></button>');
                             } else
@@ -1293,10 +1400,10 @@
                                 $elem.data('old-value', val).data('type', common.type || typeof val);
 
                                 $elem.click(onQuickEditField)
-                                    .data('id', node.key)
-                                    .data('name', 'value')
-                                    .data('selectId', data)
-                                    .addClass('select-id-quick-edit');
+                                        .data('id', node.key)
+                                        .data('name', 'value')
+                                        .data('selectId', data)
+                                        .addClass('select-id-quick-edit');
                             }
 
                             $tr.find('.select-button-push[data-id="' + node.key + '"]').button({
@@ -1315,7 +1422,7 @@
 
                             // link
                             $elem.html('<a href="' + data.webServer + '/state/' + node.key + '" target="_blank">' + data.webServer + '/state/' + node.key + '</a>')
-                                .attr('title', data.texts.linkToFile);
+                                    .attr('title', data.texts.linkToFile);
                         }
 
                         base++;
@@ -1328,8 +1435,8 @@
                                 text = '';
                                 if (data.editEnd) {
                                     text += '<button data-id="' + node.key + '" class="select-button-edit"></button>' +
-                                        '<button data-id="' + node.key + '" class="select-button-ok"></button>' +
-                                        '<button data-id="' + node.key + '" class="select-button-cancel"></button>';
+                                            '<button data-id="' + node.key + '" class="select-button-ok"></button>' +
+                                            '<button data-id="' + node.key + '" class="select-button-cancel"></button>';
                                 }
 
                                 for (var j = 0; j < data.buttons.length; j++) {
@@ -1341,26 +1448,30 @@
                                 for (var p = 0; p < data.buttons.length; p++) {
                                     var btn = $tr.find('.select-button-' + p + '[data-id="' + node.key + '"]').button(data.buttons[p]).click(function () {
                                         var cb = $(this).data('callback');
-                                        if (cb) cb.call($(this), $(this).attr('data-id'));
+                                        if (cb)
+                                            cb.call($(this), $(this).attr('data-id'));
                                     }).data('callback', data.buttons[p].click).attr('title', data.buttons[p].title || '');
-                                    if (data.buttons[p].width) btn.css({width: data.buttons[p].width});
-                                    if (data.buttons[p].height) btn.css({height: data.buttons[p].height});
-                                    if (data.buttons[p].match) data.buttons[p].match.call(btn, node.key);
+                                    if (data.buttons[p].width)
+                                        btn.css({width: data.buttons[p].width});
+                                    if (data.buttons[p].height)
+                                        btn.css({height: data.buttons[p].height});
+                                    if (data.buttons[p].match)
+                                        data.buttons[p].match.call(btn, node.key);
                                 }
                             } else {
                                 $tdList.eq(base).text('');
                             }
                         } else if (data.editEnd) {
                             text = '<button data-id="' + node.key + '" class="select-button-edit"></button>' +
-                            '<button data-id="' + node.key + '" class="select-button-ok"></button>' +
-                            '<button data-id="' + node.key + '" class="select-button-cancel"></button>';
+                                    '<button data-id="' + node.key + '" class="select-button-ok"></button>' +
+                                    '<button data-id="' + node.key + '" class="select-button-cancel"></button>';
                         }
 
                         if (data.editEnd) {
                             $tr.find('.select-button-edit[data-id="' + node.key + '"]').button({
                                 text: false,
                                 icons: {
-                                    primary:'ui-icon-pencil'
+                                    primary: 'ui-icon-pencil'
                                 }
                             }).click(function () {
                                 $(this).data('node').editStart();
@@ -1409,20 +1520,21 @@
                         $elem = $tdList.eq(base);
                         var val = data.columns[c].data(node.key, data.columns[c].name);
                         var title = '';
-                        if (data.columns[c].title) title = data.columns[c].title(node.key, data.columns[c].name);
+                        if (data.columns[c].title)
+                            title = data.columns[c].title(node.key, data.columns[c].name);
                         $elem.html(val).attr('title', title);
                         if (data.quickEdit && data.objects[node.key]) {
                             for (var q = 0; q < data.quickEdit.length; q++) {
                                 if (data.quickEdit[q] === data.columns[c].name ||
-                                    data.quickEdit[q].name === data.columns[c].name) {
+                                        data.quickEdit[q].name === data.columns[c].name) {
                                     $elem.data('old-value', val).data('type', typeof val);
 
                                     $elem.click(onQuickEditField)
-                                        .data('id', node.key)
-                                        .data('name', data.columns[c].name)
-                                        .data('selectId', data)
-                                        .data('options', data.quickEdit[q].options)
-                                        .addClass('select-id-quick-edit');
+                                            .data('id', node.key)
+                                            .data('name', data.columns[c].name)
+                                            .data('selectId', data)
+                                            .data('options', data.quickEdit[q].options)
+                                            .addClass('select-id-quick-edit');
 
                                     break;
                                 }
@@ -1451,15 +1563,16 @@
             foptions.extensions.push('edit');
             foptions.edit = {
                 triggerStart: ['f2', 'dblclick', 'shift+click', 'mac+enter'],
-                triggerStop:  ['esc'],
+                triggerStop: ['esc'],
                 beforeEdit: function (event, _data) {
                     // Return false to prevent edit mode
-                    if (!data.objects[_data.node.key]) return false;
+                    if (!data.objects[_data.node.key])
+                        return false;
                 },
                 edit: function (event, _data) {
-                    $dlg.find('.select-button-edit[data-id="'   + _data.node.key + '"]').hide();
+                    $dlg.find('.select-button-edit[data-id="' + _data.node.key + '"]').hide();
                     $dlg.find('.select-button-cancel[data-id="' + _data.node.key + '"]').show();
-                    $dlg.find('.select-button-ok[data-id="'     + _data.node.key + '"]').show();
+                    $dlg.find('.select-button-ok[data-id="' + _data.node.key + '"]').show();
                     $dlg.find('.select-button-custom[data-id="' + _data.node.key + '"]').hide();
 
                     var node = _data.node;
@@ -1469,7 +1582,8 @@
 
                     for (var c = 0; c < data.columns.length; c++) {
                         var name = data.columns[c];
-                        if (typeof name === 'object') name = name.name;
+                        if (typeof name === 'object')
+                            name = name.name;
 
                         if (name === 'name') {
                             $tdList.eq(2 + c).html('<input type="text" id="select_edit_' + name + '" value="' + data.objects[_data.node.key].common[name] + '" style="width: 100%"/>');
@@ -1493,7 +1607,8 @@
                         }).data('node', node);
                     }
 
-                    if (data.editStart) data.editStart(_data.node.key, inputs);
+                    if (data.editStart)
+                        data.editStart(_data.node.key, inputs);
                     node.editFinished = false;
                 },
                 beforeClose: function (event, _data) {
@@ -1505,14 +1620,16 @@
 
                     for (var c = 0; c < data.columns.length; c++) {
                         var name = data.columns[c];
-                        if (typeof name === 'object') name = name.name;
+                        if (typeof name === 'object')
+                            name = name.name;
                         if (name === 'name') {
                             editValues[name] = $dlg.find('#select_edit_' + name).val();
                         }
                     }
 
                     // Save data.input.val() or return false to keep editor open
-                    if (data.editEnd) data.editEnd(_data.node.key, editValues);
+                    if (data.editEnd)
+                        data.editEnd(_data.node.key, editValues);
                     _data.node.render(true);
 
                     // We return true, so ext-edit will set the current user input
@@ -1524,7 +1641,8 @@
                     $dlg.find('.select-button-cancel[data-id="' + _data.node.key + '"]').hide();
                     $dlg.find('.select-button-ok[data-id="' + _data.node.key + '"]').hide();
                     $dlg.find('.select-button-custom[data-id="' + _data.node.key + '"]').show();
-                    if (_data.node.editFinished !== undefined) delete _data.node.editFinished;
+                    if (_data.node.editFinished !== undefined)
+                        delete _data.node.editFinished;
                     // Editor was removed
                     if (data.save) {
                         // Since we started an async request, mark the node as preliminary
@@ -1560,29 +1678,29 @@
                     node.moveTo(node.getParent(), 'after');
                     node.setActive();
                     break;
-                /*case 'copy':
-                    CLIPBOARD = {
-                        mode: data.cmd,
-                        data: node.toDict(function (n) {
-                            delete n.key;
-                        })
-                    };
-                    break;
-                case 'clear':
-                    CLIPBOARD = null;
-                    break;*/
+                    /*case 'copy':
+                     CLIPBOARD = {
+                     mode: data.cmd,
+                     data: node.toDict(function (n) {
+                     delete n.key;
+                     })
+                     };
+                     break;
+                     case 'clear':
+                     CLIPBOARD = null;
+                     break;*/
                 default:
-                    bootbox.alert('Unhandled command: ' + data.cmd);
+                    alert('Unhandled command: ' + data.cmd);
                     return;
             }
 
         }).on('keydown', function (e) {
-            var c   = String.fromCharCode(e.which);
+            var c = String.fromCharCode(e.which);
             var cmd = null;
 
             if (e.which === 'c' && e.ctrlKey) {
                 cmd = 'copy';
-            }else if (e.which === $.ui.keyCode.UP && e.ctrlKey) {
+            } else if (e.which === $.ui.keyCode.UP && e.ctrlKey) {
                 cmd = 'moveUp';
             } else if (e.which === $.ui.keyCode.DOWN && e.ctrlKey) {
                 cmd = 'moveDown';
@@ -1598,7 +1716,8 @@
         });
 
         function customFilter(node) {
-            if (node.parent && node.parent.match) return true;
+            if (node.parent && node.parent.match)
+                return true;
 
             // Read all filter settings
             if (data.filterVals === null) {
@@ -1611,7 +1730,8 @@
 
                 for (var c = 0; c < data.columns.length; c++) {
                     var name = data.columns[c];
-                    if (typeof name === 'object') name = name.name;
+                    if (typeof name === 'object')
+                        name = name.name;
                     if (name === 'image') {
                         //continue;
                     } else if (name === 'role' || name === 'type' || name === 'room' || name === 'function') {
@@ -1630,53 +1750,70 @@
                     }
                 }
                 // if no clear "close" event => store on change
-                if (data.noDialog) storeSettings(data);
+                if (data.noDialog)
+                    storeSettings(data);
             }
 
             var isCommon = null;
 
             for (var f in data.filterVals) {
-                if (f === 'length') continue;
+                if (f === 'length')
+                    continue;
 
-                if (isCommon === null) isCommon = data.objects[node.key] && data.objects[node.key].common;
+                if (isCommon === null)
+                    isCommon = data.objects[node.key] && data.objects[node.key].common;
 
                 if (f === 'ID') {
-                    if (node.key.toLowerCase().indexOf(data.filterVals[f]) === -1) return false;
+                    if (node.key.toLowerCase().indexOf(data.filterVals[f]) === -1)
+                        return false;
                 } else
                 if (f === 'name' || f === 'enum') {
-                    if (!isCommon || data.objects[node.key].common[f] === undefined || data.objects[node.key].common[f].toLowerCase().indexOf(data.filterVals[f]) === -1) return false;
+                    if (!isCommon || data.objects[node.key].common[f] === undefined || data.objects[node.key].common[f].toLowerCase().indexOf(data.filterVals[f]) === -1)
+                        return false;
                 } else
                 if (f === 'role') {
-                    if (!isCommon || data.objects[node.key].common[f] === undefined || data.objects[node.key].common[f].indexOf(data.filterVals[f]) === -1) return false;
+                    if (!isCommon || data.objects[node.key].common[f] === undefined || data.objects[node.key].common[f].indexOf(data.filterVals[f]) === -1)
+                        return false;
                 } else
                 if (f === 'type') {
-                    if (!data.objects[node.key] || data.objects[node.key][f] === undefined || data.objects[node.key][f] !== data.filterVals[f]) return false;
+                    if (!data.objects[node.key] || data.objects[node.key][f] === undefined || data.objects[node.key][f] !== data.filterVals[f])
+                        return false;
                 } else
                 if (f === 'value') {
-                    if (!data.states[node.key] || data.states[node.key].val === undefined || data.states[node.key].val === null || data.states[node.key].val.toString().toLowerCase().indexOf(data.filterVals[f]) === -1) return false;
+                    if (!data.states[node.key] || data.states[node.key].val === undefined || data.states[node.key].val === null || data.states[node.key].val.toString().toLowerCase().indexOf(data.filterVals[f]) === -1)
+                        return false;
                 } else
                 if (f === 'button') {
                     if (data.filterVals[f] === 'true') {
-                        if (!isCommon || !data.objects[node.key].common.custom || data.objects[node.key].common.custom.enabled === false) return false;
+                        if (!isCommon || !data.objects[node.key].common.custom || data.objects[node.key].common.custom.enabled === false)
+                            return false;
                     } else if (data.filterVals[f] === 'false') {
-                        if (!isCommon || data.objects[node.key].type !== 'state' || data.objects[node.key].common.custom) return false;
+                        if (!isCommon || data.objects[node.key].type !== 'state' || data.objects[node.key].common.custom)
+                            return false;
                     } else if (data.filterVals[f]) {
-                        if (!isCommon || !data.objects[node.key].common.custom || !data.objects[node.key].common.custom[data.filterVals[f]]) return false;
+                        if (!isCommon || !data.objects[node.key].common.custom || !data.objects[node.key].common.custom[data.filterVals[f]])
+                            return false;
                     }
                 } else
                 if (f === 'room') {
-                    if (!data.objects[node.key]) return false;
+                    if (!data.objects[node.key])
+                        return false;
 
                     // Try to find room
-                    if (!data.rooms[node.key]) data.rooms[node.key] = findRoomsForObject(data, node.key);
-                    if (data.rooms[node.key].indexOf(data.filterVals[f]) === -1) return false;
+                    if (!data.rooms[node.key])
+                        data.rooms[node.key] = findRoomsForObject(data, node.key);
+                    if (data.rooms[node.key].indexOf(data.filterVals[f]) === -1)
+                        return false;
                 } else
                 if (f === 'function') {
-                    if (!data.objects[node.key]) return false;
+                    if (!data.objects[node.key])
+                        return false;
 
                     // Try to find functions
-                    if (!data.funcs[node.key]) data.funcs[node.key] = findFunctionsForObject(data, node.key);
-                    if (data.funcs[node.key].indexOf(data.filterVals[f]) === -1) return false;
+                    if (!data.funcs[node.key])
+                        data.funcs[node.key] = findFunctionsForObject(data, node.key);
+                    if (data.funcs[node.key].indexOf(data.filterVals[f]) === -1)
+                        return false;
                 }
             }
 
@@ -1690,8 +1827,9 @@
             $('#process_running_' + data.instance).hide();
         }).keyup(function () {
             var tree = data.$tree[0];
-            if (tree._timer) tree._timer = clearTimeout(tree._timer);
-            
+            if (tree._timer)
+                tree._timer = clearTimeout(tree._timer);
+
             var that = this;
             tree._timer = setTimeout(function () {
                 $(that).trigger('change');
@@ -1706,7 +1844,8 @@
             $('#process_running_' + data.instance).show();
             setTimeout(function () {
                 data.$tree.fancytree('getRootNode').visit(function (node) {
-                    if (!data.filterVals.length || node.match || node.subMatch) node.setExpanded(false);
+                    if (!data.filterVals.length || node.match || node.subMatch)
+                        node.setExpanded(false);
                 });
                 $('#process_running_' + data.instance).hide();
             }, 100);
@@ -1795,7 +1934,8 @@
                 }, 200);
             }).attr('title', data.texts.expertMode);
 
-            if (data.expertMode) $('#btn_expert_' + data.instance).addClass('ui-state-error');
+            if (data.expertMode)
+                $('#btn_expert_' + data.instance).addClass('ui-state-error');
         }
 
         $('#btn_unselect_all_' + data.instance).button({icons: {primary: 'ui-icon-circle-close'}, text: false}).css({width: 18, height: 18}).click(function () {
@@ -1812,7 +1952,7 @@
             $('#process_running_' + data.instance).show();
             setTimeout(function () {
                 data.$tree.fancytree('getRootNode').visit(function (node) {
-                    if (!data.filterVals.length || node.match || node.subMatch){
+                    if (!data.filterVals.length || node.match || node.subMatch) {
                         if (data.objects[node.key] && data.objects[node.key].type === 'state') {
                             node.toggleSelected();
                         }
@@ -1824,7 +1964,8 @@
 
         for (var f in filter) {
             try {
-                if (f) $('#filter_' + f + '_' + data.instance).val(filter[f]).trigger('change');
+                if (f)
+                    $('#filter_' + f + '_' + data.instance).val(filter[f]).trigger('change');
             } catch (err) {
                 console.error('Cannot apply filter: ' + err)
             }
@@ -1847,7 +1988,8 @@
 
         // set preset filters
         for (var field in data.filterPresets) {
-            if (!data.filterPresets[field]) continue;
+            if (!data.filterPresets[field])
+                continue;
             if (typeof data.filterPresets[field] === 'object') {
                 $('#filter_' + field + '_' + data.instance).val(data.filterPresets[field][0]).trigger('change');
             } else {
@@ -1857,9 +1999,11 @@
     }
 
     function storeSettings(data, force) {
-        if (typeof Storage === 'undefined' || !data.name) return;
+        if (typeof Storage === 'undefined' || !data.name)
+            return;
 
-        if (data.timer) clearTimeout(data.timer);
+        if (data.timer)
+            clearTimeout(data.timer);
 
         if (force) {
             window.localStorage.setItem(data.name + '-filter', JSON.stringify(data.filterVals));
@@ -1877,14 +2021,16 @@
         if (typeof Storage !== 'undefined' && data.name) {
             var f = window.localStorage.getItem(data.name + '-filter');
             if (f) {
-                try{
+                try {
                     f = JSON.parse(f);
                     for (var field in f) {
-                        if (field === 'length') continue;
-                        if (data.filterPresets[field]) continue;
+                        if (field === 'length')
+                            continue;
+                        if (data.filterPresets[field])
+                            continue;
                         $('#filter_' + field + '_' + data.instance).val(f[field]).trigger('change');
                     }
-                } catch(e) {
+                } catch (e) {
                     console.error('Cannot parse settings: ' + e);
                 }
             } else if (!data.filter) {
@@ -1898,48 +2044,48 @@
         init: function (options) {
             // done, just to show possible settings, this is not required
             var settings = $.extend({
-                currentId:  '',
-                objects:    null,
-                states:     null,
-                filter:     null,
-                imgPath:    'lib/css/fancytree/',
-                connCfg:    null,
-                onSuccess:  null,
-                onChange:   null,
-                zindex:     null,
-                list:       false,
-                name:       null,
+                currentId: '',
+                objects: null,
+                states: null,
+                filter: null,
+                imgPath: 'lib/css/fancytree/',
+                connCfg: null,
+                onSuccess: null,
+                onChange: null,
+                zindex: null,
+                list: false,
+                name: null,
                 columns: ['image', 'name', 'type', 'role', 'enum', 'room', 'function', 'value', 'button']
             }, options);
 
             settings.texts = settings.texts || {};
             settings.texts = $.extend({
-                select:   'Select',
-                cancel:   'Cancel',
-                all:      'All',
-                id:       'ID',
-                name:     'Name',
-                role:     'Role',
-                type:     'Type',
-                room:     'Room',
+                select: 'Select',
+                cancel: 'Cancel',
+                all: 'All',
+                id: 'ID',
+                name: 'Name',
+                role: 'Role',
+                type: 'Type',
+                room: 'Room',
                 'function': 'Function',
-                enum:     'Members',
-                value:    'Value',
+                enum: 'Members',
+                value: 'Value',
                 selectid: 'Select ID',
-                from:     'From',
-                quality:  'Quality',
-                lc:       'Last changed',
-                ts:       'Time stamp',
-                ack:      'Acknowledged',
-                expand:   'Expand all nodes',
+                from: 'From',
+                quality: 'Quality',
+                lc: 'Last changed',
+                ts: 'Time stamp',
+                ack: 'Acknowledged',
+                expand: 'Expand all nodes',
                 collapse: 'Collapse all nodes',
-                refresh:  'Rebuild tree',
-                edit:     'Edit',
-                ok:       'Ok',
-                push:     'Trigger event',
-                wait:     'Processing...',
-                list:     'Show list view',
-                tree:     'Show tree view',
+                refresh: 'Rebuild tree',
+                edit: 'Edit',
+                ok: 'Ok',
+                push: 'Trigger event',
+                wait: 'Processing...',
+                list: 'Show list view',
+                tree: 'Show tree view',
                 selectAll: 'Select all',
                 unselectAll: 'Unselect all',
                 invertSelection: 'Invert selection',
@@ -1954,31 +2100,31 @@
                 // Init data
                 if (!data) {
                     data = {
-                        tree:               {title: '', children: [], count: 0, root: true},
-                        roomEnums:          [],
-                        rooms:              {},
-                        roomsColored:       {},
-                        funcEnums:          [],
-                        funcs:              {},
-                        funcsColored:       {},
-                        roles:              [],
-                        histories:          [],
-                        types:              [],
+                        tree: {title: '', children: [], count: 0, root: true},
+                        roomEnums: [],
+                        rooms: {},
+                        roomsColored: {},
+                        funcEnums: [],
+                        funcs: {},
+                        funcsColored: {},
+                        roles: [],
+                        histories: [],
+                        types: [],
                         regexSystemAdapter: new RegExp('^system\\.adapter\\.'),
-                        regexSystemHost:    new RegExp('^system\\.host\\.'),
-                        regexEnumRooms:     new RegExp('^enum\\.rooms\\.'),
-                        regexEnumFuncs:     new RegExp('^enum\\.functions\\.'),
-                        instance:           instance++,
-                        inited:             false,
-                        filterPresets:      {}
+                        regexSystemHost: new RegExp('^system\\.host\\.'),
+                        regexEnumRooms: new RegExp('^enum\\.rooms\\.'),
+                        regexEnumFuncs: new RegExp('^enum\\.functions\\.'),
+                        instance: instance++,
+                        inited: false,
+                        filterPresets: {}
                     };
                     $dlg.data('selectId', data);
                 }
                 if (data.inited) {
                     // Re-init tree if filter or selectedID changed
                     if ((data.filter && !settings.filter && settings.filter !== undefined) ||
-                        (!data.filter && settings.filter) ||
-                        (data.filter && settings.filter && JSON.stringify(data.filter) !== JSON.stringify(settings.filter))) {
+                            (!data.filter && settings.filter) ||
+                            (data.filter && settings.filter && JSON.stringify(data.filter) !== JSON.stringify(settings.filter))) {
                         data.inited = false;
                     }
                     if (data.inited && settings.currentId !== undefined && (data.currentId !== settings.currentId)) {
@@ -1997,7 +2143,7 @@
 
                 data.rootExp = data.root ? new RegExp('^' + data.root.replace('.', '\\.')) : null;
 
-                    data.selectedID = data.currentId;
+                data.selectedID = data.currentId;
 
                 // make a copy of filter
                 data.filter = JSON.parse(JSON.stringify(data.filter));
@@ -2011,10 +2157,10 @@
                         if (data.socketURL && data.socketURL[0] === ':') {
                             data.socketURL = location.protocol + '//' + location.hostname + data.socketURL;
                         }
-                        data.socketSESSION          = data.connCfg.socketSession;
-                        data.socketUPGRADE          = data.connCfg.upgrade;
-                        data.socketRememberUpgrade  = data.connCfg.rememberUpgrade;
-                        data.socketTransports       = data.connCfg.transports;
+                        data.socketSESSION = data.connCfg.socketSession;
+                        data.socketUPGRADE = data.connCfg.upgrade;
+                        data.socketRememberUpgrade = data.connCfg.rememberUpgrade;
+                        data.socketTransports = data.connCfg.transports;
                     }
 
                     var connectTimeout = setTimeout(function () {
@@ -2026,17 +2172,18 @@
                         });
                     }, 5000);
 
-                   data.socket = io.connect(data.socketURL, {
-                        query:                          'key=' + data.socketSESSION,
-                        'reconnection limit':           10000,
-                        'max reconnection attempts':    Infinity,
-                        upgrade:                        data.socketUPGRADE,
-                        rememberUpgrade:                data.socketRememberUpgrade,
-                        transports:                     data.socketTransports
+                    data.socket = io.connect(data.socketURL, {
+                        query: 'key=' + data.socketSESSION,
+                        'reconnection limit': 10000,
+                        'max reconnection attempts': Infinity,
+                        upgrade: data.socketUPGRADE,
+                        rememberUpgrade: data.socketRememberUpgrade,
+                        transports: data.socketTransports
                     });
 
                     data.socket.on('connect', function () {
-                        if (connectTimeout) clearTimeout(connectTimeout);
+                        if (connectTimeout)
+                            clearTimeout(connectTimeout);
                         this.emit('name', data.connCfg.socketName || 'selectId');
                         this.emit('getObjects', function (err, res) {
                             data.objects = res;
@@ -2072,12 +2219,13 @@
                 var dlg = this[i];
                 var $dlg = $(dlg);
                 var data = $dlg.data('selectId');
-                if (!data) continue;
+                if (!data)
+                    continue;
                 if (data.inited) {
                     // Re-init tree if filter or selectedID changed
                     if ((data.filter && !filter && filter !== undefined) ||
-                        (!data.filter && filter) ||
-                        (data.filter &&  filter && JSON.stringify(data.filter) !== JSON.stringify(filter))) {
+                            (!data.filter && filter) ||
+                            (data.filter && filter && JSON.stringify(data.filter) !== JSON.stringify(filter))) {
                         data.inited = false;
                     }
 
@@ -2092,12 +2240,15 @@
                         });
                     }
                 }
-                if (currentId !== undefined) data.currentId = currentId;
-                if (filter    !== undefined) data.filter    = JSON.parse(JSON.stringify(filter));
+                if (currentId !== undefined)
+                    data.currentId = currentId;
+                if (filter !== undefined)
+                    data.filter = JSON.parse(JSON.stringify(filter));
                 if (onSuccess !== undefined) {
-                    data.onSuccess  = onSuccess;
+                    data.onSuccess = onSuccess;
                     data.$tree = $('#selectID_' + data.instance);
-                    if (data.$tree[0]) data.$tree[0]._onSuccess = data.onSuccess;
+                    if (data.$tree[0])
+                        data.$tree[0]._onSuccess = data.onSuccess;
                 }
                 data.selectedID = data.currentId;
 
@@ -2117,12 +2268,12 @@
                     }
                 }
                 if (!data.noDialog) {
-                    $dlg.dialog('option', 'title', data.texts.selectid +  ' - ' + (data.currentId || ' '));
+                    $dlg.dialog('option', 'title', data.texts.selectid + ' - ' + (data.currentId || ' '));
                     if (data.currentId) {
                         if (data.objects[data.currentId] && data.objects[data.currentId].common && data.objects[data.currentId].common.name) {
-                            $dlg.dialog('option', 'title', data.texts.selectid +  ' - ' + (data.objects[data.currentId].common.name || ' '));
+                            $dlg.dialog('option', 'title', data.texts.selectid + ' - ' + (data.objects[data.currentId].common.name || ' '));
                         } else {
-                            $dlg.dialog('option', 'title', data.texts.selectid +  ' - ' + (data.currentId || ' '));
+                            $dlg.dialog('option', 'title', data.texts.selectid + ' - ' + (data.currentId || ' '));
                         }
                     } else {
                         $('#' + data.instance + '-button-ok').addClass('ui-state-disabled');
@@ -2158,13 +2309,13 @@
                 var data = $dlg.data('selectId');
                 // Init data
                 if (data) {
-                    data.tree      = {title: '', children: [], count: 0, root: true};
-                    data.rooms     = {};
+                    data.tree = {title: '', children: [], count: 0, root: true};
+                    data.rooms = {};
                     data.roomEnums = [];
-                    data.funcs     = {};
+                    data.funcs = {};
                     data.funcEnums = [];
-                    data.roles     = [];
-                    data.types     = [];
+                    data.roles = [];
+                    data.types = [];
                     data.histories = [];
                 }
             }
@@ -2186,7 +2337,8 @@
                 var dlg = this[i];
                 var $dlg = $(dlg);
                 var data = $dlg.data('selectId');
-                if (!data || !data.$tree) continue;
+                if (!data || !data.$tree)
+                    continue;
 
                 var tree = data.$tree.fancytree('getTree');
                 var node = null;
@@ -2207,7 +2359,8 @@
                     for (var t = 0; t < node.children.length; t++) {
                         result.children.push(node.children[t].key);
                     }
-                    if (!result.children.length) delete result.children;
+                    if (!result.children.length)
+                        delete result.children;
 
                 }
                 return result;
@@ -2238,18 +2391,20 @@
         // update states
         state: function (id, state) {
             for (var i = 0; i < this.length; i++) {
-                var dlg  = this[i];
+                var dlg = this[i];
                 var $dlg = $(dlg);
                 var data = $dlg.data('selectId');
-                if (!data || !data.states || !data.$tree) continue;
+                if (!data || !data.states || !data.$tree)
+                    continue;
                 if (data.states[id] &&
-                    state &&
-                    data.states[id].val  === state.val  &&
-                    data.states[id].ack  === state.ack  &&
-                    data.states[id].q    === state.q    &&
-                    data.states[id].from === state.from &&
-                    data.states[id].ts   === state.ts
-                    ) return;
+                        state &&
+                        data.states[id].val === state.val &&
+                        data.states[id].ack === state.ack &&
+                        data.states[id].q === state.q &&
+                        data.states[id].from === state.from &&
+                        data.states[id].ts === state.ts
+                        )
+                    return;
 
                 data.states[id] = state;
                 var tree = data.$tree.fancytree('getTree');
@@ -2260,7 +2415,8 @@
                         return false;
                     }
                 });
-                if (node) node.render(true);
+                if (node)
+                    node.render(true);
             }
             return this;
         },
@@ -2270,9 +2426,10 @@
                 var dlg = this[k];
                 var $dlg = $(dlg);
                 var data = $dlg.data('selectId');
-                if (!data || !data.$tree || !data.objects) continue;
+                if (!data || !data.$tree || !data.objects)
+                    continue;
 
-                if (id.match(/^enum\.rooms/))     {
+                if (id.match(/^enum\.rooms/)) {
                     data.rooms = {};
                     data.roomsColored = {};
                 }
@@ -2297,7 +2454,8 @@
                     data.objects[id] = obj;
                     var addedNodes = [];
 
-                    if (!filterId(data, id)) return;
+                    if (!filterId(data, id))
+                        return;
 
                     treeInsert(data, id, false, addedNodes);
 
@@ -2324,7 +2482,8 @@
                         } else {
                             var c;
                             for (c = 0; c < node.children.length; c++) {
-                                if (node.children[c].key > addedNodes[i].key) break;
+                                if (node.children[c].key > addedNodes[i].key)
+                                    break;
                             }
                             // if some found greater than new one
                             if (c !== node.children.length) {
@@ -2361,7 +2520,8 @@
                     }
                 } else {
                     // object updated
-                    if (node) node.render(true);
+                    if (node)
+                        node.render(true);
                 }
             }
             return this;
@@ -2371,7 +2531,8 @@
                 var dlg = this[k];
                 var $dlg = $(dlg);
                 var data = $dlg.data('selectId');
-                if (!data) continue;
+                if (!data)
+                    continue;
 
                 if (data[name] !== undefined) {
                     data[name] = value;
@@ -2391,12 +2552,14 @@
                 var dlg = this[k];
                 var $dlg = $(dlg);
                 var data = $dlg.data('selectId');
-                if (!data || !data.$tree || !data.objects) continue;
+                if (!data || !data.$tree || !data.objects)
+                    continue;
 
                 var tree = data.$tree.fancytree('getTree');
                 var nodes = [];
                 tree.visit(function (n) {
-                    if (n.match) nodes.push(n.key);
+                    if (n.match)
+                        nodes.push(n.key);
                 });
                 return nodes;
             }
@@ -2419,7 +2582,7 @@
         } else if (typeof method === 'object' || !method) {
             return methods.init.apply(this, arguments);
         } else {
-            $.error('Method "' +  method + '" not found in jQuery.selectId');
+            $.error('Method "' + method + '" not found in jQuery.selectId');
         }
     };
 })(jQuery);

@@ -210,8 +210,9 @@ var adapterRedirect = function (redirect, timeout) {
                     }
                 }
                 // if less 2000.01.01 00:00:00
-                if (text !== 'object')
+                if (text !== 'object') {
                     dateObj = dateObj < 946681200000 ? new Date(dateObj * 1000) : new Date(dateObj);
+                }
 
                 var v;
                 if (!justTime) {
@@ -275,8 +276,9 @@ var adapterRedirect = function (redirect, timeout) {
                 var id;
                 if (typeof idOrList === 'object') {
                     if (!idOrList || !idOrList.length) {
-                        if (callback)
+                        if (callback) {
                             callback(null);
+                        }
                         return;
                     }
                     id = idOrList.pop();
@@ -402,9 +404,8 @@ var adapterRedirect = function (redirect, timeout) {
                             // If all
                             if (result === 0) {
                                 main._delObjects(id, true, callback);
-                            } else
-                            // if only one object
-                            if (result === 1) {
+                            } else if (result === 1) {
+                                // if only one object
                                 main._delObjects(id, false, callback);
                             } // else do nothing
                         });
@@ -583,8 +584,9 @@ var adapterRedirect = function (redirect, timeout) {
             navigation();
 
             main.socket.emit('authEnabled', function (auth, user) {
-                if (!auth)
+                if (!auth) {
                     $('#button-logout').remove();
+                }
                 $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
             });
 
@@ -617,8 +619,9 @@ var adapterRedirect = function (redirect, timeout) {
                             break;
                         }
                     }
-                    if (!isFound)
+                    if (!isFound) {
                         addMenus.push(main.instances[i]);
+                    }
                 } else {
                     addMenus.push(main.instances[i]);
                 }
@@ -794,8 +797,9 @@ var adapterRedirect = function (redirect, timeout) {
                                                 break;
                                             }
                                         }
-                                        if (addr)
+                                        if (addr) {
                                             break;
+                                        }
                                     }
                                 }
                                 if (addr) {
