@@ -9,13 +9,20 @@ function Objects(main) {
     this.main = main;
     this.customEnabled = null;
     this.currentCustoms = null; // Id of the currently shown customs dialog
-    this.treeOptions = {
+
+    var treeOptionsObjectTable = {
         extensions: ["edit", "glyph", "table"],
         glyph: that.main.glyph_opts,
         table: {
             indentation: 20 // indent 20px per node level
         },
-        renderColumns: that.renderColumns
+        renderColumns: function (event, data) {
+            var node = data.node;
+            var $tdList = $(node.tr).find(">td");
+            $tdList.eq(1).text(node.getIndexHier()).addClass("alignRight");
+            $tdList.eq(3).text(node.key);
+            $tdList.eq(4).html("<input type='checkbox' name='like' value='" + node.key + "'>");
+        }
     };
 
     this.prepare = function () {
@@ -201,27 +208,17 @@ function Objects(main) {
             return;
         }
 
-        $objectsContainer.html('');
-
         if (this.customEnabled === null) {
             this.checkCustoms();
         }
 
         this.assignObjectsMembers();
 
-        $objectsTable.fancytree(that.treeOptions);
+        $objectsTable.fancytree(treeOptionsObjectTable);
         var objectTree = $objectsTable.fancytree('getTree');
-        //objectTree.reload(that.objs);
+        objectTree.reload(convertToObjectTree(that.objs));
 
         this.main.fillContent('#menu-objects-div');
-    };
-
-    this.renderColumns = function (event, data) {
-        var node = data.node;
-        var $tdList = $(node.tr).find(">td");
-        $tdList.eq(1).text(node.getIndexHier()).addClass("alignRight");
-        $tdList.eq(3).text(node.key);
-        $tdList.eq(4).html("<input type='checkbox' name='like' value='" + node.key + "'>");
     };
 
     this.assignObjectsMembers = function () {
@@ -439,7 +436,7 @@ function Objects(main) {
             img = '/adapter/' + adapter + '/' + img;
             var tab = '<div class="customs-row-title ui-widget-header ' +
                     (hidden ? 'customs-row-title-collapsed' : 'customs-row-title-expanded') +
-                    '" data-adapter="' + data + '"><img class="customs-row-title-icon" width="20" src="' + img + '" /><span class="customs-row-title-settings">' + _('Settings for %s', '') + '</span>' + data +
+                    '" data-adapter="' + data + '"><img class="customs-row-title-icon" width="20" src="' + img + '" /><span class="customs-row-title-settings">' + $.i18n('Settings for %s', '') + '</span>' + data +
                     '</div>' +
                     '<div class="customs-settings" style="' + (hidden ? 'display: none' : '') + '">' +
                     $('script[data-template-name="' + adapter + '"]').html() +
@@ -530,8 +527,8 @@ function Objects(main) {
                     if (commons[instance][attr] === '__different__') {
                         /*$('<select data-field="' + attr + '" data-instance="' + instance + '">\n' +
                          '   <option value="' + wordDifferent + '" selected>' + wordDifferent + '</option>\n' +
-                         '   <option value="false">' + _('false') + '</option>\n' +
-                         '   <option value="true">'  + _('true')  + '</option>\n' +
+                         '   <option value="false">' + $.i18n('false') + '</option>\n' +
+                         '   <option value="true">'  + $.i18n('true')  + '</option>\n' +
                          '</select>').insertBefore($this);
                          $this.hide().attr('data-field', '').data('field', '');*/
                         $this[0].indeterminate = true;

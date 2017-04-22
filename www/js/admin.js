@@ -1280,11 +1280,18 @@ function convertToObjectTree(obj, key) {
     var converted = [];
     var elem = key === undefined ? obj : obj[key];
     for (var k in elem) {
-        var treeElement = {};
-        treeElement['title'] = k;
-        treeElement['key'] = k;
-        treeElement['folder'] = true;
-        converted.push(treeElement);
+        if (k.match(/^system\.|^iobroker\.|^_|^[\w-]+$|^enum\.|^[\w-]+\.admin|^script\./)) {
+            var treeElement = {};
+            treeElement['title'] = k;
+            treeElement['key'] = k;
+            if (Object.prototype.toString.call(elem[k]) === '[object Object]') {
+                treeElement['folder'] = true;
+                treeElement['children'] = convertToObjectTree(elem, k);
+            } else {
+                treeElement['folder'] = false;
+            }
+            converted.push(treeElement);
+        }
     }
     return converted;
 }

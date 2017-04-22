@@ -65,8 +65,6 @@ function States(main) {
             return;
         }
 
-        $('#states-body').html('');
-
         var data = [];
         for (var key in main.states) {
             var obj = convertState(key, main.states[key]);
