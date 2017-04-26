@@ -1237,7 +1237,23 @@ var adapterRedirect = function (redirect, timeout) {
             } else {
                 id = "home";
             }
-            menus[id].init();
+            
+            if ($('#custom-' + id + '-menu').length) {
+                main.fillContent('#custom-' + id + '-menu');
+                var $panel = $('#custom-' + id + '-menu');
+                var link = $panel.data('src');
+                if (link && link.indexOf('%') === -1) {
+                    var $iframe = $panel.find('iframe');
+                    if ($iframe.length && !$iframe.attr('src')) {
+                        $iframe.attr('src', link);
+                    }
+                } else {
+                    alert('problem-link');
+                }
+            } else {
+                menus[id].init();
+            }
+           
             $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
         }
 
