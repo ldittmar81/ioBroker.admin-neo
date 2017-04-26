@@ -542,20 +542,12 @@ var adapterRedirect = function (redirect, timeout) {
 
         function initHtmlMenus(showMenus) {
 
-            $(document.body).on("click", ".main-menu", function () {
-                var id = $(this).attr('id').slice(5);
-                menus[id].init();
-                $("#menu-title").text($.i18n(id));
-                $('.side-menu li.active').removeClass('active');
-                $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
-            });
-
             if (showMenus) {
                 $('#menus-show').html('<option value="" data-i18n="show">' + $.i18n('show') + '</option>' + showMenus).show();
 
                 $('#menus-show').on('change', function () {
                     if ($(this).val()) {
-                        main.systemConfig.common.tabs.push($(this).val());
+                        main.systemConfig.common.menus.push($(this).val());
                         // save
                         main.socket.emit('setObject', 'system.config', main.systemConfig, function (err) {
                             if (err) {
@@ -563,11 +555,11 @@ var adapterRedirect = function (redirect, timeout) {
                                 return;
                             }
                         });
-                        initTabs();
+                        initMenus();
                     }
                 });
             } else {
-                $('#tabs-show').html('').hide();
+                $('#menus-show').html('').hide();
             }
 
             main.updateWizard();
@@ -632,8 +624,10 @@ var adapterRedirect = function (redirect, timeout) {
                 var id = $(this).attr('id').substring(5, $(this).attr('id').length - 4);
                 list.push(id);
                 if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
-                    text += '<li class="text-nowrap"><a class="main-menu" href="#' + id + '" id="menu-' + id + '"><i class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a><a class="menu-close"><i class="fa fa-times"></i></a></li>\n';
-                    $(this).show().appendTo($('#menus'));
+                    text += '<li class="text-nowrap">';
+                    text += '<a class="main-menu" href="#' + id + '" id="menu-' + id + '">';
+                    text += '<i class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a>';
+                    text += '<a class="menu-close"><i class="fa fa-times"></i></a></li>';
                 } else {
                     showMenus += '<option value="' + id + '">' + $.i18n(id) + '</option>';
                 }
@@ -684,17 +678,17 @@ var adapterRedirect = function (redirect, timeout) {
                         isReplace = link.indexOf('%') !== -1;
                     }
 
-                    //       <li><a href="#hosts" id="menu-hosts"><i class="fa fa-server"></i> <span data-i18n="hosts">Hosts</span> </a></li>
                     var icon = main.objects[addMenus[a]].common.adminTab['fa-icon'] || 'fa-cog';
-                    text += '<li><a href="#' + name + '" id="menu-' + name + '"><i class="fa ' + icon + '"></i><span data-i18n="' + buttonName + '">' + buttonName + '</a><button class="menu-close" data-tab="' + name + '" style="display: none"></button></li>\n';
+                    text += '<li class="text-nowrap">';
+                    text += '<a class="main-menu" href="#' + name + '" id="menu-' + name + '">';
+                    text += '<i class="fa ' + icon + '"></i> <span data-i18n="' + buttonName + '">' + $.i18n(buttonName) + '</span></a>';
+                    text += '<a class="menu-close"><i class="fa fa-times"></i></a></li>';
 
                     //noinspection JSJQueryEfficiency
                     if (!$('#' + name).length) {
-                        var div = '<div id="' + name + '" class="tab-custom ' + (isReplace ? 'link-replace' : '') + '" data-adapter="' + parts[2] + '" data-instance="' + parts[3] + '" data-src="' + link + '">' +
+                        var div = '<div id="custom-' + name + '-menu" class="tab-custom ' + (isReplace ? 'link-replace' : '') + '" data-adapter="' + parts[2] + '" data-instance="' + parts[3] + '" data-src="' + link + '">' +
                                 '<iframe class="iframe-in-tab" style="border: 0; solid #FFF; display:block; left: 0; top: 0; width: 100%;"></iframe></div>';
-                        $(div).appendTo($('#menus'));
-                    } else {
-                        $('#' + name).show().appendTo($('#menus'));
+                        $(div).appendTo($('#hiddenObjects'));
                     }
                 } else {
                     $('#' + name).hide().appendTo($('body'));
@@ -703,13 +697,15 @@ var adapterRedirect = function (redirect, timeout) {
             }
 
             $('.tab-custom').each(function () {
-                if (list.indexOf($(this).attr('id')) === -1) {
+                var name = $(this).attr('id').substring(7, $(this).attr('id').length - 5);
+                if (list.indexOf(name) === -1) {
                     $(this).remove();
                 }
             });
 
-            if (!main.systemConfig.common.menus)
+            if (!main.systemConfig.common.menus) {
                 main.systemConfig.common.menus = list;
+            }
 
             $('.side-menu').append(text);
 
@@ -1183,6 +1179,28 @@ var adapterRedirect = function (redirect, timeout) {
                 $(this).addClass('ui-state-error');
                 main.editTabs = true;
             }
+        });
+
+        $(document.body).on("click", ".main-menu", function () {
+            var id = $(this).attr('id').slice(5);
+            if ($('#custom-' + id + '-menu').length) {
+                main.fillContent('#custom-' + id + '-menu');
+                var $panel = $('#custom-' + id + '-menu');
+                var link = $panel.data('src');
+                if (link && link.indexOf('%') === -1) {
+                    var $iframe = $panel.find('iframe');
+                    if ($iframe.length && !$iframe.attr('src')) {
+                        $iframe.attr('src', link);
+                    }
+                } else {
+                    alert('problem-link');
+                }
+            } else {
+                menus[id].init();
+            }
+            $("#menu-title").text($.i18n(id));
+            $('.side-menu li.active').removeClass('active');
+            $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
         });
 
         // Fullscreen
