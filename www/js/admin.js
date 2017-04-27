@@ -489,7 +489,6 @@ var adapterRedirect = function (redirect, timeout) {
                 }
 
                 $("#menu-title").text($.i18n(id));
-                $('#menu-title-icon').addClass($('#menuicon-' + id).attr('class'));
                 $('.side-menu li.active').removeClass('active');
                 $('#menuitem-' + id).parent().addClass('active');
             },
@@ -1207,42 +1206,79 @@ var adapterRedirect = function (redirect, timeout) {
         });
 
         $(document.body).on("click", ".main-menu", function () {
-            var id = $(this).attr('id').slice(5);
+            var id = $(this).attr('id').slice(9);
             main.selectMenu(id);
         });
 
         // Fullscreen
+        var fullscreenElement;
         $('#button-fullscreen ,#button-content-fullscreen').on("click", function () {
-            var element;
             if ($(this).attr('id') === 'button-fullscreen') {
-                element = document;
+                fullscreenElement = document;
             } else {
-                element = document.getElementById('pageContent');
+                fullscreenElement = document.getElementById('pageContent');
             }
 
-            if (!element.fullscreenElement && // alternative standard method
-                    !element.mozFullScreenElement && !element.webkitFullscreenElement && !element.msFullscreenElement) {  // current working methods
-                if (element.documentElement.requestFullscreen) {
-                    element.documentElement.requestFullscreen();
-                } else if (element.documentElement.msRequestFullscreen) {
-                    element.documentElement.msRequestFullscreen();
-                } else if (element.documentElement.mozRequestFullScreen) {
-                    element.documentElement.mozRequestFullScreen();
-                } else if (element.documentElement.webkitRequestFullscreen) {
-                    element.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            if (!fullscreenElement.fullscreenElement && // alternative standard method
+                    !fullscreenElement.mozFullScreenElement && !fullscreenElement.webkitFullscreenElement && !fullscreenElement.msFullscreenElement) {  // current working methods
+                if (fullscreenElement === document) {
+                    fullscreenElement = document.documentElement;
+                } else {
+                    $(fullscreenElement).switchClass('right_col', 'no_right_col');
                 }
+
+                if (fullscreenElement.requestFullscreen) {
+                    fullscreenElement.requestFullscreen();
+                } else if (fullscreenElement.msRequestFullscreen) {
+                    fullscreenElement.msRequestFullscreen();
+                } else if (fullscreenElement.mozRequestFullScreen) {
+                    fullscreenElement.mozRequestFullScreen();
+                } else if (fullscreenElement.webkitRequestFullscreen) {
+                    fullscreenElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+
+                if (fullscreenElement !== document.documentElement) {
+                    setTimeout(function () {
+                        document.addEventListener("fullscreenchange", handleFullscreenContent, false);
+                        document.addEventListener("mozfullscreenchange", handleFullscreenContent, false);
+                        document.addEventListener("webkitfullscreenchange", handleFullscreenContent, false);
+                        document.addEventListener("MSFullscreenChange", handleFullscreenContent, false);
+                    }, 100);
+                }
+
             } else {
-                if (element.exitFullscreen) {
-                    element.exitFullscreen();
-                } else if (element.msExitFullscreen) {
-                    element.msExitFullscreen();
-                } else if (element.mozCancelFullScreen) {
-                    element.mozCancelFullScreen();
-                } else if (element.webkitExitFullscreen) {
-                    element.webkitExitFullscreen();
+                if (fullscreenElement.exitFullscreen) {
+                    fullscreenElement.exitFullscreen();
+                } else if (fullscreenElement.msExitFullscreen) {
+                    fullscreenElement.msExitFullscreen();
+                } else if (fullscreenElement.mozCancelFullScreen) {
+                    fullscreenElement.mozCancelFullScreen();
+                } else if (fullscreenElement.webkitExitFullscreen) {
+                    fullscreenElement.webkitExitFullscreen();
                 }
             }
         });
+
+        function handleFullscreenContent() {
+            if (!fullscreenElement.fullscreen) {
+                fullscreenPageContentExit();
+            } else if (!fullscreenElement.mozFullScreen) {
+                fullscreenPageContentExit();
+            } else if (!fullscreenElement.webkitIsFullScreen) {
+                fullscreenPageContentExit();
+            } else if (fullscreenElement.msFullscreenElement === null) {
+                fullscreenPageContentExit();
+            }
+        }
+
+        function fullscreenPageContentExit() {
+            $('#pageContent').switchClass('no_right_col', 'right_col');
+            document.removeEventListener("fullscreenchange", handleFullscreenContent);
+            document.removeEventListener("mozfullscreenchange", handleFullscreenContent);
+            document.removeEventListener("webkitfullscreenchange", handleFullscreenContent);
+            document.removeEventListener("MSFullscreenChange", handleFullscreenContent);
+        }
+
         // / Fullscreen
 
         function navigation() {
@@ -1252,7 +1288,7 @@ var adapterRedirect = function (redirect, timeout) {
             } else {
                 id = "home";
             }
-            main.selectMenu(id);
+            main.selectMenu(id, menus);
         }
 
     });
