@@ -89,4 +89,5 @@ ul.widget_profile_box_2 li:nth-child(2) {
 .no_right_col {
     overflow: auto;
     padding: 20px !important;
+    width: 100%;
 }

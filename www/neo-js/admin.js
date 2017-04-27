@@ -487,6 +487,9 @@ var adapterRedirect = function (redirect, timeout) {
                 if (init !== false) {
                     if ($('#custom-' + id + '-menu').length) {
                         main.fillContent('#custom-' + id + '-menu');
+                        var boxHeight = $('#pageContent').height();
+                        $('#pageContent').children('div:first').height(boxHeight).children('iframe:first').height(boxHeight);
+                        
                         var $panel = $('#custom-' + id + '-menu');
                         var link = $panel.data('src');
                         if (link && link.indexOf('%') === -1) {
@@ -715,7 +718,7 @@ var adapterRedirect = function (redirect, timeout) {
                     } else {
                         isReplace = link.indexOf('%') !== -1;
                     }
-                    
+
                     buttonName = main.getMenuTitle(buttonName);
 
                     var icon = main.objects[addMenus[a]].common.adminTab['fa-icon'] || 'fa-cog';
@@ -1306,9 +1309,10 @@ var adapterRedirect = function (redirect, timeout) {
             }
             main.selectMenu(id, menus);
         }
-
     });
 })(jQuery);
+
+
 
 function assign(obj, prop, value) {
     if (typeof prop === "string") {
