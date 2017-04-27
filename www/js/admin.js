@@ -468,6 +468,31 @@ var adapterRedirect = function (redirect, timeout) {
                 }
                 $(selector).prependTo($pageContent, restartFunctions(selector));
             },
+            selectMenu: function (id, init) {
+
+                if (init !== false) {
+                    if ($('#custom-' + id + '-menu').length) {
+                        main.fillContent('#custom-' + id + '-menu');
+                        var $panel = $('#custom-' + id + '-menu');
+                        var link = $panel.data('src');
+                        if (link && link.indexOf('%') === -1) {
+                            var $iframe = $panel.find('iframe');
+                            if ($iframe.length && !$iframe.attr('src')) {
+                                $iframe.attr('src', link);
+                            }
+                        } else {
+                            alert('problem-link');
+                        }
+                    } else {
+                        menus[id].init();
+                    }
+                }
+
+                $("#menu-title").text($.i18n(id));
+                $('#menu-title-icon').addClass($('#menuicon-' + id).attr('class'));
+                $('.side-menu li.active').removeClass('active');
+                $('#menuitem-' + id).parent().addClass('active');
+            },
             updateWizard: function () {
                 var $wizard = $('#link-wizard');
                 if (main.objects['system.adapter.discovery.0']) {
@@ -625,8 +650,8 @@ var adapterRedirect = function (redirect, timeout) {
                 list.push(id);
                 if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
                     text += '<li class="text-nowrap">';
-                    text += '<a class="main-menu" href="#' + id + '" id="menu-' + id + '">';
-                    text += '<i class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a>';
+                    text += '<a class="main-menu" href="#' + id + '" id="menuitem-' + id + '">';
+                    text += '<i id="menuicon-' + id + '" class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a>';
                     text += '<a class="menu-close"><i class="fa fa-times"></i></a></li>';
                 } else {
                     showMenus += '<option value="' + id + '">' + $.i18n(id) + '</option>';
@@ -680,8 +705,8 @@ var adapterRedirect = function (redirect, timeout) {
 
                     var icon = main.objects[addMenus[a]].common.adminTab['fa-icon'] || 'fa-cog';
                     text += '<li class="text-nowrap">';
-                    text += '<a class="main-menu" href="#' + name + '" id="menu-' + name + '">';
-                    text += '<i class="fa ' + icon + '"></i> <span data-i18n="' + buttonName + '">' + $.i18n(buttonName) + '</span></a>';
+                    text += '<a class="main-menu" href="#' + name + '" id="menuitem-' + name + '">';
+                    text += '<i id="menuicon-' + name + '" class="fa ' + icon + '"></i> <span data-i18n="' + buttonName + '">' + $.i18n(buttonName) + '</span></a>';
                     text += '<a class="menu-close"><i class="fa fa-times"></i></a></li>';
 
                     //noinspection JSJQueryEfficiency
@@ -1183,48 +1208,38 @@ var adapterRedirect = function (redirect, timeout) {
 
         $(document.body).on("click", ".main-menu", function () {
             var id = $(this).attr('id').slice(5);
-            if ($('#custom-' + id + '-menu').length) {
-                main.fillContent('#custom-' + id + '-menu');
-                var $panel = $('#custom-' + id + '-menu');
-                var link = $panel.data('src');
-                if (link && link.indexOf('%') === -1) {
-                    var $iframe = $panel.find('iframe');
-                    if ($iframe.length && !$iframe.attr('src')) {
-                        $iframe.attr('src', link);
-                    }
-                } else {
-                    alert('problem-link');
-                }
-            } else {
-                menus[id].init();
-            }
-            $("#menu-title").text($.i18n(id));
-            $('.side-menu li.active').removeClass('active');
-            $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
+            main.selectMenu(id);
         });
 
         // Fullscreen
-        $('#button-fullscreen').on("click", function () {
-            if (!document.fullscreenElement && // alternative standard method
-                    !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen();
-                } else if (document.documentElement.msRequestFullscreen) {
-                    document.documentElement.msRequestFullscreen();
-                } else if (document.documentElement.mozRequestFullScreen) {
-                    document.documentElement.mozRequestFullScreen();
-                } else if (document.documentElement.webkitRequestFullscreen) {
-                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        $('#button-fullscreen ,#button-content-fullscreen').on("click", function () {
+            var element;
+            if ($(this).attr('id') === 'button-fullscreen') {
+                element = document;
+            } else {
+                element = document.getElementById('pageContent');
+            }
+
+            if (!element.fullscreenElement && // alternative standard method
+                    !element.mozFullScreenElement && !element.webkitFullscreenElement && !element.msFullscreenElement) {  // current working methods
+                if (element.documentElement.requestFullscreen) {
+                    element.documentElement.requestFullscreen();
+                } else if (element.documentElement.msRequestFullscreen) {
+                    element.documentElement.msRequestFullscreen();
+                } else if (element.documentElement.mozRequestFullScreen) {
+                    element.documentElement.mozRequestFullScreen();
+                } else if (element.documentElement.webkitRequestFullscreen) {
+                    element.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
                 }
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
+                if (element.exitFullscreen) {
+                    element.exitFullscreen();
+                } else if (element.msExitFullscreen) {
+                    element.msExitFullscreen();
+                } else if (element.mozCancelFullScreen) {
+                    element.mozCancelFullScreen();
+                } else if (element.webkitExitFullscreen) {
+                    element.webkitExitFullscreen();
                 }
             }
         });
@@ -1237,24 +1252,7 @@ var adapterRedirect = function (redirect, timeout) {
             } else {
                 id = "home";
             }
-            
-            if ($('#custom-' + id + '-menu').length) {
-                main.fillContent('#custom-' + id + '-menu');
-                var $panel = $('#custom-' + id + '-menu');
-                var link = $panel.data('src');
-                if (link && link.indexOf('%') === -1) {
-                    var $iframe = $panel.find('iframe');
-                    if ($iframe.length && !$iframe.attr('src')) {
-                        $iframe.attr('src', link);
-                    }
-                } else {
-                    alert('problem-link');
-                }
-            } else {
-                menus[id].init();
-            }
-           
-            $('.side-menu').find('a[href="#' + id + '"]').parent().addClass('active');
+            main.selectMenu(id);
         }
 
     });

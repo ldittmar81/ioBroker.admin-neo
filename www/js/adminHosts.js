@@ -50,17 +50,16 @@ function Hosts(main) {
             return;
         }
         if ($('.side-menu li.active').children('#menu-hosts').length === 0) {
-            $("#menu-title").text($.i18n('hosts'));
-            $('.side-menu li.active').removeClass('active');
-            $('.side-menu').find('a[href="#hosts"]').parent().addClass('active');
+            this.main.selectMenu('hosts', false);
         }
 
         // fill the host list (select) on adapter tab
         var $selHosts = $('#host-adapters');
         var selHosts = $selHosts[0];
         var myOpts = selHosts.options;
-        if (!isUpdate && $selHosts.data('inited'))
+        if (!isUpdate && $selHosts.data('inited')) {
             return;
+        }
 
         $selHosts.data('inited', true);
 
@@ -77,8 +76,9 @@ function Hosts(main) {
                     break;
                 }
             }
-            if (!found)
+            if (!found) {
                 selHosts.remove(i);
+            }
         }
 
         for (i = 0; i < that.list.length; i++) {
@@ -89,8 +89,9 @@ function Hosts(main) {
                     break;
                 }
             }
-            if (!found)
+            if (!found) {
                 $selHosts.append('<option value="' + that.list[i].name + '">' + that.list[i].name + '</option>');
+            }
         }
 
         if (that.main.currentHost) {
@@ -274,7 +275,7 @@ function Hosts(main) {
                 return;
 
             for (var id in installedList.hosts) {
-                if (!installedList.hosts.hasOwnProperty(id)){
+                if (!installedList.hosts.hasOwnProperty(id)) {
                     continue;
                 }
                 var obj = main.objects['system.host.' + id];
