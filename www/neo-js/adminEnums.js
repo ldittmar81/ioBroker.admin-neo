@@ -166,7 +166,7 @@ function Enums(main) {
 
         this.main.fillContent('#menu-enums-div');
 
-        $(window).on('resize', resizeWindow);
+        $(window).smartresize(resizeWindow);
         resizeWindow();
     };
 

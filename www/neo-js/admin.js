@@ -9,7 +9,7 @@
 /* global storage */
 /* global i18n */
 /* global availableLanguages */
-/* global toggleFullScreen */
+/* global toggleFullScreen, $BODY, $LEFT_COL, $SIDEBAR_FOOTER, $FOOTER, $NAV_MENU */
 
 'use strict';
 
@@ -50,6 +50,7 @@ var adapterRedirect = function (redirect, timeout) {
             instances: null,
             objectsLoaded: false,
             waitForRestart: false,
+            iframemenu: false,
             menus: null,
             selectId: null,
             config: {},
@@ -486,10 +487,10 @@ var adapterRedirect = function (redirect, timeout) {
             selectMenu: function (id, init) {
                 if (init !== false) {
                     if ($('#custom-' + id + '-menu').length) {
+                        main.iframemenu = true;
                         main.fillContent('#custom-' + id + '-menu');
-                        var boxHeight = $('#pageContent').height();
-                        $('#pageContent').children('div:first').height(boxHeight).children('iframe:first').height(boxHeight);
-                        
+                        resizeIFrame();
+
                         var $panel = $('#custom-' + id + '-menu');
                         var link = $panel.data('src');
                         if (link && link.indexOf('%') === -1) {
@@ -501,6 +502,7 @@ var adapterRedirect = function (redirect, timeout) {
                             alert('problem-link');
                         }
                     } else {
+                        main.iframemenu = false;
                         menus[id].init();
                     }
                 }
@@ -1309,6 +1311,20 @@ var adapterRedirect = function (redirect, timeout) {
             }
             main.selectMenu(id, menus);
         }
+
+        function resizeIFrame() {
+            if (main.iframemenu) {
+                var bodyHeight = $BODY.outerHeight(),
+                        footerHeight = $BODY.hasClass('footer_fixed') ? -10 : $FOOTER.height(),
+                        leftColHeight = $LEFT_COL.eq(1).height() + $SIDEBAR_FOOTER.height(),
+                        contentHeight = bodyHeight < leftColHeight ? leftColHeight : bodyHeight;
+                contentHeight -= ($NAV_MENU.height() + footerHeight + 70);
+                $('#pageContent').children('div:first').height(contentHeight).children('iframe:first').height(contentHeight);
+
+            }
+        }
+
+        $(window).smartresize(resizeIFrame);
     });
 })(jQuery);
 
