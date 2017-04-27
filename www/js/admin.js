@@ -468,8 +468,22 @@ var adapterRedirect = function (redirect, timeout) {
                 }
                 $(selector).prependTo($pageContent, restartFunctions(selector));
             },
+            getMenuTitle: function (id) {
+                var menuTitle = "";
+                if (id.indexOf('.') !== -1) {
+                    var instanz = id.substring(id.lastIndexOf('.') + 1, id.length);
+                    if (instanz === "0") {
+                        menuTitle = $.i18n(id.substring(0, id.lastIndexOf('.')) + "zero");
+                        instanz = "";
+                    } else {
+                        menuTitle = $.i18n(id.substring(0, id.lastIndexOf('.')), instanz);
+                    }
+                } else {
+                    menuTitle = $.i18n(id);
+                }
+                return menuTitle;
+            },
             selectMenu: function (id, init) {
-
                 if (init !== false) {
                     if ($('#custom-' + id + '-menu').length) {
                         main.fillContent('#custom-' + id + '-menu');
@@ -488,7 +502,7 @@ var adapterRedirect = function (redirect, timeout) {
                     }
                 }
 
-                $("#menu-title").text($.i18n(id));
+                $("#menu-title").text($('#menutitle-' + id).text());
                 $('.side-menu li.active').removeClass('active');
                 $('#menuitem-' + id).parent().addClass('active');
             },
@@ -567,7 +581,7 @@ var adapterRedirect = function (redirect, timeout) {
         function initHtmlMenus(showMenus) {
 
             if (showMenus) {
-                $('#menus-show').html('<option value="" data-i18n="show">' + $.i18n('show') + '</option>' + showMenus).show();
+                $('#menus-show').html('<option value="" data-i18n="show">' + $.i18n('show') + '</option>' + showMenus).selectpicker().show();
 
                 $('#menus-show').on('change', function () {
                     if ($(this).val()) {
@@ -647,10 +661,10 @@ var adapterRedirect = function (redirect, timeout) {
             $("#hiddenObjects div[id^='menu']").each(function () {
                 var id = $(this).attr('id').substring(5, $(this).attr('id').length - 4);
                 list.push(id);
-                if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf($(this).attr('id')) !== -1) {
+                if (!main.systemConfig.common.menus || main.systemConfig.common.menus.indexOf(id) !== -1) {
                     text += '<li class="text-nowrap">';
                     text += '<a class="main-menu" href="#' + id + '" id="menuitem-' + id + '">';
-                    text += '<i id="menuicon-' + id + '" class="fa ' + menus[id].menuIcon + '"></i> <span data-i18n="' + id + '">' + $.i18n(id) + '</span></a>';
+                    text += '<i id="menuicon-' + id + '" class="fa ' + menus[id].menuIcon + '"></i> <span id="menutitle-' + id + '">' + $.i18n(id) + '</span></a>';
                     text += '<a class="menu-close"><i class="fa fa-times"></i></a></li>';
                 } else {
                     showMenus += '<option value="' + id + '">' + $.i18n(id) + '</option>';
@@ -701,11 +715,13 @@ var adapterRedirect = function (redirect, timeout) {
                     } else {
                         isReplace = link.indexOf('%') !== -1;
                     }
+                    
+                    buttonName = main.getMenuTitle(buttonName);
 
                     var icon = main.objects[addMenus[a]].common.adminTab['fa-icon'] || 'fa-cog';
                     text += '<li class="text-nowrap">';
                     text += '<a class="main-menu" href="#' + name + '" id="menuitem-' + name + '">';
-                    text += '<i id="menuicon-' + name + '" class="fa ' + icon + '"></i> <span data-i18n="' + buttonName + '">' + $.i18n(buttonName) + '</span></a>';
+                    text += '<i id="menuicon-' + name + '" class="fa ' + icon + '"></i> <span id="menutitle-' + name + '">' + buttonName + '</span></a>';
                     text += '<a class="menu-close"><i class="fa fa-times"></i></a></li>';
 
                     //noinspection JSJQueryEfficiency
