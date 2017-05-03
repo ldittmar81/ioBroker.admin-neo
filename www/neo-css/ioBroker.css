@@ -392,7 +392,7 @@ body .container.body .right_col {
     }
     .right_col {
         padding: 10px !important
-        width: 100%;
+            width: 100%;
     }
 }
 @media (max-width: 1200px) {
@@ -4489,4 +4489,13 @@ fieldset > legend {
 
 ul.fancytree-container {
     min-height: 200px;
+}
+
+.clippy-button {
+    position: absolute; 
+    right: 0; 
+    top: 0; 
+    width: 36px; 
+    height: 18px;
+    z-index: 1;
 }

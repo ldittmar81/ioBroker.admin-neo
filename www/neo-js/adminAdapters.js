@@ -26,7 +26,7 @@ function Adapters(main) {
         'garden_group': 'img/groups/garden.png',
         'general_group': 'img/groups/general.png',
         'geoposition_group': 'img/groups/geoposition.png',
-        'hardware_group': 'img/groups/hardware.png',        
+        'hardware_group': 'img/groups/hardware.png',
         'household_group': 'img/groups/household.png',
         'infrastructure_group': 'img/groups/infrastructure.png',
         'iot-systems_group': 'img/groups/iot-systems.png',
@@ -43,7 +43,7 @@ function Adapters(main) {
         'visualization-icons_group': 'img/groups/visualization-icons.png',
         'visualization-widgets_group': 'img/groups/visualization-widgets.png',
         'weather_group': 'img/groups/weather.png',
-        'unknown_group': 'img/groups/unknown.png'        
+        'unknown_group': 'img/groups/unknown.png'
     };
     this.isList = false;
     this.filterVals = {length: 0};
@@ -642,12 +642,14 @@ function Adapters(main) {
             if (!that.onlyInstalled && !that.onlyUpdatable) {
                 fillData(listUnsinstalled, installedList, repository, null);
             }
+
+            if (that.isList) {
+                that.createAdapterTable();
+            } else {
+                that.createAdapterTiles();
+            }
+
         });
-        if (that.isList) {
-            this.createAdapterTable();
-        } else {
-            this.createAdapterTiles();
-        }
 
         this.main.fillContent('#menu-adapters-div');
     };
@@ -772,9 +774,9 @@ function Adapters(main) {
         }
     };
     this.createAdapterTable = function () {
-        var $tempTable = $adapterGroupTemplate.children().clone(true, true);
+        var $tempTable = $adapterTableTemplate.children().clone(true, true);
 
-        $('#adapterTable').bootstrapTable({
+        $tempTable.find('.adapterTable').bootstrapTable({
             columns: [{
                     field: 'title',
                     title: 'Name'
