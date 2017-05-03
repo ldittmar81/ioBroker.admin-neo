@@ -75,7 +75,7 @@
 
 <!-- Instances -->
 <div id="instancesTemplateTile" class="hidden">
-    <div class="col-md-3 col-xs-12 widget widget_tally_box">
+    <div class="col-md-3 col-xs-12 widget widget_tally_box instance-adapter">
         <div class="x_panel fixed_height_390">
             <div class="x_content">
                 <div class="fixed_height_360">
@@ -88,19 +88,33 @@
                                 <img src="img/no-image.png" alt="..." class="img-circle profile_img" onerror="this.src='img/no-image.png'" />
                             </li>
                             <li>
-                               <img class="instance-led-r" src="img/leds/led_grey.png" alt="off" />
+                                <img class="instance-led-r" src="img/leds/led_grey.png" alt="off" />
                             </li>
                         </ul>
                     </div>
                     <h3 class="name">admin.0</h3>
                     <p class="description">ioBroker Admin</p>
+                    <div>
+                        <dl class="dl-horizontal">
+                            <dt data-i18n="schedule">schedule</dt>
+                            <dd class="instance-schedule">12123</dd>
+                            <dt data-i18n="restartSchedule">restartSchedule</dt>
+                            <dd class="instance-restartSchedule">12123</dd>
+                            <dt data-i18n="loglevel">loglevel</dt>
+                            <dd class="instance-loglevel">12123</dd>
+                            <dt data-i18n="memoryLimitMB">memoryLimitMB</dt>
+                            <dd class="instance-memoryLimitMB">12123</dd>
+                            <dt data-i18n="memUsage">memUsage</dt>
+                            <dd class="instance-memUsage">12123</dd>
+                        </dl>
+                    </div>
                     <div class="tiles-footer">
                         <p class="text-center">
-                            <button class="adapter-update-submit btn btn-default" disabled data-i18n-tooltip="update_adapter"><i class="fa fa-pause"></i></button>
-                            <button class="adapter-issue-submit btn btn-default" data-i18n-tooltip="issue_adapter"><i class="fa fa-gear"></i></button>
-                            <button class="adapter-delete-submit btn btn-default" disabled data-i18n-tooltip="delete_adapter"><i class="fa fa-repeat"></i></button>
-                            <button class="adapter-delete-submit btn btn-default" disabled data-i18n-tooltip="delete_adapter"><i class="fa fa-trash"></i></button>
-                            <button class="adapter-delete-submit btn btn-default" disabled data-i18n-tooltip="delete_adapter"><i class="fa fa-globe"></i></button>
+                            <button class="instance-stop-run btn"><i class="fa instance-stop-run-icon"></i></button>
+                            <button class="instance-settings btn btn-default" data-i18n-tooltip="instance_settings"><i class="fa fa-gear"></i></button>
+                            <button class="instance-reload btn btn-default" data-i18n-tooltip="instance_reload"><i class="fa fa-repeat"></i></button>
+                            <button class="instance-del btn btn-default" data-i18n-tooltip="instance_del"><i class="fa fa-trash"></i></button>
+                            <button class="instance-web btn btn-default" data-i18n-tooltip="instance_web"><i class="fa fa-globe"></i></button>
                         </p>
                         <p class="tiles-footer-footer" style="min-height: 12px;">
                             <span class="pull-left">&nbsp;</span>

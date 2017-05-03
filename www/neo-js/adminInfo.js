@@ -18,5 +18,5 @@ function Info(main) {
 
     this.init = function () {
         $dialogInfo.modal();
-    }
+    };
 }

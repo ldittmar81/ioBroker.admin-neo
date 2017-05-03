@@ -4499,3 +4499,7 @@ ul.fancytree-container {
     height: 18px;
     z-index: 1;
 }
+
+.dl-horizontal dt {
+    width: inherit;
+}

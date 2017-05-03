@@ -239,7 +239,7 @@ function Instances(main) {
                 title_left += '</p>';
             }
         }
-        
+
         $led_left.attr('src', 'img/leds/led_' + state_left + '.png')
                 .attr('alt', state_left)
                 .tooltip({placement: 'bottom', html: true, title: title_left});
@@ -326,19 +326,96 @@ function Instances(main) {
         if (!that.main.config.instanceFormList) {
             var $instanceTile = $instancesTileTemplate.children().clone(true, true);
 
-            $instanceTile.find('.instance-led').attr('data-instance-id', instanceId);
+            $instanceTile.attr('data-instance-id', instanceId);
             //$instanceTile.find('.profile_img').attr('src', 'adapter/' + adapter + '/' + common.icon).attr('alt', adapter);
             $instanceTile.find('.name').text(adapter + '.' + instance);
+            $instanceTile.find('.description').text(common.title || '');
 
             updateLed(instanceId, $instanceTile);
+
+            var link = common.localLinks || common.localLink || '';
+            var url = link ? replaceInLink(link, adapter, instance) : '';
+            if (link) {
+                if (typeof url === 'object') {
+                    link = '<a href="' + url.__first + '" target="_blank">';
+                } else {
+                    link = '<a href="' + url + '" target="_blank">';
+                }
+            }
+
+            var isRun = common.onlyWWW || common.enabled;
+
+            if (common.onlyWWW) {
+                $instanceTile.find('.instance-stop-run').remove();
+                $instanceTile.find('.instance-reload').remove();
+            } else {
+                if (!isRun) {
+                    $instanceTile.find('.instance-reload').prop('disabled', true);
+                }
+            }
+
+            if (url) {
+                $instanceTile.find('.instance-web')
+                        .attr('data-link', typeof url !== 'object' ? url : '')
+                        .prop('disabled', !isRun);
+            } else {
+                $instanceTile.find('.instance-web').remove();
+            }
+
+            $instanceTile.find('.instance-schedule').text(common.mode === 'schedule' ? (common.schedule || '') : '');
+            $instanceTile.find('.instance-memUsage').text(calculateRam(instanceId));
+
+            if (that.main.config.expertMode) {
+                $instanceTile.find('.instance-restartSchedule').text(common.restartSchedule || '').show();
+                $instanceTile.find('.instance-loglevel').text(common.loglevel || '').show();
+                $instanceTile.find('.instance-memoryLimitMB').text(common.memoryLimitMB || '').show();
+            } else {
+                $instanceTile.find('.instance-restartSchedule').hide().prev().hide();
+                $instanceTile.find('.instance-loglevel').hide().prev().hide();
+                $instanceTile.find('.instance-memoryLimitMB').hide().prev().hide();
+            }
+
+            that.initButtons($instanceTile);
 
             $instanceContainer.append($instanceTile);
         } else {
 
         }
+
     }
 
     function applyFilter(filter) {
+        if (filter === undefined) {
+            filter = $('#instances-filter').val();
+        }
+        var invisible = [];
+        if (filter) {
+            var reg = new RegExp(filter);
+
+            for (var i = 0; i < that.list.length; i++) {
+                var obj = that.main.objects[that.list[i]];
+                if (!obj || !obj.common) {
+                    $instanceContainer.find('.instance-adapter[data-instance-id="' + that.list[i] + '"]').hide();
+                    continue;
+                }
+                var isShow = 'hide';
+                if (obj.common.name && reg.test(obj.common.name)) {
+                    isShow = 'show';
+                } else if (obj.common.title && reg.test(obj.common.title)) {
+                    isShow = 'show';
+                } else if (filter === 'true') {
+                    isShow = $instanceContainer.find('.instance-adapter[data-instance-id="' + that.list[i] + '"]').find('instance-led').hasClass('led-green') ? 'show' : 'hide';
+                } else if (filter === 'false') {
+                    isShow = $instanceContainer.find('.instance-adapter[data-instance-id="' + that.list[i] + '"]').find('instance-led').hasClass('led-green') ? 'hide' : 'show';
+                }
+                if (isShow === 'hide') {
+                    invisible.push(that.list[i]);
+                }
+                $instanceContainer.find('.instance-adapter[data-instance-id="' + that.list[i] + '"]')[isShow]();
+            }
+        } else {
+            $instanceContainer.find('.instance-adapter').show();
+        }
     }
 
 
@@ -450,6 +527,7 @@ function Instances(main) {
             $instanceContainer = $('#instances-container');
 
             $('#instances-filter').change(function () {
+                console.log('change: ' + $(this).val());
                 that.main.saveConfig('instancesFilter', $(this).val());
                 applyFilter($(this).val());
             }).keyup(function () {
@@ -684,9 +762,10 @@ function Instances(main) {
                 if (!obj) {
                     continue;
                 }
-
                 showOneAdapter(this.list[i]);
             }
+
+            applyFilter();
 
             $('#currentHost').html(this.main.currentHost);
             var totalRam = that.calculateTotalRam('instances');
@@ -706,7 +785,21 @@ function Instances(main) {
     this.showConfigDialog = function (id) {
     };
 
-    this.initButtons = function (id, url) {
+    this.initButtons = function ($instanceTile) {
+        var id = $instanceTile.attr('data-instance-id');
+
+        $instanceTile.find('.instance-stop-run')
+                .addClass(that.main.objects[id].common.enabled ? 'btn-success':'btn-danger')
+                .attr('data-i18n-tooltip', that.main.objects[id].common.enabled ? 'activated' : 'deactivated')
+                .click(function () {
+                    $(this).button('disable');
+                    that.main.socket.emit('extendObject', id, {common: {enabled: !that.main.objects[id].common.enabled}}, function (err) {
+                        if (err) {
+                            that.main.showError(err);
+                        }
+                    });
+                });
+        $instanceTile.find('.instance-stop-run-icon').addClass(that.main.objects[id].common.enabled ? 'fa-pause' : 'fa-play');
     };
 
 }
