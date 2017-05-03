@@ -145,123 +145,112 @@ function Instances(main) {
         }
     }
 
-    function updateLed(instanceId, $led) {
+    function updateLed(instanceId, $tile) {
         var tmp = instanceId.split('.');
         var adapter = tmp[2];
         var instance = tmp[3];
 
+        var $led_left = $tile.find('.instance-led-l');
+        var $led_right = $tile.find('.instance-led-r');
+
         var common = that.main.objects[instanceId] ? that.main.objects[instanceId].common || {} : {};
-        var state = (common.mode === 'daemon') ? 'green' : 'blue';
-        var title = '';
+        var state_left = '';
+        var title_left = '';
+        var state_right = '';
+        var title_right = '';
+
         if (common.enabled && (!common.webExtension || !that.main.objects[instanceId].native.webInstance)) {
-            title = '<table style="border: 0">';
-            title += '<tr style="border: 0"><td style="border: 0">' + $.i18n('Connected to host: ') + '</td><td style="border: 0">';
+            state_left = (common.mode === 'daemon') ? 'green' : 'blue';
+            state_right = (common.mode === 'daemon') ? 'green' : 'blue';
+
+            title_left += '<p>';
+            title_left += '<span>' + $.i18n('connectedtohost') + ': </span>';
 
             if (!that.main.states[instanceId + '.connected'] || !that.main.states[instanceId + '.connected'].val) {
-                title += ((common.mode === 'daemon') ? '<span style="color: red">' + $.i18n('false') + '</span>' : $.i18n('false'));
-                state = (common.mode === 'daemon') ? 'red' : 'blue';
+                title_left += ((common.mode === 'daemon') ? '<span style="color: #ff9999">' + $.i18n('false') + '</span>' : $.i18n('false'));
+                state_left = (common.mode === 'daemon') ? 'red' : 'blue';
             } else {
-                title += '<span style="color: green">' + $.i18n('true') + '</span>';
+                title_left += '<span style="color: #80ff00">' + $.i18n('true') + '</span>';
             }
-            title += '</td></tr><tr style="border: 0"><td style="border: 0">' + $.i18n('Heartbeat: ') + '</td><td style="border: 0">';
+            title_left += '</p>';
 
+            title_right += '<p>';
+            title_right += '<p><span>' + $.i18n('heartbeat') + ': </span>';
             if (!that.main.states[instanceId + '.alive'] || !that.main.states[instanceId + '.alive'].val) {
-                title += ((common.mode === 'daemon') ? '<span style="color: red">' + $.i18n('false') + '</span>' : $.i18n('false'));
-                state = (common.mode === 'daemon') ? 'red' : 'blue';
+                title_right += ((common.mode === 'daemon') ? '<span style="color: #ff9999">' + $.i18n('false') + '</span>' : $.i18n('false'));
+                state_right = (common.mode === 'daemon') ? 'red' : 'blue';
             } else {
-                title += '<span style="color: green">' + $.i18n('true') + '</span>';
+                title_right += '<span style="color: #80ff00">' + $.i18n('true') + '</span>';
             }
-            title += '</td></tr>';
+            title_right += '</p>';
 
             if (that.main.states[adapter + '.' + instance + '.info.connection'] || that.main.objects[adapter + '.' + instance + '.info.connection']) {
-                title += '<tr style="border: 0"><td style="border: 0">' + $.i18n('Connected to %s: ', adapter) + '</td><td>';
+                title_left += '<p>';
+                title_left += '<span>' + $.i18n('connectedtoadapter', adapter) + ': </span>';
                 var val = that.main.states[adapter + '.' + instance + '.info.connection'] ? that.main.states[adapter + '.' + instance + '.info.connection'].val : false;
                 if (!val) {
-                    state = state === 'red' ? 'red' : 'orange';
-                    title += '<span style="color: red">' + $.i18n('false') + '</span>';
+                    state_left = state_left === 'red' ? 'red' : 'orange';
+                    title_left += '<span style="color: #ff9999">' + $.i18n('false') + '</span>';
                 } else {
                     if (val === true) {
-                        title += '<span style="color: green">' + $.i18n('true') + '</span>';
+                        title_left += '<span style="color: #80ff00">' + $.i18n('true') + '</span>';
                     } else {
-                        title += '<span style="color: green">' + val + '</span>';
+                        title_left += '<span style="color: #80ff00">' + val + '</span>';
                     }
                 }
-                title += '</td></tr>';
+                title_left += '</p>';
             }
-            title += '</table>';
         } else {
-            state = (common.mode === 'daemon') ? 'grey' : 'blue';
-            title = '<table style="border: 0">';
-            title += '<tr style="border: 0"><td style="border: 0">' + $.i18n('Connected to host: ') + '</td><td style="border: 0">';
+            state_left = (common.mode === 'daemon') ? 'grey' : 'blue';
+            state_right = (common.mode === 'daemon') ? 'grey' : 'blue';
+
+            title_left += '<p>';
+            title_left += '<span>' + $.i18n('connectedtohost') + ': </span>';
 
             if (!that.main.states[instanceId + '.connected'] || !that.main.states[instanceId + '.connected'].val) {
-                title += $.i18n('false');
+                title_left += $.i18n('false');
             } else {
-                title += '<span style="color: green">' + $.i18n('true') + '</span>';
+                title_left += '<span style="color: #80ff00">' + $.i18n('true') + '</span>';
             }
-            title += '</td></tr><tr style="border: 0">';
+            title_left += '</p>';
 
-            title += '<td style="border: 0">' + $.i18n('Heartbeat: ') + '</td><td style="border: 0">';
+            title_right += '<p>';
+            title_right += '<p><span>' + $.i18n('heartbeat') + ': </span>';
             if (!that.main.states[instanceId + '.alive'] || !that.main.states[instanceId + '.alive'].val) {
-                title += $.i18n('false');
+                title_right += $.i18n('false');
             } else {
-                title += '<span style="color: green">' + $.i18n('true') + '</span>';
+                title_right += '<span style="color: #80ff00">' + $.i18n('true') + '</span>';
             }
-            title += '</td></tr>';
+            title_right += '</p>';
 
             if (that.main.states[adapter + '.' + instance + '.info.connection'] || that.main.objects[adapter + '.' + instance + '.info.connection']) {
-                title += '<tr style="border: 0"><td style="border: 0">' + $.i18n('Connected to %s: ', adapter) + '</td><td>';
+                title_left += '<p>';
+                title_left += '<span>' + $.i18n('connectedtoadapter', adapter) + ': </span>';
                 var val = that.main.states[adapter + '.' + instance + '.info.connection'] ? that.main.states[adapter + '.' + instance + '.info.connection'].val : false;
                 if (!val) {
-                    title += $.i18n('false');
+                    title_left += $.i18n('false');
                 } else {
                     if (val === true) {
-                        title += '<span style="color: green">' + $.i18n('true') + '</span>';
+                        title_left += '<span style="color: #80ff00">' + $.i18n('true') + '</span>';
                     } else {
-                        title += '<span style="color: green">' + val + '</span>';
+                        title_left += '<span style="color: #80ff00">' + val + '</span>';
                     }
                 }
-                title += '</td></tr>';
+                title_left += '</p>';
             }
-            title += '</table>';
         }
+        
+        $led_left.attr('src', 'img/leds/led_' + state_left + '.png')
+                .attr('alt', state_left)
+                .tooltip({placement: 'bottom', html: true, title: title_left});
 
-        $led.attr('src', 'img/leds/led_' + state + '.png').attr('alt', state).data('title', title);
+        $led_right.attr('src', 'img/leds/led_' + state_right + '.png')
+                .attr('alt', state_right)
+                .tooltip({placement: 'bottom', html: true, title: title_right});
 
-        if (!$led.data('inited') && state !== 'grey') {
-            $led.data('inited', true);
-
-            $led.hover(function () {
-                var text = '<div class="instance-state-hover" style="' +
-                        'left: ' + Math.round($(this).position().left + $(this).width() + 5) + 'px;">' + $(this).data('title') + '</div>';
-                var $big = $(text);
-
-                $big.insertAfter($(this));
-                $(this).data('big', $big[0]);
-                var h = parseFloat($big.height());
-                var top = Math.round($(this).position().top - ((h - parseFloat($(this).height())) / 2));
-                if (h + top > (window.innerHeight || document.documentElement.clientHeight)) {
-                    top = (window.innerHeight || document.documentElement.clientHeight) - h;
-                }
-                if (top < 0) {
-                    top = 0;
-                }
-                $big.click(function () {
-                    var big = $(this).data('big');
-                    $(big).remove();
-                    $(this).data('big', undefined);
-                });
-            }, function () {
-                var big = $(this).data('big');
-                $(big).remove();
-                $(this).data('big', undefined);
-            }).click(function () {
-                $(this).trigger('hover');
-            });
-        }
     }
 
-    this.calculateTotalRam = function(page) {
+    this.calculateTotalRam = function (page) {
         var host = that.main.states['system.host.' + that.main.currentHost + '.memRss'];
         var processes = 1;
         var mem = host ? host.val : 0;
@@ -286,7 +275,7 @@ function Instances(main) {
         return Math.round(mem);
     };
 
-    this.calculateFreeMem = function(page) {
+    this.calculateFreeMem = function (page) {
         var host = that.main.states['system.host.' + that.main.currentHost + '.freemem'];
         if (host) {
             that.totalmem = that.totalmem || that.main.objects['system.host.' + that.main.currentHost].native.hardware.totalmem / (1024 * 1024);
@@ -341,7 +330,7 @@ function Instances(main) {
             //$instanceTile.find('.profile_img').attr('src', 'adapter/' + adapter + '/' + common.icon).attr('alt', adapter);
             $instanceTile.find('.name').text(adapter + '.' + instance);
 
-            updateLed(instanceId, $instanceTile.find('.instance-led'));
+            updateLed(instanceId, $instanceTile);
 
             $instanceContainer.append($instanceTile);
         } else {
