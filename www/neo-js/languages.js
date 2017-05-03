@@ -5,3 +5,4 @@ if (!availableLanguages.hasOwnProperty(systemLang)) {
     systemLang = "en";
 }
 var i18n = $.i18n();
+i18n.load('i18n/en/translations.json', 'en');
