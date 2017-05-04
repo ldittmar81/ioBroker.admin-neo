@@ -33,6 +33,7 @@ function Hosts(main) {
                     $('#hosts-filter').trigger('change');
                 }, 300);
             });
+
             if (that.main.config.hostsFilter && that.main.config.hostsFilter[0] !== '{') {
                 $('#hosts-filter').val(that.main.config.hostsFilter);
             }
@@ -157,40 +158,32 @@ function Hosts(main) {
     }
 
     function applyFilter(filter) {
+        if (filter === undefined) {
+            filter = $('#host-filter').val();
+        }
         filter = filter.toLowerCase().trim();
-        var index = 0;
-        if (!filter) {
-            $('.hosts-host').each(function () {
-                if (index & 1) {
-                    $(this).removeClass('hosts-even').addClass('hosts-odd');
-                } else {
-                    $(this).removeClass('hosts-odd').addClass('hosts-even');
-                }
-                index++;
-            });
-        } else {
+
+        if (filter) {
             $('.hosts-host').each(function () {
                 var $this = $(this);
                 var found = false;
-                $this.find('td').each(function () {
-                    var text = $(this).text();
-                    if (text.toLowerCase().indexOf(filter) !== -1) {
-                        found = true;
-                        return false;
-                    }
-                });
+
+                if ($this.find('.name').text().toLowerCase().indexOf(filter) !== -1) {
+                    found = true;
+                }
+                if (!found && $this.find('.profile_img').data('i18n-tooltip').toLowerCase().indexOf(filter) !== -1) {
+                    found = true;
+                }
+
                 if (!found) {
                     $this.hide();
                 } else {
                     $this.show();
                 }
-                if (index & 1) {
-                    $(this).removeClass('hosts-even').addClass('hosts-odd');
-                } else {
-                    $(this).removeClass('hosts-odd').addClass('hosts-even');
-                }
-                index++;
+
             });
+        } else {
+            $('.hosts-host').show();
         }
     }
 
@@ -221,7 +214,7 @@ function Hosts(main) {
             default:
                 icon = "fa-server";
         }
-        $hostTile.find('.hosts-version-available').data("host-id", obj._id).data("type", obj.common.type);
+        $hostTile.find('.hosts-version-available').text(obj.common.installedVersion);
         $hostTile.find('.installed').text(obj.common.installedVersion);
         $hostTile.find('.profile_img').addClass(icon).attr('data-i18n-tooltip', obj.native.os.platform);
 
