@@ -1,44 +1,55 @@
-<div id="grid-events" class="ui-jqgrid" style="display: block;">
-    <div class="ui-jqgrid-titlebar ui-jqgrid-caption ui-widget-header ui-corner-top ui-helper-clearfix" style="height: 23px">
-        <div class="">
-            <span class="ui-jqgrid-title translate" style="padding-top: 3px">Events</span>
-            <table style="border-collapse: collapse; position: absolute; right: 10px;  top: 1px"><tr>
-                    <td><button id="event-pause"></button></td>
-                    <td><button id="event-clear"></button></td>
-                </tr></table>
+<div id="grid-events">
+
+    <div class="page-title">
+        <div class="title_left">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button id="event-pause" class="btn btn-default" data-i18n-tooltip="pauseoutput"><i class="fa fa-pause"></i></button>
+                <button id="event-clear" class="btn btn-default" data-i18n-tooltip="clearevent"><i class="fa fa-times"></i></button>
+            </div>           
+        </div>       
+        <div class="title_right">            
         </div>
-
     </div>
-    <table style="width: 100%; border-collapse: collapse;" class="ui-widget ui-state-default ui-corner-bottom">
-        <thead>
-            <tr class="ui-jqgrid-labels ui-jqgrid-view ui-jqgrid-htable">
-                <th class="event-column-1 ui-state-default ui-th-column ui-th-ltr translate">Event</th>
-                <th class="event-column-2 ui-state-default ui-th-column ui-th-ltr">id</th>
-                <th class="event-column-3 ui-state-default ui-th-column ui-th-ltr translate">val</th>
-                <th class="event-column-4 ui-state-default ui-th-column ui-th-ltr translate">ack</th>
-                <th class="event-column-5 ui-state-default ui-th-column ui-th-ltr translate">from</th>
-                <th class="event-column-6 ui-state-default ui-th-column ui-th-ltr translate">ts</th>
-                <th class="event-column-7 ui-state-default ui-th-column ui-th-ltr translate">lc</th>
-                <th style="color: rgba(0,0,0,0)">aa</th>
-            </tr>
-            <tr class="ui-jqgrid-labels ui-jqgrid-view ui-jqgrid-htable">
-                <th><select id="event-filter-type"></select></th>
-                <th><table style="border-spacing: 0; border-collapse: collapse; width: 100%" cellspacing="0" cellpadding="1"><tr><td><input  id="event-filter-id" type="text" style="width:100%;font-size: 0.7em"/></td><td><button id="event-filter-id-clear"></button></td></tr></table></th>
-                <th><table style="border-spacing: 0; border-collapse: collapse; width: 100%" cellspacing="0" cellpadding="1"><tr><td><input  id="event-filter-val" type="text" style="width:100%;font-size: 0.7em"/></td><td><button id="event-filter-val-clear"></button></td></tr></table></th>
-                <th><select id="event-filter-ack"><option value="" class="translate">all</option><option value="true" class="translate">ack</option><option value="false" class="translate">not ack</option></select></th>
-                <th><select id="event-filter-from"></select></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-    </table>
-    <div id="grid-events-inner" style="width: 100%; overflow-y: scroll;">
-        <table id="event-outer" style="width: 100%; border-collapse: collapse; margin-top: -1px" class="ui-widget ui-state-default ui-corner-bottom">
-            <tbody id="event-table">
 
-            </tbody>
-        </table>
+    <div class="clearfix"></div>
 
+    <div id="events-container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            </div>
+            <table id="event-outer">
+                <thead>
+                    <tr>
+                        <th data-i18n="event">event</th>
+                        <th data-i18n="id">id</th>
+                        <th data-i18n="val">val</th>
+                        <th data-i18n="ack">ack</th>
+                        <th data-i18n="from">from</th>
+                        <th data-i18n="ts">ts</th>
+                        <th data-i18n="lc">lc</th>
+                        <th data-i18n="aa">aa</th>
+                    </tr>
+                    <tr>
+                        <th class="overflow_visible"><select id="event-filter-type"></select></th>
+                        <th><input id="event-filter-id" class="form-control clearable" type="text"/></th>
+                        <th><input  id="event-filter-val" class="form-control clearable" type="text"/></th>
+                        <th class="overflow_visible">
+                            <select id="event-filter-ack">
+                                <option value="" data-i18n="all">all</option>
+                                <option value="true" data-i18n="ack">ack</option>
+                                <option value="false" data-i18n="notack">notack</option>
+                            </select>
+                        </th>
+                        <th class="overflow_visible"><select id="event-filter-from"></select></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="event-table"></tbody>
+            </table>
+            <div class="panel-footer">&nbsp;</div>
+        </div>
     </div>
+
 </div>

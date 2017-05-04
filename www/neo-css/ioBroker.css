@@ -4342,6 +4342,10 @@ ul#cssClock li{
     overflow: visible !important;
 }
 
+.overflow_visible > .th-inner {
+    overflow: visible !important;
+}
+
 /* Orbitlist core */
 ol.orbit.orbitlistJS {
     list-style-type: none;

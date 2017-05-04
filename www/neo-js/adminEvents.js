@@ -51,17 +51,7 @@ function Events(main) {
             });
             $('#event-filter-ack').change(filterEvents);
             $('#event-filter-from').change(filterEvents);
-            $('#event-filter-val-clear').click(function () {
-                if ($('#event-filter-val').val() !== '') {
-                    $('#event-filter-val').val('').trigger('change');
-                }
-            });
-            $('#event-filter-id-clear').click(function () {
-                if ($('#event-filter-id').val() !== '') {
-                    $('#event-filter-id').val('').trigger('change');
-                }
-            });
-
+            
             $('#event-pause').attr('data-i18n-tooltip', $.i18n('Pause output')).click(function () {
                 that.pause();
             });
