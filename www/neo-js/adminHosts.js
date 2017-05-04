@@ -193,7 +193,7 @@ function Hosts(main) {
 
         var $hostTile = $hostsTileTemplate.children().clone(true, true);
 
-        $hostTile.find('.widget_tally_box').data('host-id', obj._id);
+        $hostTile.data('host-id', obj._id);
         $hostTile.find('.name').text(obj.common.hostname);
         $hostTile.find('.title').text(obj.common.title);
         $hostTile.find('.host-led').attr('src', 'img/leds/led_' + (alive ? 'green' : 'red') + '.png').attr('alt', alive);
@@ -264,42 +264,29 @@ function Hosts(main) {
         }
 
         that.main.menus.adapters.getAdaptersInfo(host, update, updateRepo, function (repository, installedList) {
-            if (!installedList || !installedList.hosts)
+            if (!installedList || !installedList.hosts){
                 return;
-
-            for (var id in installedList.hosts) {
-                if (!installedList.hosts.hasOwnProperty(id)) {
-                    continue;
-                }
-                var obj = main.objects['system.host.' + id];
-                var installed = installedList.hosts[id].version;
-                if (installed !== installedList.hosts[id].runningVersion)
-                    installed += '(' + $.i18n('Running: ') + installedList.hosts[id].runningVersion + ')';
-                if (!installed && obj.common && obj.common.installedVersion)
-                    installed = obj.common.installedVersion;
-
-                id = 'system.host.' + id.replace(/ /g, '_');
-                $('.hosts-version-installed[data-host-id="' + id + '"]').html(installed);
             }
 
             $('.hosts-host').each(function () {
+                debugger;
                 var id = $(this).data('host-id');
                 var obj = that.main.objects[id];
-                var installedVersion = obj.common.installedVersion;
-                var availableVersion = obj.common ? (repository && repository[obj.common.type] ? repository[obj.common.type].version : '') : '';
-                if (installedVersion && availableVersion) {
-                    if (!main.upToDate(availableVersion, installedVersion)) {
-                        // show button
-                        if (that.main.states[id + '.alive'] && that.main.states[id + '.alive'].val && that.main.states[id + '.alive'].val !== 'null') {
-                            $(this).find('.host-update-submit').show();
-                            $(this).find('.host-update-hint-submit').show();
-                            $(this).find('.hosts-version-installed').addClass('updateReady');
-                            $('a[href="#tab-hosts"]').addClass('updateReady');
+                if (obj) {
+                    var installedVersion = obj.common ? obj.common.installedVersion : '';
+                    var availableVersion = obj.common ? (repository && repository[obj.common.type] ? repository[obj.common.type].version : '') : '';
+                    if (installedVersion && availableVersion) {
+                        if (!main.upToDate(availableVersion, installedVersion)) {
+                            // show button
+                            if (that.main.states[id + '.alive'] && that.main.states[id + '.alive'].val && that.main.states[id + '.alive'].val !== 'null') {
+                                $(this).find('.host-update-submit').show();
+                                $(this).find('.host-update-hint-submit').show();
+                                $(this).find('.hosts-version-installed').addClass('updateReady');
+                                $('a[href="#tab-hosts"]').addClass('updateReady');
+                            }
                         }
-                    }
-                }
-                if (availableVersion) {
-                    $(this).find('.hosts-version-available').html(availableVersion);
+                        $(this).find('.installed').text(availableVersion).removeClass('hidden');
+                    }                    
                 }
             });
 

@@ -546,11 +546,7 @@ function Instances(main) {
                 that.main.config.expertMode = !that.main.config.expertMode;
                 that.main.saveConfig('expertMode', that.main.config.expertMode);
                 that.updateExpertMode();
-                that.main.menus.adapter.updateExpertMode();
             });
-            if (that.main.config.expertMode) {
-                $('#btn-instances-expert-mode').switchClass('btn-default', 'btn-primary');
-            }
 
             $('#btn-instances-reload').click(function () {
                 that.init(true);
@@ -575,7 +571,6 @@ function Instances(main) {
 
     this.updateExpertMode = function () {
         that.init(true);
-        $('#btn-instances-expert-mode').switchClass('btn-default', 'btn-primary');
     };
 
     this.replaceLink = function (_var, adapter, instance, elem) {
@@ -734,6 +729,12 @@ function Instances(main) {
             return;
         }
 
+        if (that.main.config.expertMode) {
+            $('#btn-instances-expert-mode').removeClass('btn-default').addClass('btn-primary');
+        } else {
+            $('#btn-instances-expert-mode').addClass('btn-default').removeClass('btn-primary');
+        }
+
         $instanceContainer.html('');
 
         if (this.main.currentHost) {
@@ -789,7 +790,7 @@ function Instances(main) {
         var id = $instanceTile.attr('data-instance-id');
 
         $instanceTile.find('.instance-stop-run')
-                .addClass(that.main.objects[id].common.enabled ? 'btn-success':'btn-danger')
+                .addClass(that.main.objects[id].common.enabled ? 'btn-success' : 'btn-danger')
                 .attr('data-i18n-tooltip', that.main.objects[id].common.enabled ? 'activated' : 'deactivated')
                 .click(function () {
                     $(this).button('disable');

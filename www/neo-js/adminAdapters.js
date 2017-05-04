@@ -146,10 +146,9 @@ function Adapters(main) {
                 that.main.config.expertMode = !that.main.config.expertMode;
                 that.main.saveConfig('expertMode', that.main.config.expertMode);
                 that.updateExpertMode();
-                that.main.menus.instances.updateExpertMode();
             });
             if (that.main.config.expertMode) {
-                $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
+                $('#btn-adapters-expert-mode').removeClass('btn-default').addClass('btn-primary');
             }
 
             // save last selected adapter
@@ -272,18 +271,7 @@ function Adapters(main) {
         });
     };
     this.updateExpertMode = function () {
-        this.init(true);
-        if (that.main.config.expertMode) {
-            $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
-            $('#btn_upgrade_all').show();
-        } else {
-            $('#btn-adapters-expert-mode').switchClass('btn-default', 'btn-primary');
-            if (that.onlyUpdatable) {
-                $('#btn_upgrade_all').show();
-            } else {
-                $('#btn_upgrade_all').hide();
-            }
-        }
+        that.init(true);
     };
 
     function customFilter(node) {
@@ -591,6 +579,18 @@ function Adapters(main) {
                 that.init();
             }, 250);
             return;
+        }
+
+        if (that.main.config.expertMode) {
+            $('#btn-adapters-expert-mode').removeClass('btn-default').addClass('btn-primary');
+            $('#btn_upgrade_all').show();
+        } else {
+            $('#btn-adapters-expert-mode').addClass('btn-default').removeClass('btn-primary');
+            if (that.onlyUpdatable) {
+                $('#btn_upgrade_all').show();
+            } else {
+                $('#btn_upgrade_all').hide();
+            }
         }
 
         $adapterContainer.html('');
