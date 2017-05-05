@@ -201,7 +201,7 @@ function Hosts(main) {
         $hostTile.find('.type').text(obj.common.type);
         $hostTile.find('.platform').text(obj.common.platform);
         var icon;
-        switch (/*obj.native.os.platform*/"freebsd") {
+        switch (obj.native.os.platform) {
             case "linux":
                 icon = "fa-linux";
                 break;
