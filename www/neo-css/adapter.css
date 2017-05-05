@@ -91,3 +91,7 @@ ul.widget_profile_box_2 li:nth-child(2) {
     padding: 20px !important;
     width: 100%;
 }
+.fa-sym-freebsd{
+    background: #fff url(../img/freebsd.png) no-repeat !important;
+    background-position: 12px 15px !important;
+}

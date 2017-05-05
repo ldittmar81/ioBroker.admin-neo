@@ -201,7 +201,7 @@ function Hosts(main) {
         $hostTile.find('.type').text(obj.common.type);
         $hostTile.find('.platform').text(obj.common.platform);
         var icon;
-        switch (obj.native.os.platform) {
+        switch (/*obj.native.os.platform*/"freebsd") {
             case "linux":
                 icon = "fa-linux";
                 break;
@@ -211,6 +211,9 @@ function Hosts(main) {
             case "darwin":
                 icon = "fa-apple";
                 break;
+            case "freebsd":
+                icon = "fa-sym-freebsd";
+                break;            
             default:
                 icon = "fa-server";
         }
@@ -269,7 +272,6 @@ function Hosts(main) {
             }
 
             $('.hosts-host').each(function () {
-                debugger;
                 var id = $(this).data('host-id');
                 var obj = that.main.objects[id];
                 if (obj) {
