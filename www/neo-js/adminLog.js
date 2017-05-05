@@ -196,9 +196,12 @@ function Logs(main) {
         if (message.from && this.logHosts.indexOf(message.from) === -1) {
             this.logHosts.push(message.from);
             this.logHosts.sort();
-            this.$logFilterHost.html('<option value="">' + $.i18n('all') + '</option>');
-            for (var i = 0; i < this.logHosts.length; i++) {
-                this.$logFilterHost.append('<option value="' + this.logHosts[i].replace(/\./g, '-') + '" ' + ((this.logHosts[i] === this.logFilterHost) ? 'selected' : '') + '>' + this.logHosts[i] + '</option>');
+
+            if (this.$logFilterHost) {
+                this.$logFilterHost.html('<option value="">' + $.i18n('all') + '</option>');
+                for (var i = 0; i < this.logHosts.length; i++) {
+                    this.$logFilterHost.append('<option value="' + this.logHosts[i].replace(/\./g, '-') + '" ' + ((this.logHosts[i] === this.logFilterHost) ? 'selected' : '') + '>' + this.logHosts[i] + '</option>');
+                }
             }
         }
         var visible = '';
