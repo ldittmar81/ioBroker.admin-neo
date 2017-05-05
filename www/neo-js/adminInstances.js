@@ -327,7 +327,9 @@ function Instances(main) {
             var $instanceTile = $instancesTileTemplate.children().clone(true, true);
 
             $instanceTile.attr('data-instance-id', instanceId);
-            //$instanceTile.find('.profile_img').attr('src', 'adapter/' + adapter + '/' + common.icon).attr('alt', adapter);
+            if (common.icon) {
+                $instanceTile.find('.profile_img').attr('src', 'adapter/' + adapter + '/' + common.icon).attr('alt', adapter);
+            }
             $instanceTile.find('.name').text(adapter + '.' + instance);
             $instanceTile.find('.description').text(common.title || '');
 
