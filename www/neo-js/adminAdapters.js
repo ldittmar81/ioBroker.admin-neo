@@ -563,10 +563,12 @@ function Adapters(main) {
                 that.tree[igroup].children.push(adapter);
             } else {
                 that.tree.push({
+                    icon: that.data[adapter].image,
                     title: that.data[adapter].name,
                     desc: that.data[adapter].desc,
-                    group: that.data[adapter].group,
-                    version: that.data[adapter].version
+                    group: $.i18n(that.data[adapter].group),
+                    version: that.data[adapter].version,
+                    license: that.data[adapter].license
                 });
             }
         }
@@ -778,23 +780,35 @@ function Adapters(main) {
 
         $tempTable.find('.adapterTable').bootstrapTable({
             columns: [{
+                    field: 'icon',
+                    formatter: iconFormatter
+                },{
                     field: 'title',
-                    title: 'Name'
+                    title: $.i18n('name'),
+                    sortable: true
                 }, {
                     field: 'desc',
-                    title: 'Beschreibnung'
+                    title: $.i18n('desc')
                 }, {
                     field: 'group',
-                    title: 'Gruppe'
+                    title: $.i18n('group'),
+                    sortable: true
                 }, {
                     field: 'version',
-                    title: 'Version'
+                    title: $.i18n('version')
+                }, {
+                    field: 'license',
+                    title: $.i18n('license')
                 }],
             data: that.tree
         });
 
         $adapterContainer.append($tempTable);
     };
+    
+    function iconFormatter(value) {
+        return '<img style="height: 20px;" src="' + value + '"/>';
+    }
 
     function showLicenseDialog(adapter, callback) {
 
