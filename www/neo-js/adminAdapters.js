@@ -1,7 +1,6 @@
 /* global systemLang */
 /* global semver */
 /* global bootbox */
-/* global showdown */
 
 function Adapters(main) {
     'use strict';
@@ -108,9 +107,9 @@ function Adapters(main) {
             $('#btn_filter_adapters').click(function () {
                 that.onlyInstalled = !that.onlyInstalled;
                 if (that.onlyInstalled) {
-                    $('#btn_filter_adapters').switchClass('btn-default', 'btn-primary');
+                    $('#btn_filter_adapters').addClass('btn-primary').removeClass('btn-default');
                 } else {
-                    $('#btn_filter_adapters').switchClass('btn-default', 'btn-primary');
+                    $('#btn_filter_adapters').addClass('btn-default').removeClass('btn-primary');
                 }
                 that.main.saveConfig('adaptersOnlyInstalled', that.onlyInstalled);
                 setTimeout(function () {
@@ -120,10 +119,10 @@ function Adapters(main) {
             $('#btn_filter_updates').click(function () {
                 that.onlyUpdatable = !that.onlyUpdatable;
                 if (that.onlyUpdatable) {
-                    $('#btn_filter_updates').switchClass('btn-default', 'btn-primary');
+                    $('#btn_filter_updates').addClass('btn-primary').removeClass('btn-default');
                     $('#btn_upgrade_all').show();
                 } else {
-                    $('#btn_filter_updates').switchClass('btn-default', 'btn-primary');
+                    $('#btn_filter_updates').addClass('btn-default').removeClass('btn-primary');
                     $('#btn_upgrade_all').hide();
                 }
                 that.main.saveConfig('adaptersOnlyUpdatable', that.onlyUpdatable);
@@ -132,7 +131,7 @@ function Adapters(main) {
                 }, 200);
             });
             $('#btn_upgrade_all').click(function () {
-                that.main.confirmMessage($.i18n('Do you want to upgrade all adapters?'), $.i18n('Question'), 'help', function (result) {
+                that.main.confirmMessage($.i18n('updateAllAdapters'), $.i18n('question'), 'help', function (result) {
                     if (result) {
                         that.main.cmdExec(null, 'upgrade', function (exitCode) {
                             if (!exitCode) {
@@ -149,6 +148,8 @@ function Adapters(main) {
             });
             if (that.main.config.expertMode) {
                 $('#btn-adapters-expert-mode').removeClass('btn-default').addClass('btn-primary');
+            } else {
+                $('#btn-adapters-expert-mode').removeClass('btn-primary').addClass('btn-default');
             }
 
             // save last selected adapter
@@ -203,21 +204,11 @@ function Adapters(main) {
                     //that.$grid.fancytree('getTree').filterNodes(customFilter, false);
                 }, 400);
             });
-            $(document.body).on('click', '.show-md', function () {
-                var url = $(this).data('md-url');
-                $.get(url, function (data) {
-                    var link = url.match(/([^/]*\/){6}/);
-                    var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'class="img-responsive" src="' + link[0]);
-                    bootbox.alert({
-                        size: 'large',
-                        backdrop: true,
-                        message: html
-                    }).off("shown.bs.modal");
-                });
-            });
             $(document.body).on('click', '.adapter-issue-submit', function () {
+                var adapter_name = $(this).data('adapter-name');
                 $.getJSON($(this).data('issue-url'), function (data) {
                     var $table = $('#issueTable').children().clone(true, true);
+                    $table.find('.adapter-name').text(adapter_name);
                     var bug = false;
                     for (var i in data) {
                         if (i === "remove") {
@@ -251,12 +242,12 @@ function Adapters(main) {
                         backdrop: true,
                         message: $table.toString(),
                         buttons: {
-                            confirm: {
+                            cancel: {
                                 label: $.i18n('close'),
                                 className: 'btn-default'
                             },
-                            cancel: {
-                                label: $.i18n('add'),
+                            confirm: {
+                                label: $.i18n('addIssue'),
                                 className: 'btn-success'
                             }
                         },
@@ -266,6 +257,52 @@ function Adapters(main) {
                             }
                         }
                     }).off("shown.bs.modal");
+                });
+            });
+            $(document.body).on('click', '.adapter-install-submit', function () {
+                var adapter = $(this).attr('data-adapter-name');
+                that.getAdaptersInfo(that.main.currentHost, false, false, function (repo, installed) {
+                    var obj = repo[adapter];
+
+                    if (!obj) {
+                        obj = installed[adapter];
+                    }
+
+                    if (!obj) {
+                        return;
+                    }
+
+                    if (obj.license && obj.license !== 'MIT') {
+                        // Show license dialog!
+                        showLicenseDialog(adapter, function (isAgree) {
+                            if (isAgree) {
+                                that.main.cmdExec(null, 'add ' + adapter, function (exitCode) {
+                                    if (!exitCode) {
+                                        that.init(true);
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        that.main.cmdExec(null, 'add ' + adapter, function (exitCode) {
+                            if (!exitCode) {
+                                that.init(true);
+                            }
+                        });
+                    }
+                });
+            });
+
+            $(document.body).on('click', '.adapter-delete-submit', function () {
+                var name = $(this).attr('data-adapter-name');
+                that.main.confirmMessage($.i18n('areyousure'), $.i18n('question'), 'help', function (result) {
+                    if (result) {
+                        that.main.cmdExec(null, 'del ' + name, function (exitCode) {
+                            if (!exitCode) {
+                                that.init(true);
+                            }
+                        });
+                    }
                 });
             });
         });
@@ -714,12 +751,17 @@ function Adapters(main) {
                         $tempAdapterInner.find('.version').text(adapter.version).parent().removeClass('bg-info').addClass(bgColor);
                     }
                     $tempAdapterInner.find('.adapter-install-submit').attr('data-adapter-name', adapter.name);
+                    $tempAdapterInner.find('.adapter-delete-submit').attr('data-adapter-name', adapter.name);
                     if (adapter.readme) {
                         $tempAdapterInner.find('.adapter-readme-submit').attr('data-md-url', adapter.readme);
                     } else {
                         $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled').prop('disabled', true);
                     }
-                    $tempAdapterInner.find('.adapter-issue-submit').attr('data-issue-url', adapter.issue);
+                    if (adapter.issue) {
+                        $tempAdapterInner.find('.adapter-issue-submit').attr('data-issue-url', adapter.issue).attr('data-adapter-name', adapter.name);
+                    } else {
+                        $tempAdapterInner.find('.adapter-issue-submit').prop('disabled', true);
+                    }
                     if (adapter.license) {
                         $tempAdapterInner.find('.license').text(adapter.license);
                     } else {
@@ -773,6 +815,7 @@ function Adapters(main) {
             }
 
             $adapterContainer.append($tempGroup);
+
         }
     };
     this.createAdapterTable = function () {
@@ -782,7 +825,7 @@ function Adapters(main) {
             columns: [{
                     field: 'icon',
                     formatter: iconFormatter
-                },{
+                }, {
                     field: 'title',
                     title: $.i18n('name'),
                     sortable: true
@@ -805,7 +848,7 @@ function Adapters(main) {
 
         $adapterContainer.append($tempTable);
     };
-    
+
     function iconFormatter(value) {
         return '<img style="height: 20px;" src="' + value + '"/>';
     }

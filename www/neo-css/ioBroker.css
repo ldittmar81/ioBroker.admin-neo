@@ -4289,6 +4289,9 @@ a.disabled, a.disabled:hover{
     .top_nav .navbar-right{
         width: 40% !important;
     }
+    .timeline .block {
+        margin-left: 0 !important;
+    }
 }
 
 .info-position{

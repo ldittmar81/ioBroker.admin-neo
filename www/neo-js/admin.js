@@ -10,6 +10,7 @@
 /* global i18n */
 /* global availableLanguages */
 /* global toggleFullScreen, $BODY, $LEFT_COL, $SIDEBAR_FOOTER, $FOOTER, $NAV_MENU */
+/* global showdown */
 
 'use strict';
 
@@ -1230,6 +1231,19 @@ var adapterRedirect = function (redirect, timeout) {
             var id = $(this).attr('id').slice(9);
             main.selectMenu(id);
         });
+        
+        $(document.body).on('click', '.show-md', function () {
+                var url = $(this).data('md-url');
+                $.get(url, function (data) {
+                    var link = url.match(/([^/]*\/){6}/);
+                    var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'class="img-responsive" src="' + link[0]);
+                    bootbox.alert({
+                        size: 'large',
+                        backdrop: true,
+                        message: html
+                    }).off("shown.bs.modal");
+                });
+            });
 
         // Fullscreen
         var fullscreenElement;
