@@ -76,6 +76,7 @@ alert('Hello World'); // == alert('Hello World', 'notice', $.i18n('notice');
 * jQuery 3.3.1 https://api.jquery.com/
 * jQuery UI 1.12.1 (Drag & Drop + Blind + Keycode + UniqueID) https://jqueryui.com/download/#!version=1.12.1&components=101010010111110000000000010000001100000000000000
 * jQuery i18n 1.0.4 https://github.com/wikimedia/jquery.i18n
+* jQuery Mobile v1.5.0-pre (Touch-Events & Orientation-Events) http://jquerymobile.com/
 * Bootbox 4.4.0 https://bootboxjs.com/
 * Bootstrap Select 1.12.2 https://silviomoreto.github.io/bootstrap-select/
 * iCheck 1.0.2 http://icheck.fronteed.com/
