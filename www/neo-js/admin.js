@@ -117,7 +117,8 @@ var adapterRedirect = function (redirect, timeout) {
             cmdExec: function (host, cmd, callback) {
                 host = host || main.currentHost;
                 $stdout.val('');
-                $dialogCommand.dialog('open');
+                $('#modal-command-label').text(cmd);
+                $('#dialog-command').modal();
                 stdout = '$ ./iobroker ' + cmd;
                 $stdout.val(stdout);
                 // genereate the unique id to coordinate the outputs
@@ -130,8 +131,9 @@ var adapterRedirect = function (redirect, timeout) {
                         cmdCallback = null;
                         callback(err);
                     } else {
-                        if (callback)
+                        if (callback) {
                             callback();
+                        }
                     }
                 });
             },
@@ -633,6 +635,9 @@ var adapterRedirect = function (redirect, timeout) {
         }
 
         function initMenus() {
+
+            initAllDialogs();
+
             // extract all additional instances
             var text = '';
             var list = [];
@@ -796,6 +801,36 @@ var adapterRedirect = function (redirect, timeout) {
             } else {
                 initHtmlMenus(showMenus);
             }
+        }
+
+        function initAllDialogs() {
+
+            $('#dialog-license').load("templates/dialogs.html #modal-license", function () {
+                restartFunctions('#dialog-license');
+
+                for (var lang in availableLanguages) {
+                    $('#license_language')
+                            .append('<option value="' + lang + '" ' + (systemLang === lang ? "selected" : "") + '>' + availableLanguages[lang] + '</option>');
+                }
+
+                $('#license_diag').change(function () {
+                    if ($(this).prop('checked')) {
+                        $('#license_agree').prop('disable', false);
+                    } else {
+                        $('#license_agree').prop('disable', true);
+                    }
+                });
+
+                $('#license_language').change(function () {
+                    var language = $(this).val();
+                    changeLanguage(language);
+                });
+
+            });
+
+            $('#dialog-command').load("templates/dialogs.html #modal-command", function () {
+                restartFunctions('#dialog-command');
+            });
         }
 
         menus.logs.prepare();
@@ -1040,7 +1075,7 @@ var adapterRedirect = function (redirect, timeout) {
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
                 if (!exitCode) {
                     setTimeout(function () {
-                        $dialogCommand.dialog('close');
+                        $('#dialog-license').modal('hide');
                     }, 1500);
                 }
                 if (cmdCallback) {
@@ -1098,31 +1133,7 @@ var adapterRedirect = function (redirect, timeout) {
 
                                             if (!main.systemConfig.common.licenseConfirmed) {
                                                 // Show license agreement
-
-                                                $('#dialog-license').load("templates/dialogs.html #modal-license", function () {
-                                                    restartFunctions('#dialog-license');
-
-                                                    for (var lang in availableLanguages) {
-                                                        $('#license_language')
-                                                                .append('<option value="' + lang + '" ' + (systemLang === lang ? "selected" : "") + '>' + availableLanguages[lang] + '</option>');
-                                                    }
-
-                                                    $('#license_diag').change(function () {
-                                                        if ($(this).prop('checked')) {
-                                                            $('#license_agree').prop('disable', false);
-                                                        } else {
-                                                            $('#license_agree').prop('disable', true);
-                                                        }
-                                                    });
-
-                                                    $('#license_language').change(function () {
-                                                        var language = $(this).val();
-                                                        changeLanguage(language);
-                                                    });
-
-                                                    $('#dialog-license').modal();
-
-                                                });
+                                                $('#dialog-license').modal();
                                             }
                                         } else {
                                             main.systemConfig = {
@@ -1231,19 +1242,19 @@ var adapterRedirect = function (redirect, timeout) {
             var id = $(this).attr('id').slice(9);
             main.selectMenu(id);
         });
-        
+
         $(document.body).on('click', '.show-md', function () {
-                var url = $(this).data('md-url');
-                $.get(url, function (data) {
-                    var link = url.match(/([^/]*\/){6}/);
-                    var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'class="img-responsive" src="' + link[0]);
-                    bootbox.alert({
-                        size: 'large',
-                        backdrop: true,
-                        message: html
-                    }).off("shown.bs.modal");
-                });
+            var url = $(this).data('md-url');
+            $.get(url, function (data) {
+                var link = url.match(/([^/]*\/){6}/);
+                var html = new showdown.Converter().makeHtml(data).replace(/src="(?!http)/g, 'class="img-responsive" src="' + link[0]);
+                bootbox.alert({
+                    size: 'large',
+                    backdrop: true,
+                    message: html
+                }).off("shown.bs.modal");
             });
+        });
 
         // Fullscreen
         var fullscreenElement;
