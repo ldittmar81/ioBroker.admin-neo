@@ -1,7 +1,8 @@
 .command {
     font-family: courier monospace; 
     font-size: 11px; 
-    resize: none
+    resize: none;
+    width: 100%;
 }
 
 .group_img {

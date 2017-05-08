@@ -118,7 +118,7 @@ var adapterRedirect = function (redirect, timeout) {
                 host = host || main.currentHost;
                 $stdout.val('');
                 $('#modal-command-label').text(cmd);
-                $('#dialog-command').modal();
+                $('#modal-command').modal();
                 stdout = '$ ./iobroker ' + cmd;
                 $stdout.val(stdout);
                 // genereate the unique id to coordinate the outputs
@@ -564,7 +564,7 @@ var adapterRedirect = function (redirect, timeout) {
         var $pageContent = $('#pageContent');
         var $hiddenObjects = $('#hiddenObjects');
 
-        var $stdout = $('#stdout');
+        var $stdout = null;
 
         var firstConnect = true;
 
@@ -830,6 +830,7 @@ var adapterRedirect = function (redirect, timeout) {
 
             $('#dialog-command').load("templates/dialogs.html #modal-command", function () {
                 restartFunctions('#dialog-command');
+                $stdout = $('#stdout');
             });
         }
 
@@ -1075,7 +1076,7 @@ var adapterRedirect = function (redirect, timeout) {
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
                 if (!exitCode) {
                     setTimeout(function () {
-                        $('#dialog-command').modal('hide');
+                        $('#modal-command').modal('hide');
                     }, 1500);
                 }
                 if (cmdCallback) {
@@ -1133,7 +1134,7 @@ var adapterRedirect = function (redirect, timeout) {
 
                                             if (!main.systemConfig.common.licenseConfirmed) {
                                                 // Show license agreement
-                                                $('#dialog-license').modal();
+                                                $('#modal-license').modal();
                                             }
                                         } else {
                                             main.systemConfig = {

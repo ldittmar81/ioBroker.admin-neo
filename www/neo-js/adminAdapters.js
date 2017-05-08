@@ -546,7 +546,6 @@ function Adapters(main) {
                 group = 'unknown_group';
             }
             var desc = (typeof obj.desc === 'object') ? (obj.desc[systemLang] || obj.desc.en) : obj.desc;
-            desc += showUploadProgress(group, adapter, that.main.states['system.adapter.' + adapter + '.upload'] ? that.main.states['system.adapter.' + adapter + '.upload'].val : 0);
             if (obj.readme) {
                 obj.readme = obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', '');
             }
@@ -858,11 +857,7 @@ function Adapters(main) {
     }
 
     this.objectChange = function (id, obj) {
-    };
-
-    function showUploadProgress(group, adapter, percent) {
-
-    }
+    };    
 
     this.stateChange = function (id, state) {
 
