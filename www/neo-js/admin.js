@@ -1075,7 +1075,7 @@ var adapterRedirect = function (redirect, timeout) {
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
                 if (!exitCode) {
                     setTimeout(function () {
-                        $('#dialog-license').modal('hide');
+                        $('#dialog-command').modal('hide');
                     }, 1500);
                 }
                 if (cmdCallback) {
