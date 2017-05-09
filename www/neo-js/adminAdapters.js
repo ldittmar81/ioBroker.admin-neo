@@ -841,6 +841,8 @@ function Adapters(main) {
                 }, {
                     field: 'license',
                     title: $.i18n('license')
+                }, {
+                    formatter: addButtonsFormatter
                 }],
             data: that.tree
         });
@@ -850,6 +852,11 @@ function Adapters(main) {
 
     function iconFormatter(value) {
         return '<img style="height: 20px;" src="' + value + '"/>';
+    }
+    
+    function addButtonsFormatter(){
+        var $tempButtons = $('#adapterTemplateTableButtons').children().clone(true, true);
+        return $tempButtons.toString();
     }
 
     function showLicenseDialog(adapter, callback) {

@@ -832,6 +832,15 @@ var adapterRedirect = function (redirect, timeout) {
                 restartFunctions('#dialog-command');
                 $stdout = $('#stdout');
             });
+            
+            $('#dialog-cron').load("templates/dialogs.html #modal-cron", function () {
+                restartFunctions('#dialog-cron');
+            });
+            
+            $('#dialog-config').load("templates/dialogs.html #modal-config", function () {
+                restartFunctions('#dialog-config');
+            });
+         
         }
 
         menus.logs.prepare();

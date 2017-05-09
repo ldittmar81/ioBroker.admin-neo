@@ -10,6 +10,10 @@ function Instances(main) {
     this.list = [];
     this.hostsText = null;
 
+    this.$configFrame = $('#config-iframe');
+    this.$dialogConfig = $('#modal-config');
+    this.$dialogCron = $('#modal-cron');
+
     function getLinkVar(_var, obj, attr, link, instance) {
         if (attr === 'protocol') {
             attr = 'secure';
@@ -519,6 +523,24 @@ function Instances(main) {
     }
 
     function showCronDialog(value, cb) {
+        value = (value || '').replace(/"/g, '').replace(/'/g, '');
+        try {
+            $('#div-cron').cron('value', value);
+        } catch (e) {
+            alert($.i18n('cannotParseValueAsCron'));
+        }
+
+        $('#dialog_cron_insert').hide();
+
+        $('#dialog_cron_callback').show().click(function () {
+            var val = $('#div-cron').cron('value');
+            that.$dialogCron.modal('hide');
+            if (cb) {
+                cb(val);
+            }
+        });
+
+        that.$dialogCron.modal();
     }
 
     this.prepare = function () {
@@ -786,6 +808,56 @@ function Instances(main) {
     };
 
     this.showConfigDialog = function (id) {
+        // id = 'system.adapter.NAME.X'
+        $iframeDialog = that.$dialogConfig;
+        var parts = id.split('.');
+        that.$configFrame.attr('src', 'adapter/' + parts[2] + '/?' + parts[3]);
+
+        var name = id.replace(/^system\.adapter\./, '');
+        var config = that.main.objects[id];
+        var width = 830;
+        var height = 536;
+        var minHeight = 0;
+        var minWidth = 0;
+        if (config.common.config) {
+            if (config.common.config.width) {
+                width = config.common.config.width;
+            }
+            if (config.common.config.height) {
+                height = config.common.config.height;
+            }
+            if (config.common.config.minWidth) {
+                minWidth = config.common.config.minWidth;
+            }
+            if (config.common.config.minHeight) {
+                minHeight = config.common.config.minHeight;
+            }
+        }
+        if (that.main.config['adapter-config-width-' + name]) {
+            width = that.main.config['adapter-config-width-' + name];
+        }
+        if (that.main.config['adapter-config-height-' + name]) {
+            height = that.main.config['adapter-config-height-' + name];
+        }
+
+        that.$dialogConfig.data('name', name);
+
+        // Set minimal height and width
+        that.$dialogConfig.dialog('option', 'minWidth', minWidth).dialog('option', 'minHeight', minHeight);
+
+        that.$dialogConfig
+                .dialog('option', 'title', _('Adapter configuration') + ': ' + name)
+                .dialog('option', 'width', width)
+                .dialog('option', 'height', height)
+                .dialog('open');
+        that.$dialogConfig.parent().find('.ui-widget-header button .ui-button-text').html('');
+
+        if (that.main.config['adapter-config-top-' + name]) {
+            that.$dialogConfig.parent().css({top: that.main.config['adapter-config-top-' + name]});
+        }
+        if (that.main.config['adapter-config-left-' + name]) {
+            that.$dialogConfig.parent().css({left: that.main.config['adapter-config-left-' + name]});
+        }
     };
 
     this.initButtons = function ($instanceTile) {

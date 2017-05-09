@@ -198,6 +198,7 @@
   "readme": "Information about the adapter",
   "role": "Role",
   "room": "Room",
+  "runBackgroud": "Run on background",
   "saturday": "Saturday",
   "save": "Save",
   "saveclose": "Save and close",
