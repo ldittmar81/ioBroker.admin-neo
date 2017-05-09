@@ -472,18 +472,18 @@ var adapterRedirect = function (redirect, timeout) {
                 }
                 $(selector).prependTo($pageContent, restartFunctions(selector));
             },
-            getMenuTitle: function (id) {
+            getMenuTitle: function (id, noSingletonCount) {
                 var menuTitle = "";
                 if (id.indexOf('.') !== -1) {
                     var instanz = id.substring(id.lastIndexOf('.') + 1, id.length);
-                    if (instanz === "0") {
-                        menuTitle = $.i18n(id.substring(0, id.lastIndexOf('.')) + "zero");
-                        instanz = "";
+                    var adapter = id.substring(0, id.lastIndexOf('.'));
+                    if (noSingletonCount[adapter] === 1) {
+                        menuTitle = adapter;
                     } else {
-                        menuTitle = $.i18n(id.substring(0, id.lastIndexOf('.')), instanz);
+                        menuTitle = adapter + " (" + instanz + ")";
                     }
                 } else {
-                    menuTitle = $.i18n(id);
+                    menuTitle = id;
                 }
                 return menuTitle;
             },
@@ -646,6 +646,7 @@ var adapterRedirect = function (redirect, timeout) {
             var addMenus = [];
             var otherMenus = [];
             var urlList = [];
+            var noSingleton = {};
             for (var i = 0; i < main.instances.length; i++) {
                 var object = main.objects[main.instances[i]];
                 if (!object.common) {
@@ -666,6 +667,11 @@ var adapterRedirect = function (redirect, timeout) {
                         addMenus.push(main.instances[i]);
                     }
                 } else if (object.common.adminTab) {
+                    if(noSingleton[object.common.name]){
+                        noSingleton[object.common.name] += 1;
+                    }else{
+                        noSingleton[object.common.name] = 1;
+                    }
                     addMenus.push(main.instances[i]);
                 } else {
                     var tmp = main.instances[i].split('.');
@@ -749,12 +755,12 @@ var adapterRedirect = function (redirect, timeout) {
                         isReplace = link.indexOf('%') !== -1;
                     }
 
-                    buttonName = main.getMenuTitle(buttonName);
+                    buttonName = main.getMenuTitle(buttonName, noSingleton);
 
                     var icon = main.objects[addMenus[a]].common.adminTab['fa-icon'] || 'fa-cog';
                     text += '<li class="text-nowrap">';
                     text += '<a class="main-menu" href="#' + name + '" id="menuitem-' + name + '">';
-                    text += '<i id="menuicon-' + name + '" class="fa ' + icon + '"></i> <span id="menutitle-' + name + '">' + buttonName + '</span></a>';
+                    text += '<i id="menuicon-' + name + '" class="fa ' + icon + '"></i> <span style="text-transform: capitalize;" id="menutitle-' + name + '">' + buttonName + '</span></a>';
                     text += '<a class="menu-close"><i class="fa fa-times"></i></a></li>';
 
                     //noinspection JSJQueryEfficiency
@@ -776,11 +782,9 @@ var adapterRedirect = function (redirect, timeout) {
                     var name = otherMenus[a].title + '-' + otherMenus[a].instance;
                     var link = otherMenus[a].url;
 
-                    buttonName = main.getMenuTitle(otherMenus[a].title + '.' + otherMenus[a].instance);
-
                     var child = '<li>';
                     child += '<a class="main-menu" href="#' + name + '" id="menuitem-' + name + '">';
-                    child += '<span id="menutitle-' + name + '">' + buttonName + '</span></a></li>';
+                    child += '<span id="menutitle-' + name + '" style="text-transform: capitalize;">' + otherMenus[a].title + '</span></a></li>';
                     $('#child_others_menu').append(child);
 
                     var div = '<div id="custom-' + name + '-menu" class="tab-custom" data-adapter="' + otherMenus[a].title + '" data-instance="' + otherMenus[a].instance + '" data-src="' + link + '">' +
