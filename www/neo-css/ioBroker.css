@@ -4649,3 +4649,8 @@ ul.fancytree-container {
     -moz-animation: none;
     background-image: none;
 }
+
+img.tranparent {
+    opacity: 0.2;
+    filter: alpha(opacity=20); /* For IE8 and earlier */
+}
