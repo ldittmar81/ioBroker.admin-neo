@@ -322,7 +322,7 @@ String.prototype.text2iconClass = function () {
     $(function () {
         changeLanguage(systemLang);
         $("body").tooltip({
-            selector: '[data-toggle="tooltip"]'
+            selector: '[data-toggle="tooltip"]:not(:disabled)'
         });
     });
     // / Translation/Tooltip

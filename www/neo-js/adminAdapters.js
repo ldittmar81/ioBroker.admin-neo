@@ -749,18 +749,9 @@ function Adapters(main) {
                     if (adapter.version) {
                         $tempAdapterInner.find('.version').text(adapter.version).parent().removeClass('bg-info').addClass(bgColor);
                     }
-                    $tempAdapterInner.find('.adapter-install-submit').attr('data-adapter-name', adapter.name);
-                    $tempAdapterInner.find('.adapter-delete-submit').attr('data-adapter-name', adapter.name);
-                    if (adapter.readme) {
-                        $tempAdapterInner.find('.adapter-readme-submit').attr('data-md-url', adapter.readme);
-                    } else {
-                        $tempAdapterInner.find('.adapter-readme-submit').addClass('disabled').prop('disabled', true);
-                    }
-                    if (adapter.issue) {
-                        $tempAdapterInner.find('.adapter-issue-submit').attr('data-issue-url', adapter.issue).attr('data-adapter-name', adapter.name);
-                    } else {
-                        $tempAdapterInner.find('.adapter-issue-submit').prop('disabled', true);
-                    }
+
+                    initButtons(adapter, $tempAdapterInner);
+
                     if (adapter.license) {
                         $tempAdapterInner.find('.license').text(adapter.license);
                     } else {
@@ -772,7 +763,6 @@ function Adapters(main) {
                         $tempAdapterInner.find('.license').addClass('disabled').prop('disabled', true);
                     }
                     if (adapter.installed) {
-                        $tempAdapterInner.find('.adapter-delete-submit').prop('disabled', false);
                         $tempAdapterInner.find('.installedInstanceSpan').removeClass('hidden');
                         $tempAdapterInner.find('.installedInstances').text(adapter.installed.instances);
                         $tempAdapterInner.find('.activeInstances').text(adapter.installed.active);
@@ -780,12 +770,6 @@ function Adapters(main) {
                             $tempAdapterInner.find('.installedVersion').removeClass('hidden').text(adapter.installed.version);
                             if (adapter.installed.news) {
                                 $tempAdapterInner.find('.notesVersion').removeClass('hidden').attr('title', adapter.installed.news);
-                            }
-                            if (adapter.installed.updatable) {
-                                $tempAdapterInner.find('.adapter-update-submit').prop('disabled', false);
-                            }
-                            if (adapter.installed.updatableError) {
-                                $tempAdapterInner.find('.adapter-update-submit').attr('title', adapter.installed.updatableError);
                             }
                         }
                     }
@@ -842,6 +826,7 @@ function Adapters(main) {
                     field: 'license',
                     title: $.i18n('license')
                 }, {
+                    field: 'title',
                     formatter: addButtonsFormatter
                 }],
             data: that.tree
@@ -850,12 +835,40 @@ function Adapters(main) {
         $adapterContainer.append($tempTable);
     };
 
+    function initButtons(adapter, $adapterFragment) {
+        $adapterFragment.find('.adapter-install-submit').attr('data-adapter-name', adapter.name);
+        $adapterFragment.find('.adapter-delete-submit').attr('data-adapter-name', adapter.name);
+        if (adapter.readme) {
+            $adapterFragment.find('.adapter-readme-submit').attr('data-md-url', adapter.readme);
+        } else {
+            $adapterFragment.find('.adapter-readme-submit').addClass('disabled').prop('disabled', true);
+        }
+        if (adapter.issue) {
+            $adapterFragment.find('.adapter-issue-submit').attr('data-issue-url', adapter.issue).attr('data-adapter-name', adapter.name);
+        } else {
+            $adapterFragment.find('.adapter-issue-submit').prop('disabled', true);
+        }
+        if (adapter.installed) {
+            $adapterFragment.find('.adapter-delete-submit').prop('disabled', false);
+            if (adapter.installed.version !== adapter.version) {
+                if (adapter.installed.updatable) {
+                    $adapterFragment.find('.adapter-update-submit').prop('disabled', false);
+                }
+                if (adapter.installed.updatableError) {
+                    $adapterFragment.find('.adapter-update-submit').attr('title', adapter.installed.updatableError);
+                }
+            }
+        }
+    }
+
     function iconFormatter(value) {
         return '<img style="height: 20px;" src="' + value + '"/>';
     }
-    
-    function addButtonsFormatter(){
+
+    function addButtonsFormatter(value) {
         var $tempButtons = $('#adapterTemplateTableButtons').children().clone(true, true);
+        var adapter = that.data[value];
+        initButtons(adapter, $tempButtons);
         return $tempButtons.toString();
     }
 
@@ -864,7 +877,7 @@ function Adapters(main) {
     }
 
     this.objectChange = function (id, obj) {
-    };    
+    };
 
     this.stateChange = function (id, state) {
 

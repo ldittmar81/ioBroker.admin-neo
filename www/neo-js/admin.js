@@ -644,13 +644,15 @@ var adapterRedirect = function (redirect, timeout) {
             var showMenus = '';
 
             var addMenus = [];
+            var otherMenus = [];
+            var urlList = [];
             for (var i = 0; i < main.instances.length; i++) {
-                if (!main.objects[main.instances[i]].common ||
-                        !main.objects[main.instances[i]].common.adminTab) {
+                var object = main.objects[main.instances[i]];
+                if (!object.common) {
                     continue;
                 }
 
-                if (main.objects[main.instances[i]].common.adminTab.singleton) {
+                if (object.common.adminTab && object.common.adminTab.singleton) {
                     var isFound = false;
                     var inst1 = main.instances[i].replace(/\.(\d+)$/, '.');
                     for (var j = 0; j < addMenus.length; j++) {
@@ -663,8 +665,28 @@ var adapterRedirect = function (redirect, timeout) {
                     if (!isFound) {
                         addMenus.push(main.instances[i]);
                     }
-                } else {
+                } else if (object.common.adminTab) {
                     addMenus.push(main.instances[i]);
+                } else {
+                    var tmp = main.instances[i].split('.');
+                    var adapter = tmp[2];
+                    if(adapter === "admin-neo"){
+                        continue;
+                    }
+                    var instance = tmp[3];
+                    var link = object.common.localLinks || object.common.localLink || '';
+                    var url = link ? main.menus.instances.replaceInLink(link, adapter, instance) : '';
+                    if (typeof url === 'object') {
+                        url = url.__first;
+                    }
+                    if (!url) {
+                        continue;
+                    }
+                    if(urlList.indexOf(url) !== -1){
+                        continue;
+                    }
+                    urlList.push(url);
+                    otherMenus.push({title: adapter, instance: instance, url: url});
                 }
             }
 
@@ -747,6 +769,28 @@ var adapterRedirect = function (redirect, timeout) {
                 }
             }
 
+            // Look for other menus
+            if (otherMenus.length > 0) {
+                $('#child_others_parentmenu').removeClass("hidden");
+                for (var a = 0; a < otherMenus.length; a++) {
+                    var name = otherMenus[a].title + '-' + otherMenus[a].instance;
+                    var link = otherMenus[a].url;
+                    
+                    buttonName = main.getMenuTitle(otherMenus[a].title + '.' + otherMenus[a].instance);
+                    
+                    var child = '<li>';
+                    child += '<a class="main-menu" href="#' + name + '" id="menuitem-' + name + '">';
+                    child += '<span id="menutitle-' + name + '">' + buttonName + '</span></a></li>';
+                    $('#child_others_menu').append(child);
+
+                    var div = '<div id="custom-' + name + '-menu" class="tab-custom" data-adapter="' + otherMenus[a].title + '" data-instance="' + otherMenus[a].instance + '" data-src="' + link + '">' +
+                            '<iframe class="iframe-in-tab" style="border: 0; solid #FFF; display:block; left: 0; top: 0; width: 100%;"></iframe></div>';
+                    $(div).appendTo($('#hiddenObjects'));
+                    
+                    list.push(name);
+                }
+            }
+
             $('.tab-custom').each(function () {
                 var name = $(this).attr('id').substring(7, $(this).attr('id').length - 5);
                 if (list.indexOf(name) === -1) {
@@ -758,7 +802,7 @@ var adapterRedirect = function (redirect, timeout) {
                 main.systemConfig.common.menus = list;
             }
 
-            $('.side-menu').append(text);
+            $('.side-menu').prepend(text);
 
             $('.menu-close').click(function () {
                 var pos = main.systemConfig.common.menus.indexOf($(this).data('tab'));
@@ -832,15 +876,15 @@ var adapterRedirect = function (redirect, timeout) {
                 restartFunctions('#dialog-command');
                 $stdout = $('#stdout');
             });
-            
+
             $('#dialog-cron').load("templates/dialogs.html #modal-cron", function () {
                 restartFunctions('#dialog-cron');
             });
-            
+
             $('#dialog-config').load("templates/dialogs.html #modal-config", function () {
                 restartFunctions('#dialog-config');
             });
-         
+
         }
 
         menus.logs.prepare();

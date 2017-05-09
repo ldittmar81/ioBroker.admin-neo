@@ -58,7 +58,7 @@ function Instances(main) {
         return link;
     }
 
-    function resolveLink(link, adapter, instance) {
+    this.resolveLink = function(link, adapter, instance) {
         var vars = link.match(/%(\w+)%/g);
         var _var;
         var v;
@@ -130,14 +130,14 @@ function Instances(main) {
             }
         }
         return result || link;
-    }
+    };
 
-    function replaceInLink(link, adapter, instance) {
+    this.replaceInLink = function (link, adapter, instance) {
         if (typeof link === 'object') {
             var links = JSON.parse(JSON.stringify(link));
             var first;
             for (var v in links) {
-                links[v] = resolveLink(links[v], adapter, instance);
+                links[v] = that.resolveLink(links[v], adapter, instance);
                 if (!first) {
                     first = links[v];
                 }
@@ -145,9 +145,9 @@ function Instances(main) {
             links.__first = first;
             return links;
         } else {
-            return resolveLink(link, adapter, instance);
+            return that.resolveLink(link, adapter, instance);
         }
-    }
+    };
 
     function updateLed(instanceId, $tile) {
         var tmp = instanceId.split('.');
@@ -340,7 +340,7 @@ function Instances(main) {
             updateLed(instanceId, $instanceTile);
 
             var link = common.localLinks || common.localLink || '';
-            var url = link ? replaceInLink(link, adapter, instance) : '';
+            var url = link ? that.replaceInLink(link, adapter, instance) : '';
             if (link) {
                 if (typeof url === 'object') {
                     link = '<a href="' + url.__first + '" target="_blank">';
