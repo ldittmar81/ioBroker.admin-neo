@@ -41,6 +41,47 @@ jQuery.fn.toString = function () {
     return out.join("\n");
 };
 
+jQuery.fn.progressbar = function (a, b) {
+    var $this = $(this);
+    if ($this.hasClass('meter')) {
+        if (a === "error" || b === "error") {
+            $this.removeClass('orange').addClass('red');
+        } else if (a === "warning" || b === "warning") {
+            $this.removeClass('red').addClass('orange');
+        } else {
+            $this.removeClass('red').removeClass('orange');
+        }
+
+        var $span = $this.find('span');
+
+        var value;
+        var orgval = 100 * $span.width() / $span.offsetParent().width();
+        if (typeof a === "string" && a.startsWith("+")) {
+            value = parseInt(a.substr(1));
+            value = a.startsWith("+") ? (orgval + value) : (orgval - value);
+            if ((value > 90 && a.startsWith("+"))) {
+                value = orgval;
+            }
+        } else if (typeof b === "string" && b.startsWith("+")) {
+            value = parseInt(b.substr(1));
+            value = orgval + value;
+            if ((value > 90 && b.startsWith("+"))) {
+                value = orgval;
+            }
+        } else {
+            value = parseInt(a) || parseInt(b);
+        }
+
+        if (!isNaN(value)) {
+            if (value > 100) {
+                value = 100;
+            }
+            $span.width(value + "%");            
+        }
+    }
+    return this;
+};
+
 jQuery.fn.switchClass = function (a, b) {
     this.each(function () {
         var t = $(this).hasClass(a);
@@ -141,9 +182,9 @@ String.prototype.text2iconClass = function () {
                 this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this));
 
                 if (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)) {
-                    this.$element.on('taphold.' + this.type, this.options.selector, function(event){
+                    this.$element.on('taphold.' + this.type, this.options.selector, function (event) {
                         event.stopPropagation();
-                        $.proxy(this.enter, this);                        
+                        $.proxy(this.enter, this);
                     });
                     $(document.body).one('tap.' + this.type, this.options.selector, $.proxy(this.leave, this));
                 }

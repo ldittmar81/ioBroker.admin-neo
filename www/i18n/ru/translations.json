@@ -55,6 +55,7 @@
   "delete_one_all": "Хотите удалить только <span style=\"color: blue\">один объект</span> или <span style=\"color: red\">все</span> нижележащие от $1 тоже?",
   "delete_sure": "Удалить <b>\"$1\"</b>?",
   "desc": "Описание",
+  "details": "Детали",
   "eachday": "Каждый день",
   "eachmonth": "Каждый месяц",
   "eachselectedday": "Каждый выбранный день",

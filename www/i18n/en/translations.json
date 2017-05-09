@@ -65,6 +65,7 @@
   "delete_one_all": "Do you want to delete just <span style=\"color: blue\">one object</span> or <span style=\"color: red\">all</span> children of $1 too?",
   "delete_sure": "Are you sure to delete <b>\"$1\"</b>?",
   "desc": "description",
+  "details": "Details",
   "eachday": "Each Day",
   "eachmonth": "Each Month",
   "eachselectedday": "Each selected day",

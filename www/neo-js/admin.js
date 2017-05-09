@@ -670,7 +670,7 @@ var adapterRedirect = function (redirect, timeout) {
                 } else {
                     var tmp = main.instances[i].split('.');
                     var adapter = tmp[2];
-                    if(adapter === "admin-neo"){
+                    if (adapter === "admin-neo") {
                         continue;
                     }
                     var instance = tmp[3];
@@ -682,7 +682,7 @@ var adapterRedirect = function (redirect, timeout) {
                     if (!url) {
                         continue;
                     }
-                    if(urlList.indexOf(url) !== -1){
+                    if (urlList.indexOf(url) !== -1) {
                         continue;
                     }
                     urlList.push(url);
@@ -775,9 +775,9 @@ var adapterRedirect = function (redirect, timeout) {
                 for (var a = 0; a < otherMenus.length; a++) {
                     var name = otherMenus[a].title + '-' + otherMenus[a].instance;
                     var link = otherMenus[a].url;
-                    
+
                     buttonName = main.getMenuTitle(otherMenus[a].title + '.' + otherMenus[a].instance);
-                    
+
                     var child = '<li>';
                     child += '<a class="main-menu" href="#' + name + '" id="menuitem-' + name + '">';
                     child += '<span id="menutitle-' + name + '">' + buttonName + '</span></a></li>';
@@ -786,7 +786,7 @@ var adapterRedirect = function (redirect, timeout) {
                     var div = '<div id="custom-' + name + '-menu" class="tab-custom" data-adapter="' + otherMenus[a].title + '" data-instance="' + otherMenus[a].instance + '" data-src="' + link + '">' +
                             '<iframe class="iframe-in-tab" style="border: 0; solid #FFF; display:block; left: 0; top: 0; width: 100%;"></iframe></div>';
                     $(div).appendTo($('#hiddenObjects'));
-                    
+
                     list.push(name);
                 }
             }
@@ -1110,6 +1110,7 @@ var adapterRedirect = function (redirect, timeout) {
         main.socket.on('cmdStdout', function (_id, text) {
             if (activeCmdId === _id) {
                 stdout += '\n' + text;
+                $('#adapter-meter').progressbar("+1");
                 $stdout.val(stdout);
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
             }
@@ -1117,6 +1118,7 @@ var adapterRedirect = function (redirect, timeout) {
         main.socket.on('cmdStderr', function (_id, text) {
             if (activeCmdId === _id) {
                 stdout += '\nERROR: ' + text;
+                $('#adapter-meter').progressbar("+1");
                 $stdout.val(stdout);
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
             }
@@ -1127,12 +1129,18 @@ var adapterRedirect = function (redirect, timeout) {
                 stdout += '\n' + (exitCode !== 0 ? 'ERROR: ' : '') + 'process exited with code ' + exitCode;
                 $stdout.val(stdout);
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
+                $('#adapter-install-close-btn').text($.i18n('close'));
                 if (!exitCode) {
+                    $('#adapter-meter').progressbar(100);
                     setTimeout(function () {
                         $('#modal-command').modal('hide');
                     }, 1500);
+                } else {
+                    $('#adapter-meter').progressbar(90, "error");
                 }
                 if (cmdCallback) {
+
+                    $('#adapter-install-close-btn').text($.i18n('close'));
                     cmdCallback(exitCode);
                     cmdCallback = null;
                 }
@@ -1310,6 +1318,10 @@ var adapterRedirect = function (redirect, timeout) {
             });
         });
 
+        $(document.body).on('hidden.bs.modal', '#modal-command', function () {
+            $('#adapter-meter').progressbar(1);
+        });
+
         // Fullscreen
         var fullscreenElement;
         $('#button-fullscreen ,#button-content-fullscreen').on("click", function () {
@@ -1406,8 +1418,6 @@ var adapterRedirect = function (redirect, timeout) {
         $(window).smartresize(resizeIFrame);
     });
 })(jQuery);
-
-
 
 function assign(obj, prop, value) {
     if (typeof prop === "string") {

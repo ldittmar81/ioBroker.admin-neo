@@ -64,6 +64,20 @@ type = notice, error, success, info
 alert('Hello World'); // == alert('Hello World', 'notice', $.i18n('notice');
 ```
 
+### Progress bar
+
+Ist must be a div with class "meter" and a span as child
+```
+<div id="meter" class="meter nostripes">
+    <span style="width: 1%;"></span>
+</div>
+
+$('#meter).progressbar(50); // set progres bar to 50%
+$('#meter).progressbar('+5'); // add 5% to the progress bar
+$('#meter).progressbar('10', 'error"); // set progress bar to 10% with color red
+$('#meter).progressbar('warning"); // set progress bar to color orange
+```
+
 ## Bibliotheken
 
 ### CSS

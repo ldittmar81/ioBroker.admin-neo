@@ -59,6 +59,7 @@
   "delete_one_all": "Você só quer remover <span style=\"color: blue\">um objeto</ span> ou <span style=\"color: red\">todas as</span> crianças do $1, também?",
   "delete_sure": "Tem certeza que deseja remover <b>\"$ 1\"</ b>?",
   "desc": "descrição",
+  "details": "Detalhes",
   "eachday": "Todos os dias",
   "eachmonth": "Todos os meses",
   "eachselectedday": "Cada dia selecionado",
