@@ -75,7 +75,7 @@
 
 <!-- Adapter -->
 <div id="adapterTemplateAdapter" class="hidden">
-    <div class="col-md-3 col-xs-12 widget widget_tally_box">
+    <div class="col-md-3 col-xs-12 widget widget_tally_box">        
         <div class="x_panel fixed_height_390">
             <div class="x_content">
 
@@ -87,7 +87,7 @@
 
 <!-- New Adapter -->
 <div id="adapterTemplateNewAdapter" class="hidden">
-    <div class="col-md-3 col-xs-12 widget widget_tally_box">
+    <div class="col-md-3 col-xs-12 widget widget_tally_box">   
         <div class="x_panel ui-ribbon-container fixed_height_390">
             <div class="ui-ribbon-wrapper">
                 <div class="ui-ribbon text-uppercase">new</div>
@@ -103,6 +103,11 @@
 <!-- Adapter inside -->
 <div id="adapterTemplateAdapterInside" class="hidden">
     <div class="fixed_height_360">
+        <span class="cool-ribbon hidden">
+            <small class="installedInstanceSpan">
+                [<span class="installedInstances"></span>/<span class="activeInstances"></span>]
+            </small>
+        </span>
         <div class="flex">
             <ul class="list-inline widget_profile_box">
                 <li>
@@ -124,10 +129,7 @@
         <p class="description">Opens a webserver for the ioBroker admin UI</p>
         <div class="tiles-footer">
             <h3 class="text-center bg-info">
-                <span class="pull-left">
-                    <small class="hidden installedInstanceSpan">
-                        [<span class="installedInstances"></span>/<span class="activeInstances"></span>]
-                    </small>
+                <span class="pull-left">                    
                 </span>
                 <span class="version">0.0.0</span>
                 <small class="info-position">

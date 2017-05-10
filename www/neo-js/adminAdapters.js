@@ -763,7 +763,7 @@ function Adapters(main) {
                         $tempAdapterInner.find('.license').addClass('disabled').prop('disabled', true);
                     }
                     if (adapter.installed) {
-                        $tempAdapterInner.find('.installedInstanceSpan').removeClass('hidden');
+                        $tempAdapterInner.find('.cool-ribbon').removeClass('hidden');
                         $tempAdapterInner.find('.installedInstances').text(adapter.installed.instances);
                         $tempAdapterInner.find('.activeInstances').text(adapter.installed.active);
                         if (adapter.installed.version !== adapter.version) {

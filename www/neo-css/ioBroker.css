@@ -4650,3 +4650,47 @@ img.tranparent {
     opacity: 0.2;
     filter: alpha(opacity=20); /* For IE8 and earlier */
 }
+
+.cool-ribbon{
+    position: absolute;
+    top: -15px;
+    z-index: 1;
+    font-size: 2em;
+    cursor: default;
+    width: 1.5em;
+    line-height: 0.5em;
+    -webkit-transition: line-height 0.5s;
+    transition: line-height 0.5s;
+}
+.cool-ribbon:after {
+    content: "";
+    font-size: 0.5em;
+    position: absolute;
+    height: 1.2em;
+    border: 1.5em solid #F44336;
+    z-index: -1;
+    top: -1em;
+    border-top-width: 1.5em;
+    border-bottom-color: transparent;
+    right: 0;
+    -webkit-transition: height 0.5s;
+    transition: height 0.5s;
+}
+.cool-ribbon:before {
+    content: "";
+    font-size: 0.5em;
+    position: absolute;
+    border-style: solid;
+    border-color: transparent transparent #B71C1C transparent;
+    top: -1em;
+    right: 3em;
+    border-width: 0 0 1em 0.7em;
+    z-index: -1;
+}
+.installedInstanceSpan{
+    color: #eee;
+    font-size: 0.4em;
+    top: -10px;
+    right: 10px;
+    position: absolute;
+}
