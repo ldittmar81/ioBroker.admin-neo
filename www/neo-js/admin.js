@@ -117,7 +117,12 @@ var adapterRedirect = function (redirect, timeout) {
             cmdExec: function (host, cmd, callback) {
                 host = host || main.currentHost;
                 $stdout.val('');
-                $('#modal-command-label').text(cmd);
+                var title = cmd;
+                if(title.startsWith('add')){
+                    var tmp = title.split(' ');
+                    title = $.i18n('addCommandTitle', tmp[1]);
+                }
+                $('#modal-command-label').text(title);
                 $('#modal-command').modal();
                 stdout = '$ ./iobroker ' + cmd;
                 $stdout.val(stdout);
@@ -900,8 +905,9 @@ var adapterRedirect = function (redirect, timeout) {
                     var obj;
                     main.objects = res;
                     for (var id in main.objects) {
-                        if (id.slice(0, 7) === '_design')
+                        if (id.slice(0, 7) === '_design'){
                             continue;
+                        }
 
                         obj = main.objects[id];
 
@@ -961,8 +967,9 @@ var adapterRedirect = function (redirect, timeout) {
                     // Show if update available
                     menus.hosts.initList();
 
-                    if (typeof callback === 'function')
+                    if (typeof callback === 'function'){
                         callback();
+                    }
                 }, 0);
             });
         }
@@ -990,8 +997,9 @@ var adapterRedirect = function (redirect, timeout) {
                 menus.objects.stateChange(id, state);
                 menus.hosts.stateChange(id, state);
 
-                if (main.selectId)
+                if (main.selectId){
                     main.selectId.selectId('state', id, state);
+                }
             }
 
             // Update alive and connected of main.instances
@@ -1007,8 +1015,9 @@ var adapterRedirect = function (redirect, timeout) {
 
             // update main.objects cache
             if (obj) {
-                if (obj._rev && main.objects[id])
+                if (obj._rev && main.objects[id]){
                     main.objects[id]._rev = obj._rev;
+                }
                 if (!main.objects[id]) {
                     isNew = true;
                     //treeInsert(id);
@@ -1028,8 +1037,9 @@ var adapterRedirect = function (redirect, timeout) {
 
             menus.objects.objectChange(id, obj);
 
-            if (main.selectId)
+            if (main.selectId){
                 main.selectId.selectId('object', id, obj);
+            }
 
             menus.enums.objectChange(id, obj);
 

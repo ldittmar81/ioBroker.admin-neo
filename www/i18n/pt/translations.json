@@ -2,6 +2,7 @@
   "ack": "conf.",
   "acknowledged": "confirmado",
   "adapters": "Adaptador",
+  "addCommandTitle": "$1 esta sendo instalado...",
   "addIssue": "Reportar um erro!",
   "address": "Endereço",
   "alarm_group": "Alarme",
