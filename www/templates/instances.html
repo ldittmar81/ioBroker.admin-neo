@@ -61,12 +61,24 @@
 </div>
 
 <!-- Table -->
-<div id="instancesTemplateTable" class="hidden">
+<div id="instanceTemplateTable" class="hidden">
     <div class="row">
-        <table class="adapterTable"></table>
+        <table class="instanceTable"></table>
     </div>
 </div>
 <!-- / Table -->
+
+<!-- Table-Button-Row -->
+<div id="instanceTemplateTableButtons" class="hidden">
+    <div class="btn-group btn-group-xs" role="group">
+        <button class="instance-stop-run btn"><i class="fa instance-stop-run-icon"></i></button>
+        <button class="instance-settings btn btn-default" data-i18n-tooltip="instance_settings"><i class="fa fa-gear"></i></button>
+        <button class="instance-reload btn btn-default" data-i18n-tooltip="instance_reload"><i class="fa fa-repeat"></i></button>
+        <button class="instance-del btn btn-default" data-i18n-tooltip="instance_del"><i class="fa fa-trash"></i></button>
+        <button class="instance-web btn btn-default" data-i18n-tooltip="instance_web"><i class="fa fa-globe"></i></button>
+    </div>   
+</div>
+<!-- / Table-Button-Row -->
 
 <!-- Instances -->
 <div id="instancesTemplateTile" class="hidden">
@@ -93,7 +105,9 @@
                         <dl class="dl-horizontal">
                             <dt data-i18n="schedule">schedule</dt>
                             <dd class="instance-schedule">12123</dd>
-                            <dt data-i18n="restartSchedule">restartSchedule</dt>
+                            <dt>
+                                <a href="javascript:;" class="instance-schedule-button" data-i18n="restartSchedule" data-i18n-tooltip="timeSetup">restartSchedule</a>
+                            </dt>
                             <dd class="instance-restartSchedule">12123</dd>
                             <dt data-i18n="loglevel">loglevel</dt>
                             <dd class="instance-loglevel">12123</dd>

@@ -4235,10 +4235,6 @@ ul.notifications {
     position: fixed;
 }
 
-.icheckbox_flat-green {
-    top: 6px;
-}
-
 .clearable{
     background: #fff url(data:image/gif;base64,R0lGODlhBwAHAIAAAP///5KSkiH5BAAAAAAALAAAAAAHAAcAAAIMTICmsGrIXnLxuDMLADs=) no-repeat right -10px center;
     border: 1px solid #999;

@@ -11,8 +11,6 @@ function Instances(main) {
     this.hostsText = null;
 
     this.$configFrame = $('#config-iframe');
-    this.$dialogConfig = $('#modal-config');
-    this.$dialogCron = $('#modal-cron');
 
     function getLinkVar(_var, obj, attr, link, instance) {
         if (attr === 'protocol') {
@@ -58,7 +56,7 @@ function Instances(main) {
         return link;
     }
 
-    this.resolveLink = function(link, adapter, instance) {
+    this.resolveLink = function (link, adapter, instance) {
         var vars = link.match(/%(\w+)%/g);
         var _var;
         var v;
@@ -312,7 +310,7 @@ function Instances(main) {
             if (common.memoryLimitMB && common.memoryLimitMB <= mem) {
                 mem = '<span class="high-mem">' + mem.toFixed(1) + ' MB</span>';
             } else {
-                mem = mem.toFixed(1) + ' MB'
+                mem = mem.toFixed(1) + ' MB';
             }
         } else {
             mem = '';
@@ -331,6 +329,7 @@ function Instances(main) {
             var $instanceTile = $instancesTileTemplate.children().clone(true, true);
 
             $instanceTile.attr('data-instance-id', instanceId);
+            $instanceTile.attr('data-adapter', adapter);
             if (common.icon) {
                 $instanceTile.find('.profile_img').attr('src', 'adapter/' + adapter + '/' + common.icon).attr('alt', adapter);
             }
@@ -534,13 +533,13 @@ function Instances(main) {
 
         $('#dialog_cron_callback').show().click(function () {
             var val = $('#div-cron').cron('value');
-            that.$dialogCron.modal('hide');
+            $('#modal-cron').modal('hide');
             if (cb) {
                 cb(val);
             }
         });
 
-        that.$dialogCron.modal();
+        $('#modal-cron').modal();
     }
 
     this.prepare = function () {
@@ -551,7 +550,6 @@ function Instances(main) {
             $instanceContainer = $('#instances-container');
 
             $('#instances-filter').change(function () {
-                console.log('change: ' + $(this).val());
                 that.main.saveConfig('instancesFilter', $(this).val());
                 applyFilter($(this).val());
             }).keyup(function () {
@@ -608,7 +606,7 @@ function Instances(main) {
             parts = [
                 adapter + '.' + instance,
                 _var
-            ]
+            ];
         } else {
             parts = _var.split('_');
             // add .0 if not defined
@@ -759,6 +757,15 @@ function Instances(main) {
             $('#btn-instances-expert-mode').addClass('btn-default').removeClass('btn-primary');
         }
 
+        if (that.main.config.instanceFormList) {
+            $('#btn-instances-form i').removeClass('fa-list').addClass('fa-window-maximize');
+            $('#btn-instances-form').changeTooltip($.i18n('list'));
+        } else {
+            $('#btn-instances-form i').addClass('fa-list').removeClass('fa-window-maximize');
+            $('#btn-instances-form').changeTooltip($.i18n('tiles'));
+        }
+
+
         $instanceContainer.html('');
 
         if (this.main.currentHost) {
@@ -809,7 +816,7 @@ function Instances(main) {
 
     this.showConfigDialog = function (id) {
         // id = 'system.adapter.NAME.X'
-        $iframeDialog = that.$dialogConfig;
+        $iframeDialog = $('#modal-config');
         var parts = id.split('.');
         that.$configFrame.attr('src', 'adapter/' + parts[2] + '/?' + parts[3]);
 
@@ -840,34 +847,35 @@ function Instances(main) {
             height = that.main.config['adapter-config-height-' + name];
         }
 
-        that.$dialogConfig.data('name', name);
+        $('#modal-config').data('name', name);
 
         // Set minimal height and width
-        that.$dialogConfig.dialog('option', 'minWidth', minWidth).dialog('option', 'minHeight', minHeight);
+        $('#modal-config').dialog('option', 'minWidth', minWidth).dialog('option', 'minHeight', minHeight);
 
-        that.$dialogConfig
+        $('#modal-config')
                 .dialog('option', 'title', _('Adapter configuration') + ': ' + name)
                 .dialog('option', 'width', width)
                 .dialog('option', 'height', height)
                 .dialog('open');
-        that.$dialogConfig.parent().find('.ui-widget-header button .ui-button-text').html('');
+        $('#modal-config').parent().find('.ui-widget-header button .ui-button-text').html('');
 
         if (that.main.config['adapter-config-top-' + name]) {
-            that.$dialogConfig.parent().css({top: that.main.config['adapter-config-top-' + name]});
+            $('#modal-config').parent().css({top: that.main.config['adapter-config-top-' + name]});
         }
         if (that.main.config['adapter-config-left-' + name]) {
-            that.$dialogConfig.parent().css({left: that.main.config['adapter-config-left-' + name]});
+            $('#modal-config').parent().css({left: that.main.config['adapter-config-left-' + name]});
         }
     };
 
     this.initButtons = function ($instanceTile) {
         var id = $instanceTile.attr('data-instance-id');
+        var attr = $instanceTile.attr('data-adapter');
 
         $instanceTile.find('.instance-stop-run')
                 .addClass(that.main.objects[id].common.enabled ? 'btn-success' : 'btn-danger')
                 .attr('data-i18n-tooltip', that.main.objects[id].common.enabled ? 'activated' : 'deactivated')
                 .click(function () {
-                    $(this).button('disable');
+                    $(this).prop('disable', true);
                     that.main.socket.emit('extendObject', id, {common: {enabled: !that.main.objects[id].common.enabled}}, function (err) {
                         if (err) {
                             that.main.showError(err);
@@ -875,6 +883,20 @@ function Instances(main) {
                     });
                 });
         $instanceTile.find('.instance-stop-run-icon').addClass(that.main.objects[id].common.enabled ? 'fa-pause' : 'fa-play');
+
+        $instanceTile.find('.instance-schedule-button').click(function () {
+            showCronDialog(that.main.objects[id].common[attr] || '', function (newValue) {
+                if (newValue !== null) {
+                    var obj = {common: {}};
+                    obj.common[attr] = newValue;
+                    that.main.socket.emit('extendObject', id, obj, function (err) {
+                        if (err) {
+                            that.main.showError(err);
+                        }
+                    });
+                }
+            });
+        });
     };
 
 }
