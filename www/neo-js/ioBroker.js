@@ -45,11 +45,11 @@ jQuery.fn.progressbar = function (a, b) {
     var $this = $(this);
     if ($this.hasClass('meter')) {
         if (a === "error" || b === "error") {
-            $this.removeClass('orange').addClass('red');
+            $this.removeClass('orange').addClass('red').addClass('nostripes');
         } else if (a === "warning" || b === "warning") {
-            $this.removeClass('red').addClass('orange');
+            $this.removeClass('red').addClass('orange').removeClass('nostripes');
         } else {
-            $this.removeClass('red').removeClass('orange');
+            $this.removeClass('red').removeClass('orange').removeClass('nostripes');
         }
 
         var $span = $this.find('span');
@@ -75,6 +75,9 @@ jQuery.fn.progressbar = function (a, b) {
         if (!isNaN(value)) {
             if (value > 100) {
                 value = 100;
+            }
+            if(value === 100){
+                $this.addClass('nostripes');
             }
             $span.width(value + "%");            
         }

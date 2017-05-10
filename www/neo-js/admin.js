@@ -121,6 +121,29 @@ var adapterRedirect = function (redirect, timeout) {
                 if(title.startsWith('add')){
                     var tmp = title.split(' ');
                     title = $.i18n('addCommandTitle', tmp[1]);
+                }else if(title.startsWith('del')){
+                    var tmp = title.split(' ');
+                    title = $.i18n('delCommandTitle', tmp[1]);
+                }else if(title === "upgrade self"){
+                    title = $.i18n('upgradeSelfCommandTitle', host);
+                }else if(title.startsWith('upgrade') && title.indexof('@') === -1){
+                    var tmp = title.split(' ');
+                    title = $.i18n('upgradeCommandTitle', tmp[1]);
+                }else if(title.startsWith('upgrade') && title.indexof('@') !== -1){
+                    var tmp = title.split(' ');
+                    tmp = tmp[1].split('@');                   
+                    title = $.i18n('upgradeVersionCommandTitle', tmp[0], tmp[1]);
+                }else if(title === "_restart"){
+                    title = $.i18n('restartCommandTitle', host);
+                }else if(title.startsWith('url')){
+                    var tmp;
+                    if(title.indexof('--debug') === -1){
+                        tmp = title.substring(title.lastIndexOf("\""), title.length);
+                        title = $.i18n('urlInstallCommandTitle', tmp);
+                    }else{
+                        tmp = title.substring(title.lastIndexOf("\""), title.indexof('--debug'));
+                        title = $.i18n('urlInstallDebugCommandTitle', tmp);
+                    }                    
                 }
                 $('#modal-command-label').text(title);
                 $('#modal-command').modal();
