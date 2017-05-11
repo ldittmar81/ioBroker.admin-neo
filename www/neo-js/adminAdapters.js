@@ -73,6 +73,7 @@ function Adapters(main) {
 
                 });
             });
+
             $('#btn_expand_adapters').click(function () {
                 $('.collapse-link').each(function () {
                     var $ICON = $(this).find('i');
@@ -86,6 +87,7 @@ function Adapters(main) {
 
                 });
             });
+
             $('#btn_list_adapters').click(function () {
                 that.isList = !that.isList;
                 if (that.isList) {
@@ -104,6 +106,7 @@ function Adapters(main) {
                     that.init(true);
                 }, 200);
             });
+
             $('#btn_filter_adapters').click(function () {
                 that.onlyInstalled = !that.onlyInstalled;
                 if (that.onlyInstalled) {
@@ -116,6 +119,7 @@ function Adapters(main) {
                     that.init(true);
                 }, 200);
             });
+
             $('#btn_filter_updates').click(function () {
                 that.onlyUpdatable = !that.onlyUpdatable;
                 if (that.onlyUpdatable) {
@@ -130,6 +134,58 @@ function Adapters(main) {
                     that.init(true);
                 }, 200);
             });
+
+            $('#btn_filter_custom_url').click(function () {
+                // prepare adapters
+                var text = '<option value="">' + $.i18n('none') + '</option>';
+                var order = [];
+                var url;
+                for (url in that.urls) {
+                    order.push(url);
+                }
+                order.sort();
+
+                for (var o = 0; o < order.length; o++) {
+                    var user = that.urls[order[o]].match(/\.com\/([-_$§A-Za-z0-9]+)\/([-._$§A-Za-z0-9]+)\//);
+                    if (user && user.length >= 2 && (that.main.config.expertMode || order[o].indexOf('js-controller') === -1)) {
+                        text += '<option value="https://github.com/' + user[1] + '/ioBroker.' + order[o] + '/tarball/master ' + order[o] + '">' + order[o] + '</option>';
+                    }
+                }
+                $('#install-github-link').html(text).val(that.main.config.adaptersGithub || '').selectpicker('refresh');
+
+                $('#modal-install-url').modal();
+            });
+
+            $(document.body).on("click", "#dialog-install-url-button", function () {
+                var isCustom = $('#install-main-tab').find('.tab-pane.active').attr('id') === "install-custom";
+                
+                $('#modal-install-url').modal('hide');
+                var url;
+                var debug;
+                var adapter;
+                if (isCustom) {
+                    url = $('#install-url-link').val();
+                    debug = $('#install-url-debug').prop('checked') ? ' --debug' : '';
+                    adapter = '';
+                } else {
+                    var parts = $('#install-github-link').val().split(' ');
+                    url = parts[0];
+                    debug = $('#install-github-debug').prop('checked') ? ' --debug' : '';
+                    adapter = ' ' + parts[1];
+                }
+
+                if (!url) {
+                    that.main.showError($.i18n('invalidLink'));
+                    return;
+                }
+
+                that.main.cmdExec(null, 'url "' + url + '"' + adapter + debug, function (exitCode) {
+                    if (!exitCode){
+                        that.init(true, true);
+                    }
+                });
+            });
+
             $('#btn_upgrade_all').click(function () {
                 that.main.confirmMessage($.i18n('updateAllAdapters'), $.i18n('question'), 'help', function (result) {
                     if (result) {
@@ -141,11 +197,13 @@ function Adapters(main) {
                     }
                 });
             });
+
             $('#btn-adapters-expert-mode').click(function () {
                 that.main.config.expertMode = !that.main.config.expertMode;
                 that.main.saveConfig('expertMode', that.main.config.expertMode);
                 that.updateExpertMode();
             });
+
             if (that.main.config.expertMode) {
                 $('#btn-adapters-expert-mode').removeClass('btn-default').addClass('btn-primary');
             } else {
@@ -156,11 +214,13 @@ function Adapters(main) {
             $('#install-github-link').change(function () {
                 that.main.saveConfig('adaptersGithub', $(this).val());
             });
+
             $('#install-url-link').keyup(function (event) {
                 if (event.which === 13) {
                     $('#dialog-install-url-button').trigger('click');
                 }
             });
+
             // Load settings
             that.isList = that.main.config.adaptersIsList || false;
             that.onlyInstalled = that.main.config.adaptersOnlyInstalled || false;

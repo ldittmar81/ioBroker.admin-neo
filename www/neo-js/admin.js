@@ -916,6 +916,10 @@ var adapterRedirect = function (redirect, timeout) {
             $('#dialog-config').load("templates/dialogs.html #modal-config", function () {
                 restartFunctions('#dialog-config');
             });
+            
+            $('#dialog-install-url').load("templates/dialogs.html #modal-install-url", function () {
+                restartFunctions('#dialog-install-url');
+            });
 
         }
 
