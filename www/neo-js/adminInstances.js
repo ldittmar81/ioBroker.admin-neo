@@ -3,7 +3,7 @@ function Instances(main) {
 
     var that = this;
 
-    var $instancesTableTemplate, $instancesTileTemplate, $instanceContainer;
+    var $instancesTableTemplate, $instancesTileTemplate, $instanceContainer, $instancesTable;
 
     this.main = main;
     this.menuIcon = 'fa-object-group';
@@ -384,9 +384,32 @@ function Instances(main) {
 
             $instanceContainer.append($instanceTile);
         } else {
-
+            var row = [{
+                    instance: adapter + '.' + instance,
+                    title: common.title || '',
+                    schedule: common.mode === 'schedule' ? (common.schedule || '') : '',
+                    memUsage: calculateRam(instanceId),
+                    loglevel: common.loglevel || '',
+                    restartSchedule: common.restartSchedule || '',
+                    memoryLimitMB: common.memoryLimitMB || '',
+                    icon: iconFormatter(common.icon, adapter),
+                    buttons: addButtonsFormatter()
+                }];
+            $instancesTable.bootstrapTable('append', row);
         }
 
+    }
+
+    function iconFormatter(value, adapter) {
+        if (value) {
+            return '<img style="height: 20px;" src="adapter/' + adapter + '/' + value + '"/>';
+        }
+        return "";
+    }
+    
+    function addButtonsFormatter() {
+        var $tempButtons = $('#instanceTemplateTableButtons').children().clone(true, true);       
+        return $tempButtons.toString();
     }
 
     function applyFilter(filter) {
@@ -751,6 +774,8 @@ function Instances(main) {
             return;
         }
 
+        $instanceContainer.html('');
+
         if (that.main.config.expertMode) {
             $('#btn-instances-expert-mode').removeClass('btn-default').addClass('btn-primary');
         } else {
@@ -759,14 +784,12 @@ function Instances(main) {
 
         if (that.main.config.instanceFormList) {
             $('#btn-instances-form i').removeClass('fa-list').addClass('fa-window-maximize');
-            $('#btn-instances-form').changeTooltip($.i18n('list'));
+            $('#btn-instances-form').changeTooltip($.i18n('tiles'));
+            createTable();
         } else {
             $('#btn-instances-form i').addClass('fa-list').removeClass('fa-window-maximize');
-            $('#btn-instances-form').changeTooltip($.i18n('tiles'));
+            $('#btn-instances-form').changeTooltip($.i18n('list'));
         }
-
-
-        $instanceContainer.html('');
 
         if (this.main.currentHost) {
             this.list.sort();
@@ -898,5 +921,12 @@ function Instances(main) {
             });
         });
     };
+
+    function createTable() {
+        var $tempTable = $instancesTableTemplate.children().clone(true, true);
+        $tempTable.find('.instanceTable').bootstrapTable();
+        $instanceContainer.append($tempTable);
+        $instancesTable = $instanceContainer.find('.instanceTable');
+    }
 
 }

@@ -61,9 +61,25 @@
 </div>
 
 <!-- Table -->
-<div id="instanceTemplateTable" class="hidden">
+<div id="instancesTemplateTable" class="hidden">
     <div class="row">
-        <table class="instanceTable"></table>
+        <table class="instanceTable" data-toggle="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th data-field="icon"></th>
+                    <th data-field="instance" data-i18n="instance" data-sortable="true">instance</th>
+                    <th data-field="buttons"></th>
+                    <th data-field="title" data-i18n="title" data-sortable="true">title</th>
+                    <th data-field="schedule" data-i18n="schedule">schedule</th>
+                    <th data-field="restartSchedule" data-i18n="restartSchedule">restartSchedule</th>
+                    <th data-field="loglevel" data-i18n="loglevel">loglevel</th>
+                    <th data-field="memoryLimitMB" data-i18n="memoryLimitMB">memoryLimitMB</th>
+                    <th data-field="events" data-i18n="events">events</th>
+                    <th data-field="memUsage" data-i18n="memUsage" data-sortable="true">memUsage</th>
+                </tr>
+            </thead>
+        </table>
     </div>
 </div>
 <!-- / Table -->
@@ -71,11 +87,11 @@
 <!-- Table-Button-Row -->
 <div id="instanceTemplateTableButtons" class="hidden">
     <div class="btn-group btn-group-xs" role="group">
-        <button class="instance-stop-run btn"><i class="fa instance-stop-run-icon"></i></button>
-        <button class="instance-settings btn btn-default" data-i18n-tooltip="instance_settings"><i class="fa fa-gear"></i></button>
-        <button class="instance-reload btn btn-default" data-i18n-tooltip="instance_reload"><i class="fa fa-repeat"></i></button>
-        <button class="instance-del btn btn-default" data-i18n-tooltip="instance_del"><i class="fa fa-trash"></i></button>
-        <button class="instance-web btn btn-default" data-i18n-tooltip="instance_web"><i class="fa fa-globe"></i></button>
+        <button class="instance-stop-run btn" disabled><i class="fa fa-play instance-stop-run-icon"></i></button>
+        <button class="instance-settings btn btn-default" data-i18n-tooltip="instance_settings" disabled><i class="fa fa-gear"></i></button>
+        <button class="instance-reload btn btn-default" data-i18n-tooltip="instance_reload" disabled><i class="fa fa-repeat"></i></button>
+        <button class="instance-del btn btn-default" data-i18n-tooltip="instance_del" disabled><i class="fa fa-trash"></i></button>
+        <button class="instance-web btn btn-default" data-i18n-tooltip="instance_web" disabled><i class="fa fa-globe"></i></button>
     </div>   
 </div>
 <!-- / Table-Button-Row -->
