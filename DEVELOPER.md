@@ -73,9 +73,11 @@ Ist must be a div with class "meter" and a span as child
 </div>
 
 $('#meter).progressbar(50); // set progres bar to 50%
-$('#meter).progressbar('+5'); // add 5% to the progress bar
-$('#meter).progressbar('10', 'error"); // set progress bar to 10% with color red
-$('#meter).progressbar('warning"); // set progress bar to color orange
+$('#meter).progressbar('+5'); // add 5% to the progress bar (max 90%)
+$('#meter).progressbar('10', 'error'); // set progress bar to 10% with color red
+$('#meter).progressbar('error', '10'); // set progress bar to 10% with color red
+$('#meter).progressbar('warning'); // set progress bar to color orange
+$('#meter).progressbar('auto'); // auto increase bar till 90%
 ```
 
 ## Bibliotheken

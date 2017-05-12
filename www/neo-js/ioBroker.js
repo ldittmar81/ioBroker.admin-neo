@@ -56,16 +56,32 @@ jQuery.fn.progressbar = function (a, b) {
 
         var value;
         var orgval = 100 * $span.width() / $span.offsetParent().width();
-        if (typeof a === "string" && a.startsWith("+")) {
+        if (a === "auto" || b === "auto") {
+            if (orgval < 10) {
+                value = orgval + 3;
+            } else if (orgval < 30) {
+                value = orgval + 1;
+            } else if (orgval < 40) {
+                value = orgval + 2;
+            } else if (orgval < 60) {
+                value = orgval + 0.5;
+            } else if (orgval < 80) {
+                value = orgval + 1;
+            } else if (orgval < 90) {
+                value = orgval + 0.2;
+            } else {
+                value = orgval;
+            }
+        } else if (typeof a === "string" && a.startsWith("+")) {
             value = parseInt(a.substr(1));
             value = a.startsWith("+") ? (orgval + value) : (orgval - value);
-            if ((value > 90 && a.startsWith("+"))) {
+            if (value > 90) {
                 value = orgval;
             }
         } else if (typeof b === "string" && b.startsWith("+")) {
             value = parseInt(b.substr(1));
             value = orgval + value;
-            if ((value > 90 && b.startsWith("+"))) {
+            if (value > 90) {
                 value = orgval;
             }
         } else {
@@ -76,10 +92,10 @@ jQuery.fn.progressbar = function (a, b) {
             if (value > 100) {
                 value = 100;
             }
-            if(value === 100){
+            if (value === 100) {
                 $this.addClass('nostripes');
             }
-            $span.width(value + "%");            
+            $span.width(value + "%");
         }
     }
     return this;

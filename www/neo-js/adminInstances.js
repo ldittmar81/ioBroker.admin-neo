@@ -825,7 +825,7 @@ function Instances(main) {
             $('#currentHost').html(this.main.currentHost);
             var totalRam = that.calculateTotalRam('instances');
             var freeRam = that.calculateFreeMem('instances');
-            $('#totalRamText').text($.i18n('totalRamText', totalRam, freeRam));
+            $('#instancesTotalRamText').text($.i18n('totalRamText', totalRam, freeRam));
         }
 
         this.main.fillContent('#menu-instances-div');

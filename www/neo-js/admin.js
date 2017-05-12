@@ -1152,7 +1152,7 @@ var adapterRedirect = function (redirect, timeout) {
         main.socket.on('cmdStdout', function (_id, text) {
             if (activeCmdId === _id) {
                 stdout += '\n' + text;
-                $('#adapter-meter').progressbar("+1");
+                $('#adapter-meter').progressbar("auto");
                 $stdout.val(stdout);
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
             }
@@ -1160,7 +1160,7 @@ var adapterRedirect = function (redirect, timeout) {
         main.socket.on('cmdStderr', function (_id, text) {
             if (activeCmdId === _id) {
                 stdout += '\nERROR: ' + text;
-                $('#adapter-meter').progressbar("+1");
+                $('#adapter-meter').progressbar("auto");
                 $stdout.val(stdout);
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
             }
