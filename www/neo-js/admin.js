@@ -137,16 +137,17 @@ var adapterRedirect = function (redirect, timeout) {
                     title = $.i18n('restartCommandTitle', host);
                 }else if(title.startsWith('url')){
                     var tmp;
-                    if(title.indexof('--debug') === -1){
-                        tmp = title.substring(title.lastIndexOf("\""), title.length);
+                    if(title.indexOf('--debug') === -1){
+                        tmp = title.substring(title.lastIndexOf(" ") + 1, title.length);
                         title = $.i18n('urlInstallCommandTitle', tmp);
                     }else{
-                        tmp = title.substring(title.lastIndexOf("\""), title.indexof('--debug'));
+                        tmp = title.substring(title.lastIndexOf("\"") + 2, title.indexOf('--debug'));
                         title = $.i18n('urlInstallDebugCommandTitle', tmp);
                     }                    
-                }
+                }                
                 $('#modal-command-label').text(title);
                 $('#modal-command').modal();
+                
                 stdout = '$ ./iobroker ' + cmd;
                 $stdout.val(stdout);
                 // genereate the unique id to coordinate the outputs
@@ -227,7 +228,7 @@ var adapterRedirect = function (redirect, timeout) {
                 });
             },
             showError: function (error) {
-                main.showMessage($.i18n(error), $.i18n('error'), 'alert');
+                alert($.i18n(error), "error", $.i18n('error'));
             },
             formatDate: function (dateObj, justTime, noMilli) {
                 if (!dateObj) {

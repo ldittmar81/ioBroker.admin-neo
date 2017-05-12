@@ -175,7 +175,7 @@ function Adapters(main) {
                 }
 
                 if (!url) {
-                    that.main.showError($.i18n('invalidLink'));
+                    that.main.showError('invalidLink');
                     return;
                 }
 
