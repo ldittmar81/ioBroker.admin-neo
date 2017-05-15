@@ -9,9 +9,7 @@ function Instances(main) {
     this.menuIcon = 'fa-object-group';
     this.list = [];
     this.hostsText = null;
-
-    this.$configFrame = $('#config-iframe');
-
+ 
     function getLinkVar(_var, obj, attr, link, instance) {
         if (attr === 'protocol') {
             attr = 'secure';
@@ -446,7 +444,6 @@ function Instances(main) {
         }
     }
 
-
     function onQuickEditField(e) {
         var $this = $(this);
         var id = $this.data('instance-id');
@@ -567,7 +564,7 @@ function Instances(main) {
 
     this.prepare = function () {
         $('#menu-instances-div').load("templates/instances.html", function () {
-
+            
             $instancesTableTemplate = $('#instancesTemplateTable');
             $instancesTileTemplate = $('#instancesTemplateTile');
             $instanceContainer = $('#instances-container');
@@ -841,53 +838,17 @@ function Instances(main) {
         // id = 'system.adapter.NAME.X'
         $iframeDialog = $('#modal-config');
         var parts = id.split('.');
-        that.$configFrame.attr('src', 'adapter/' + parts[2] + '/?' + parts[3]);
+        
+        $('#config-iframe').attr('src', 'adapter/' + parts[2] + '/?' + parts[3]);
 
         var name = id.replace(/^system\.adapter\./, '');
-        var config = that.main.objects[id];
-        var width = 830;
-        var height = 536;
-        var minHeight = 0;
-        var minWidth = 0;
-        if (config.common.config) {
-            if (config.common.config.width) {
-                width = config.common.config.width;
-            }
-            if (config.common.config.height) {
-                height = config.common.config.height;
-            }
-            if (config.common.config.minWidth) {
-                minWidth = config.common.config.minWidth;
-            }
-            if (config.common.config.minHeight) {
-                minHeight = config.common.config.minHeight;
-            }
-        }
-        if (that.main.config['adapter-config-width-' + name]) {
-            width = that.main.config['adapter-config-width-' + name];
-        }
-        if (that.main.config['adapter-config-height-' + name]) {
-            height = that.main.config['adapter-config-height-' + name];
-        }
-
+        
         $('#modal-config').data('name', name);
 
-        // Set minimal height and width
-        $('#modal-config').dialog('option', 'minWidth', minWidth).dialog('option', 'minHeight', minHeight);
-
-        $('#modal-config')
-                .dialog('option', 'title', _('Adapter configuration') + ': ' + name)
-                .dialog('option', 'width', width)
-                .dialog('option', 'height', height)
-                .dialog('open');
-        $('#modal-config').parent().find('.ui-widget-header button .ui-button-text').html('');
-
-        if (that.main.config['adapter-config-top-' + name]) {
-            $('#modal-config').parent().css({top: that.main.config['adapter-config-top-' + name]});
-        }
-        if (that.main.config['adapter-config-left-' + name]) {
-            $('#modal-config').parent().css({left: that.main.config['adapter-config-left-' + name]});
-        }
+        $('#modal-config-label').text($.i18n('adapterConfiguration') + ': ' + name);
+        
+        $iframeDialog.modal();
+        
     };
 
     this.initButtons = function ($instanceTile) {
