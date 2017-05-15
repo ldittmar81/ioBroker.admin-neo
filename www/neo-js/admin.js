@@ -119,36 +119,36 @@ var adapterRedirect = function (redirect, timeout) {
                 host = host || main.currentHost;
                 $stdout.val('');
                 var title = cmd;
-                if(title.startsWith('add')){
+                if (title.startsWith('add')) {
                     var tmp = title.split(' ');
                     title = $.i18n('addCommandTitle', tmp[1]);
-                }else if(title.startsWith('del')){
+                } else if (title.startsWith('del')) {
                     var tmp = title.split(' ');
                     title = $.i18n('delCommandTitle', tmp[1]);
-                }else if(title === "upgrade self"){
+                } else if (title === "upgrade self") {
                     title = $.i18n('upgradeSelfCommandTitle', host);
-                }else if(title.startsWith('upgrade') && title.indexof('@') === -1){
+                } else if (title.startsWith('upgrade') && title.indexof('@') === -1) {
                     var tmp = title.split(' ');
                     title = $.i18n('upgradeCommandTitle', tmp[1]);
-                }else if(title.startsWith('upgrade') && title.indexof('@') !== -1){
+                } else if (title.startsWith('upgrade') && title.indexof('@') !== -1) {
                     var tmp = title.split(' ');
-                    tmp = tmp[1].split('@');                   
+                    tmp = tmp[1].split('@');
                     title = $.i18n('upgradeVersionCommandTitle', tmp[0], tmp[1]);
-                }else if(title === "_restart"){
+                } else if (title === "_restart") {
                     title = $.i18n('restartCommandTitle', host);
-                }else if(title.startsWith('url')){
+                } else if (title.startsWith('url')) {
                     var tmp;
-                    if(title.indexOf('--debug') === -1){
+                    if (title.indexOf('--debug') === -1) {
                         tmp = title.substring(title.lastIndexOf(" ") + 1, title.length);
                         title = $.i18n('urlInstallCommandTitle', tmp);
-                    }else{
+                    } else {
                         tmp = title.substring(title.lastIndexOf("\"") + 2, title.indexOf('--debug'));
                         title = $.i18n('urlInstallDebugCommandTitle', tmp);
-                    }                    
-                }                
+                    }
+                }
                 $('#modal-command-label').text(title);
                 $('#modal-command').modal();
-                
+
                 stdout = '$ ./iobroker ' + cmd;
                 $stdout.val(stdout);
                 // genereate the unique id to coordinate the outputs
@@ -584,6 +584,8 @@ var adapterRedirect = function (redirect, timeout) {
         main.infoDialog = new Info(main);
         main.usersDialog = new Users(main);
         main.groupsDialog = new Groups(main);
+        main.canSubscribe = false;
+        main.isSubscribed = false;
 
         var children = {};
 
@@ -697,9 +699,9 @@ var adapterRedirect = function (redirect, timeout) {
                         addMenus.push(main.instances[i]);
                     }
                 } else if (object.common.adminTab) {
-                    if(noSingleton[object.common.name]){
+                    if (noSingleton[object.common.name]) {
                         noSingleton[object.common.name] += 1;
-                    }else{
+                    } else {
                         noSingleton[object.common.name] = 1;
                     }
                     addMenus.push(main.instances[i]);
@@ -918,11 +920,85 @@ var adapterRedirect = function (redirect, timeout) {
             $('#dialog-config').load("templates/dialogs.html #modal-config", function () {
                 restartFunctions('#dialog-config');
             });
-            
+
             $('#dialog-install-url').load("templates/dialogs.html #modal-install-url", function () {
                 restartFunctions('#dialog-install-url');
             });
 
+        }
+
+        //Service Worker for Log-Errors
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('neo-js/service-worker.js').then(function () {
+                console.log('service worker registered');
+                main.canSubscribe = true;
+            });
+            getSubscription().then(function (subscription) {
+                if (subscription) {
+                    console.log('Already subscribed', subscription.endpoint);
+                    main.isSubscribed = true;
+                } else {
+                    main.isSubscribed = false;
+                }
+            });
+        }
+
+        function getSubscription() {
+            return navigator.serviceWorker.ready.then(function (registration) {
+                return registration.pushManager.getSubscription();
+            });
+        }
+
+        function subscribe() {
+            navigator.serviceWorker.ready.then(function (registration) {
+                return registration.pushManager.subscribe({userVisibleOnly: true});
+            }).then(function (subscription) {
+                console.log('Subscribed', subscription.endpoint);
+                return fetch('register', {
+                    method: 'post',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        endpoint: subscription.endpoint
+                    })
+                });
+            }).then(setUnsubscribeButton);
+        }
+
+        function unsubscribe() {
+            getSubscription().then(function (subscription) {
+                return subscription.unsubscribe().then(function () {
+                    console.log('Unsubscribed', subscription.endpoint);
+                    return fetch('unregister', {
+                        method: 'post',
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            endpoint: subscription.endpoint
+                        })
+                    });
+                });
+            }).then(setSubscribeButton);
+        }
+
+        $(document.body).on('click', '.subscriptionButton', function () {
+            if (main.canSubscribe && main.isSubscribed) {
+                unsubscribe();
+            } else if (main.canSubscribe) {
+                subscribe();
+            }
+        });
+
+        function setSubscribeButton() {
+            main.isSubscribed = false;
+            $('.subscriptionButton').html('Subscribe');
+        }
+
+        function setUnsubscribeButton() {
+            main.isSubscribed = true;
+            $('.subscriptionButton').html('Unsubscribe');
         }
 
         menus.logs.prepare();
@@ -934,7 +1010,7 @@ var adapterRedirect = function (redirect, timeout) {
                     var obj;
                     main.objects = res;
                     for (var id in main.objects) {
-                        if (id.slice(0, 7) === '_design'){
+                        if (id.slice(0, 7) === '_design') {
                             continue;
                         }
 
@@ -996,7 +1072,7 @@ var adapterRedirect = function (redirect, timeout) {
                     // Show if update available
                     menus.hosts.initList();
 
-                    if (typeof callback === 'function'){
+                    if (typeof callback === 'function') {
                         callback();
                     }
                 }, 0);
@@ -1026,7 +1102,7 @@ var adapterRedirect = function (redirect, timeout) {
                 menus.objects.stateChange(id, state);
                 menus.hosts.stateChange(id, state);
 
-                if (main.selectId){
+                if (main.selectId) {
                     main.selectId.selectId('state', id, state);
                 }
             }
@@ -1044,7 +1120,7 @@ var adapterRedirect = function (redirect, timeout) {
 
             // update main.objects cache
             if (obj) {
-                if (obj._rev && main.objects[id]){
+                if (obj._rev && main.objects[id]) {
                     main.objects[id]._rev = obj._rev;
                 }
                 if (!main.objects[id]) {
@@ -1066,7 +1142,7 @@ var adapterRedirect = function (redirect, timeout) {
 
             menus.objects.objectChange(id, obj);
 
-            if (main.selectId){
+            if (main.selectId) {
                 main.selectId.selectId('object', id, obj);
             }
 
