@@ -1,8 +1,8 @@
 /* global self */
 
 self.addEventListener('push', function (event) {
-    event.waitUntil(self.registration.showNotification('Log error', {
-        body: 'Test bla worker'
+    event.waitUntil(self.registration.showNotification('ServiceWorker ioBroker', {
+        body: 'ioBroker Desktop Message test'
     }));
 });
 
@@ -23,4 +23,3 @@ self.addEventListener('pushsubscriptionchange', function (event) {
         })
     );
 });
-

@@ -927,25 +927,28 @@ var adapterRedirect = function (redirect, timeout) {
 
         }
 
-        //Service Worker for Log-Errors
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('neo-js/service-worker.js').then(function () {
-                console.log('service worker registered');
-                main.canSubscribe = true;
-            });
-            getSubscription().then(function (subscription) {
-                if (subscription) {
-                    console.log('Already subscribed', subscription.endpoint);
-                    main.isSubscribed = true;
-                } else {
-                    main.isSubscribed = false;
-                }
-            });
-        }
+        //Service Worker for desktop messages
+        var subscriptionButton = document.getElementById('subscriptionButton');
 
         function getSubscription() {
             return navigator.serviceWorker.ready.then(function (registration) {
                 return registration.pushManager.getSubscription();
+            });
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                    .then(function () {
+                        console.log('service worker registered');
+                        subscriptionButton.removeAttribute('disabled');
+                    });
+            getSubscription().then(function (subscription) {
+                if (subscription) {
+                    console.log('Already subscribed', subscription.endpoint);
+                    setUnsubscribeButton();
+                } else {
+                    setSubscribeButton();
+                }
             });
         }
 
@@ -983,22 +986,14 @@ var adapterRedirect = function (redirect, timeout) {
             }).then(setSubscribeButton);
         }
 
-        $(document.body).on('click', '.subscriptionButton', function () {
-            if (main.canSubscribe && main.isSubscribed) {
-                unsubscribe();
-            } else if (main.canSubscribe) {
-                subscribe();
-            }
-        });
-
         function setSubscribeButton() {
-            main.isSubscribed = false;
-            $('.subscriptionButton').html('Subscribe');
+            subscriptionButton.onclick = subscribe;
+            subscriptionButton.textContent = 'Subscribe!';
         }
 
         function setUnsubscribeButton() {
-            main.isSubscribed = true;
-            $('.subscriptionButton').html('Unsubscribe');
+            subscriptionButton.onclick = unsubscribe;
+            subscriptionButton.textContent = 'Unsubscribe!';
         }
 
         menus.logs.prepare();
