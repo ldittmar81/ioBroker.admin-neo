@@ -16,7 +16,6 @@ function Logs(main) {
     this.logFilterHost = '';
     this.logFilterSeverity = '';
     this.logFilterMessage = '';
-    this.$logFilterHost = null;
     this.$logFilterSeverity = null;
     this.$logFilterMessage = null;
 
@@ -31,10 +30,9 @@ function Logs(main) {
         $('#menu-logs-div').load("templates/log.html", function () {
 
             that.$logFilterSeverity = $('#log-filter-severity');
-            that.$logFilterHost = $('#log-filter-host');
             that.$logFilterMessage = $('#log-filter-message');
 
-            that.$logFilterHost.change(this.filter);
+            $('#log-filter-host').change(this.filter);
             that.$logFilterSeverity.change(this.filter);
 
             that.$logFilterMessage.change(function () {
@@ -58,7 +56,7 @@ function Logs(main) {
             });
 
             $('#log-clear-on-disk').click(function () {
-                that.main.confirmMessage($.i18n('Log file will be deleted. Are you sure?'), null, null, function (result) {
+                that.main.confirmMessage($.i18n('logfileDeletedQuestion'), null, null, function (result) {
                     if (result) {
                         that.main.socket.emit('sendToHost', main.currentHost, 'delLogs', null, function (err) {
                             if (err) {
@@ -153,7 +151,7 @@ function Logs(main) {
                 }
                 restartFunctions('#log_error_list');
 
-                that.logFilterHost = that.$logFilterHost.val();
+                that.logFilterHost = $('#log-filter-host').val();
                 that.logFilterMessage = that.$logFilterMessage.val();
                 that.logFilterSeverity = that.$logFilterSeverity.val();
             }, 0);
@@ -197,11 +195,10 @@ function Logs(main) {
             this.logHosts.push(message.from);
             this.logHosts.sort();
 
-            if (this.$logFilterHost) {
-                this.$logFilterHost.html('<option value="">' + $.i18n('all') + '</option>');
-                for (var i = 0; i < this.logHosts.length; i++) {
-                    this.$logFilterHost.append('<option value="' + this.logHosts[i].replace(/\./g, '-') + '" ' + ((this.logHosts[i] === this.logFilterHost) ? 'selected' : '') + '>' + this.logHosts[i] + '</option>');
-                }
+            if ($('#log-filter-host')) {
+                $('#log-filter-host')
+                        .append('<option value="' + message.from.replace(/\./g, '-') + '" ' + ((message.from === this.logFilterHost) ? 'selected' : '') + '>' + message.from + '</option>')
+                        .selectpicker('refresh');
             }
         }
         var visible = '';
@@ -228,11 +225,11 @@ function Logs(main) {
         if (message.severity === 'error') {
             $('a[href="#tab-log"]').addClass('errorLog');
         }
-
+        
         var text = '<tr id="log-line-' + (this.logLinesStart + this.logLinesCount) + '" class="log-line log-severity-' + message.severity + ' ' + (from ? 'log-from-' + from : '') + '" style="' + visible + '">';
         text += '<td class="log-column-1">' + (message.from || '') + '</td>';
         text += '<td class="log-column-2">' + this.main.formatDate(message.ts) + '</td>';
-        text += '<td class="log-column-3">' + message.severity + '</td>';
+        text += '<td class="log-column-3">' + $.i18n(message.severity) + '</td>';
         text += '<td class="log-column-4" title="' + message.message.replace(/"/g, "'") + '">' + message.message.substring(0, 200) + '</td></tr>';
 
         if (message.severity === "error") {
@@ -240,6 +237,9 @@ function Logs(main) {
             $('#log_error_count').text(this.errorCount);
             if (this.errorCount === 1) {
                 $('#log_error_count').removeClass('bg-green').addClass('bg-red');
+            }
+            if (this.errorCount === 0) {
+                $('#log_error_count').addClass('bg-green').removeClass('bg-red');
             }
             if (this.errorCount > 10) {
                 $('#log_error_list li:nth-last-child(2)').remove();
@@ -259,7 +259,7 @@ function Logs(main) {
         }
         var $logOuter = $('#log-outer');
 
-        that.logFilterHost = that.$logFilterHost.val();
+        that.logFilterHost = $('#log-filter-host').val();
         that.logFilterMessage = that.$logFilterMessage.val();
         that.logFilterSeverity = that.$logFilterSeverity.val();
 
