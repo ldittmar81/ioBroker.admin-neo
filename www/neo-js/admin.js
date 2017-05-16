@@ -129,10 +129,10 @@ var adapterRedirect = function (redirect, timeout) {
                     title = $.i18n('delCommandTitle', tmp[1]);
                 } else if (title === "upgrade self") {
                     title = $.i18n('upgradeSelfCommandTitle', host);
-                } else if (title.startsWith('upgrade') && title.indexof('@') === -1) {
+                } else if (title.startsWith('upgrade') && title.indexOf('@') === -1) {
                     var tmp = title.split(' ');
                     title = $.i18n('upgradeCommandTitle', tmp[1]);
-                } else if (title.startsWith('upgrade') && title.indexof('@') !== -1) {
+                } else if (title.startsWith('upgrade') && title.indexOf('@') !== -1) {
                     var tmp = title.split(' ');
                     tmp = tmp[1].split('@');
                     title = $.i18n('upgradeVersionCommandTitle', tmp[0], tmp[1]);
