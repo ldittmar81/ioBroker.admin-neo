@@ -158,7 +158,7 @@ function Adapters(main) {
 
             $(document.body).on("click", "#dialog-install-url-button", function () {
                 var isCustom = $('#install-main-tab').find('.tab-pane.active').attr('id') === "install-custom";
-                
+
                 $('#modal-install-url').modal('hide');
                 var url;
                 var debug;
@@ -180,7 +180,7 @@ function Adapters(main) {
                 }
 
                 that.main.cmdExec(null, 'url "' + url + '"' + adapter + debug, function (exitCode) {
-                    if (!exitCode){
+                    if (!exitCode) {
                         that.init(true, true);
                     }
                 });
@@ -317,39 +317,6 @@ function Adapters(main) {
                             }
                         }
                     }).off("shown.bs.modal");
-                });
-            });
-            $(document.body).on('click', '.adapter-install-submit', function () {
-                var adapter = $(this).attr('data-adapter-name');
-                that.getAdaptersInfo(that.main.currentHost, false, false, function (repo, installed) {
-                    var obj = repo[adapter];
-
-                    if (!obj) {
-                        obj = installed[adapter];
-                    }
-
-                    if (!obj) {
-                        return;
-                    }
-
-                    if (obj.license && obj.license !== 'MIT') {
-                        // Show license dialog!
-                        showLicenseDialog(adapter, function (isAgree) {
-                            if (isAgree) {
-                                that.main.cmdExec(null, 'add ' + adapter, function (exitCode) {
-                                    if (!exitCode) {
-                                        that.init(true);
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        that.main.cmdExec(null, 'add ' + adapter, function (exitCode) {
-                            if (!exitCode) {
-                                that.init(true);
-                            }
-                        });
-                    }
                 });
             });
 
@@ -912,7 +879,7 @@ function Adapters(main) {
             $adapterFragment.find('.adapter-delete-submit').prop('disabled', false);
             if (adapter.installed.version !== adapter.version) {
                 if (adapter.installed.updatable) {
-                    $adapterFragment.find('.adapter-update-submit').prop('disabled', false);
+                    $adapterFragment.find('.adapter-update-submit').prop('disabled', false).attr('data-adapter-name', adapter.name);
                 }
                 if (adapter.installed.updatableError) {
                     $adapterFragment.find('.adapter-update-submit').attr('title', adapter.installed.updatableError);
@@ -932,9 +899,55 @@ function Adapters(main) {
         return $tempButtons.toString();
     }
 
-    function showLicenseDialog(adapter, callback) {
+    this.showLicenseDialog = function(adapter, callback) {
+        var $dialogLicense = $('#modal-license');
+        // Is adapter installed
+        if (that.data[adapter].installed || !that.data[adapter].licenseUrl) {
+            callback(true);
+            return;
+        }
+        
+        $('#license_language').hide();
+        $('#license_diag').hide();
+        $('#license_language_label').hide();
+        $('#license_checkbox').hide();
 
-    }
+        var timeout = setTimeout(function () {
+            timeout = null;
+            callback(true);
+        }, 10000);
+
+        if (!that.data[adapter].licenseUrl) {
+            that.data[adapter].licenseUrl = 'https://raw.githubusercontent.com/ioBroker/ioBroker.' + template.common.name + '/master/LICENSE';
+        }
+        if (typeof that.data[adapter].licenseUrl === 'object') {
+            that.data[adapter].licenseUrl = that.data[adapter].licenseUrl[systemLang] || that.data[adapter].licenseUrl.en;
+        }
+        // Workaround
+        // https://github.com/ioBroker/ioBroker.vis/blob/master/LICENSE =>
+        // https://raw.githubusercontent.com/ioBroker/ioBroker.vis/master/LICENSE
+        if (that.data[adapter].licenseUrl.indexOf('github.com') !== -1) {
+            that.data[adapter].licenseUrl = that.data[adapter].licenseUrl.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+        }
+
+        that.main.socket.emit('httpGet', that.data[adapter].licenseUrl, function (error, response, body) {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+
+                if (!error && body) {
+                    $dialogLicense.css({'z-index': 200});
+                    body = body.toString().replace(/\r\n/g, '<br>');
+                    body = body.replace(/\n/g, '<br>');
+                    $('#license_text').html(body);
+                    $dialogLicense.modal();             
+                } else {
+                    callback && callback(true);
+                    callback = null;
+                }
+            }
+        });
+    };
 
     this.objectChange = function (id, obj) {
     };

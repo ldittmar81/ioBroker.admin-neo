@@ -54,6 +54,8 @@ var adapterRedirect = function (redirect, timeout) {
             waitForRestart: false,
             iframemenu: false,
             menus: null,
+            isServiceWorker: false,
+            isLogSubscribed: false,
             selectId: null,
             config: {},
             glyph_opts: {
@@ -928,8 +930,6 @@ var adapterRedirect = function (redirect, timeout) {
         }
 
         //Service Worker for desktop messages
-        var subscriptionButton = document.getElementById('subscriptionButton');
-
         function getSubscription() {
             return navigator.serviceWorker.ready.then(function (registration) {
                 return registration.pushManager.getSubscription();
@@ -937,11 +937,11 @@ var adapterRedirect = function (redirect, timeout) {
         }
 
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                    .then(function () {
-                        console.log('service worker registered');
-                        subscriptionButton.removeAttribute('disabled');
-                    });
+            navigator.serviceWorker.register('service-worker.js').then(function () {
+                console.log('service worker registered');
+                $('.logSubscriptionButton').prop("disabled", false);
+                main.isServiceWorker = true;
+            });
             getSubscription().then(function (subscription) {
                 if (subscription) {
                     console.log('Already subscribed', subscription.endpoint);
@@ -986,14 +986,22 @@ var adapterRedirect = function (redirect, timeout) {
             }).then(setSubscribeButton);
         }
 
+        $(document.body).on('click', '.logSubscriptionButton', function () {
+            if (main.isLogSubscribed) {
+                unsubscribe();
+            } else {
+                subscribe();
+            }
+        });
+
         function setSubscribeButton() {
-            subscriptionButton.onclick = subscribe;
-            subscriptionButton.textContent = 'Subscribe!';
+            $('.logSubscriptionButton').addClass('btn-default').removeClass('btn-primary').changeTooltip($.i18n('subscribeLog'));
+            main.isLogSubscribed = false;
         }
 
         function setUnsubscribeButton() {
-            subscriptionButton.onclick = unsubscribe;
-            subscriptionButton.textContent = 'Unsubscribe!';
+            $('.logSubscriptionButton').removeClass('btn-default').addClass('btn-primary').changeTooltip($.i18n('unsubscribeLog'));
+            main.isLogSubscribed = true;
         }
 
         menus.logs.prepare();
@@ -1389,8 +1397,7 @@ var adapterRedirect = function (redirect, timeout) {
 
         // open links        
         $('#link-logs').on("click", function () {
-            $('#menu-logs').click();
-            $('.side-menu').find('a[href="#logs"]').parent().addClass('active');
+            main.selectMenu('logs');
         });
         $('#link-users').on("click", function () {
             main.usersDialog.init();
@@ -1434,6 +1441,53 @@ var adapterRedirect = function (redirect, timeout) {
 
         $(document.body).on('hidden.bs.modal', '#modal-command', function () {
             $('#adapter-meter').progressbar(1);
+        });
+
+        $(document.body).on('click', '.adapter-install-submit', function () {
+            var adapter = $(this).attr('data-adapter-name');
+            main.menus.adapters.getAdaptersInfo(main.currentHost, false, false, function (repo, installed) {
+                var obj = repo[adapter];
+
+                if (!obj) {
+                    obj = installed[adapter];
+                }
+
+                if (!obj) {
+                    return;
+                }
+
+                if (obj.license && obj.license !== 'MIT') {
+                    // Show license dialog!
+                    main.menus.adapters.showLicenseDialog(adapter, function (isAgree) {
+                        if (isAgree) {
+                            main.cmdExec(null, 'add ' + adapter, function (exitCode) {
+                                if (!exitCode) {
+                                    main.menus.adapters.init(true);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    main.cmdExec(null, 'add ' + adapter, function (exitCode) {
+                        if (!exitCode) {
+                            main.menus.adapters.init(true);
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document.body).on('click', '.adapter-update-submit', function () {
+            var aName = $(this).attr('data-adapter-name');
+            if (aName === 'admin-neo') {
+                main.waitForRestart = true;
+            }
+
+            main.cmdExec(null, 'upgrade ' + aName, function (exitCode) {
+                if (!exitCode) {
+                    main.menus.adapters.init(true);
+                }
+            });
         });
 
         // Fullscreen

@@ -24,10 +24,14 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
 
 jQuery.fn.changeTooltip = function (newValue) {
     this.each(function () {
-        $(this).tooltip('hide')
-                .attr('data-original-title', newValue)
-                .tooltip('fixTitle')
-                .tooltip('show');
+        var $elem = $(this);
+        if (!$elem.prop("disabled")) {
+            $elem.tooltip('hide')
+                    .attr('title', newValue)
+                    .attr('data-i18n-tooltip', newValue)
+                    .attr('data-original-title', newValue)
+                    .tooltip('fixTitle');
+        }
     });
     return this;
 };

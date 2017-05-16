@@ -2,7 +2,8 @@
 
 self.addEventListener('push', function (event) {
     event.waitUntil(self.registration.showNotification('ServiceWorker ioBroker', {
-        body: 'ioBroker Desktop Message test'
+        body: 'ioBroker Desktop Message test',
+        icon: 'img/no-image.png'
     }));
 });
 

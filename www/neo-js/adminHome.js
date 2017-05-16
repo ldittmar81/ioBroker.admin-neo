@@ -120,14 +120,16 @@ function Home(main) {
             $tmpLiElement.find('.version').text(obj.version);
 
             if (isInstalled && repository[adapter]) {
+                $tmpLiElement.find('.adapter-update-submit').attr('data-adapter-name', adapter);
                 $tmpLiElement.find('.newVersion').text(repository[adapter].version);
-                var news = that.main.menus.adapters.getNews(obj.version, repository[adapter])
+                var news = that.main.menus.adapters.getNews(obj.version, repository[adapter]);
                 if (news) {
                     $tmpLiElement.find('.notesVersion').attr('title', news);
                 } else {
                     $tmpLiElement.find('.notesVersion').remove();
                 }
             } else if (!isInstalled) {
+                $tmpLiElement.find('.adapter-install-submit').attr('data-adapter-name', adapter);
                 if (obj.readme) {
                     $tmpLiElement.find('.adapter-readme-submit').attr('data-md-url', obj.readme.replace('https://github.com', 'https://raw.githubusercontent.com').replace('blob/', ''));
                 } else {

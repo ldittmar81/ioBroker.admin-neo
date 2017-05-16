@@ -165,9 +165,13 @@
                                         <span id="log_error_count" class="badge bg-green">0</span>
                                     </a>
                                     <ul id="log_error_list" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                        <li>
-                                            <button class="btn btn-default subscriptionButton" id="subscriptionButton">Subscribe</button>
-                                            <div class="text-center">
+                                        <li class="row">
+                                            <div class="col-xs-3">
+                                                <button class="btn btn-default btn-sm logSubscriptionButton" disabled data-i18n-tooltip="subscribeLog">
+                                                    <i class="fa fa-rss"></i>
+                                                </button>
+                                            </div>
+                                            <div class="text-center col-xs-9" style="top: 8px;">
                                                 <a href="#logs" id="link-logs">
                                                     <strong data-i18n="see_all_logs">See All Logs</strong>
                                                     <i class="fa fa-angle-right"></i>
