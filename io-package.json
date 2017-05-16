@@ -1,67 +1,72 @@
 {
     "common": {
-        "name":                     "admin-neo",
-        "title":                    "ioBroker Admin Neo",
+        "name": "admin-neo",
+        "title": "ioBroker Admin Neo",
         "version": "0.0.1",
         "news": {            
             "0.0.1": {
-                                    "en": "initial commit",
-                                    "de": "Initiale Version",
-                                    "ru": "Первая версия",
-                                    "pt": "Versão inicial"
+                "en": "initial commit",
+                "de": "Initiale Version",
+                "ru": "Первая версия",
+                "pt": "Versão inicial"
             }
         },
         "desc": {
-            "en":                   "Opens a webserver for the ioBroker admin neo UI",
-            "de":                   "Stellt Webserver für 'ioBroker Admin Neo UI' zur Verfügung",
-            "ru":                   "Запускает веб сервер с 'ioBroker admin neo UI' для удобной настройки через веб интерфейс",
-            "pt":                   "Abre um servidor web para o ioBroker Admin Neo UI'"
+            "en": "Opens a webserver for the ioBroker admin neo UI",
+            "de": "Stellt Webserver für 'ioBroker Admin Neo UI' zur Verfügung",
+            "ru": "Запускает веб сервер с 'ioBroker admin neo UI' для удобной настройки через веб интерфейс",
+            "pt": "Abre um servidor web para o ioBroker Admin Neo UI'"
         },
-        "mode":                     "daemon",
-        "platform":                 "Javascript/Node.js",
-        "loglevel":                 "info",
-        "icon":                     "admin-neo.png",
-        "messagebox":               true,
-        "enabled":                  true,
-        "extIcon":                  "https://raw.githubusercontent.com/ldittmar81/ioBroker.admin-neo/master/admin/admin-neo.png",
-        "keywords":                 ["setup", "config", "update", "upgrade", "system", "konfiguration", "administration", "einrichtung", "wartung"],
-        "readme":                   "https://github.com/ldittmar81/ioBroker.admin-neo/blob/master/README.md",
-        "authors":                  ["ldittmar <iobroker@lmdsoft.de>"],
-        "dependencies":             [{"js-controller": ">=0.16.0"}],
-        "type":                     "common adapters",
-        "license":                  "MIT",
-        "logTransporter":           true,
-        "stopBeforeUpdate":         true,
-        "wwwDontUpload":            true,
-        "localLink":                "%protocol%://%ip%:%port%"
+        "mode": "daemon",
+        "platform": "Javascript/Node.js",
+        "loglevel": "info",
+        "icon": "admin-neo.png",
+        "messagebox": true,
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/ldittmar81/ioBroker.admin-neo/master/admin/admin-neo.png",
+        "keywords": ["setup", "config", "update", "upgrade", "system", "konfiguration", "administration", "einrichtung", "wartung"],
+        "readme": "https://github.com/ldittmar81/ioBroker.admin-neo/blob/master/README.md",
+        "authors": ["ldittmar <iobroker@lmdsoft.de>"],
+        "dependencies": [{
+            "js-controller": ">=0.16.0"
+        }],
+        "type": "common adapters",
+        "license": "MIT",
+        "logTransporter": true,
+        "stopBeforeUpdate": true,
+        "wwwDontUpload": true,
+        "localLink": "%protocol%://%ip%:%port%",
+        "authors": [
+            "ldittmar <iobroker@lmdsoft.de>"
+        ]
     },
     "native": {
-        "port":                     8091,
-        "auth":                     false,
-        "secure":                   false,
-        "bind":                     "0.0.0.0",
-        "cache":                    false,
-        "certPublic":               "",
-        "certPrivate":              "",
-        "certChained":              "",
-        "ttl":                      3600,
-        "defaultUser":              "admin",
+        "port": 8091,
+        "auth": false,
+        "secure": false,
+        "bind": "0.0.0.0",
+        "cache": false,
+        "certPublic": "",
+        "certPrivate": "",
+        "certChained": "",
+        "ttl": 3600,
+        "defaultUser": "admin",
 
-        "leEnabled":                false,
-        "leUpdate":                 false,
-        "leCheckPort":              80
+        "leEnabled": false,
+        "leUpdate": false,
+        "leCheckPort": 80
     },
     "objects": [
 
     ],
     "instanceObjects": [
         {
-            "_id":                  "info",
-            "type":                 "channel",
+            "_id": "info",
+            "type": "channel",
             "common": {
-                                    "name": "Information"
+                "name": "Information"
             },
-            "native":               {}
+            "native": {}
         }
     ]
 }
