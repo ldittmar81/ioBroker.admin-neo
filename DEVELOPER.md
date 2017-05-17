@@ -21,6 +21,12 @@
 $('#element').changeTooltip('New Tooltip!');
 ```
 
+### Translation with HTML tags
+
+```
+<p data-i18n-html="htmlData"></p>
+```
+
 ### Icons -> fa-icons at showMessage and confirmMessage
 
 ```

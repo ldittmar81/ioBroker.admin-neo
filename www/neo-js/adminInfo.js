@@ -33,6 +33,8 @@ function Info(main) {
     };
 
     this.init = function () {
+        restartFunctions('#dialog-info');
+        
         $dialogInfo.modal();
     };
 }

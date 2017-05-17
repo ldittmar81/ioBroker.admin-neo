@@ -457,6 +457,11 @@ function restartFunctions(selector) {
     });
     $(selector).find('select').selectpicker();
     $(selector).find('[data-i18n]').i18n();
+    $(selector).find('[data-i18n-html]').each(function () {
+        var $this = $(this);
+        $this.html($.i18n($this.data('i18n-html')));
+    });
+
     $(selector).find('[data-i18n-attr]').each(function () {
         var $this = $(this);
         var data = $this.data('i18n-attr').split("|");

@@ -78,7 +78,7 @@ function Home(main) {
                     if (installedList && installedList[adapter]) {
                         continue;
                     }
-                    if (obj.published && ((now - new Date(obj.published)) < 3600000 * 24 * 31)) {
+                    if (!(obj.published && ((now - new Date(obj.published)) < 3600000 * 24 * 31))) {
                         continue;
                     }
                     listNew.push(adapter);
