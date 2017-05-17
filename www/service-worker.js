@@ -1,4 +1,16 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
 /* global self */
+
+'use strict';
 
 self.addEventListener('push', function (event) {
     event.waitUntil(self.registration.showNotification('ServiceWorker ioBroker', {

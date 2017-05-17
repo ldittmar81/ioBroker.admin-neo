@@ -1,3 +1,19 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+/**
+ * @constructor
+ * @param {Object} main
+ * @returns {Enums}  
+ */
 function Enums(main) {
     'use strict';
 
@@ -79,7 +95,7 @@ function Enums(main) {
                 appendTo: "body"
             }
         }
-    }
+    };
 
     var $enumsTemplate, $enumsTable, $enumsOrbit, $enumsContainer, $enumList, $enumObjectList, $objectList;
 
@@ -201,7 +217,7 @@ function Enums(main) {
         var obj = {};
         for (var key in main.objects) {
             if (key.startsWith('enum.')) {
-                assign(obj, key, main.objects[key])
+                assign(obj, key, main.objects[key]);
             }
         }
         $orbitlist.html(createOrbitList(obj, "enum"));
@@ -214,9 +230,9 @@ function Enums(main) {
             if (k !== '_id' && k !== 'acl' && k !== 'common' && k !== 'type') {
                 var common;
                 if (Object.prototype.toString.call(elem[k]) === '[object Object]') {
-                    common = elem[k]['common'];
+                    common = elem[k].common;
                 }
-                text += "<li id='" + k + "'>" + (common ? common['name'] : k);
+                text += "<li id='" + k + "'>" + (common ? common.name : k);
                 text += "<ol>";
                 if (common && common.members) {
                     if (common.members.length > 0) {

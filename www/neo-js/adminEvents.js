@@ -1,3 +1,20 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+/**
+ * 
+ * @constructor
+ * @param {Object} main
+ * @returns {Events}
+ */
 function Events(main) {
     "use strict";
 
@@ -51,7 +68,7 @@ function Events(main) {
             });
             $('#event-filter-ack').change(filterEvents);
             $('#event-filter-from').change(filterEvents);
-            
+
             $('#event-pause').attr('data-i18n-tooltip', $.i18n('Pause output')).click(function () {
                 that.pause();
             });
@@ -76,12 +93,8 @@ function Events(main) {
         var typeFilter = $('#event-filter-type').val();
         var fromFilter = $('#event-filter-from').val();
         var type = rowData ? 'stateChange' : 'message';
-        var value;
-        var ack;
-        var from = '';
-        var tc;
-        var lc;
-
+        var value, ack, from = '', tc, lc, e, i;
+   
         if (obj) {
             type = 'objectChange';
             value = JSON.stringify(obj, '\x0A', 2);
@@ -98,7 +111,7 @@ function Events(main) {
             eventTypes.sort();
             if (eventTypes.length > 1) {
                 $('#event-filter-type').html('<option value="">' + $.i18n('all') + '</option>');
-                for (var i = 0; i < eventTypes.length; i++) {
+                for (i = 0; i < eventTypes.length; i++) {
                     $('#event-filter-type').append('<option value="' + eventTypes[i] + '" ' + ((eventTypes[i] === typeFilter) ? 'selected' : '') + '>' + eventTypes[i] + '</option>');
                 }
             }
@@ -107,7 +120,7 @@ function Events(main) {
         if (!this.eventPauseMode) {
             if (eventsLinesCount >= that.eventLimit) {
                 eventsLinesStart++;
-                var e = document.getElementById('event_' + eventsLinesStart);
+                e = document.getElementById('event_' + eventsLinesStart);
                 if (e) {
                     e.outerHTML = '';
                 }
@@ -125,8 +138,8 @@ function Events(main) {
                 eventFroms.push(state.from);
                 eventFroms.sort();
                 $('#event-filter-from').html('<option value="">' + $.i18n('all') + '</option>');
-                for (var i = 0; i < eventFroms.length; i++) {
-                    var e = eventFroms[i].replace('.', '-');
+                for (i = 0; i < eventFroms.length; i++) {
+                    e = eventFroms[i].replace('.', '-');
                     $('#event-filter-from').append('<option value="' + e + '" ' + ((e === fromFilter) ? 'selected' : '') + '>' + eventFroms[i] + '</option>');
                 }
             }
@@ -257,7 +270,7 @@ function Events(main) {
                 if (eventsLinesCount >= 500) {
                     eventsLinesStart++;
                     var e = document.getElementById('event_' + eventsLinesStart);
-                    if (e){
+                    if (e) {
                         e.outerHTML = '';
                     }
                 } else {

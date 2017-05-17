@@ -1,7 +1,20 @@
-/* global systemLang */
-/* global semver */
-/* global bootbox */
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+/* global systemLang, semver, bootbox */
 
+/**
+ * @constructor
+ * @param {Object} main
+ * @returns {Adapters}
+ */
 function Adapters(main) {
     'use strict';
     var that = this;
@@ -663,13 +676,14 @@ function Adapters(main) {
         this.getAdaptersInfo(this.main.currentHost, update, updateRepo, function (repository, installedList) {
             var listInstalled = [];
             var listUnsinstalled = [];
+            var adapter, obj;
 
             if (installedList) {
-                for (var adapter in installedList) {
+                for (adapter in installedList) {
                     if (!installedList.hasOwnProperty(adapter)) {
                         continue;
                     }
-                    var obj = installedList[adapter];
+                    obj = installedList[adapter];
                     if (!obj || obj.controller || adapter === 'hosts') {
                         continue;
                     }
@@ -681,13 +695,13 @@ function Adapters(main) {
             that.urls = {};
 
             // List of adapters from repository
-            for (var adapter in repository) {
+            for (adapter in repository) {
                 if (!repository.hasOwnProperty(adapter)) {
                     continue;
                 }
 
                 that.urls[adapter] = repository[adapter].meta;
-                var obj = repository[adapter];
+                obj = repository[adapter];
                 if (!obj || obj.controller) {
                     continue;
                 }
@@ -719,7 +733,8 @@ function Adapters(main) {
         this.main.fillContent('#menu-adapters-div');
     };
     this.createAdapterTiles = function () {
-        for (var i in this.tree) {
+        var i;
+        for (i in this.tree) {
             if (i === "remove") {
                 break;
             }
@@ -803,7 +818,7 @@ function Adapters(main) {
 
                     if (adapter.authors) {
                         var authors = "";
-                        for (var i in adapter.authors) {
+                        for (i in adapter.authors) {
                             if (i === "remove") {
                                 break;
                             }
@@ -918,7 +933,7 @@ function Adapters(main) {
         }, 10000);
 
         if (!that.data[adapter].licenseUrl) {
-            that.data[adapter].licenseUrl = 'https://raw.githubusercontent.com/ioBroker/ioBroker.' + template.common.name + '/master/LICENSE';
+            that.data[adapter].licenseUrl = 'https://raw.githubusercontent.com/ioBroker/ioBroker.' + that.data[adapter].common.name + '/master/LICENSE';
         }
         if (typeof that.data[adapter].licenseUrl === 'object') {
             that.data[adapter].licenseUrl = that.data[adapter].licenseUrl[systemLang] || that.data[adapter].licenseUrl.en;

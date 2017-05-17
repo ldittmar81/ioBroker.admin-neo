@@ -1,3 +1,19 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+/**
+ * @constructor
+ * @param {Object} main
+ * @returns {Instances}  
+ */
 function Instances(main) {
     'use strict';
 
@@ -56,9 +72,8 @@ function Instances(main) {
 
     this.resolveLink = function (link, adapter, instance) {
         var vars = link.match(/%(\w+)%/g);
-        var _var;
-        var v;
-        var parts;
+        var _var, v, parts, result;
+      
         if (vars) {
             // first replace simple patterns
             for (v = vars.length - 1; v >= 0; v--) {
@@ -107,7 +122,7 @@ function Instances(main) {
                     };
                 }
             }
-            var result;
+            
             if (instances) {
                 result = [];
                 var count = 0;
@@ -125,6 +140,7 @@ function Instances(main) {
                 }
             }
         }
+        
         return result || link;
     };
 
@@ -158,6 +174,7 @@ function Instances(main) {
         var title_left = '';
         var state_right = '';
         var title_right = '';
+        var val = '';
 
         if (common.enabled && (!common.webExtension || !that.main.objects[instanceId].native.webInstance)) {
             state_left = (common.mode === 'daemon') ? 'green' : 'blue';
@@ -187,7 +204,7 @@ function Instances(main) {
             if (that.main.states[adapter + '.' + instance + '.info.connection'] || that.main.objects[adapter + '.' + instance + '.info.connection']) {
                 title_left += '<p>';
                 title_left += '<span>' + $.i18n('connectedtoadapter', adapter) + ': </span>';
-                var val = that.main.states[adapter + '.' + instance + '.info.connection'] ? that.main.states[adapter + '.' + instance + '.info.connection'].val : false;
+                val = that.main.states[adapter + '.' + instance + '.info.connection'] ? that.main.states[adapter + '.' + instance + '.info.connection'].val : false;
                 if (!val) {
                     state_left = state_left === 'red' ? 'red' : 'orange';
                     title_left += '<span style="color: #ff9999">' + $.i18n('false') + '</span>';
@@ -226,7 +243,7 @@ function Instances(main) {
             if (that.main.states[adapter + '.' + instance + '.info.connection'] || that.main.objects[adapter + '.' + instance + '.info.connection']) {
                 title_left += '<p>';
                 title_left += '<span>' + $.i18n('connectedtoadapter', adapter) + ': </span>';
-                var val = that.main.states[adapter + '.' + instance + '.info.connection'] ? that.main.states[adapter + '.' + instance + '.info.connection'].val : false;
+                val = that.main.states[adapter + '.' + instance + '.info.connection'] ? that.main.states[adapter + '.' + instance + '.info.connection'].val : false;
                 if (!val) {
                     title_left += $.i18n('false');
                 } else {
@@ -269,7 +286,7 @@ function Instances(main) {
         var text = $.i18n('countProcesses', processes);
         var $running_processes = $('#' + page + 'RunningProcesses');
         if (text !== $running_processes.text()) {
-            $running_processes.html('<span class="highlight">' + text + '</span>')
+            $running_processes.html('<span class="highlight">' + text + '</span>');
         }
 
         return Math.round(mem);
@@ -445,7 +462,7 @@ function Instances(main) {
     }
 
     function onQuickEditField(e) {
-        var $this = $(this);
+        var $this = $(e);
         var id = $this.data('instance-id');
         var attr = $this.data('name');
         var options = $this.data('options');

@@ -1,12 +1,17 @@
 /* jshint -W097 */// jshint strict:true
 /* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
 /* global io:false */
 /* global jQuery:false */
-/* jslint browser:true */
-/* jshint browser:true */
-/* global bootbox */
-/* global save */
-/* global load */
+/* global $:false */
+/* global systemLang:true */
+/* global bootbox, save, load */
+
+'use strict';
 
 var path = location.pathname;
 var parts = path.split('/');
@@ -23,8 +28,6 @@ var adapter = '';
 var onChangeSupported = false;
 
 $(function () {
-    'use strict';
-
     var tmp = window.location.pathname.split('/');
     adapter = tmp[tmp.length - 2];
     var id = 'system.adapter.' + adapter + '.' + instance;
@@ -83,6 +86,9 @@ $(function () {
         }
 
         socket.emit('getObject', id, function (err, oldObj) {
+            if (err) {
+                console.log(err);
+            }
             if (!oldObj)
                 oldObj = {};
 
@@ -265,11 +271,13 @@ function confirmMessage(message, title, icon, buttons, callback) {
 function getObject(id, callback) {
     socket.emit('getObject', id, function (err, res) {
         if (!err && res) {
-            if (callback)
+            if (callback){
                 callback(err, res);
+            }
         } else {
-            if (callback)
+            if (callback){
                 callback(null);
+            }
         }
     });
 }
@@ -277,11 +285,13 @@ function getObject(id, callback) {
 function getState(id, callback) {
     socket.emit('getState', id, function (err, res) {
         if (!err && res) {
-            if (callback)
+            if (callback){
                 callback(err, res);
+            }
         } else {
-            if (callback)
+            if (callback){
                 callback(null);
+            }
         }
     });
 }
@@ -291,15 +301,18 @@ function getEnums(_enum, callback) {
         if (!err && res) {
             var _res = {};
             for (var i = 0; i < res.rows.length; i++) {
-                if (res.rows[i].id === 'enum.' + _enum)
+                if (res.rows[i].id === 'enum.' + _enum){
                     continue;
+                }
                 _res[res.rows[i].id] = res.rows[i].value;
             }
-            if (callback)
+            if (callback){
                 callback(null, _res);
+            }
         } else {
-            if (callback)
+            if (callback){
                 callback(err, []);
+            }
         }
     });
 }
@@ -360,7 +373,7 @@ function getIPs(host, callback) {
             if (host.native.hardware && host.native.hardware.networkInterfaces) {
                 for (var eth in host.native.hardware.networkInterfaces) {
                     for (var num = 0; num < host.native.hardware.networkInterfaces[eth].length; num++) {
-                        if (host.native.hardware.networkInterfaces[eth][num].family != 'IPv6') {
+                        if (host.native.hardware.networkInterfaces[eth][num].family !== 'IPv6') {
                             IPs4.push({name: '[' + host.native.hardware.networkInterfaces[eth][num].family + '] ' + host.native.hardware.networkInterfaces[eth][num].address + ' - ' + eth, address: host.native.hardware.networkInterfaces[eth][num].address, family: 'ipv4'});
                         } else {
                             IPs6.push({name: '[' + host.native.hardware.networkInterfaces[eth][num].family + '] ' + host.native.hardware.networkInterfaces[eth][num].address + ' - ' + eth, address: host.native.hardware.networkInterfaces[eth][num].address, family: 'ipv6'});
@@ -405,7 +418,7 @@ function sendToHost(host, command, message, callback) {
 function fillSelectCertificates(id, type, actualValued) {
     var str = '<option value="">' + $.i18n('none') + '</option>';
     for (var i = 0; i < certs.length; i++) {
-        if (certs[i].type != type)
+        if (certs[i].type !== type)
             continue;
         str += '<option value="' + certs[i].name + '" ' + ((certs[i].name === actualValued) ? 'selected' : '') + '>' + certs[i].name + '</option>';
     }
@@ -624,7 +637,6 @@ function _editTable(tabId, cols, values, rooms, top, onChange) {
         tabId = tabId.tabId;
     }
 
-    initGridLanguage(systemLang);
     var colNames = [];
     var colModel = [];
     var $grid = $('#' + tabId);
@@ -921,7 +933,7 @@ function getTableResult(tabId, cols) {
  *   </div>
  * <pre><code>
  *
- * @param {string} id name of the html element (or empty).
+ * @param {string} divId name of the html element (or empty).
  * @param {string} values data array
  * @param {function} onChange this function will be called if something changed
  * @param {function} onReady called, when the table is ready (may be to modify some elements of it)
@@ -1099,7 +1111,7 @@ function values2table(divId, values, onChange, onReady) {
                             options = names[i].options;
                         }
                         if (names[i].type === 'select multiple') {
-                            delete options[_('none')];
+                            delete options[$.i18n('none')];
                         }
                         var val = (values[v][names[i].name] === undefined ? '' : values[v][names[i].name]);
                         if (typeof val !== 'object') {
@@ -1206,6 +1218,7 @@ function values2table(divId, values, onChange, onReady) {
                         .click(function () {
                             var id = $(this).data('index');
                             var elem = values[id];
+                            /*
                             if (typeof editLine === 'function') {
                                 setTimeout(function () {
                                     editLine(id, JSON.parse(JSON.stringify(values[id])), function (err, id, newValues) {
@@ -1218,7 +1231,7 @@ function values2table(divId, values, onChange, onReady) {
                                         }
                                     });
                                 }, 100);
-                            }
+                            }*/
                         });
             }
         });
@@ -1247,7 +1260,7 @@ function values2table(divId, values, onChange, onReady) {
  *
  * This function extracts the values from edit table, that was generated with values2table function.
  *
- * @param {string} id name of the html element (or nothing).
+ * @param {string} divId name of the html element (or nothing).
  * @return {object} array with values
  */
 function table2values(divId) {
@@ -1273,9 +1286,10 @@ function table2values(divId) {
         values[j] = {};
 
         $(this).find('td').each(function () {
+            var name = '';
             var $input = $(this).find('input');
             if ($input.length) {
-                var name = $input.data('name');
+                name = $input.data('name');
                 if ($input.attr('type') === 'checkbox') {
                     values[j][name] = $input.prop('checked');
                 } else {
@@ -1284,7 +1298,7 @@ function table2values(divId) {
             }
             var $select = $(this).find('select');
             if ($select.length) {
-                var name = $select.data('name');
+                name = $select.data('name');
                 values[j][name] = $select.val() || '';
             }
         });

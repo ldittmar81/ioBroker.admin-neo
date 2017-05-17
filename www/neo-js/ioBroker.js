@@ -1,12 +1,14 @@
 /* jshint -W097 */// jshint strict:true
 /* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
 /* global io:false */
 /* global jQuery:false */
-/* jslint browser:true */
-/* jshint browser:true */
-/* global systemLang */
-/* global i18n */
-/* global PNotify */
+/* global $:false */
+/* global i18n, PNotify, systemLang */
 
 'use strict';
 
@@ -215,10 +217,8 @@ String.prototype.text2iconClass = function () {
             }
         }
 
-        this.options.selector ?
-                (this._options = $.extend({}, this.options, {trigger: 'manual', selector: ''})) :
-                this.fixTitle();
-    }
+        this.options.selector ? (this._options = $.extend({}, this.options, {trigger: 'manual', selector: ''})) : this.fixTitle();
+    };
 
     // Sidebar
     $(function () {
@@ -366,7 +366,7 @@ String.prototype.text2iconClass = function () {
     $(function () {
         $(".expand").on("click", function () {
             $(this).next().slideToggle(200);
-            $expand = $(this).find(">:first-child");
+            var $expand = $(this).find(">:first-child");
             if ($expand.text() === "+") {
                 $expand.text("-");
             } else {

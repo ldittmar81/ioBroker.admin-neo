@@ -1,3 +1,19 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+/**
+ * @constructor
+ * @param {Object} main
+ * @returns {Groups}  
+ */
 function Groups(main) {
     "use strict";
 
@@ -33,7 +49,7 @@ function Groups(main) {
             for (var j = 0; j < users.length; j++) {
                 var name = users[j].substring('system.user.'.length);
                 select += '<option value="' + users[j] + '"';
-                if (obj.common && obj.common.members && obj.common.members.indexOf(users[j]) != -1)
+                if (obj.common && obj.common.members && obj.common.members.indexOf(users[j]) !== -1)
                     select += ' selected';
                 select += '>' + name + '</option>';
             }
@@ -125,7 +141,7 @@ function Groups(main) {
     this.delUser = function (id) {
         for (var i = 0; i < this.list.length; i++) {
             // If user has no group, but group has user => delete user from group
-            if (that.main.objects[this.list[i]].common.members && that.main.objects[this.list[i]].common.members.indexOf(id) != -1) {
+            if (that.main.objects[this.list[i]].common.members && that.main.objects[this.list[i]].common.members.indexOf(id) !== -1) {
                 that.main.objects[this.list[i]].common.members.splice(that.main.objects[this.list[i]].common.members.indexOf(id), 1);
                 that.main.socket.emit('extendObject', this.list[i], {
                     common: {
@@ -139,12 +155,12 @@ function Groups(main) {
     this.objectChange = function (id, obj) {
         if (id.match(/^system\.group\./)) {
             if (obj) {
-                if (this.list.indexOf(id) == -1) {
+                if (this.list.indexOf(id) === -1) {
                     this.list.push(id);
                 }
             } else {
                 var j = this.list.indexOf(id);
-                if (j != -1) {
+                if (j !== -1) {
                     this.list.splice(j, 1);
                 }
             }
@@ -158,7 +174,7 @@ function Groups(main) {
                 that.init(true);
             }, 200);
         }
-    }
+    };
 
 }
 

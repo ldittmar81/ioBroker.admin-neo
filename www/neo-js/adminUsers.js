@@ -1,6 +1,22 @@
-'use strict';
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
 
+/**
+ * 
+ * @constructor
+ * @param {Object} main
+ * @returns {Users}
+ */
 function Users(main) {
+    'use strict';
     
     var that = this;
     this.list = [];
@@ -36,8 +52,9 @@ function Users(main) {
                 var name = groups[j].substring('system.group.'.length);
                 name = name.substring(0, 1).toUpperCase() + name.substring(1);
                 select += '<option value="' + groups[j] + '"';
-                if (that.main.objects[groups[j]].common && that.main.objects[groups[j]].common.members && that.main.objects[groups[j]].common.members.indexOf(that.list[i]) != -1)
+                if (that.main.objects[groups[j]].common && that.main.objects[groups[j]].common.members && that.main.objects[groups[j]].common.members.indexOf(that.list[i]) !== -1){
                     select += ' selected';
+                }
                 select += '>' + name + '</option>';
             }
 

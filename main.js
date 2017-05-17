@@ -1,5 +1,7 @@
 /* jshint -W097 */// jshint strict:false
-/*jslint node: true */
+/* jslint node:true */
+/* jshint node:true */
+
 'use strict';
 
 var adapterName = require(__dirname + '/package.json').name.split('.').pop();
@@ -175,7 +177,7 @@ adapter.on('message', function (obj) {
         }
         // we cannot save the socket, because if it takes a bit time, the socket will be invalid
         //cmdSessions[obj.message.id].socket.emit(obj.command, obj.message.id, obj.message.data);
-        if (obj.command == 'cmdExit') {
+        if (obj.command === 'cmdExit') {
             delete cmdSessions[obj.message.id];
         }
     }
@@ -304,7 +306,7 @@ function writeUpdateInfo(sources) {
 
     for (var name in sources) {
         if (installed[name] && installed[name].version && sources[name].version) {
-            if (sources[name].version != installed[name].version &&
+            if (sources[name].version !== installed[name].version &&
                     !upToDate(sources[name].version, installed[name].version)) {
                 // remove first part of the name
                 var n = name.indexOf('.');
@@ -396,7 +398,7 @@ function main() {
 function addUser(user, pw, options, callback) {
     adapter.getForeignObject('system.user.' + user, options, function (err, obj) {
         if (obj) {
-            if (typeof callback == 'function') {
+            if (typeof callback === 'function') {
                 callback('User yet exists');
             }
         } else {
@@ -439,19 +441,19 @@ function delUser(user, options, callback) {
 
 function addGroup(group, desc, acl, options, callback) {
     var name = group;
-    if (typeof acl == 'function') {
+    if (typeof acl === 'function') {
         callback = acl;
         acl = null;
     }
-    if (typeof desc == 'function') {
+    if (typeof desc === 'function') {
         callback = desc;
         desc = null;
     }
-    if (typeof options == 'function') {
+    if (typeof options === 'function') {
         callback = options;
         options = null;
     }
-    if (name && name.substring(0, 1) != name.substring(0, 1).toUpperCase()) {
+    if (name && name.substring(0, 1) !== name.substring(0, 1).toUpperCase()) {
         name = name.substring(0, 1).toUpperCase() + name.substring(1);
     }
     group = group.substring(0, 1).toLowerCase() + group.substring(1);
@@ -725,7 +727,7 @@ function initWebServer(settings) {
 
     if (server.server) {
         adapter.getPort(settings.port, function (port) {
-            if (port != settings.port && !adapter.config.findNextPort) {
+            if (port !== settings.port && !adapter.config.findNextPort) {
                 adapter.log.error('port ' + settings.port + ' already in use');
                 process.exit(1);
             }
@@ -733,7 +735,7 @@ function initWebServer(settings) {
             adapter.log.info('http' + (settings.secure ? 's' : '') + ' server listening on port ' + port);
             adapter.log.info('Use link "http' + (settings.secure ? 's' : '') + '://localhost:' + port + '" to configure.');
 
-            server.io = socketio.listen(server.server, (settings.bind && settings.bind != "0.0.0.0") ? settings.bind : undefined);
+            server.io = socketio.listen(server.server, (settings.bind && settings.bind !== "0.0.0.0") ? settings.bind : undefined);
 
             if (settings.auth) {
                 server.io.use(passportSocketIo.authorize({
@@ -962,21 +964,21 @@ function checkObject(id, options, flag) {
             options.groups.indexOf('system.group.administrator') === -1) {
         if (objects[id].acl.owner !== options.user) {
             // Check if the user is in the group
-            if (options.groups.indexOf(objects[id].acl.ownerGroup) != -1) {
+            if (options.groups.indexOf(objects[id].acl.ownerGroup) !== -1) {
                 // Check group rights
                 if (!(objects[id].acl.object & (flag << 4))) {
-                    return false
+                    return false;
                 }
             } else {
                 // everybody
                 if (!(objects[id].acl.object & flag)) {
-                    return false
+                    return false;
                 }
             }
         } else {
             // Check group rights
             if (!(objects[id].acl.object & (flag << 8))) {
-                return false
+                return false;
             }
         }
     }
@@ -1093,7 +1095,7 @@ function socketEvents(socket) {
             adapter.objects.getObjectView('system', 'host', {}, {user: this._acl.user}, function (err, data) {
                 if (data.rows.length) {
                     for (var i = 0; i < data.rows.length; i++) {
-                        if (data.rows[i].value.common.hostname == ip) {
+                        if (data.rows[i].value.common.hostname === ip) {
                             if (callback) {
                                 callback(ip, data.rows[i].value);
                             }
@@ -1103,7 +1105,7 @@ function socketEvents(socket) {
                             var net = data.rows[i].value.native.hardware.networkInterfaces;
                             for (var eth in net) {
                                 for (var j = 0; j < net[eth].length; j++) {
-                                    if (net[eth][j].address == ip) {
+                                    if (net[eth][j].address === ip) {
                                         if (callback) {
                                             callback(ip, data.rows[i].value);
                                         }
@@ -1204,7 +1206,7 @@ function socketEvents(socket) {
 
     socket.on('changePassword', function (user, pass, callback) {
         if (updateSession(socket)) {
-            if (user == socket._acl.user || checkPermissions(socket, 'changePassword', callback, user)) {
+            if (user === socket._acl.user || checkPermissions(socket, 'changePassword', callback, user)) {
                 adapter.setPassword(user, pass, {user: this._acl.user}, callback);
             }
         }
@@ -1261,8 +1263,8 @@ function socketEvents(socket) {
     socket.on('sendToHost', function (host, command, message, callback) {
         // host can answer following commands
         if (updateSession(socket)) {
-            if ((command != 'cmdExec' && command != 'delLogs' && checkPermissions(socket, 'sendToHost', callback, command)) ||
-                    ((command == 'cmdExec' || command == 'delLogs') && checkPermissions(socket, 'cmdExec', callback, command))) {
+            if ((command !== 'cmdExec' && command !== 'delLogs' && checkPermissions(socket, 'sendToHost', callback, command)) ||
+                    ((command === 'cmdExec' || command === 'delLogs') && checkPermissions(socket, 'cmdExec', callback, command))) {
                 adapter.sendToHost(host, command, message, function (res) {
                     if (callback) {
                         setTimeout(function () {

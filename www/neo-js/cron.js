@@ -1,4 +1,17 @@
-$.fn.cron = function(options, setValue) {
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+$.fn.cron = function (options, setValue) {
+    'use strict';
+
     var el = this;
 
     if (options === 'value') {
@@ -78,7 +91,8 @@ $.fn.cron = function(options, setValue) {
 
     $(el).find('.cron-tabs').tabs({
         activate: function (event, ui) {
-            if ($(el).find('.cron-input').is(':focus') || updateInput) return;
+            if ($(el).find('.cron-input').is(':focus') || updateInput)
+                return;
 
             cronArr = cronArr || ['*', '*', '*', '*', '*', '*'];
             switch ($(ui.newTab).attr('id')) {
@@ -96,7 +110,7 @@ $.fn.cron = function(options, setValue) {
                     drawEachSecond();
                     break;
 
-                // Minutes
+                    // Minutes
                 case 'cron-button-minute-every':
                     cronArr[1] = '*';
                     break;
@@ -109,7 +123,7 @@ $.fn.cron = function(options, setValue) {
                     drawEachMinute();
                     break;
 
-                // Hours
+                    // Hours
                 case 'cron-button-hour-every':
                     cronArr[2] = '*';
                     break;
@@ -122,7 +136,7 @@ $.fn.cron = function(options, setValue) {
                     drawEachHour();
                     break;
 
-                // Days
+                    // Days
                 case 'cron-button-day-every':
                     cronArr[3] = '*';
                     break;
@@ -132,7 +146,7 @@ $.fn.cron = function(options, setValue) {
                     drawEachDay();
                     break;
 
-                // Months
+                    // Months
                 case 'cron-button-month-every':
                     cronArr[4] = '*';
                     break;
@@ -142,7 +156,7 @@ $.fn.cron = function(options, setValue) {
                     drawEachMonth();
                     break;
 
-                // Weeks
+                    // Weeks
                 case 'cron-button-week-every':
                     cronArr[5] = '*';
                     break;
@@ -239,7 +253,8 @@ $.fn.cron = function(options, setValue) {
     }
 
     function cron2text(arr) {
-        if (!arr) arr = cronArr;
+        if (!arr)
+            arr = cronArr;
 
         if (!arr) {
             return '';
@@ -250,54 +265,55 @@ $.fn.cron = function(options, setValue) {
             arr.shift();
         }
         for (var a = 0; a < arr.length; a++) {
-            if (arr[a] === '*/1') arr[a] = '*';
+            if (arr[a] === '*/1')
+                arr[a] = '*';
         }
 
         return arr.join(' ');
     }
 
     function correctCasus(text, seconds) {
-        text = text.replace('Каждую(ый) минуту',    'Каждую минуту');
-        text = text.replace('Каждую(ый) минут(у)',  'Каждую минуту');
-        text = text.replace('Каждую(ый) час',       'Каждый час');
-        text = text.replace('Каждую(ый) секунду',   'Каждую секунду');
-        text = text.replace(/ (\d{1,2}) числа/,     ' $1го числа');
+        text = text.replace('Каждую(ый) минуту', 'Каждую минуту');
+        text = text.replace('Каждую(ый) минут(у)', 'Каждую минуту');
+        text = text.replace('Каждую(ый) час', 'Каждый час');
+        text = text.replace('Каждую(ый) секунду', 'Каждую секунду');
+        text = text.replace(/ (\d{1,2}) числа/, ' $1го числа');
 
-        text = text.replace(/ (\d{1,2}) в Январе/,  ' $1го числа в Январе');
+        text = text.replace(/ (\d{1,2}) в Январе/, ' $1го числа в Январе');
         text = text.replace(/ (\d{1,2}) в Феврале/, ' $1го числа в Феврале');
-        text = text.replace(/ (\d{1,2}) в Марте/,   ' $1го числа в Марте');
-        text = text.replace(/ (\d{1,2}) в Апреле/,  ' $1го числа в Апреле');
-        text = text.replace(/ (\d{1,2}) в Майе/,    ' $1го числа в Майе');
-        text = text.replace(/ (\d{1,2}) в Июне/,    ' $1го числа в Июне');
-        text = text.replace(/ (\d{1,2}) в Июле/,    ' $1го числа в Июле');
-        text = text.replace(/ (\d{1,2}) в Августе/,  ' $1го числа в Августе');
-        text = text.replace(/ (\d{1,2}) в Сентябре/,  ' $1го числа в Сентябре');
-        text = text.replace(/ (\d{1,2}) в Октябре/,  ' $1го числа в Октябре');
-        text = text.replace(/ (\d{1,2}) в Ноябре/,  ' $1го числа в Ноябре');
-        text = text.replace(/ (\d{1,2}) в Декабре/,  ' $1го числа в Декабре');
+        text = text.replace(/ (\d{1,2}) в Марте/, ' $1го числа в Марте');
+        text = text.replace(/ (\d{1,2}) в Апреле/, ' $1го числа в Апреле');
+        text = text.replace(/ (\d{1,2}) в Майе/, ' $1го числа в Майе');
+        text = text.replace(/ (\d{1,2}) в Июне/, ' $1го числа в Июне');
+        text = text.replace(/ (\d{1,2}) в Июле/, ' $1го числа в Июле');
+        text = text.replace(/ (\d{1,2}) в Августе/, ' $1го числа в Августе');
+        text = text.replace(/ (\d{1,2}) в Сентябре/, ' $1го числа в Сентябре');
+        text = text.replace(/ (\d{1,2}) в Октябре/, ' $1го числа в Октябре');
+        text = text.replace(/ (\d{1,2}) в Ноябре/, ' $1го числа в Ноябре');
+        text = text.replace(/ (\d{1,2}) в Декабре/, ' $1го числа в Декабре');
 
-        text = text.replace('Каждую(ый) 0 минуту',   'Каждые ноль минут');
+        text = text.replace('Каждую(ый) 0 минуту', 'Каждые ноль минут');
         text = text.replace(/Каждую\(ый\) ([\d\sи,]+) минуту/, 'Каждую $1 минуту');
 
         text = text.replace(/каждой\(го\) ([\d\sи,]+) минуту/, 'каждой $1 минуты');
-        text = text.replace('каждой(го) минут(у)',  'каждой минуты');
+        text = text.replace('каждой(го) минут(у)', 'каждой минуты');
 
-        text = text.replace(' 0 часа(ов)',           ' 0 часов');
-        text = text.replace(' 1 часа(ов)',           ' 1 час');
-        text = text.replace(' 2 часа(ов)',           ' 2 часа');
-        text = text.replace(' 3 часа(ов)',           ' 3 часа');
-        text = text.replace(' 4 часа(ов)',           ' 4 часа');
+        text = text.replace(' 0 часа(ов)', ' 0 часов');
+        text = text.replace(' 1 часа(ов)', ' 1 час');
+        text = text.replace(' 2 часа(ов)', ' 2 часа');
+        text = text.replace(' 3 часа(ов)', ' 3 часа');
+        text = text.replace(' 4 часа(ов)', ' 4 часа');
         text = text.replace(/ (\d{1,2}) часа\(ов\)/, ' $1 часов');
 
-        text = text.replace('Jede(r) Sekunde',      'Jede Sekunde');
+        text = text.replace('Jede(r) Sekunde', 'Jede Sekunde');
         text = text.replace(/Jede\(r\) ([\d\sund,]+) Sekunde/, 'Jede $1 Sekunde');
-        text = text.replace('Jede(r) Minute',       'Jede Minute');
-        text = text.replace('Jede Minuten',         'Jede Minute');
-        text = text.replace('Jede Stunde',          'Jede Stunde');
-        text = text.replace('Jede(r) Stunde',       'Jede Stunde');
+        text = text.replace('Jede(r) Minute', 'Jede Minute');
+        text = text.replace('Jede Minuten', 'Jede Minute');
+        text = text.replace('Jede Stunde', 'Jede Stunde');
+        text = text.replace('Jede(r) Stunde', 'Jede Stunde');
         text = text.replace(/Jede\(r\) ([\d\sund,]+) Minute/, 'Jede $1 Minute');
         text = text.replace('Jede Sekunde in Minuten', 'Jede Sekunde in jeder Minute');
-        
+
         return text;
     }
 
@@ -344,7 +360,7 @@ $.fn.cron = function(options, setValue) {
                 parts[p] = parts[p].join(',');
             }
         }
-        var value = parts.join(',');
+        value = parts.join(',');
         var values = value.split(',');
         values.sort(function (a, b) {
             a = parseInt(a, 10);
@@ -368,26 +384,26 @@ $.fn.cron = function(options, setValue) {
         var parts = value.split(',');
         var newParts = [];
         var start = parts[0];
-        var end   = parts[0];
+        var end = parts[0];
         for (var p = 1; p < parts.length; p++) {
             if (parts[p] - 1 !== parseInt(parts[p - 1], 10)) {
                 if (start === end) {
-                    newParts.push(start)
-                } else if (end - 1 == start) {
+                    newParts.push(start);
+                } else if (end - 1 === start) {
                     newParts.push(start + ',' + end);
-                }else {
+                } else {
                     newParts.push(start + '-' + end);
                 }
                 start = parts[p];
-                end   = parts[p];
+                end = parts[p];
             } else {
                 end = parts[p];
             }
         }
 
         if (start === end) {
-            newParts.push(start)
-        } else if (end - 1 == start) {
+            newParts.push(start);
+        } else if (end - 1 === start) {
             newParts.push(start + ',' + end);
         } else {
             newParts.push(start + '-' + end);
@@ -400,7 +416,7 @@ $.fn.cron = function(options, setValue) {
         var $tab = $(el).find('.cron-tab-' + types[index]);
 
         if (!values) {
-            if ($tab.find('.cron-tabs').tabs('option', 'active') != 0) {
+            if ($tab.find('.cron-tabs').tabs('option', 'active') !== 0) {
                 $tab.find('.cron-tabs').tabs('option', 'active', 0);
                 changed = true;
             }
@@ -412,30 +428,30 @@ $.fn.cron = function(options, setValue) {
 
         if (values[index].indexOf('/') !== -1) {
             var parts_ = values[index].split('/');
-            var value  = parseInt(parts_[1], 10) || 1;
-            if ($tab.find('.cron-slider').slider('value') != value) {
+            var value = parseInt(parts_[1], 10) || 1;
+            if ($tab.find('.cron-slider').slider('value') !== value) {
                 $tab.find('.cron-slider').slider('value', parseInt(parts_[1], 10) || 1);
                 changed = true;
             }
-            if ($tab.find('.cron-tabs').tabs('option', 'active') != 1) {
+            if ($tab.find('.cron-tabs').tabs('option', 'active') !== 1) {
                 $tab.find('.cron-tabs').tabs('option', 'active', 1);
                 changed = true;
             }
             $tab.find('.cron-preview-every').html($.i18n(everyText[index], parseInt(parts_[1], 10) || 1));
         } else if (values[index].indexOf('*') !== -1) {
-            if ($tab.find('.cron-tabs').tabs('option', 'active') != 0) {
+            if ($tab.find('.cron-tabs').tabs('option', 'active') !== 0) {
                 $tab.find('.cron-tabs').tabs('option', 'active', 0);
                 changed = true;
             }
         } else {
             var parts = convertMinusIntoArray(values[index]).split(',');
             if ($tab.find('.cron-tabs li').length === 3) {
-                if ($tab.find('.cron-tabs').tabs('option', 'active') != 2) {
+                if ($tab.find('.cron-tabs').tabs('option', 'active') !== 2) {
                     $tab.find('.cron-tabs').tabs('option', 'active', 2);
                     changed = true;
                 }
             } else {
-                if ($tab.find('.cron-tabs').tabs('option', 'active') != 1) {
+                if ($tab.find('.cron-tabs').tabs('option', 'active') !== 1) {
                     $tab.find('.cron-tabs').tabs('option', 'active', 1);
                     changed = true;
                 }
@@ -445,21 +461,23 @@ $.fn.cron = function(options, setValue) {
             $tab.find('.cron-tabs-format input[type="checkbox"]').each(function () {
                 var index = $(this).data('index').toString();
                 var value = parts.indexOf(index) !== -1;
-                if (value != $(this).prop('checked')) {
+                if (value !== $(this).prop('checked')) {
                     $(this).prop('checked', parts.indexOf(index) !== -1);
                     $(this).button('refresh');
                     changed = true;
                 }
-                if (value) selected = true;
+                if (value)
+                    selected = true;
             });
 
             if (!selected) {
-                if ($tab.find('.cron-tabs').tabs('option', 'active') != 0) {
+                if ($tab.find('.cron-tabs').tabs('option', 'active') !== 0) {
                     $tab.find('.cron-tabs').tabs('option', 'active', 0);
                     changed = true;
                 }
             }
-            if (changed) $(el).find('.cron-main-tab').tabs('option', 'active', index);
+            if (changed)
+                $(el).find('.cron-main-tab').tabs('option', 'active', index);
         }
     }
 
@@ -472,9 +490,10 @@ $.fn.cron = function(options, setValue) {
 
     function processEachChange(elem) {
         var newItem = $(elem).data('index').toString();
-        var arg     = $(elem).data('arg');
+        var arg = $(elem).data('arg');
 
-        if (!cronArr) cronArr = ['*', '*', '*', '*', '*', '*'];
+        if (!cronArr)
+            cronArr = ['*', '*', '*', '*', '*', '*'];
 
         if (cronArr[arg] === '*') {
             cronArr[arg] = newItem;
@@ -489,7 +508,8 @@ $.fn.cron = function(options, setValue) {
                 cronArr[arg] = cronArr[arg] + ',' + newItem;
             }
             cronArr[arg] = convertArrayIntoMinus(cronArr[arg]);
-            if(cronArr[arg] === '') cronArr[arg] = '*';
+            if (cronArr[arg] === '')
+                cronArr[arg] = '*';
         }
         drawCron();
     }
@@ -523,22 +543,25 @@ $.fn.cron = function(options, setValue) {
             // seconds
             for (var i = 0; i < 60; i++) {
                 text += '<input type="checkbox" id="cron-second-check' + i + '" data-index="' + i + '" data-arg="0"><label for="cron-second-check' + i + '">' + padded(i) + '</label>';
-                if (i !== 0 && ((i + 1) % 10 === 0)) text += '<br/>';
+                if (i !== 0 && ((i + 1) % 10 === 0))
+                    text += '<br/>';
             }
             return text;
         });
     }
 
-    function drawEachMinute () {
+    function drawEachMinute() {
         draw('minute', function () {
             var text = '';
             // minutes
             for (var i = 0; i < 60; i++) {
                 var padded = i;
-                if (padded < 10) padded = '0' + padded;
+                if (padded < 10)
+                    padded = '0' + padded;
 
                 text += '<input type="checkbox" id="cron-minute-check' + i + '" data-index="' + i + '" data-arg="1"><label for="cron-minute-check' + i + '">' + padded + '</label>';
-                if (i !== 0 && (((i + 1) % 10) === 0)) text += '<br/>';
+                if (i !== 0 && (((i + 1) % 10) === 0))
+                    text += '<br/>';
             }
             return text;
         });
@@ -550,31 +573,35 @@ $.fn.cron = function(options, setValue) {
             // hours
             for (var i = 0; i < 24; i++) {
                 var padded = i;
-                if (padded < 10) padded = '0' + padded;
+                if (padded < 10)
+                    padded = '0' + padded;
 
                 text += '<input type="checkbox" id="cron-hour-check' + i + '" data-index="' + i + '" data-arg="2"><label for="cron-hour-check' + i + '">' + padded + '</label>';
-                if (i !== 0 && (((i + 1) % 12) === 0)) text += '<br/>';
+                if (i !== 0 && (((i + 1) % 12) === 0))
+                    text += '<br/>';
             }
             return text;
         });
     }
 
-    function drawEachDay () {
+    function drawEachDay() {
         draw('day', function () {
             var text = '';
             // days
             for (var i = 1; i < 32; i++) {
                 var padded = i;
-                if (padded < 10) padded = '0' + padded;
+                if (padded < 10)
+                    padded = '0' + padded;
 
                 text += '<input type="checkbox" id="cron-day-check' + i + '" data-index="' + i + '" data-arg="3"><label for="cron-day-check' + i + '">' + padded + '</label>';
-                if (i !== 0 && ((i % 7) === 0)) text += '<br/>';
+                if (i !== 0 && ((i % 7) === 0))
+                    text += '<br/>';
             }
             return text;
         });
     }
-    
-    function drawEachMonth () {
+
+    function drawEachMonth() {
         draw('month', function () {
             var text = '';
             // months
@@ -587,7 +614,7 @@ $.fn.cron = function(options, setValue) {
         });
     }
 
-    function drawEachWeekday () {
+    function drawEachWeekday() {
         draw('week', function () {
             var text = '';
             // weeks
@@ -621,7 +648,7 @@ $.fn.cron = function(options, setValue) {
  * Given a cronspec, return the human-readable string.
  * @param {string} cronspec
  * @param withSeconds
- * @param {Object=} locale
+ * @param {Object} DATA
  */
 function cronToText(cronspec, withSeconds, DATA) {
     'use strict';
@@ -660,9 +687,7 @@ function cronToText(cronspec, withSeconds, DATA) {
      * attempts to look up the value in the NAMES table and returns
      * that result instead.
      *
-     * @param {Number,String} value: The value that should be parsed
-     * @param {Number=} offset: Any offset that must be added to the value
-     * @param {Number=} max
+     * @param {Number,String} value :The value that should be parsed
      * @returns {Number|null}
      */
     function getValue(value) {
@@ -676,12 +701,12 @@ function cronToText(cronspec, withSeconds, DATA) {
      * Returns a deep clone of a schedule skipping any day of week
      * constraints.
      *
-     * @param {Object} sched: The schedule that will be cloned
+     * @param {Object} sched :The schedule that will be cloned
      * @returns {Object}
      */
     function cloneSchedule(sched) {
         var clone = {},
-            field;
+                field;
 
         for (field in sched) {
             if (field !== 'dc' && field !== 'd') {
@@ -695,11 +720,10 @@ function cronToText(cronspec, withSeconds, DATA) {
     /**
      * Adds values to the specified constraint in the current schedule.
      *
-     * @param {Object} sched: The schedule to add the constraint to
-     * @param {String} name: Name of constraint to add
-     * @param {Number} min: Minimum value for this constraint
-     * @param {Number} max: Maximum value for this constraint
-     * @param {Number=} inc: The increment to use between min and max
+     * @param {Object} sched : The schedule to add the constraint to
+     * @param {String} name : Name of constraint to add
+     * @param {Number} min : Minimum value for this constraint
+     * @param {Number} max : Maximum value for this constraint
      */
     function add(sched, name, min, max) {
         var inc = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
@@ -725,10 +749,10 @@ function cronToText(cronspec, withSeconds, DATA) {
     /**
      * Adds a hash item (of the form x#y or xL) to the schedule.
      *
-     * @param {Object} schedules: The current schedule array to add to
-     * @param {Object} curSched: The current schedule to add to
-     * @param {Number} value: The value to add (x of x#y or xL)
-     * @param {Number} hash: The hash value to add (y of x#y)
+     * @param {Object} schedules : The current schedule array to add to
+     * @param {Object} curSched : The current schedule to add to
+     * @param {Number} value : The value to add (x of x#y or xL)
+     * @param {Number} hash : The hash value to add (y of x#y)
      */
     function addHash(schedules, curSched, value, hash) {
         // if there are any existing day of week constraints that
@@ -745,13 +769,13 @@ function cronToText(cronspec, withSeconds, DATA) {
 
     /**
      *
-     * @param {Object} s: The existing set of schedules
-     * @param {Object} curSched: The current schedule to add to
+     * @param {Object} s : The existing set of schedules
+     * @param {Object} curSched : The current schedule to add to
      * @param {Number} value
      */
     function addWeekday(s, curSched, value) {
         var except1 = {},
-            except2 = {};
+                except2 = {};
         if (value === 1) {
             // cron doesn't pass month boundaries, so if 1st is a
             // weekend then we need to use 2nd or 3rd instead
@@ -779,18 +803,18 @@ function cronToText(cronspec, withSeconds, DATA) {
     /**
      * Adds a range item (of the form x-y/z) to the schedule.
      *
-     * @param {String} item: The cron expression item to add
-     * @param {Object} curSched: The current schedule to add to
-     * @param {String} name: The name to use for this constraint
-     * @param {Number} min: The min value for the constraint
-     * @param {Number} max: The max value for the constraint
-     * @param {Number} offset: The offset to apply to the cron value
+     * @param {String} item : The cron expression item to add
+     * @param {Object} curSched : The current schedule to add to
+     * @param {String} name : The name to use for this constraint
+     * @param {Number} min : The min value for the constraint
+     * @param {Number} max : The max value for the constraint
+     * @param {Number} offset : The offset to apply to the cron value
      */
     function addRange(item, curSched, name, min, max, offset) {
         // parse range/x
         var incSplit = item.split('/'),
-            inc = +incSplit[1],
-            range = incSplit[0];
+                inc = +incSplit[1],
+                range = incSplit[0];
 
         // parse x-y or * or 0
         if (range !== '*' && range !== '0') {
@@ -807,18 +831,18 @@ function cronToText(cronspec, withSeconds, DATA) {
     /**
      * Parses a particular item within a cron expression.
      *
-     * @param {String} item: The cron expression item to parse
-     * @param {Object} s: The existing set of schedules
-     * @param {String} name: The name to use for this constraint
-     * @param {Number} min: The min value for the constraint
-     * @param {Number} max: The max value for the constraint
-     * @param {Number} offset: The offset to apply to the cron value
+     * @param {String} item : The cron expression item to parse
+     * @param {Object} s : The existing set of schedules
+     * @param {String} name : The name to use for this constraint
+     * @param {Number} min : The min value for the constraint
+     * @param {Number} max : The max value for the constraint
+     * @param {Number} offset : The offset to apply to the cron value
      */
     function parse(item, s, name, min, max, offset) {
         var value,
-            split,
-            schedules = s.schedules,
-            curSched = schedules[schedules.length - 1];
+                split,
+                schedules = s.schedules,
+                curSched = schedules[schedules.length - 1];
 
         // L just means min - 1 (this also makes it work for any field)
         if (item === 'L') {
@@ -851,7 +875,7 @@ function cronToText(cronspec, withSeconds, DATA) {
     /**
      * Returns true if the item is either of the form x#y or xL.
      *
-     * @param {String} item: The expression item to check
+     * @param {String} item : The expression item to check
      */
     function isHash(item) {
         return item.indexOf('#') > -1 || item.indexOf('L') > 0;
@@ -865,15 +889,15 @@ function cronToText(cronspec, withSeconds, DATA) {
      * Parses each of the fields in a cron expression.  The expression must
      * include the seconds field, the year field is optional.
      *
-     * @param {String} expr: The cron expression to parse
+     * @param {String} expr : The cron expression to parse
      */
     function parseExpr(expr) {
-        var schedule = { schedules: [{}], exceptions: [] },
-            components = expr.replace(/(\s)+/g, ' ').split(' '),
-            field,
-            f,
-            component,
-            items;
+        var schedule = {schedules: [{}], exceptions: []},
+                components = expr.replace(/(\s)+/g, ' ').split(' '),
+                field,
+                f,
+                component,
+                items;
 
         for (field in FIELDS) {
             f = FIELDS[field];
@@ -884,7 +908,7 @@ function cronToText(cronspec, withSeconds, DATA) {
                 // other constraints
                 items = component.split(',').sort(itemSorter);
                 var i,
-                    length = items.length;
+                        length = items.length;
                 for (i = 0; i < length; i++) {
                     parse(items[i], schedule, field, f[1], f[2], f[3]);
                 }
@@ -897,7 +921,7 @@ function cronToText(cronspec, withSeconds, DATA) {
     /**
      * Make cron expression parsable.
      *
-     * @param {String} expr: The cron expression to prepare
+     * @param {String} expr : The cron expression to prepare
      */
     function prepareExpr(expr) {
         var prepared = expr.toUpperCase();
@@ -910,7 +934,7 @@ function cronToText(cronspec, withSeconds, DATA) {
     }
 
     var schedule = parseCron(cronspec, withSeconds);
-  
+
     function absFloor(number) {
         if (number < 0) {
             return Math.ceil(number);
@@ -921,7 +945,7 @@ function cronToText(cronspec, withSeconds, DATA) {
 
     function toInt(argumentForCoercion) {
         var coercedNumber = +argumentForCoercion,
-            value = 0;
+                value = 0;
 
         if (coercedNumber !== 0 && isFinite(coercedNumber)) {
             value = absFloor(coercedNumber);
@@ -932,10 +956,10 @@ function cronToText(cronspec, withSeconds, DATA) {
 
     function ordinal(number) {
         var b = number % 10,
-            output = (toInt(number % 100 / 10) === 1) ? $i18n('ordth') :
+                output = (toInt(number % 100 / 10) === 1) ? $i18n('ordth') :
                 (b === 1) ? $i18n('ordst') :
-                    (b === 2) ? $i18n('ordnd') :
-                        (b === 3) ? $i18n('ordrd') : $i18n('ordth');
+                (b === 2) ? $i18n('ordnd') :
+                (b === 3) ? $i18n('ordrd') : $i18n('ordth');
         return number + output;
     }
 
@@ -985,7 +1009,8 @@ function cronToText(cronspec, withSeconds, DATA) {
         var lastVal = '' + numbers.pop();
         var outputText = '';
 
-        for (var i = 0, value; value = numbers[i]; i++) {
+        for (var i = 0; i < numbers.length; i++) {
+            var value = numbers[i];
             if (outputText.length > 0) {
                 outputText += ', ';
             }
@@ -1008,118 +1033,120 @@ function cronToText(cronspec, withSeconds, DATA) {
     /**
      * Given a schedule, generate a friendly sentence description.
      * @param {Object} schedule
+     * @param {boolean} withSeconds 
      * @returns {string}
      */
     function scheduleToSentence(schedule, withSeconds) {
         var outputText = $.i18n('every') + ' ';
+        var hm, i, j, lastVal;
 
-        if (schedule['h'] && schedule['m'] && schedule['h'].length <= 2 && schedule['m'].length <= 2 && withSeconds && schedule['s'] && schedule['s'].length <= 2 ) {
+        if (schedule.h && schedule.m && schedule.h.length <= 2 && schedule.m.length <= 2 && withSeconds && schedule.s && schedule.s.length <= 2) {
             // If there are only one or two specified values for
             // hour or minute, print them in HH:MM:SS format
 
-            var hm = [];
-            for (var i = 0; i < schedule['h'].length; i++) {
-                for (var j = 0; j < schedule['m'].length; j++) {
-                    for (var k = 0; k < schedule['s'].length; k++) {
-                        hm.push(zeroPad(schedule['h'][i]) + ':' + zeroPad(schedule['m'][j]) + ':' + zeroPad(schedule['s'][k]));
+            hm = [];
+            for (i = 0; i < schedule.h.length; i++) {
+                for (j = 0; j < schedule.m.length; j++) {
+                    for (var k = 0; k < schedule.s.length; k++) {
+                        hm.push(zeroPad(schedule.h[i]) + ':' + zeroPad(schedule.m[j]) + ':' + zeroPad(schedule.s[k]));
                     }
                 }
             }
             if (hm.length < 2) {
                 outputText = $.i18n('at') + ' ' + hm[0];
             } else {
-                var lastVal = hm.pop();
+                lastVal = hm.pop();
                 outputText = $.i18n('at') + ' ' + hm.join(', ') + ' ' + $.i18n('and') + ' ' + lastVal;
             }
-            if (!schedule['d'] && !schedule['D']) {
+            if (!schedule.d && !schedule.D) {
                 outputText += ' ' + $.i18n('everyday') + ' ';
             }
         } else
-        if (schedule['h'] && schedule['m'] && schedule['h'].length <= 2 && schedule['m'].length <= 2) {
+        if (schedule.h && schedule.m && schedule.h.length <= 2 && schedule.m.length <= 2) {
             // If there are only one or two specified values for
             // hour or minute, print them in HH:MM format
 
-            var hm = [];
-            for (var i = 0; i < schedule['h'].length; i++) {
-                for (var j = 0; j < schedule['m'].length; j++) {
-                    hm.push(zeroPad(schedule['h'][i]) + ':' + zeroPad(schedule['m'][j]));
+            hm = [];
+            for (i = 0; i < schedule.h.length; i++) {
+                for (j = 0; j < schedule.m.length; j++) {
+                    hm.push(zeroPad(schedule.h[i]) + ':' + zeroPad(schedule.m[j]));
                 }
             }
             if (hm.length < 2) {
                 outputText = $.i18n('at') + ' ' + hm[0];
             } else {
-                var lastVal = hm.pop();
+                lastVal = hm.pop();
                 outputText = $.i18n('at') + ' ' + hm.join(', ') + ' ' + $.i18n('and') + ' ' + lastVal;
             }
-            if (!schedule['d'] && !schedule['D']) {
+            if (!schedule.d && !schedule.D) {
                 outputText += ' ' + $.i18n('everyday') + ' ';
             }
         } else {
             // Otherwise, list out every specified hour/minute value.
 
-            if (schedule['h']) { // runs only at specific hours
-                if (schedule['m']) { // and only at specific minutes
+            if (schedule.h) { // runs only at specific hours
+                if (schedule.m) { // and only at specific minutes
                     if (withSeconds) {
-                        if (!schedule['s'] || schedule['s'].length === 60) {
-                            outputText += $.i18n('secondofevery') + ' ' + numberList(schedule['m']) + ' ' + $.i18n('minutepastthe') + ' ' + numberList(schedule['h']) + ' ' + $.i18n('hour');
+                        if (!schedule.s || schedule.s.length === 60) {
+                            outputText += $.i18n('secondofevery') + ' ' + numberList(schedule.m) + ' ' + $.i18n('minutepastthe') + ' ' + numberList(schedule.h) + ' ' + $.i18n('hour');
                         } else {
-                            outputText += numberList(schedule['s']) + ' ' + $.i18n('secondofevery') + ' ' +numberList(schedule['m']) + ' ' + $.i18n('minutepastthe') + ' ' + numberList(schedule['h']) + ' ' + $.i18n('hour');
+                            outputText += numberList(schedule.s) + ' ' + $.i18n('secondofevery') + ' ' + numberList(schedule.m) + ' ' + $.i18n('minutepastthe') + ' ' + numberList(schedule.h) + ' ' + $.i18n('hour');
                         }
                     } else {
-                        outputText += numberList(schedule['m']) + ' ' + $.i18n('minutepastthe') + ' ' + numberList(schedule['h']) + ' ' + $.i18n('hour');
+                        outputText += numberList(schedule.m) + ' ' + $.i18n('minutepastthe') + ' ' + numberList(schedule.h) + ' ' + $.i18n('hour');
                     }
                 } else { // specific hours, but every minute
                     if (withSeconds) {
-                        if (!schedule['s'] || schedule['s'].length === 60) {
-                            outputText += $.i18n('secondofevery') + ' ' + $.i18n('minuteof') + ' ' + numberList(schedule['h']) + ' ' + $.i18n('hour');
+                        if (!schedule.s || schedule.s.length === 60) {
+                            outputText += $.i18n('secondofevery') + ' ' + $.i18n('minuteof') + ' ' + numberList(schedule.h) + ' ' + $.i18n('hour');
                         } else {
-                            outputText += numberList(schedule['s']) + ' ' + $.i18n('secondofevery') + ' ' + $.i18n('minuteof') + ' ' + numberList(schedule['h']) + ' ' + $.i18n('hour');
+                            outputText += numberList(schedule.s) + ' ' + $.i18n('secondofevery') + ' ' + $.i18n('minuteof') + ' ' + numberList(schedule.h) + ' ' + $.i18n('hour');
                         }
                     } else {
-                        outputText += $.i18n('minuteof') + ' ' + numberList(schedule['h']) + ' ' + $.i18n('hour');
+                        outputText += $.i18n('minuteof') + ' ' + numberList(schedule.h) + ' ' + $.i18n('hour');
                     }
                 }
-            } else if (schedule['m']) { // every hour, but specific minutes
+            } else if (schedule.m) { // every hour, but specific minutes
                 if (withSeconds) {
-                    if (!schedule['s'] || schedule['s'].length === 60) {
-                        outputText += $.i18n('secondofevery') + ' ' + numberList(schedule['m']) + ' ' + $.i18n('minuteeveryhour');
+                    if (!schedule.s || schedule.s.length === 60) {
+                        outputText += $.i18n('secondofevery') + ' ' + numberList(schedule.m) + ' ' + $.i18n('minuteeveryhour');
                     } else {
-                        outputText += numberList(schedule['s']) + ' ' + $.i18n('secondofevery') + ' ' + numberList(schedule['m']) + ' ' + $.i18n('minuteeveryhour');
+                        outputText += numberList(schedule.s) + ' ' + $.i18n('secondofevery') + ' ' + numberList(schedule.m) + ' ' + $.i18n('minuteeveryhour');
                     }
                 } else {
-                    outputText += numberList(schedule['m']) + ' ' + $.i18n('minuteeveryhour');
+                    outputText += numberList(schedule.m) + ' ' + $.i18n('minuteeveryhour');
                 }
             } else if (withSeconds) {
-                if (!schedule['s'] || schedule['s'].length === 60) {
+                if (!schedule.s || schedule.s.length === 60) {
                     outputText += $.i18n('second');
                 } else {
-                    outputText += numberList(schedule['s']) + ' ' + $.i18n('second');
+                    outputText += numberList(schedule.s) + ' ' + $.i18n('second');
                 }
             } else { // cronspec has "*" for both hour and minute
                 outputText += $.i18n('minute');
             }
         }
 
-        if (schedule['D']) { // runs only on specific day(s) of month
-            outputText += ($.i18n('onthe') ? ' ' + $.i18n('onthe') + ' ' : ' ') + numberList(schedule['D']);
-            if (!schedule['M']) {
+        if (schedule.D) { // runs only on specific day(s) of month
+            outputText += ($.i18n('onthe') ? ' ' + $.i18n('onthe') + ' ' : ' ') + numberList(schedule.D);
+            if (!schedule.M) {
                 outputText += ' ' + $.i18n('ofeverymonth');
             }
         }
 
-        if (schedule['d']) { // runs only on specific day(s) of week
-            if (schedule['D']) {
+        if (schedule.d) { // runs only on specific day(s) of week
+            if (schedule.D) {
                 // if both day fields are specified, cron uses both; superuser.com/a/348372
                 outputText += ' ' + $.i18n('andevery') + ' ';
             } else {
                 outputText += ' ' + $.i18n('on') + ' ';
             }
-            outputText += dateList(schedule['d'], 'dow');
+            outputText += dateList(schedule.d, 'dow');
         }
 
-        if (schedule['M']) {
+        if (schedule.M) {
             // runs only in specific months; put this output last
-            outputText += ' ' + $.i18n('in') + ' ' + dateList(schedule['M'], 'mon');
+            outputText += ' ' + $.i18n('in') + ' ' + dateList(schedule.M, 'mon');
         }
 
         return outputText;

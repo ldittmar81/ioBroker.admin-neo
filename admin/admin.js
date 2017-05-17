@@ -1,4 +1,16 @@
-/* global systemLang, i18n */
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+/* global systemLang, i18n, getIPs, fillSelectCertificates, showMessage, fillUsers */
+
+'use strict';
 
 var oldBind;
 var oldSecure;
@@ -85,7 +97,7 @@ function load(settings, onChange) {
                             }
                         }
 
-                        if (val != newVal)
+                        if (val !== newVal)
                             $(this).val(newVal);
                     }
                 }
@@ -114,7 +126,7 @@ function save(callback) {
     var obj = {};
     $('.value').each(function () {
         var $this = $(this);
-        if ($this.attr('type') == 'checkbox') {
+        if ($this.attr('type') === 'checkbox') {
             obj[$this.attr('id')] = $this.prop('checked');
         } else {
             obj[$this.attr('id')] = $this.val();

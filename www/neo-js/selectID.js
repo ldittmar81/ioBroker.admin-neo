@@ -1,3 +1,15 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+/* global Storage, Infinity */
+
 /*
  Copyright 2014-2017 bluefox <dogafox@gmail.com>
  
@@ -239,6 +251,8 @@
         data.roomEnums = [];
         data.funcEnums = [];
 
+        var e;
+
         for (var id in objects) {
 
             if (isRoom) {
@@ -246,7 +260,7 @@
                     data.roomEnums.push(id);
                 }
                 if (objects[id].enums) {
-                    for (var e in objects[id].enums) {
+                    for (e in objects[id].enums) {
                         if (data.regexEnumRooms.test(e) && data.roomEnums.indexOf(e) === -1) {
                             data.roomEnums.push(e);
                         }
@@ -269,7 +283,7 @@
                     data.funcEnums.push(id);
                 }
                 if (objects[id].enums) {
-                    for (var e in objects[id].enums) {
+                    for (e in objects[id].enums) {
                         if (data.regexEnumFuncs.test(e) && data.funcEnums.indexOf(e) === -1) {
                             data.funcEnums.push(e);
                         }
@@ -324,7 +338,7 @@
             treeInsert(data, id, data.currentId === id);
 
             if (objects[id].enums) {
-                for (var e in objects[id].enums) {
+                for (e in objects[id].enums) {
                     if (objects[e] &&
                             objects[e].common &&
                             objects[e].common.members &&
@@ -586,27 +600,27 @@
     function clippyCopy(e) {
         var $temp = $('<input>');
         //$('body').append($temp);
-        $(this).append($temp);
-        $temp.val($(this).parent().data('clippy')).select();
+        $(e).append($temp);
+        $temp.val($(e).parent().data('clippy')).select();
         document.execCommand('copy');
         $temp.remove();
         e.preventDefault();
         e.stopPropagation();
     }
 
-    function clippyShow() {
-        if ($(this).hasClass('clippy')) {
+    function clippyShow(e) {
+        if ($(e).hasClass('clippy')) {
             var text = '<button class="btn btn-default clippy-button" ' +
-                    'role="button" title="' + $(this).data('copyToClipboard') + '" >' +
+                    'role="button" title="' + $(e).data('copyToClipboard') + '" >' +
                     '<i class="fa fa-fa-clipboard"></span></button>';
 
-            $(this).append(text);
-            $(this).find('.clippy-button').click(clippyCopy);
+            $(e).append(text);
+            $(e).find('.clippy-button').click(clippyCopy);
         }
     }
 
-    function clippyHide() {
-        $(this).find('.clippy-button').remove();
+    function clippyHide(e) {
+        $(e).find('.clippy-button').remove();
     }
 
     function installColResize(data, $dlg) {
@@ -614,7 +628,7 @@
             return;
         }
 
-        var data = $dlg.data('selectId');
+        data = $dlg.data('selectId');
         if (data.$tree.is(':visible')) {
             data.$tree.colResizable({
                 liveDrag: true,
@@ -658,8 +672,8 @@
         return states;
     }
 
-    function onQuickEditField(e) {
-        var $this = $(this);
+    function onQuickEditField(elem) {
+        var $this = $(elem);
         var id = $this.data('id');
         var attr = $this.data('name');
         var data = $this.data('selectId');
@@ -681,13 +695,13 @@
         } else {
             type = 'text';
         }
-        var text;
+        var text, e, t;
 
         if (attr === 'value') {
             states = getStates(data, id);
             if (states) {
                 text = '<select style="width: calc(100% - 50px); z-index: 2">';
-                for (var t in states) {
+                for (t in states) {
                     if (typeof states[t] !== 'string') {
                         continue;
                     }
@@ -698,14 +712,14 @@
         } else if (attr === 'room') {
             states = findRoomsForObjectAsIds(data, id) || [];
             text = '<select style="width: calc(100% - 50px); z-index: 2" multiple="multiple">';
-            for (var e = 0; e < data.roomEnums.length; e++) {
+            for (e = 0; e < data.roomEnums.length; e++) {
                 text += '<option value="' + data.roomEnums[e] + '" ' + (states.indexOf(data.roomEnums[e]) !== -1 ? 'selected' : '') + '>' + data.objects[data.roomEnums[e]].common.name + '</option>';
             }
             text += '</select>';
         } else if (attr === 'function') {
             states = findFunctionsForObjectAsIds(data, id) || [];
             text = '<select style="width: calc(100% - 50px); z-index: 2" multiple="multiple">';
-            for (var e = 0; e < data.funcEnums.length; e++) {
+            for (e = 0; e < data.funcEnums.length; e++) {
                 text += '<option value="' + data.funcEnums[e] + '" ' + (states.indexOf(data.funcEnums[e]) !== -1 ? 'selected' : '') + '>' + data.objects[data.funcEnums[e]].common.name + '</option>';
             }
             text += '</select>';
@@ -717,7 +731,7 @@
             }
             if (states) {
                 text = '<select style="width: calc(100% - 50px); z-index: 2">';
-                for (var t in states) {
+                for (t in states) {
                     text += '<option value="' + t + '">' + states[t] + '</option>';
                 }
                 text += '</select>';
@@ -893,14 +907,15 @@
                 buttons: data.buttonsDlg
             });
             if (data.zindex !== null) {
-                $('div[aria-describedby="' + $dlg.attr('id') + '"]').css({'z-index': data.zindex})
+                $('div[aria-describedby="' + $dlg.attr('id') + '"]').css({'z-index': data.zindex});
             }
         }
 
+        var name, i;
         // Store current filter
         var filter = {ID: $('#filter_ID_' + data.instance).val()};
         for (var u = 0; u < data.columns.length; u++) {
-            var name = data.columns[u];
+            name = data.columns[u];
             if (typeof name === 'object')
                 name = name.name;
             filter[name] = $('#filter_' + name + '_' + data.instance).val();
@@ -909,7 +924,7 @@
         var textRooms;
         if (data.columns.indexOf('room') !== -1) {
             textRooms = '<select id="filter_room_' + data.instance + '" class="filter_' + data.instance + '" style="padding: 0; width: 150px"><option value="">' + data.texts.all + '</option>';
-            for (var i = 0; i < data.roomEnums.length; i++) {
+            for (i = 0; i < data.roomEnums.length; i++) {
                 textRooms += '<option value="' + data.objects[data.roomEnums[i]].common.name + '">' + data.objects[data.roomEnums[i]].common.name + '</option>';
             }
             textRooms += '</select>';
@@ -923,7 +938,7 @@
         var textFuncs;
         if (data.columns.indexOf('function') !== -1) {
             textFuncs = '<select id="filter_function_' + data.instance + '" class="filter_' + data.instance + '" style="padding: 0; width: 150px"><option value="">' + data.texts.all + '</option>';
-            for (var i = 0; i < data.funcEnums.length; i++) {
+            for (i = 0; i < data.funcEnums.length; i++) {
                 textFuncs += '<option value="' + data.objects[data.funcEnums[i]].common.name + '">' + data.objects[data.funcEnums[i]].common.name + '</option>';
             }
             textFuncs += '</select>';
@@ -958,7 +973,7 @@
         text += '            <col width="400px"/>';
 
         for (c = 0; c < data.columns.length; c++) {
-            var name = data.columns[c];
+            name = data.columns[c];
             if (typeof name === 'object') {
                 name = name.name;
             }
@@ -1026,7 +1041,7 @@
         text += '               <td><table style="width: 100%"><tr><td style="width: 100%"><input style="width: 100%; padding: 0" type="text" id="filter_ID_' + data.instance + '" class="filter_' + data.instance + '"/></td><td style="vertical-align: top;"><button data-id="filter_ID_' + data.instance + '" class="filter_btn_' + data.instance + '"></button></td></tr></table></td>';
 
         for (c = 0; c < data.columns.length; c++) {
-            var name = data.columns[c];
+            name = data.columns[c];
             if (typeof name === 'object') {
                 name = name.name;
             }
@@ -1055,7 +1070,7 @@
 
                     t += '</select>';
 
-                    text += '<table cellpadding="0" cellspacing="0" style="border-spacing: 0 0"><tr><td>' + t + '</td>' + '<td><button id="filter_' + data.columns[c] + '_' + data.instance + '_btn"></button></td></tr></table>'
+                    text += '<table cellpadding="0" cellspacing="0" style="border-spacing: 0 0"><tr><td>' + t + '</td>' + '<td><button id="filter_' + data.columns[c] + '_' + data.instance + '_btn"></button></td></tr></table>';
                 }
                 text += '</td>';
             } else {
@@ -1075,7 +1090,7 @@
         text += '            <col ' + (data.firstMinWidth ? ('width="' + data.firstMinWidth + '"') : 'width="400px"') + '/>';
 
         for (c = 0; c < data.columns.length; c++) {
-            var name = data.columns[c];
+            name = data.columns[c];
             if (typeof name === 'object')
                 name = name.name;
             if (name === 'image') {
@@ -1228,8 +1243,7 @@
                 if (data.useNameAsId && data.objects[node.key] && data.objects[node.key].common && data.objects[node.key].common.name) {
                     $firstTD.find('.fancytree-title').html(data.objects[node.key].common.name);
                 }
-                var $elem;
-                var val;
+                var $elem, val;
                 for (var c = 0; c < data.columns.length; c++) {
                     var name = data.columns[c];
                     if (typeof name === 'object') {
@@ -1368,7 +1382,7 @@
                         var common = data.objects[node.key] ? data.objects[node.key].common || {} : {};
 
                         if (data.states && (data.states[node.key] || data.states[node.key + '.val'] !== undefined)) {
-                            var $elem = $tdList.eq(base);
+                            $elem = $tdList.eq(base);
                             var state = data.states[node.key];
                             var states = getStates(data, node.key);
                             if (!state) {
@@ -1445,7 +1459,7 @@
                             if (data.objects[node.key].common.role === 'button' && !data.expertMode) {
                                 $tdList.eq(base).html('<button data-id="' + node.key + '" class="select-button-push"></button>');
                             } else if (!data.objects[node.key].common || data.objects[node.key].common.type !== 'file') {
-                                var val = data.states[node.key];
+                                val = data.states[node.key];
                                 val = val ? val.val : '';
                                 $elem.data('old-value', val).data('type', common.type || typeof val);
 
@@ -1549,7 +1563,7 @@
                     } else
                     if (typeof data.columns[c].data === 'function') {
                         $elem = $tdList.eq(base);
-                        var val = data.columns[c].data(node.key, data.columns[c].name);
+                        val = data.columns[c].data(node.key, data.columns[c].name);
                         var title = '';
                         if (data.columns[c].title) {
                             title = data.columns[c].title(node.key, data.columns[c].name);
@@ -2032,7 +2046,7 @@
                     $('#filter_' + f + '_' + data.instance).val(filter[f]).trigger('change');
                 }
             } catch (err) {
-                console.error('Cannot apply filter: ' + err)
+                console.error('Cannot apply filter: ' + err);
             }
         }
 
@@ -2307,6 +2321,7 @@
             }
 
             for (var i = 0; i < this.length; i++) {
+                var tree;
                 var dlg = this[i];
                 var $dlg = $(dlg);
                 var data = $dlg.data('selectId');
@@ -2323,7 +2338,7 @@
 
                     if (data.inited && currentId !== undefined && (data.currentId !== currentId)) {
                         // Deactivate current line
-                        var tree = data.$tree.fancytree('getTree');
+                        tree = data.$tree.fancytree('getTree');
                         tree.visit(function (node) {
                             if (node.key === data.currentId) {
                                 node.setActive(false);
@@ -2350,7 +2365,7 @@
                     initTreeDialog($dlg);
                 } else {
                     if (data.selectedID) {
-                        var tree = data.$tree.fancytree('getTree');
+                        tree = data.$tree.fancytree('getTree');
                         tree.visit(function (node) {
                             if (node.key === data.selectedID) {
                                 node.setActive();

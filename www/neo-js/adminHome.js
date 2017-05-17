@@ -1,3 +1,19 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+/**
+ * @constructor
+ * @param {Object} main
+ * @returns {Home}  
+ */
 function Home(main) {
     "use strict";
 
@@ -26,13 +42,14 @@ function Home(main) {
 
                 var listUpdatable = [];
                 var listNew = [];
+                var adapter, obj;
 
                 if (installedList) {
-                    for (var adapter in installedList) {
+                    for (adapter in installedList) {
                         if (!installedList.hasOwnProperty(adapter)) {
                             continue;
                         }
-                        var obj = installedList[adapter];
+                        obj = installedList[adapter];
                         if (!obj || obj.controller || adapter === 'hosts' || !obj.version) {
                             continue;
                         }
@@ -50,18 +67,18 @@ function Home(main) {
                 fillList('update', listUpdatable, repository, installedList);
 
                 var now = new Date();
-                for (var adapter in repository) {
+                for (adapter in repository) {
                     if (!repository.hasOwnProperty(adapter)) {
                         continue;
                     }
-                    var obj = repository[adapter];
+                    obj = repository[adapter];
                     if (!obj || obj.controller) {
                         continue;
                     }
                     if (installedList && installedList[adapter]) {
                         continue;
                     }
-                    if (!obj.published || !((now - new Date(obj.published)) < 3600000 * 24 * 31)) {
+                    if (obj.published && ((now - new Date(obj.published)) < 3600000 * 24 * 31)) {
                         continue;
                     }
                     listNew.push(adapter);
@@ -81,8 +98,8 @@ function Home(main) {
     };
 
     this.getForumData = function (data) {
-        if (data['results'] && data['results'][0]) {
-            var $forumContent = $($.parseXML(data['results'][0]));
+        if (data.results && data.results[0]) {
+            var $forumContent = $($.parseXML(data.results[0]));
 
             $('#forumTitle').text($forumContent.find('title:first').text());
             $('#forumTime').text($forumContent.find('updated:first').text());

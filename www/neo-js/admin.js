@@ -1,24 +1,24 @@
 /* jshint -W097 */// jshint strict:true
 /* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
 /* global io:false */
 /* global jQuery:false */
-/* jslint browser:true */
-/* jshint browser:true */
-/* global bootbox */
-/* global systemLang */
-/* global storage */
-/* global i18n */
-/* global availableLanguages */
+/* global $:false */
+/* global systemLang:true */
+/* global i18n, showdown, storage, availableLanguages  */
 /* global toggleFullScreen, $BODY, $LEFT_COL, $SIDEBAR_FOOTER, $FOOTER, $NAV_MENU */
-/* global showdown */
+/* global restartFunctions, changeLanguage, bootbox, Element */
+/* global Home, Adapters, Instances, Logs, States, Objects, Events, Hosts */
+/* global Enums, System, Info, Users, Groups */
 
 'use strict';
 
 Array.prototype.remove = function () {
-    var what;
-    var a = arguments;
-    var L = a.length;
-    var ax;
+    var what, a = arguments, L = a.length, ax;
     while (L && this.length) {
         what = a[--L];
         while ((ax = this.indexOf(what)) !== -1) {
@@ -120,26 +120,25 @@ var adapterRedirect = function (redirect, timeout) {
             cmdExec: function (host, cmd, callback) {
                 host = host || main.currentHost;
                 $stdout.val('');
-                var title = cmd;
+                var title = cmd, tmp;
                 if (title.startsWith('add')) {
-                    var tmp = title.split(' ');
+                    tmp = title.split(' ');
                     title = $.i18n('addCommandTitle', tmp[1]);
                 } else if (title.startsWith('del')) {
-                    var tmp = title.split(' ');
+                    tmp = title.split(' ');
                     title = $.i18n('delCommandTitle', tmp[1]);
                 } else if (title === "upgrade self") {
                     title = $.i18n('upgradeSelfCommandTitle', host);
                 } else if (title.startsWith('upgrade') && title.indexOf('@') === -1) {
-                    var tmp = title.split(' ');
+                    tmp = title.split(' ');
                     title = $.i18n('upgradeCommandTitle', tmp[1]);
                 } else if (title.startsWith('upgrade') && title.indexOf('@') !== -1) {
-                    var tmp = title.split(' ');
+                    tmp = title.split(' ');
                     tmp = tmp[1].split('@');
                     title = $.i18n('upgradeVersionCommandTitle', tmp[0], tmp[1]);
                 } else if (title === "_restart") {
                     title = $.i18n('restartCommandTitle', host);
                 } else if (title.startsWith('url')) {
-                    var tmp;
                     if (title.indexOf('--debug') === -1) {
                         tmp = title.substring(title.lastIndexOf(" ") + 1, title.length);
                         title = $.i18n('urlInstallCommandTitle', tmp);
@@ -673,9 +672,7 @@ var adapterRedirect = function (redirect, timeout) {
             initAllDialogs();
 
             // extract all additional instances
-            var text = '';
-            var list = [];
-            var showMenus = '';
+            var text = '', list = [], showMenus = '', link = '', name = '', div = '', a;
 
             var addMenus = [];
             var otherMenus = [];
@@ -714,7 +711,7 @@ var adapterRedirect = function (redirect, timeout) {
                         continue;
                     }
                     var instance = tmp[3];
-                    var link = object.common.localLinks || object.common.localLink || '';
+                    link = object.common.localLinks || object.common.localLink || '';
                     var url = link ? main.menus.instances.replaceInLink(link, adapter, instance) : '';
                     if (typeof url === 'object') {
                         url = url.__first;
@@ -745,9 +742,9 @@ var adapterRedirect = function (redirect, timeout) {
             });
 
             // Look for adapter menus
-            for (var a = 0; a < addMenus.length; a++) {
-                var name = main.objects[addMenus[a]].common.name;
-                var link = main.objects[addMenus[a]].common.adminTab.link || '/adapter/' + main.objects[addMenus[a]].common.name + '/tab.html';
+            for (a = 0; a < addMenus.length; a++) {
+                name = main.objects[addMenus[a]].common.name;
+                link = main.objects[addMenus[a]].common.adminTab.link || '/adapter/' + main.objects[addMenus[a]].common.name + '/tab.html';
                 var parts = addMenus[a].split('.');
                 var buttonName;
 
@@ -799,7 +796,7 @@ var adapterRedirect = function (redirect, timeout) {
 
                     //noinspection JSJQueryEfficiency
                     if (!$('#' + name).length) {
-                        var div = '<div id="custom-' + name + '-menu" class="tab-custom ' + (isReplace ? 'link-replace' : '') + '" data-adapter="' + parts[2] + '" data-instance="' + parts[3] + '" data-src="' + link + '">' +
+                        div = '<div id="custom-' + name + '-menu" class="tab-custom ' + (isReplace ? 'link-replace' : '') + '" data-adapter="' + parts[2] + '" data-instance="' + parts[3] + '" data-src="' + link + '">' +
                                 '<iframe class="iframe-in-tab" style="border: 0; solid #FFF; display:block; left: 0; top: 0; width: 100%;"></iframe></div>';
                         $(div).appendTo($('#hiddenObjects'));
                     }
@@ -812,16 +809,16 @@ var adapterRedirect = function (redirect, timeout) {
             // Look for other menus
             if (otherMenus.length > 0) {
                 $('#child_others_parentmenu').removeClass("hidden");
-                for (var a = 0; a < otherMenus.length; a++) {
-                    var name = otherMenus[a].title + '-' + otherMenus[a].instance;
-                    var link = otherMenus[a].url;
+                for (a = 0; a < otherMenus.length; a++) {
+                    name = otherMenus[a].title + '-' + otherMenus[a].instance;
+                    link = otherMenus[a].url;
 
                     var child = '<li>';
                     child += '<a class="main-menu" href="#' + name + '" id="menuitem-' + name + '">';
                     child += '<span id="menutitle-' + name + '" style="text-transform: capitalize;">' + otherMenus[a].title + '</span></a></li>';
                     $('#child_others_menu').append(child);
 
-                    var div = '<div id="custom-' + name + '-menu" class="tab-custom" data-adapter="' + otherMenus[a].title + '" data-instance="' + otherMenus[a].instance + '" data-src="' + link + '">' +
+                    div = '<div id="custom-' + name + '-menu" class="tab-custom" data-adapter="' + otherMenus[a].title + '" data-instance="' + otherMenus[a].instance + '" data-src="' + link + '">' +
                             '<iframe class="iframe-in-tab" style="border: 0; solid #FFF; display:block; left: 0; top: 0; width: 100%;"></iframe></div>';
                     $(div).appendTo($('#hiddenObjects'));
 
@@ -830,7 +827,7 @@ var adapterRedirect = function (redirect, timeout) {
             }
 
             $('.tab-custom').each(function () {
-                var name = $(this).attr('id').substring(7, $(this).attr('id').length - 5);
+                name = $(this).attr('id').substring(7, $(this).attr('id').length - 5);
                 if (list.indexOf(name) === -1) {
                     $(this).remove();
                 }
@@ -1009,6 +1006,9 @@ var adapterRedirect = function (redirect, timeout) {
         // ----------------------------- Objects show and Edit ------------------------------------------------
         function getObjects(callback) {
             main.socket.emit('getObjects', function (err, res) {
+                if (err) {
+                    console.log(err);
+                }
                 setTimeout(function () {
                     var obj;
                     main.objects = res;
@@ -1086,6 +1086,9 @@ var adapterRedirect = function (redirect, timeout) {
         function getStates(callback) {
             menus.states.clear();
             main.socket.emit('getStates', function (err, res) {
+                if (err) {
+                    console.log(err);
+                }
                 main.states = res;
                 if (typeof callback === 'function') {
                     setTimeout(function () {
@@ -1171,8 +1174,7 @@ var adapterRedirect = function (redirect, timeout) {
             if (obj && id.match(/^system\.adapter\.[\w-]+\.[0-9]+$/)) {
                 if (obj.common &&
                         obj.common.adminTab &&
-                        !obj.common.adminTab.ignoreConfigUpdate
-                        ) {
+                        !obj.common.adminTab.ignoreConfigUpdate) {
                     initMenus();
                 }
 
@@ -1293,13 +1295,22 @@ var adapterRedirect = function (redirect, timeout) {
                     }
                 });
                 main.socket.emit('getUserPermissions', function (err, acl) {
+                    if (err) {
+                        console.log(err);
+                    }
                     main.acl = acl;
                     // Read system configuration
                     main.socket.emit('getObject', 'system.config', function (errConfig, data) {
                         main.systemConfig = data;
                         main.socket.emit('getObject', 'system.repositories', function (errRepo, repo) {
+                            if (errRepo) {
+                                console.log(errRepo);
+                            }
                             main.systemDialog.systemRepos = repo;
                             main.socket.emit('getObject', 'system.certificates', function (errCerts, certs) {
+                                if (errCerts) {
+                                    console.log(errCerts);
+                                }
                                 setTimeout(function () {
                                     main.systemDialog.systemCerts = certs;
                                     if (errConfig === 'permissionError') {
@@ -1595,9 +1606,7 @@ function assign(obj, prop, value) {
     if (prop.length > 1) {
         var e = prop.shift();
         assign(obj[e] =
-                Object.prototype.toString.call(obj[e]) === "[object Object]"
-                ? obj[e]
-                : {},
+                Object.prototype.toString.call(obj[e]) === "[object Object]" ? obj[e] : {},
                 prop,
                 value);
     } else {
@@ -1615,20 +1624,20 @@ function convertToEnumTree(obj, key) {
             var common;
             var thisElement = elem[k];
             if (Object.prototype.toString.call(thisElement) === '[object Object]') {
-                common = thisElement['common'];
+                common = thisElement.common;
             }
 
-            treeElement['title'] = common ? common['name'] : k;
-            treeElement['desc'] = common ? common['desc'] : '';
+            treeElement.title = common ? common.name : k;
+            treeElement.desc = common ? common.desc : '';
             treeElement['object-non-deletable'] = common ? (common['object-non-deletable'] === undefined ? false : common['object-non-deletable']) : false;
-            treeElement['key'] = k;
-            treeElement['folder'] = true;
+            treeElement.key = k;
+            treeElement.folder = true;
 
             if (common && common.members) {
                 if (common.members.length > 0) {
-                    treeElement['members'] = common.members.length;
+                    treeElement.members = common.members.length;
                 }
-                treeElement['children'] = convertToEnumTree(elem, k);
+                treeElement.children = convertToEnumTree(elem, k);
             }
 
             converted.push(treeElement);
@@ -1643,13 +1652,13 @@ function convertToObjectTree(obj, key) {
     for (var k in elem) {
         if (k.match(/^system\.|^iobroker\.|^_|^[\w-]+$|^enum\.|^[\w-]+\.admin|^script\./)) {
             var treeElement = {};
-            treeElement['title'] = k;
-            treeElement['key'] = k;
+            treeElement.title = k;
+            treeElement.key = k;
             if (Object.prototype.toString.call(elem[k]) === '[object Object]') {
-                treeElement['folder'] = true;
-                treeElement['children'] = convertToObjectTree(elem, k);
+                treeElement.folder = true;
+                treeElement.children = convertToObjectTree(elem, k);
             } else {
-                treeElement['folder'] = false;
+                treeElement.folder = false;
             }
             converted.push(treeElement);
         }

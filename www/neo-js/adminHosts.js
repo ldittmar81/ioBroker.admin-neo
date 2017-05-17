@@ -1,3 +1,19 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+/**
+ * @constructor
+ * @param {Object} main
+ * @returns {Hosts}  
+ */
 function Hosts(main) {
     'use strict';
 
@@ -213,7 +229,7 @@ function Hosts(main) {
                 break;
             case "freebsd":
                 icon = "fa-sym-freebsd";
-                break;            
+                break;
             default:
                 icon = "fa-server";
         }
@@ -236,14 +252,14 @@ function Hosts(main) {
 
         if (!this.main.objectsLoaded) {
             setTimeout(function () {
-                that.init(update, updateRepo, callback)
+                that.init(update, updateRepo, callback);
             }, 250);
             return;
         }
 
         $hostsContainer.html('');
-
-        for (var i = 0; i < that.list.length; i++) {
+        var i;
+        for (i = 0; i < that.list.length; i++) {
             showOneHost(i);
         }
 
@@ -258,7 +274,7 @@ function Hosts(main) {
         var host = that.main.currentHost;
         if (!host) {
             // find alive host
-            for (var i = 0; i < that.list.length; i++) {
+            for (i = 0; i < that.list.length; i++) {
                 if (that.main.states[that.list[i].id + '.alive'] && that.main.states[that.list[i].id + '.alive'].val) {
                     host = that.list[i].id;
                     break;
@@ -267,7 +283,7 @@ function Hosts(main) {
         }
 
         that.main.menus.adapters.getAdaptersInfo(host, update, updateRepo, function (repository, installedList) {
-            if (!installedList || !installedList.hosts){
+            if (!installedList || !installedList.hosts) {
                 return;
             }
 
@@ -288,7 +304,7 @@ function Hosts(main) {
                             }
                         }
                         $(this).find('.installed').text(availableVersion).removeClass('hidden');
-                    }                    
+                    }
                 }
             });
 

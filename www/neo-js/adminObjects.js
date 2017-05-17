@@ -1,3 +1,20 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
+/**
+ * 
+ * @constructor
+ * @param {Object} main
+ * @returns {Objects}
+ */
 function Objects(main) {
     'use strict';
 
@@ -149,9 +166,10 @@ function Objects(main) {
             return;
         }
 
+        var count;
         var enumId = enumIds.pop();
         if (that.main.objects[enumId] && that.main.objects[enumId].common) {
-            var count = 0;
+            count = 0;
             if (that.main.objects[enumId].common.members && that.main.objects[enumId].common.members.length) {
                 var pos = that.main.objects[enumId].common.members.indexOf(id);
                 if (pos !== -1 && newArray.indexOf(enumId) === -1) {
@@ -490,7 +508,7 @@ function Objects(main) {
                     for (var _attr in sett) {
                         if (commons[inst][_attr] === undefined) {
                             commons[inst][_attr] = sett[_attr];
-                        } else if (commons[inst][_attr] != sett[_attr]) {
+                        } else if (commons[inst][_attr] !== sett[_attr]) {
                             commons[inst][_attr] = '__different__';
                         }
                     }
@@ -507,7 +525,7 @@ function Objects(main) {
                     for (var attr in _default) {
                         if (commons[inst][attr] === undefined) {
                             commons[inst][attr] = _default[attr];
-                        } else if (commons[inst][attr] != _default[attr]) {
+                        } else if (commons[inst][attr] !== _default[attr]) {
                             commons[inst][attr] = '__different__';
                         }
                     }
@@ -628,10 +646,10 @@ function Objects(main) {
                                     '<td>' + (res[i].from || '').replace('system.adapter.', '').replace('system.', '') + '</td>' +
                                     '<td>' + main.formatDate(res[i].ts) + '</td>' +
                                     '<td>' + main.formatDate(res[i].lc) + '</td>' +
-                                    '</tr>\n'
+                                    '</tr>\n';
                         }
                     } else {
-                        text = '<tr><td colspan="5" style="text-align: center">' + $.i18n('No data') + '</td></tr>'
+                        text = '<tr><td colspan="5" style="text-align: center">' + $.i18n('No data') + '</td></tr>';
                     }
                     $('#grid-history-body').html(text)
                             .data('odd', true);

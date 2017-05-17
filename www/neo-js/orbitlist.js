@@ -1,4 +1,16 @@
+/* jshint -W097 */// jshint strict:true
+/* jslint vars: true */
+/* jslint browser:true */
+/* jslint devel:true */
+/* jshint browser:true */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+
 (function ($) {
+    'use strict';
     // jQuery extension: reverse jQuery element order
     jQuery.fn.reverse = [].reverse;
 
@@ -299,7 +311,7 @@
                 event.stopPropagation();
             };
 
-            if (settings['onhover']) {
+            if (settings.onhover) {
                 core.find('li').mouseover(event_handler);
             } else {
                 core.find('li').click(event_handler);

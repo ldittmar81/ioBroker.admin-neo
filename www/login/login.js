@@ -1,12 +1,17 @@
 /* jshint -W097 */// jshint strict:true
 /* jslint vars: true */
-/* global jQuery:false */
 /* jslint browser:true */
+/* jslint devel:true */
 /* jshint browser:true */
-/* global i18n */
-/* global systemLang */
+/* jshint devel:true */
+/* jshint jquery:true */
+/* global io:false */
+/* global jQuery:false */
+/* global $:false */
+/* global i18n, systemLang */
 
-$(function () {   
+$(function () {
+    'use strict';
 
     $('#submit').on('click', function () {
         $('#loginForm').submit();
@@ -21,7 +26,7 @@ $(function () {
         if (window.location.search.indexOf('error') !== -1) {
             $('#error').val($.i18n('wrong_key')).show();
         }
-        
+
         $("[data-i18n]").i18n();
     });
 
