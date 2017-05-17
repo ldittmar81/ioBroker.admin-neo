@@ -1,0 +1,14 @@
+{
+    "ignore": [
+	"**/lib/**",
+	"**/www/js/**",
+	"**/www/lib/**",
+	"**/www/css/**",
+	"**/www/neo-lib/**"
+    ], 
+    "test": [
+        "**/test/**",
+        "**/tasks/**"
+    ],
+    "packageJsonLocation": "package.json"
+}
