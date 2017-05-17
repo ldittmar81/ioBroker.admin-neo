@@ -676,6 +676,9 @@ function Instances(main) {
         }
 
         this.main.socket.emit('getObject', 'system.adapter.' + parts[0], function (err, obj) {
+            if(err){
+                console.log(err);
+            }
             if (obj) {
                 setTimeout(function () {
                     var link;
@@ -737,6 +740,9 @@ function Instances(main) {
         }
 
         this.main.socket.emit('getObject', 'system.adapter.' + parts[0], function (err, obj) {
+            if(err){
+                console.log(err);
+            }
             if (obj && link) {
                 if (parts[1] === 'secure') {
                     link = link.replace('%' + _var + '%', obj.native[parts[1]] ? 'https' : 'http');

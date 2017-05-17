@@ -107,6 +107,15 @@ function Logs(main) {
                 alert($.i18n('log-copy-error'), 'error');
             });
 
+            if (that.main.isServiceWorker) {
+                $('#log-subscribe').prop('disabled', false);
+                if (main.isLogSubscribed) {
+                    $('#log-subscribe').removeClass('btn-default').addClass('btn-primary').changeTooltip($.i18n('unsubscribeLog'));
+                } else {
+                    $('#log-subscribe').addClass('btn-default').removeClass('btn-primary').changeTooltip($.i18n('subscribeLog'));
+                }
+            }
+
             $('#log-outer').find('[data-i18n]').i18n();
             $('#log-outer').bootstrapTable();
 
@@ -242,7 +251,7 @@ function Logs(main) {
         if (message.severity === 'error') {
             $('a[href="#tab-log"]').addClass('errorLog');
         }
-        
+
         var text = '<tr id="log-line-' + (this.logLinesStart + this.logLinesCount) + '" class="log-line log-severity-' + message.severity + ' ' + (from ? 'log-from-' + from : '') + '" style="' + visible + '">';
         text += '<td class="log-column-1">' + (message.from || '') + '</td>';
         text += '<td class="log-column-2">' + this.main.formatDate(message.ts) + '</td>';

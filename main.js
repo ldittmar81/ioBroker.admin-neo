@@ -51,17 +51,13 @@ if (process.env.GCM_API_KEY) {
     webPush.setGCMAPIKey(process.env.GCM_API_KEY);
 }
 
-function sendNotification(endpoint) {
+function sendNotification(endpoint, msg) {
     webPush.sendNotification({
         endpoint: endpoint
-    }).catch(function () {
+    }, msg).catch(function () {
         subscriptions.splice(subscriptions.indexOf(endpoint), 1);
     });
 }
-
-setInterval(function () {
-    subscriptions.forEach(sendNotification);
-}, 10000);
 
 function isSubscribed(endpoint) {
     return (subscriptions.indexOf(endpoint) >= 0);
@@ -202,6 +198,11 @@ adapter.on('unload', function (callback) {
 
 adapter.on('log', function (obj) {
     // obj = {message: msg, severity: level, from: this.namespace, ts: (new Date()).getTime()}
+    if(obj.severity === "error"){
+        for(var endpoint in subscriptions){
+            sendNotification(endpoint, obj.message);
+        }       
+    }
     if (webServer && webServer.io && webServer.io.sockets) {
         // TODO Build in some threshold
         webServer.io.sockets.emit('log', obj);
@@ -321,6 +322,9 @@ function writeUpdateInfo(sources) {
 // to do => remove it later, when all repositories patched.
 function patchRepos(callback) {
     adapter.getForeignObject('system.repositories', function (err, obj) {
+        if (err) {
+            console.log(err);
+        }
         var changed = false;
         if (obj && obj.native && obj.native.repositories) {
             // default link should point to stable
@@ -369,6 +373,9 @@ function main() {
     if (adapter.config.secure) {
         // Load certificates
         adapter.getCertificates(function (err, certificates, leConfig) {
+            if (err) {
+                console.log(err);
+            }
             adapter.config.certificates = certificates;
             adapter.config.leConfig = leConfig;
             webServer = initWebServer(adapter.config);
@@ -397,6 +404,9 @@ function main() {
 
 function addUser(user, pw, options, callback) {
     adapter.getForeignObject('system.user.' + user, options, function (err, obj) {
+        if (err) {
+            console.log(err);
+        }
         if (obj) {
             if (typeof callback === 'function') {
                 callback('User yet exists');
@@ -459,6 +469,9 @@ function addGroup(group, desc, acl, options, callback) {
     group = group.substring(0, 1).toLowerCase() + group.substring(1);
 
     adapter.getForeignObject('system.group.' + group, options, function (err, obj) {
+        if (err) {
+            console.log(err);
+        }
         if (obj) {
             if (callback) {
                 callback('Group yet exists');
@@ -785,6 +798,9 @@ function initWebServer(settings) {
 function getData() {
     adapter.log.info('requesting all states');
     adapter.getForeignStates('*', function (err, res) {
+        if (err) {
+            console.log(err);
+        }
         adapter.log.info('received all states');
         states = res;
     });
@@ -808,6 +824,9 @@ function getUserFromSocket(socket, callback) {
         if (socket.conn.request.sessionID) {
             wait = true;
             store.get(socket.conn.request.sessionID, function (err, obj) {
+                if (err) {
+                    console.log(err);
+                }
                 if (obj && obj.passport && obj.passport.user) {
                     if (callback) {
                         callback(null, obj.passport.user ? 'system.user.' + obj.passport.user : '');
@@ -835,6 +854,9 @@ function disableEventThreshold(readAll) {
         setTimeout(function () {
             if (readAll) {
                 adapter.getForeignStates('*', function (err, res) {
+                    if (err) {
+                        console.log(err);
+                    }
                     adapter.log.info('received all states');
                     for (var id in res) {
                         if (res.hasOwnProperty(id) && JSON.stringify(states[id]) !== JSON.stringify(res[id])) {
@@ -1093,6 +1115,9 @@ function socketEvents(socket) {
     socket.on('getHostByIp', function (ip, callback) {
         if (updateSession(socket) && checkPermissions(socket, 'getHostByIp', ip)) {
             adapter.objects.getObjectView('system', 'host', {}, {user: this._acl.user}, function (err, data) {
+                if (err) {
+                    console.log(err);
+                }
                 if (data.rows.length) {
                     for (var i = 0; i < data.rows.length; i++) {
                         if (data.rows[i].value.common.hostname === ip) {
@@ -1339,6 +1364,9 @@ function onAuthorizeFail(data, message, error, accept) {
 function updateRegister() {
     adapter.log.info('Request actual repository...');
     adapter.getForeignObject('system.config', function (err, data) {
+        if (err) {
+            console.log(err);
+        }
         if (data && data.common) {
             adapter.sendToHost(adapter.host, 'getRepository', {
                 repo: data.common.activeRepo,

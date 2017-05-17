@@ -271,11 +271,11 @@ function confirmMessage(message, title, icon, buttons, callback) {
 function getObject(id, callback) {
     socket.emit('getObject', id, function (err, res) {
         if (!err && res) {
-            if (callback){
+            if (callback) {
                 callback(err, res);
             }
         } else {
-            if (callback){
+            if (callback) {
                 callback(null);
             }
         }
@@ -285,11 +285,11 @@ function getObject(id, callback) {
 function getState(id, callback) {
     socket.emit('getState', id, function (err, res) {
         if (!err && res) {
-            if (callback){
+            if (callback) {
                 callback(err, res);
             }
         } else {
-            if (callback){
+            if (callback) {
                 callback(null);
             }
         }
@@ -301,16 +301,16 @@ function getEnums(_enum, callback) {
         if (!err && res) {
             var _res = {};
             for (var i = 0; i < res.rows.length; i++) {
-                if (res.rows[i].id === 'enum.' + _enum){
+                if (res.rows[i].id === 'enum.' + _enum) {
                     continue;
                 }
                 _res[res.rows[i].id] = res.rows[i].value;
             }
-            if (callback){
+            if (callback) {
                 callback(null, _res);
             }
         } else {
-            if (callback){
+            if (callback) {
                 callback(err, []);
             }
         }
@@ -351,6 +351,9 @@ function getUsers(callback) {
 
 function fillUsers(elemId, current, callback) {
     getUsers(function (err, users) {
+        if (err) {
+            console.log(err);
+        }
         var text = '';
         for (var u in users) {
             text += '<option value="' + u + '" ' + ((current === u) ? 'selected' : '') + ' >' + users[u].common.name[0].toUpperCase() + users[u].common.name.substring(1) + '</option>\n';
@@ -487,6 +490,9 @@ function getIsAdapterAlive(_adapter, callback) {
         _adapter = null;
     }
     getState('system.adapter.' + (_adapter || adapter) + '.' + instance + '.alive', function (err, obj) {
+        if (err) {
+            console.log(err);
+        }
         if (!obj || !obj.val) {
             callback(false);
         } else {
@@ -852,6 +858,9 @@ function editTable(tabId, cols, values, top, onChange) {
 
     if (cols.indexOf('room') !== -1) {
         getEnums('rooms', function (err, list) {
+            if (err) {
+                console.log(err);
+            }
             return _editTable(tabId, cols, values, list, top, onChange);
         });
     } else {
@@ -962,24 +971,22 @@ function values2table(divId, values, onChange, onReady) {
         $add.button({
             icons: {primary: 'ui-icon-plus'},
             text: false
-        })
-                //.css({width: '1em', height: '1em'})
-                .click(function () {
-                    var $table = $div.find('.table-values');
-                    var values = $table.data('values');
-                    var names = $table.data('names');
-                    var obj = {};
-                    for (var i = 0; i < names.length; i++) {
-                        if (!names[i])
-                            continue;
-                        obj[names[i].name] = names[i].def;
-                    }
-                    values.push(obj);
-                    onChange && onChange();
-                    setTimeout(function () {
-                        values2table(divId, values, onChange, onReady);
-                    }, 100);
-                });
+        }).click(function () {
+            var $table = $div.find('.table-values');
+            var values = $table.data('values');
+            var names = $table.data('names');
+            var obj = {};
+            for (var i = 0; i < names.length; i++) {
+                if (!names[i])
+                    continue;
+                obj[names[i].name] = names[i].def;
+            }
+            values.push(obj);
+            onChange && onChange();
+            setTimeout(function () {
+                values2table(divId, values, onChange, onReady);
+            }, 100);
+        });
     }
 
     if (values) {
@@ -990,6 +997,9 @@ function values2table(divId, values, onChange, onReady) {
         // load rooms
         if (!$table.data('rooms') && $table.find('th[data-name="room"]').length) {
             getEnums('rooms', function (err, list) {
+                if (err) {
+                    console.log(err);
+                }
                 var result = {};
                 result[$.i18n('none')] = '';
                 var nnames = [];
@@ -1017,6 +1027,9 @@ function values2table(divId, values, onChange, onReady) {
         // load functions
         if (!$table.data('functions') && $table.find('th[data-name="func"]').length) {
             getEnums('functions', function (err, list) {
+                if (err) {
+                    console.log(err);
+                }
                 var result = {};
                 result[$.i18n('none')] = '';
                 var nnames = [];
@@ -1219,19 +1232,19 @@ function values2table(divId, values, onChange, onReady) {
                             var id = $(this).data('index');
                             var elem = values[id];
                             /*
-                            if (typeof editLine === 'function') {
-                                setTimeout(function () {
-                                    editLine(id, JSON.parse(JSON.stringify(values[id])), function (err, id, newValues) {
-                                        if (!err) {
-                                            if (JSON.stringify(values[id]) !== JSON.stringify(newValues)) {
-                                                onChange && onChange();
-                                                values[id] = newValues;
-                                                _values2table(id, values, onChange, onReady);
-                                            }
-                                        }
-                                    });
-                                }, 100);
-                            }*/
+                             if (typeof editLine === 'function') {
+                             setTimeout(function () {
+                             editLine(id, JSON.parse(JSON.stringify(values[id])), function (err, id, newValues) {
+                             if (!err) {
+                             if (JSON.stringify(values[id]) !== JSON.stringify(newValues)) {
+                             onChange && onChange();
+                             values[id] = newValues;
+                             _values2table(id, values, onChange, onReady);
+                             }
+                             }
+                             });
+                             }, 100);
+                             }*/
                         });
             }
         });

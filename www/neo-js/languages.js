@@ -9,6 +9,8 @@
 /* global jQuery:false */
 /* global $:false */
 
+'use strict';
+
 var availableLanguages = {'de': 'Deutsch', 'en': 'English', 'nl': 'Dutch', 'pt': 'Português', 'ru': 'русский'};
 
 var systemLang = navigator.language || navigator.userLanguage;
