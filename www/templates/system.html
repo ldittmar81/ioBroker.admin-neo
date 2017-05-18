@@ -69,9 +69,9 @@
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_dateFormat" class="form-control system-settings value">
-                                            <option value="DD.MM.YYYY">DD.MM.YYYY</option>
-                                            <option value="DD.MM.YY">DD.MM.YY</option>
-                                            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                            <option data-i18="DD.MM.YYYY" value="DD.MM.YYYY">DD.MM.YYYY</option>
+                                            <option data-i18="DD.MM.YY"   value="DD.MM.YY">DD.MM.YY</option>
+                                            <option data-i18="DD/MM/YYYY" value="DD/MM/YYYY">DD/MM/YYYY</option>
                                         </select>
                                     </div>
                                 </div>
@@ -82,8 +82,8 @@
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_isFloatComma" class="form-control system-settings value">
-                                            <option value="true" >comma</option>
-                                            <option value="false">point</option>
+                                            <option value="true" data-i18="system-comma" >comma</option>
+                                            <option value="false"data-i18="system-point" >point</option>
                                         </select>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_country" class="form-control system-settings value" data-live-search="true">
-                                            <option value="">Please select country</option>
+                                            <option data-i18="select-country" value="">Please select country</option>
                                             <option value="Afghanistan">Afghanistan</option>
                                             <option value="Albania">Albania</option>
                                             <option value="Algeria">Algeria</option>
@@ -166,7 +166,7 @@
                                             <option value="Congo">Congo</option>
                                             <option value="Cook Islands">Cook Islands</option>
                                             <option value="Costa Rica">Costa Rica</option>
-                                            <option>Croatia (Hrvatska)</option>
+                                            <option value="Croatia">Croatia (Hrvatska)</option>
                                             <option value="Cuba">Cuba</option>
                                             <option value="Cyprus">Cyprus</option>
                                             <option value="Czech Republic">Czech Republic</option>
@@ -428,48 +428,73 @@
                         </div>
 
                         <div id="tab-system-letsencrypt" role="tabpanel" class="tab-pane fade">
-                            <p>letsnecrypt_help</p>
-                            <table>
-                                <tr>
-                                    <td><label for="system_le_email">Email for account:</label></td>
-                                    <td><input id="system_le_email" class="system-le-settings value" data-name="email"/></td>
-                                    <td>letsnecrypt_help_email</td>
-                                </tr>
-                                <tr>
-                                    <td><label for="system_le_domains">Domains:</label></td>
-                                    <td><input id="system_le_domains" class="system-le-settings value" data-name="domains"/></td>
-                                    <td>letsnecrypt_help_domains</td>
-                                </tr>
-                                <tr>
-                                    <td><label for="system_le_path">Path to storage:</label></td>
-                                    <td><input id="system_le_path" class="system-le-settings value" data-name="path"/></td>
-                                    <td>letsnecrypt_help_path</td>
-                                </tr>
-                            </table>
+                            <div class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-10" data-i18n="letsencrypt-help-text">letsnecrypt_help</div>
+                                </div>
+                                <div class="form-group  form-group-with-help">
+                                    <label for="system_le_email" class="col-sm-2 control-label">
+                                        <span data-i18="system_le_email">Email for account</span>:
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="system_le_email" data-name="email" class="form-control system-le-settings value" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div  class="col-sm-10" data-i18n="letsencrypt-help-email">letsnecrypt_help_email</div>
+                                </div>
+                                <div class="form-group  form-group-with-help">
+                                    <label for="system_le_domains" class="col-sm-2 control-label">
+                                        <span data-i18="system_le_domains">Domains</span>:
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="system_le_domains" data-name="domains" class="form-control system-le-settings value" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div  class="col-sm-10" data-i18n="letsencrypt-help-domains">letsnecrypt_help_domains</div>
+                                </div>
+                                <div class="form-group  form-group-with-help">
+                                    <label for="system_le_path" class="col-sm-2 control-label">
+                                        <span data-i18="system_le_path">Path to storage</span>:
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="system_le_path" data-name="path" class="form-control system-le-settings value" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div  class="col-sm-10" data-i18n="letsencrypt-help-path">letsnecrypt_help_path</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div id="tab-system-diag" role="tabpanel" class="tab-pane fade">
                             <table id="table-diag">
                                 <tr>
-                                    <td>Note:</td>
-                                    <td>diag-note</td>
+                                    <td data-i18n="system-diag-note-label">Note:</td>
+                                    <td data-i18n="system-diag-note-text">diag-note</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label  for="diagMode">Statistics:</label>
+                                        <label data-i18n="system-diag-statistics" for="diagMode">Statistics:</label>
                                     </td>
                                     <td>
                                         <select id="diagMode">
-                                            <option value="none">none</option>
-                                            <option value="normal">normal</option>
-                                            <option value="no-city">no-city</option>
-                                            <option value="extended">extended</option>
+                                            <option value="none" data-i18n="system-diag-statistics-none">none</option>
+                                            <option value="normal" data-i18n="system-diag-statistics-normal">normal</option>
+                                            <option value="no-city" data-i18n="system-diag-statistics-no-city">no-city</option>
+                                            <option value="extended" data-i18n="system-diag-statistics-extended">extended</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: top">Sent data:</td>
-                                    <td><pre id="diagSample" style="font-size: 10px"></pre></td>
+                                    <td style="vertical-align: top" data-i18n="system-diag-statistics-sent">Sent data:</td>
+                                    <td><pre id="diagSample"></pre></td>
                                 </tr>
                             </table>
                         </div>                        

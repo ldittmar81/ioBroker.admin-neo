@@ -26,6 +26,8 @@ Array.prototype.remove = function () {
     }
     return this;
 };
+// enable i18n outputs
+$.i18n.debug = true;
 
 var $iframeDialog = null; // used in adapter settings window
 var defaults = {};
@@ -1327,8 +1329,6 @@ var adapterRedirect = function (redirect, timeout) {
         $(window).smartresize(resizeIFrame);
     });
 })(jQuery);
-
-
 
 function assign(obj, prop, value) {
     if (typeof prop === "string") {

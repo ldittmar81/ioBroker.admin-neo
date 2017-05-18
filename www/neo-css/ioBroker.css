@@ -391,8 +391,8 @@ body .container.body .right_col {
         padding-right: 0
     }
     .right_col {
-        padding: 10px !important
-            width: 100%;
+        padding: 10px !important;
+        width: 100%;
     }
 }
 @media (max-width: 1200px) {
@@ -4486,7 +4486,16 @@ fieldset > legend {
     color: #fff;
     top: 5px;
 }
-
+#table-diag {
+    width: 100%;
+}
+#diagSample {
+    font-size: 10px;
+    width: 100%;
+}
+.form-group-with-help {
+    margin-bottom: 0 !important;
+}
 .fancytree-fade-expander {
     overflow-y: auto;
 }
