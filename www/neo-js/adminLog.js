@@ -44,6 +44,7 @@ function Logs(main) {
 
         $('#menu-logs-div').load("templates/log.html", function () {
             
+            $('#log-outer').find('[data-i18n]').i18n();
             $('#log-outer').bootstrapTable();
 
             $('#log-filter-severity, #log-filter-host').on('change', function () {
@@ -113,9 +114,6 @@ function Logs(main) {
                     $('#log-subscribe').addClass('btn-default').removeClass('btn-primary').changeTooltip($.i18n('subscribeLog'));
                 }
             }
-
-            $('#log-outer').find('[data-i18n]').i18n();
-
 
         });
 

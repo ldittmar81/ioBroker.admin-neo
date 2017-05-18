@@ -57,6 +57,7 @@ var adapterRedirect = function (redirect, timeout) {
             isServiceWorker: false,
             isLogSubscribed: false,
             selectId: null,
+            installMsg: {},
             config: {},
             glyph_opts: {
                 map: {
@@ -120,40 +121,66 @@ var adapterRedirect = function (redirect, timeout) {
             cmdExec: function (host, cmd, callback) {
                 host = host || main.currentHost;
                 $stdout.val('');
-                var title = cmd, tmp;
+                var title = cmd, tmp, name, msgSuccess, msgError;
                 if (title.startsWith('add')) {
                     tmp = title.split(' ');
-                    title = $.i18n('addCommandTitle', tmp[1]);
+                    name = tmp[1];
+                    title = $.i18n('addCommandTitle', name);
+                    msgSuccess = $.i18n('addCommandTitleSuccess', name);
+                    msgError = $.i18n('addCommandTitleError', name);
                 } else if (title.startsWith('del')) {
                     tmp = title.split(' ');
-                    title = $.i18n('delCommandTitle', tmp[1]);
+                    name = tmp[1];
+                    title = $.i18n('delCommandTitle', name);
+                    msgSuccess = $.i18n('delCommandTitleSuccess', name);
+                    msgError = $.i18n('delCommandTitleError', name);
                 } else if (title === "upgrade self") {
                     title = $.i18n('upgradeSelfCommandTitle', host);
+                    msgSuccess = $.i18n('upgradeSelfCommandSuccess', host);
+                    msgError = $.i18n('upgradeSelfCommandError', host);
                 } else if (title.startsWith('upgrade') && title.indexOf('@') === -1) {
                     tmp = title.split(' ');
-                    title = $.i18n('upgradeCommandTitle', tmp[1]);
+                    name = tmp[1];
+                    title = $.i18n('upgradeCommandTitle', name);
+                    msgSuccess = $.i18n('delCommandTitleSuccess', name);
+                    msgError = $.i18n('delCommandTitleError', name);
                 } else if (title.startsWith('upgrade') && title.indexOf('@') !== -1) {
                     tmp = title.split(' ');
                     tmp = tmp[1].split('@');
-                    title = $.i18n('upgradeVersionCommandTitle', tmp[0], tmp[1]);
+                    name = tmp[0];
+                    var ver = tmp[1];
+                    title = $.i18n('upgradeVersionCommandTitle', name, ver);
+                    msgSuccess = $.i18n('upgradeVersionCommandTitleSuccess', name, ver);
+                    msgError = $.i18n('upgradeVersionCommandTitleError', name, ver);
                 } else if (title === "_restart") {
                     title = $.i18n('restartCommandTitle', host);
+                    msgSuccess = $.i18n('restartCommandTitleSuccess', host);
+                    msgError = $.i18n('restartCommandTitleError', host);
                 } else if (title.startsWith('url')) {
                     if (title.indexOf('--debug') === -1) {
                         tmp = title.substring(title.lastIndexOf(" ") + 1, title.length);
                         title = $.i18n('urlInstallCommandTitle', tmp);
+                        msgSuccess = $.i18n('urlInstallCommandTitleSuccess', tmp);
+                        msgError = $.i18n('urlInstallCommandTitleError', tmp);
                     } else {
                         tmp = title.substring(title.lastIndexOf("\"") + 2, title.indexOf('--debug'));
                         title = $.i18n('urlInstallDebugCommandTitle', tmp);
+                        msgSuccess = $.i18n('urlInstallDebugCommandTitleSuccess', tmp);
+                        msgError = $.i18n('urlInstallDebugCommandTitleError', tmp);
                     }
                 }
                 $('#modal-command-label').text(title);
-                $('#modal-command').modal();
 
                 stdout = '$ ./iobroker ' + cmd;
                 $stdout.val(stdout);
                 // genereate the unique id to coordinate the outputs
                 activeCmdId = Math.floor(Math.random() * 0xFFFFFFE) + 1;
+                main.installMsg[activeCmdId] = {};
+                main.installMsg[activeCmdId].success = msgSuccess;
+                main.installMsg[activeCmdId].error = msgError;
+             
+                $('#modal-command').modal();
+
                 cmdCallback = callback;
                 main.socket.emit('cmdExec', host, activeCmdId, cmd, function (err) {
                     if (err) {
@@ -1248,12 +1275,13 @@ var adapterRedirect = function (redirect, timeout) {
             }
         });
         main.socket.on('cmdExit', function (_id, exitCode) {
+            exitCode = parseInt(exitCode, 10);
             if (activeCmdId === _id) {
-                exitCode = parseInt(exitCode, 10);
                 stdout += '\n' + (exitCode !== 0 ? 'ERROR: ' : '') + 'process exited with code ' + exitCode;
                 $stdout.val(stdout);
                 $stdout.scrollTop($stdout[0].scrollHeight - $stdout.height());
                 $('#adapter-install-close-btn').text($.i18n('close'));
+
                 if (!exitCode) {
                     $('#adapter-meter').progressbar(100);
                     setTimeout(function () {
@@ -1263,11 +1291,17 @@ var adapterRedirect = function (redirect, timeout) {
                     $('#adapter-meter').progressbar(90, "error");
                 }
                 if (cmdCallback) {
-
                     $('#adapter-install-close-btn').text($.i18n('close'));
                     cmdCallback(exitCode);
                     cmdCallback = null;
                 }
+            } else if (main.installMsg.hasOwnProperty(_id)) {
+                if (!exitCode) {
+                    alert(main.installMsg[_id].success, "success");
+                } else {
+                    alert(main.installMsg[_id].error, "error");
+                }
+                delete main.installMsg[_id];
             }
         });
         main.socket.on('eventsThreshold', function (isActive) {
@@ -1451,7 +1485,12 @@ var adapterRedirect = function (redirect, timeout) {
         });
 
         $(document.body).on('hidden.bs.modal', '#modal-command', function () {
+            if (main.installMsg.hasOwnProperty(activeCmdId)) {
+                main.installMsg[activeCmdId].closed = true;
+            }
+            activeCmdId = null;
             $('#adapter-meter').progressbar(1);
+            $('#adapter-install-close-btn').text($.i18n('runBackgroud'));
         });
 
         $(document.body).on('click', '.adapter-install-submit', function () {
