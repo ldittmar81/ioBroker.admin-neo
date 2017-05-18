@@ -53,7 +53,7 @@ function Home(main) {
     }
 
     var formatInfo = {
-        uptime: formatSeconds,
+        Uptime: formatSeconds,
         'System uptime': formatSeconds,
         RAM: formatRam
     };
