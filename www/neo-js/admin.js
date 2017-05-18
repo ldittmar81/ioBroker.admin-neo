@@ -1284,11 +1284,13 @@ var adapterRedirect = function (redirect, timeout) {
 
                 if (!exitCode) {
                     $('#adapter-meter').progressbar(100);
+                    $('#adapter-install-message-on-end').text(main.installMsg[_id].success);
                     setTimeout(function () {
                         $('#modal-command').modal('hide');
                     }, 1500);
                 } else {
                     $('#adapter-meter').progressbar(90, "error");
+                    $('#adapter-install-message-on-end').text(main.installMsg[_id].error);
                 }
                 if (cmdCallback) {
                     $('#adapter-install-close-btn').text($.i18n('close'));
@@ -1490,6 +1492,7 @@ var adapterRedirect = function (redirect, timeout) {
             }
             activeCmdId = null;
             $('#adapter-meter').progressbar(1);
+            $('#adapter-install-message-on-end').html('&nbsp;');
             $('#adapter-install-close-btn').text($.i18n('runBackgroud'));
         });
 
