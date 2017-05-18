@@ -97,21 +97,36 @@ function System(main) {
         return res;
     }
 
-    function prepareRepos() {
-        $gridRepo = $('#grid-repos').bootstrapTable();
-    }
-
     function addCert(name, text) {
-    }
-
-    function prepareCerts() {
-        $gridCerts = $('#grid-certs').bootstrapTable();
     }
 
     // ----------------------------- Repositories show and Edit ------------------------------------------------
     function finishEditingRepo() {
     }
-    function initRepoGrid(update) {
+    function initRepoGrid() {
+        
+        $gridRepo.bootstrapTable();
+        
+        if (that.systemRepos && that.systemRepos.native.repositories) {
+            var id = 1;
+            // list of the repositories
+            for (var repo in that.systemRepos.native.repositories) {
+
+                var row = [{
+                        _id: id,
+                        name: repo,
+                        link: (typeof that.systemRepos.native.repositories[repo] === 'object') ? that.systemRepos.native.repositories[repo].link : that.systemRepos.native.repositories[repo],
+                        commands: addButtonsFormatter(id, "repo")
+                    }];
+                $gridRepo.bootstrapTable('append', row);
+
+                id++;
+            }
+
+            initRepoButtons();
+        } else {
+            $('#tab-system-repo').html($.i18n('permissionError'));
+        }
     }
     function initRepoButtons() {
     }
@@ -125,7 +140,29 @@ function System(main) {
     // ----------------------------- Certificates show and Edit ------------------------------------------------
     function finishEditingCerts() {
     }
-    function initCertsGrid(update) {
+    function initCertsGrid() {
+        
+        $gridCerts.bootstrapTable();
+        
+        if (that.systemCerts && that.systemCerts.native.certificates) {
+            var id = 1;
+            // list of the repositories
+            for (var cert in that.systemCerts.native.certificates) {
+                var row = [{
+                        _id: id,
+                        name: cert,
+                        certificate: cert2string(that.systemCerts.native.certificates[cert]),
+                        commands: addButtonsFormatter(id, "cert")
+                    }];
+                $gridCerts.bootstrapTable('append', row);
+
+                id++;
+            }
+
+            initCertButtons();
+        } else {
+            $('#tab-system-certs').html($.i18n('permissionError'));
+        }
     }
 
     function initCertButtons() {
@@ -199,13 +236,18 @@ function System(main) {
                     }
                 });
 
+                restartFunctions('#dialog-system');
+
+                initRepoGrid();
+                initCertsGrid();
+
                 $dialogSystem.modal();
             });
         } else {
             $('#button-system').prop('disabled', true);
             $('#link-system').hide();
         }
-        restartFunctions('#dialog-system');
+
     };
 
     this.prepare = function () {
@@ -218,9 +260,30 @@ function System(main) {
                         .append('<option value="' + lang + '" ' + (systemLang === lang ? "selected" : "") + '>' + availableLanguages[lang] + '</option>');
             }
 
-            prepareRepos();
-            prepareCerts();
+            $gridRepo = $('#grid-repos');
+            $gridCerts = $('#grid-certs');
 
         });
     };
+
+    function addButtonsFormatter(id, type) {
+        var $tempButtons = $('#systemTemplateTableButtons').children().clone(true, true);
+        $tempButtons.find('.edit-submit')
+                .removeClass('edit-submit')
+                .addClass(type + "-edit-submit")
+                .attr("data-" + type + "-id", id);
+        $tempButtons.find('.delete-submit')
+                .removeClass('delete-submit')
+                .addClass(type + "-delete-submit")
+                .attr("data-" + type + "-id", id);
+        $tempButtons.find('.ok-submit')
+                .removeClass('ok-submit')
+                .addClass(type + "-ok-submit")
+                .attr("data-" + type + "-id", id);
+        $tempButtons.find('.cancel-submit')
+                .removeClass('cancel-submit')
+                .addClass(type + "-cancel-submit")
+                .attr("data-" + type + "-id", id);
+        return $tempButtons.toString();
+    }
 }

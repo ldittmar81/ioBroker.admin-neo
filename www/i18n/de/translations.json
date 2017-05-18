@@ -78,6 +78,7 @@
   "delete_sure": "Wollen Sie wirklich <b>\"$1\"</b> löschen?",
   "desc": "Beschreibung",
   "details": "Details",
+  "diag-note": "Wir haben hart daran gearbeitet, dieses Projekt auf die Beine zu stellen. Als Gegenleistung bitten wir Sie, uns die Nutzungs-Statistik zu senden.<br><br>Es werden keine privaten Informationen zu ioBroker.org gesendet. Jedes Mal wenn die Adapterliste aktualisiert wird, wird auch die anonymisierte Statistik verschickt.<br><br><br>Vielen Dank!",
   "eachday": "Jeden Tag",
   "eachmonth": "Jeden Monat",
   "eachselectedday": "Jeden ausgewählten Tag",

@@ -80,6 +80,7 @@
   "delete_sure": "Are you sure to delete <b>\"$1\"</b>?",
   "desc": "description",
   "details": "Details",
+  "diag-note": "We worked hard to create this project. As equivalent we expect from you some statistics about the usage.<br><br>No private information will be sent to ioBroker.org. Every time you press update adapter list the anonymized statistics will be sent.<br><br><br>Thank you!",
   "eachday": "Each Day",
   "eachmonth": "Each Month",
   "eachselectedday": "Each selected day",

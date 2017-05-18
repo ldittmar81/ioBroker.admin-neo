@@ -12,19 +12,19 @@
 
                     <ul class="nav nav-tabs bar_tabs" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#tab-system-main" role="tab" data-toggle="tab" data-i18="mainSettings">Main settings</a>
+                            <a href="#tab-system-main" role="tab" data-toggle="tab" data-i18n="mainSettings">Main settings</a>
                         </li>
                         <li role="presentation">
-                            <a href="#tab-system-repo" role="tab" data-toggle="tab" data-i18="repositories">Repositories</a>
+                            <a href="#tab-system-repo" role="tab" data-toggle="tab" data-i18n="repositories">Repositories</a>
                         </li>
                         <li role="presentation">
-                            <a href="#tab-system-certs" role="tab" data-toggle="tab" data-i18="certificates">Certificates</a>
+                            <a href="#tab-system-certs" role="tab" data-toggle="tab" data-i18n="certificates">Certificates</a>
                         </li>
                         <li role="presentation">
                             <a href="#tab-system-letsencrypt" role="tab" data-toggle="tab">Let's encrypt SSL</a>
                         </li>
                         <li role="presentation">
-                            <a href="#tab-system-diag" role="tab" data-toggle="tab" data-i18="statictics">Statistics</a>
+                            <a href="#tab-system-diag" role="tab" data-toggle="tab" data-i18n="statictics">Statistics</a>
                         </li>
                     </ul>
 
@@ -35,7 +35,7 @@
 
                                 <div class="form-group">
                                     <label for="system_language" class="col-sm-2 control-label">
-                                        <span data-i18="systemLang">System language</span>:
+                                        <span data-i18n="systemLang">System language</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_language" class="form-control system-settings value"></select>
@@ -44,7 +44,7 @@
 
                                 <div class="form-group">
                                     <label for="system_tempUnit" class="col-sm-2 control-label">
-                                        <span data-i18="tempUnit">Temperature units</span>:
+                                        <span data-i18n="tempUnit">Temperature units</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_tempUnit" class="form-control system-settings value">
@@ -56,7 +56,7 @@
 
                                 <div class="form-group">
                                     <label for="system_currency" class="col-sm-2 control-label">
-                                        <span data-i18="currency">Currency</span>:
+                                        <span data-i18n="currency">Currency</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <input type="text" size="5" maxlength="5" id="system_currency" class="form-control system-settings value"/>
@@ -65,7 +65,7 @@
 
                                 <div class="form-group">
                                     <label for="system_dateFormat" class="col-sm-2 control-label">
-                                        <span data-i18="dateFormat">Date format</span>:
+                                        <span data-i18n="dateFormat">Date format</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_dateFormat" class="form-control system-settings value">
@@ -78,7 +78,7 @@
 
                                 <div class="form-group">
                                     <label for="system_isFloatComma" class="col-sm-2 control-label">
-                                        <span data-i18="floatDivider">Float divider</span>:
+                                        <span data-i18n="floatDivider">Float divider</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_isFloatComma" class="form-control system-settings value">
@@ -90,7 +90,7 @@
 
                                 <div class="form-group">
                                     <label for="system_defaultHistory" class="col-sm-2 control-label">
-                                        <span data-i18="defaultHistory">Default history instance</span>:
+                                        <span data-i18n="defaultHistory">Default history instance</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_defaultHistory" class="form-control system-settings value">
@@ -100,7 +100,7 @@
 
                                 <div class="form-group">
                                     <label for="system_activeRepo" class="col-sm-2 control-label">
-                                        <span data-i18="activeRepo">Active repository</span>:
+                                        <span data-i18n="activeRepo">Active repository</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_activeRepo" class="form-control system-settings value">
@@ -110,7 +110,7 @@
 
                                 <div class="form-group">
                                     <label for="system_country" class="col-sm-2 control-label">
-                                        <span data-i18="country">Country</span>:
+                                        <span data-i18n="country">Country</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_country" class="form-control system-settings value" data-live-search="true">
@@ -366,7 +366,7 @@
 
                                 <div class="form-group">
                                     <label for="system_city" class="col-sm-2 control-label">
-                                        <span data-i18="city">City</span>:
+                                        <span data-i18n="city">City</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <input id="system_city" class="form-control system-settings value" />
@@ -375,7 +375,7 @@
 
                                 <div class="form-group">
                                     <label for="system_latitude" class="col-sm-2 control-label">
-                                        <span data-i18="lat">Latitude</span>:
+                                        <span data-i18n="lat">Latitude</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <input id="system_latitude" class="form-control system-settings value" />
@@ -384,7 +384,7 @@
 
                                 <div class="form-group">
                                     <label for="system_longitude" class="col-sm-2 control-label">
-                                        <span data-i18="lon">Longitude</span>:
+                                        <span data-i18n="lon">Longitude</span>:
                                     </label>
                                     <div class="col-sm-10">
                                         <input id="system_longitude" class="form-control system-settings value" />
@@ -403,10 +403,8 @@
                                         <th data-field="link" data-i18n="link"></th>
                                         <th data-field="commands" data-i18n="commands"></th>
                                     </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                            <div id="pager-repos"></div>
+                                </thead>                               
+                            </table>                           
                         </div>
 
                         <div id="tab-system-certs" role="tabpanel" class="tab-pane fade drop-zone">
@@ -424,54 +422,72 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                            <div id="pager-certs"></div>
                         </div>
 
                         <div id="tab-system-letsencrypt" role="tabpanel" class="tab-pane fade">
-                            <p>letsnecrypt_help</p>
-                            <table>
-                                <tr>
-                                    <td><label for="system_le_email">Email for account:</label></td>
-                                    <td><input id="system_le_email" class="system-le-settings value" data-name="email"/></td>
-                                    <td>letsnecrypt_help_email</td>
-                                </tr>
-                                <tr>
-                                    <td><label for="system_le_domains">Domains:</label></td>
-                                    <td><input id="system_le_domains" class="system-le-settings value" data-name="domains"/></td>
-                                    <td>letsnecrypt_help_domains</td>
-                                </tr>
-                                <tr>
-                                    <td><label for="system_le_path">Path to storage:</label></td>
-                                    <td><input id="system_le_path" class="system-le-settings value" data-name="path"/></td>
-                                    <td>letsnecrypt_help_path</td>
-                                </tr>
-                            </table>
+                            
+                            <p data-i18n="letsnecrypt_help"></p>
+                            
+                            <div class="form-horizontal">
+                                
+                                <div class="form-group">
+                                    <label for="system_le_email" class="col-sm-2 control-label">
+                                        <span data-i18n="system_le_email"></span>:
+                                        <i class="fa fa-info-circle" data-i18n-tooltip="letsnecrypt_help_email"></i>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="system_le_email" class="form-control system-le-settings value" data-name="email"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="system_le_domains" class="col-sm-2 control-label">
+                                        <span data-i18n="system_le_domains"></span>:
+                                        <i class="fa fa-info-circle" data-i18n-tooltip="letsnecrypt_help_domains"></i>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="system_le_domains" class="form-control system-le-settings value" data-name="domains"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="system_le_path" class="col-sm-2 control-label">
+                                        <span data-i18n="system_le_path"></span>:
+                                        <i class="fa fa-info-circle" data-i18n-tooltip="letsnecrypt_help_path"></i>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="system_le_path" class="form-control system-le-settings value" data-name="domains"/>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                           
                         </div>
 
                         <div id="tab-system-diag" role="tabpanel" class="tab-pane fade">
-                            <table id="table-diag">
-                                <tr>
-                                    <td>Note:</td>
-                                    <td>diag-note</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label  for="diagMode">Statistics:</label>
-                                    </td>
-                                    <td>
-                                        <select id="diagMode">
-                                            <option value="none">none</option>
-                                            <option value="normal">normal</option>
-                                            <option value="no-city">no-city</option>
-                                            <option value="extended">extended</option>
+                            
+                            <h2 data-i18n-html="diag-note">&nsbp;</h2>
+                            <hr/>
+                            <div class="form-horizontal">
+                                
+                                <div class="form-group">
+                                    <label for="diagMode" class="col-sm-2 control-label">
+                                        <span data-i18n="diagMode"></span>:                                      
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <select id="diagMode" class="form-control system-settings value">
+                                            <option value="none" data-i18n="none">none</option>
+                                            <option value="normal" data-i18n="normal">normal</option>
+                                            <option value="no-city" data-i18n="no-city">no-city</option>
+                                            <option value="extended" data-i18n="extended">extended</option>
                                         </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: top">Sent data:</td>
-                                    <td><pre id="diagSample" style="font-size: 10px"></pre></td>
-                                </tr>
-                            </table>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <p data-i18n="sentData"></p>
+                            <pre id="diagSample" style="font-size: 10px"></pre>
+                            
                         </div>                        
 
                     </div>
@@ -485,3 +501,14 @@
         </div>
     </div>
 </div>
+
+<!-- Table-Button-Row -->
+<div id="systemTemplateTableButtons" class="hidden">
+    <div class="btn-group" role="group">
+        <button class="edit-submit btn btn-default" data-i18n-tooltip="edit"><i class="fa fa-edit"></i></button>
+        <button class="delete-submit btn btn-default" data-i18n-tooltip="delete"><i class="fa fa-trash"></i></button>
+        <button class="ok-submit btn btn-default hidden" data-i18n-tooltip="ok"><i class="fa fa-check"></i></button>
+        <button class="cancel-submit btn btn-default hidden" data-i18n-tooltip="cancel"><i class="fa fa-cancel"></i></button>
+    </div>   
+</div>
+<!-- / Table-Button-Row -->
