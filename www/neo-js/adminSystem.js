@@ -27,7 +27,6 @@ function System(main) {
     this.systemRepos = null;
     this.systemCerts = null;
 
-
     function string2cert(name, str) {
         // expected format: -----BEGIN CERTIFICATE-----certif...icate==-----END CERTIFICATE-----
         if (str.length < '-----BEGIN CERTIFICATE-----==-----END CERTIFICATE-----'.length) {
@@ -98,15 +97,28 @@ function System(main) {
     }
 
     function addCert(name, text) {
+
     }
 
     // ----------------------------- Repositories show and Edit ------------------------------------------------
     function finishEditingRepo() {
+        if (editingRepos.length) {
+            $('.repo-edit-submit').show();
+            $('.repo-delete-submit').show();
+            $('.repo-ok-submit').hide();
+            $('.repo-cancel-submit').hide();
+
+            for (var i = 0; i < editingRepos.length; i++) {
+                //TODO $gridRepo.jqGrid('saveRow', editingRepos[i], {url: 'clientArray'});
+                updateRepoListSelect();
+            }
+            editingRepos = [];
+        }
     }
     function initRepoGrid() {
-        
+
         $gridRepo.bootstrapTable();
-        
+
         if (that.systemRepos && that.systemRepos.native.repositories) {
             var id = 1;
             // list of the repositories
@@ -129,21 +141,144 @@ function System(main) {
         }
     }
     function initRepoButtons() {
+        $('.repo-edit-submit').on("click", function () {
+            var id = $(this).attr('data-repo-id');
+            $('.repo-edit-submit').hide();
+            $('.repo-delete-submit').hide();
+            $('.repo-ok-submit[data-repo-id="' + id + '"]').show();
+            $('.repo-cancel-submit[data-repo-id="' + id + '"]').show();
+            /* TODO $gridRepo.jqGrid('editRow', 'repo_' + id, {url: 'clientArray'});
+             if (editingRepos.indexOf('repo_' + id) === -1) editingRepos.push(rowid);*/
+        });
+
+        $('.repo-delete-submit').on("click", function () {
+            var id = $(this).attr('data-repo-id');
+            //TODO $gridRepo.jqGrid('delRowData', 'repo_' + id);
+            updateRepoListSelect();
+            var pos = editingRepos.indexOf('repo_' + id);
+            if (pos !== -1) {
+                editingRepos.splice(pos, 1);
+            }
+        });
+
+        $('.repo-ok-submit').on("click", function () {
+            var id = $(this).attr('data-repo-id');
+            $('.repo-edit-submit').show();
+            $('.repo-delete-submit').show();
+            $('.repo-ok-submit').hide();
+            $('.repo-cancel-submit').hide();
+            //TODO $gridRepo.jqGrid('saveRow', 'repo_' + id, {"url":"clientArray"});
+            updateRepoListSelect();
+            var pos = editingRepos.indexOf('repo_' + id);
+            if (pos !== -1) {
+                editingRepos.splice(pos, 1);
+            }
+        });
+
+        $('.repo-cancel-submit').on("click", function () {
+            var id = $(this).attr('data-repo-id');
+            $('.repo-edit-submit').show();
+            $('.repo-delete-submit').show();
+            $('.repo-ok-submit').hide();
+            $('.repo-cancel-submit').hide();
+            //TODO $gridRepo.jqGrid('restoreRow', 'repo_' + id, false);
+            var pos = editingRepos.indexOf('repo_' + id);
+            if (pos !== -1) {
+                editingRepos.splice(pos, 1);
+            }
+        });
     }
     function updateRepoListSelect() {
+        var selectedRepo = $('#system_activeRepo').val();
+        var isFound = false;
+        $('#system_activeRepo').html('');
+        var data = $gridRepo.jqGrid('getRowData');
+        for (var i = 0; i < data.length; i++) {
+            $('#system_activeRepo').append('<option value="' + data[i].name + '">' + data[i].name + '</option>');
+            if (selectedRepo === data[i].name) {
+                isFound = true;
+            }
+        }
 
+        $('#system_activeRepo').selectpicker('refresh');
+
+        if (isFound) {
+            $('#system_activeRepo').val(selectedRepo);
+        }
     }
 
     function fileHandler(event) {
+        event.preventDefault();
+        var file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+
+        var $dz = $('#drop-zone');
+        if (file.size > 10000) {
+            $('#drop-text').html($.i18n('fileTooBig'));
+            $dz.addClass('dropZone-error').animate({opacity: 0}, 1000, function () {
+                $dz.hide().removeClass('dropZone-error').css({opacity: 1});
+                main.showError($.i18n('fileTooBig'));
+                $('#drop-text').html($.i18n('drop-zone'));
+            });
+            return false;
+        }
+
+        $dz.show();
+
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            var text;
+            try {
+                text = atob(evt.target.result.split(',')[1]); // string has form data:;base64,TEXT==
+            } catch (err) {
+                $('#drop-text').html($.i18n('cannotReadFile'));
+                $dz.addClass('dropZone-error').animate({opacity: 0}, 1000, function () {
+                    $dz.hide().removeClass('dropZone-error').css({opacity: 1});
+                    main.showError($.i18n('cannotReadFile'));
+                    $('#drop-text').html($.i18n('drop-zone'));
+                });
+                return;
+            }
+            text = text.replace(/(\r\n|\n|\r)/gm, '');
+            if (text.indexOf('BEGIN RSA PRIVATE KEY') != -1) {
+                $dz.hide();
+                addCert('private', text);
+            } else if (text.indexOf('BEGIN PRIVATE KEY') != -1) {
+                $dz.hide();
+                addCert('private', text);
+            } else if (text.indexOf('BEGIN CERTIFICATE') != -1) {
+                $dz.hide();
+                var m = text.split('-----END CERTIFICATE-----');
+                var count = 0;
+                for (var _m = 0; _m < m.length; _m++) {
+                    if (m[_m].replace(/[\r\n|\r|\n]+/, '').trim())
+                        count++;
+                }
+                if (count > 1) {
+                    addCert('chained', text);
+                } else {
+                    addCert('public', text);
+                }
+
+            } else {
+                $('#drop-text').html($.i18n('unknownFormat'));
+                $dz.addClass('dropZone-error').animate({opacity: 0}, 1000, function () {
+                    $dz.hide().removeClass('dropZone-error').css({opacity: 1});
+                    main.showError($.i18n('unknownFormat'));
+                    $('#drop-text').html($.i18n('drop-zone'));
+                });
+            }
+        };
+        reader.readAsDataURL(file);
     }
 
     // ----------------------------- Certificates show and Edit ------------------------------------------------
     function finishEditingCerts() {
+
     }
     function initCertsGrid() {
-        
+
         $gridCerts.bootstrapTable();
-        
+
         if (that.systemCerts && that.systemCerts.native.certificates) {
             var id = 1;
             // list of the repositories
@@ -163,6 +298,30 @@ function System(main) {
         } else {
             $('#tab-system-certs').html($.i18n('permissionError'));
         }
+
+        var $dropZone = $('#tab-system-certs');
+        if (typeof (window.FileReader) !== 'undefined' && !$dropZone.data('installed')) {
+            $dropZone.data('installed', true);
+            var $dz = $('#drop-zone');
+            $('#drop-text').html($.i18n('drop-zone'));
+            $dropZone[0].ondragover = function () {
+                $dz.unbind('click');
+                $dz.show();
+                return false;
+            };
+            $dz.click(function () {
+                $dz.hide();
+            });
+
+            $dz[0].ondragleave = function () {
+                $dz.hide();
+                return false;
+            };
+
+            $dz[0].ondrop = fileHandler;
+        }
+
+        $('#drop-file').change(fileHandler);
     }
 
     function initCertButtons() {
@@ -236,10 +395,20 @@ function System(main) {
                     }
                 });
 
+                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    if ($(e.target).attr('href') === '#tab-system-certs') {
+                        $('#drop-zone').show().css({opacity: 1}).animate({opacity: 0}, 2000, function () {
+                            $('#drop-zone').hide().css({opacity: 1});
+                        });
+                    }
+                });                
+
                 restartFunctions('#dialog-system');
 
                 initRepoGrid();
                 initCertsGrid();
+
+                initSaveButton();
 
                 $dialogSystem.modal();
             });
@@ -285,5 +454,129 @@ function System(main) {
                 .addClass(type + "-cancel-submit")
                 .attr("data-" + type + "-id", id);
         return $tempButtons.toString();
+    }
+
+    function initSaveButton() {
+
+        $('#saveSystemConfigData').on("click", function () {
+            var common = main.systemConfig.common;
+            var languageChanged = false;
+            var activeRepoChanged = false;
+
+            finishEditingCerts();
+            finishEditingRepo();
+
+            $('.system-settings.value').each(function () {
+                var $this = $(this);
+                var id = $this.attr('id').substring('system_'.length);
+
+                if ($this.attr('type') === 'checkbox') {
+                    common[id] = $this.prop('checked');
+                } else {
+                    if (id === 'language' && common.language !== $this.val()) {
+                        languageChanged = true;
+                    }
+                    if (id === 'activeRepo' && common.activeRepo !== $this.val()) {
+                        activeRepoChanged = true;
+                    }
+                    common[id] = $this.val();
+                    if (id === 'isFloatComma') {
+                        common[id] = (common[id] === 'true' || common[id] === true);
+                    }
+                }
+            });
+
+            // Fill the repositories list
+            var links = {};
+            if (that.systemRepos) {
+                for (var r in that.systemRepos.native.repositories) {
+                    if (typeof that.systemRepos.native.repositories[r] === 'object' && that.systemRepos.native.repositories[r].json) {
+                        links[that.systemRepos.native.repositories[r].link] = that.systemRepos.native.repositories[r].json;
+                    }
+                }
+                that.systemRepos.native.repositories = {};
+            }
+
+            var data = $gridRepo.bootstrapTable('getData');
+            if (that.systemRepos) {
+                var first = null;
+                for (var i = 0; i < data.length; i++) {
+                    that.systemRepos.native.repositories[data[i].name] = {link: data[i].link, json: null};
+                    if (links[data[i].link]) {
+                        that.systemRepos.native.repositories[data[i].name].json = links[data[i].link];
+                    }
+                    if (!first) {
+                        first = data[i].name;
+                    }
+                }
+                // Check if the active repository still exist in the list
+                if (!first) {
+                    if (common.activeRepo) {
+                        activeRepoChanged = true;
+                        common.activeRepo = '';
+                    }
+                } else if (!that.systemRepos.native.repositories[common.activeRepo]) {
+                    activeRepoChanged = true;
+                    common.activeRepo = first;
+                }
+            }
+            common.diag = $('#diagMode').val();
+
+            if (that.systemCerts) {
+                // Fill the certificates list
+                that.systemCerts.native.certificates = {};
+                data = $gridCerts.bootstrapTable('getData');
+                for (var j = 0; j < data.length; j++) {
+                    that.systemCerts.native.certificates[data[j].name] = string2cert(data[j].name, data[j].certificate);
+                }
+
+                $('.system-le-settings.value').each(function () {
+                    var $this = $(this);
+                    var id = $this.data('name');
+
+                    if ($this.attr('type') === 'checkbox') {
+                        that.systemCerts.native.letsEncrypt[id] = $this.prop('checked');
+                    } else {
+                        that.systemCerts.native.letsEncrypt[id] = $this.val();
+                    }
+                });
+            }
+
+            main.socket.emit('extendObject', 'system.config', {common: common}, function (err) {
+                if (!err) {
+                    if (languageChanged) {
+                        window.location.reload();
+                    } else {
+                        if (activeRepoChanged) {
+                            setTimeout(function () {
+                                that.main.menus.adapters.init(true);
+                            }, 0);
+                        }
+                    }
+                } else {
+                    main.showError(err);
+                    return;
+                }
+
+                main.socket.emit('extendObject', 'system.repositories', that.systemRepos, function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    if (activeRepoChanged) {
+                        setTimeout(function () {
+                            that.main.menus.adapters.init(true);
+                        }, 0);
+                    }
+
+                    main.socket.emit('extendObject', 'system.certificates', that.systemCerts, function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        $dialogSystem.modal('hide');
+                    });
+                });
+            });
+        });
+
     }
 }

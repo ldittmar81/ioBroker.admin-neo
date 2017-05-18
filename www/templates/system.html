@@ -401,14 +401,15 @@
                                         <th data-field="_id" data-i18n="id"></th>
                                         <th data-field="name" data-i18n="name"></th>
                                         <th data-field="link" data-i18n="link"></th>
-                                        <th data-field="commands" data-i18n="commands"></th>
+                                        <th data-field="commands"></th>
                                     </tr>
                                 </thead>                               
                             </table>                           
                         </div>
 
                         <div id="tab-system-certs" role="tabpanel" class="tab-pane fade drop-zone">
-                            <div id="drop-zone" style="display: none"><div style="padding-top:20%" id="drop-text"></div>
+                            <div id="drop-zone" class="drop-zone-div" style="display: none">
+                                <div style="padding-top:20%" id="drop-text"></div>
                                 <input type="file" id="drop-file" style="display: none">
                             </div>
                             <table id="grid-certs">
@@ -417,7 +418,7 @@
                                         <th data-field="_id" data-i18n="id"></th>
                                         <th data-field="name" data-i18n="name"></th>
                                         <th data-field="certificate" data-i18n="certificate"></th>
-                                        <th data-field="commands" data-i18n="commands"></th>
+                                        <th data-field="commands"></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -495,6 +496,7 @@
             </div>
 
             <div class="modal-footer">
+                <button type="button" id="saveSystemConfigData" class="btn btn-primary" data-i18n="save">Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="close">Close</button>
             </div>
 
@@ -507,8 +509,8 @@
     <div class="btn-group" role="group">
         <button class="edit-submit btn btn-default" data-i18n-tooltip="edit"><i class="fa fa-edit"></i></button>
         <button class="delete-submit btn btn-default" data-i18n-tooltip="delete"><i class="fa fa-trash"></i></button>
-        <button class="ok-submit btn btn-default hidden" data-i18n-tooltip="ok"><i class="fa fa-check"></i></button>
-        <button class="cancel-submit btn btn-default hidden" data-i18n-tooltip="cancel"><i class="fa fa-cancel"></i></button>
+        <button class="ok-submit btn btn-default" style="display: none;" data-i18n-tooltip="ok"><i class="fa fa-check"></i></button>
+        <button class="cancel-submit btn btn-default" style="display: none;" data-i18n-tooltip="cancel"><i class="fa fa-cancel"></i></button>
     </div>   
 </div>
 <!-- / Table-Button-Row -->
