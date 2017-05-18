@@ -15,7 +15,7 @@
  * @returns {Home}  
  */
 function Home(main) {
-    "use strict";
+    'use strict';
 
     var that = this;
     this.menuIcon = 'fa-home';
@@ -23,9 +23,55 @@ function Home(main) {
     this.main = main;
 
     this.prepare = function () {
-        $('#menu-home-div').load("templates/home.html", function () {
+        $('#menu-home-div').load('templates/home.html', function () {
 
         });
+    };
+
+    function formatSeconds(seconds) {
+        var days = Math.floor(seconds / (3600 * 24));
+        seconds %= 3600 * 24;
+        var hours = Math.floor(seconds / 3600);
+        if (hours < 10) {
+            hours = '0' + hours;
+        }
+        seconds %= 3600;
+        var minutes = Math.floor(seconds / 60);
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        seconds %= 60;
+        seconds = Math.floor(seconds);
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+        var text = '';
+        if (days) {
+            text += days + $.i18n('daysShortText') + ' ';
+        }
+        text += hours + ':' + minutes + ':' + seconds;
+
+        return text
+    }
+
+    function formatRam(bytes) {
+        var GB = Math.floor(bytes / (1024 * 1024 * 1024) * 10) / 10;
+        bytes %= (1024 * 1024 * 1024);
+        var MB = Math.floor(bytes / (1024 * 1024) * 10) / 10;
+        var text = '';
+        if (GB > 1) {
+            text += GB + 'GB ';
+        } else {
+            text += MB + 'MB ';
+        }
+
+        return text
+    }
+
+    var formatInfo = {
+        Uptime: formatSeconds,
+        'System uptime': formatSeconds,
+        RAM: formatRam
     };
 
     this.init = function () {
@@ -36,7 +82,7 @@ function Home(main) {
             $('#homeTotalRamText').text($.i18n('totalRamText', totalRam, freeRam));
 
             var logSize = that.main.menus.logs.logSize;
-            $('#homeLogSize').text(logSize + " MB");
+            $('#homeLogSize').text(logSize + ' MB');
 
             that.main.menus.adapters.getAdaptersInfo(this.main.currentHost, null, null, function (repository, installedList) {
 
@@ -86,11 +132,27 @@ function Home(main) {
                 listNew.sort();
 
                 fillList('new', listNew, repository, installedList);
-
             });
         }
-
-        requestCrossDomain("http://forum.iobroker.net/feed.php?mode=topics", that.getForumData);
+        
+        that.main.menus.adapters.getHostInfo(that.main.currentHost, function (data) {
+            var text = '';
+            if (data) {
+                for (var item in data) {
+                    if (data.hasOwnProperty(item)) {
+                        text += '<tr><td>' + $.i18n(item) + ':&nbsp;</td><td class="system-info" data-attribute="' + item + '">' + (formatInfo[item] ? formatInfo[item](data[item]) : data[item]) + '</td></tr>';
+                    }
+                }
+            }
+            if (text) {
+                $('#systemInfoTab')
+                    .show()
+                    .find('#systemInfoList')
+                        .html(text);
+            }
+        });
+        
+        requestCrossDomain('http://forum.iobroker.net/feed.php?mode=topics', that.getForumData);
 
         this.main.fillContent('#menu-home-div');
 
@@ -124,7 +186,7 @@ function Home(main) {
         var $ul = $('#' + type + 'HomeList');
         $ul.empty();
 
-        var isInstalled = type === "update";
+        var isInstalled = type === 'update';
 
         for (var i = 0; i < list.length; i++) {
 
@@ -224,7 +286,7 @@ function Home(main) {
             'saturday'
         ];
         var date = new Date();
-        $('#date_now').text(date.getDate() + ". " + $.i18n(MONTH[date.getMonth()]) + " " + date.getFullYear());
+        $('#date_now').text(date.getDate() + '. ' + $.i18n(MONTH[date.getMonth()]) + ' ' + date.getFullYear());
         $('#weekday_now').text($.i18n(DOW[date.getDay()]));
     }
 

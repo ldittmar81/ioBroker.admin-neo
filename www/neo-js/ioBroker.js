@@ -14,7 +14,7 @@
 
 PNotify.prototype.options.styling = "fontawesome";
 
-var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
+var CURRENT_URL = window.location.href.split('#')[0].split('?')[0], // unused
         $BODY = $('body'),
         $MENU_TOGGLE = $('#menu_toggle'),
         $SIDEBAR_MENU = $('#sidebar-menu'),
@@ -126,7 +126,7 @@ String.prototype.text2iconClass = function () {
     if (this.startsWith('fa-')) {
         return this;
     }
-    if (this.substr())
+    if (this.substr()) {
         switch (this) {
             case 'alert':
                 return "fa-exclamation-triangle text-danger";
@@ -137,6 +137,7 @@ String.prototype.text2iconClass = function () {
             default:
                 return "fa-" + this;
         }
+    }
 };
 
 /**
@@ -148,7 +149,7 @@ String.prototype.text2iconClass = function () {
  * });
  */
 (function ($, sr) {
-    // debouncing function from John Hann
+    // de-bouncing function from John Hann
     // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
     var debounce = function (func, threshold, execAsap) {
         var timeout;
@@ -364,13 +365,13 @@ String.prototype.text2iconClass = function () {
 
     // Accordion
     $(function () {
-        $(".expand").on("click", function () {
+        $('.expand').on('click', function () {
             $(this).next().slideToggle(200);
-            var $expand = $(this).find(">:first-child");
-            if ($expand.text() === "+") {
-                $expand.text("-");
+            var $expand = $(this).find('>:first-child');
+            if ($expand.text() === '+') {
+                $expand.text('-');
             } else {
-                $expand.text("+");
+                $expand.text('+');
             }
         });
     });
@@ -385,7 +386,7 @@ String.prototype.text2iconClass = function () {
     // Translation/Tooltip
     $(function () {
         changeLanguage(systemLang);
-        $("body").tooltip({
+        $('body').tooltip({
             selector: '[data-toggle="tooltip"]:not(:disabled)'
         });
     });

@@ -172,7 +172,7 @@ adapter.on('message', function (obj) {
             webServer.io.sockets.emit(obj.command, obj.message.id, obj.message.data);
         }
         // we cannot save the socket, because if it takes a bit time, the socket will be invalid
-        //cmdSessions[obj.message.id].socket.emit(obj.command, obj.message.id, obj.message.data);
+        // cmdSessions[obj.message.id].socket.emit(obj.command, obj.message.id, obj.message.data);
         if (obj.command === 'cmdExit') {
             delete cmdSessions[obj.message.id];
         }

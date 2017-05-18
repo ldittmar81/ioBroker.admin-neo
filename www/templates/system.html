@@ -69,9 +69,9 @@
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_dateFormat" class="form-control system-settings value">
-                                            <option value="DD.MM.YYYY">DD.MM.YYYY</option>
-                                            <option value="DD.MM.YY">DD.MM.YY</option>
-                                            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                            <option data-i18="DD.MM.YYYY" value="DD.MM.YYYY">DD.MM.YYYY</option>
+                                            <option data-i18="DD.MM.YY"   value="DD.MM.YY">DD.MM.YY</option>
+                                            <option data-i18="DD/MM/YYYY" value="DD/MM/YYYY">DD/MM/YYYY</option>
                                         </select>
                                     </div>
                                 </div>
@@ -82,8 +82,8 @@
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_isFloatComma" class="form-control system-settings value">
-                                            <option value="true" >comma</option>
-                                            <option value="false">point</option>
+                                            <option value="true" data-i18="system-comma" >comma</option>
+                                            <option value="false"data-i18="system-point" >point</option>
                                         </select>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="system_country" class="form-control system-settings value" data-live-search="true">
-                                            <option value="">Please select country</option>
+                                            <option data-i18="select-country" value="">Please select country</option>
                                             <option value="Afghanistan">Afghanistan</option>
                                             <option value="Albania">Albania</option>
                                             <option value="Algeria">Algeria</option>
@@ -166,7 +166,7 @@
                                             <option value="Congo">Congo</option>
                                             <option value="Cook Islands">Cook Islands</option>
                                             <option value="Costa Rica">Costa Rica</option>
-                                            <option>Croatia (Hrvatska)</option>
+                                            <option value="Croatia">Croatia (Hrvatska)</option>
                                             <option value="Cuba">Cuba</option>
                                             <option value="Cyprus">Cyprus</option>
                                             <option value="Czech Republic">Czech Republic</option>
@@ -426,11 +426,10 @@
                         </div>
 
                         <div id="tab-system-letsencrypt" role="tabpanel" class="tab-pane fade">
-                            
                             <p data-i18n="letsnecrypt_help"></p>
-                            
+
                             <div class="form-horizontal">
-                                
+
                                 <div class="form-group">
                                     <label for="system_le_email" class="col-sm-2 control-label">
                                         <span data-i18n="system_le_email"></span>:
@@ -440,7 +439,7 @@
                                         <input id="system_le_email" class="form-control system-le-settings value" data-name="email"/>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="system_le_domains" class="col-sm-2 control-label">
                                         <span data-i18n="system_le_domains"></span>:
@@ -450,7 +449,7 @@
                                         <input id="system_le_domains" class="form-control system-le-settings value" data-name="domains"/>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="system_le_path" class="col-sm-2 control-label">
                                         <span data-i18n="system_le_path"></span>:
@@ -460,35 +459,35 @@
                                         <input id="system_le_path" class="form-control system-le-settings value" data-name="domains"/>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                           
+
                         </div>
 
                         <div id="tab-system-diag" role="tabpanel" class="tab-pane fade">
-                            
+
                             <h2 data-i18n-html="diag-note">&nsbp;</h2>
                             <hr/>
                             <div class="form-horizontal">
-                                
+
                                 <div class="form-group">
                                     <label for="diagMode" class="col-sm-2 control-label">
                                         <span data-i18n="diagMode"></span>:                                      
                                     </label>
                                     <div class="col-sm-10">
                                         <select id="diagMode" class="form-control system-settings value">
-                                            <option value="none" data-i18n="none">none</option>
-                                            <option value="normal" data-i18n="normal">normal</option>
-                                            <option value="no-city" data-i18n="no-city">no-city</option>
-                                            <option value="extended" data-i18n="extended">extended</option>
+                                            <option value="none" data-i18n="system-diag-statistics-none">none</option>
+                                            <option value="normal" data-i18n="system-diag-statistics-normal">normal</option>
+                                            <option value="no-city" data-i18n="system-diag-statistics-no-city">no-city</option>
+                                            <option value="extended" data-i18n="system-diag-statistics-extended">extended</option>
                                         </select>
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <p data-i18n="sentData"></p>
                             <pre id="diagSample" style="font-size: 10px"></pre>
-                            
+
                         </div>                        
 
                     </div>

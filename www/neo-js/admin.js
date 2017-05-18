@@ -27,6 +27,8 @@ Array.prototype.remove = function () {
     }
     return this;
 };
+// enable i18n outputs
+$.i18n.debug = true;
 
 var $iframeDialog = null; // used in adapter settings window
 var showConfig = null; // used in adapter settings window

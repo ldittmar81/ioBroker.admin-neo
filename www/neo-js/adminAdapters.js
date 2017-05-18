@@ -329,7 +329,7 @@ function Adapters(main) {
                                 //TODO create issue
                             }
                         }
-                    }).off("shown.bs.modal");
+                    }).off('shown.bs.modal');
                 });
             });
 
@@ -347,6 +347,7 @@ function Adapters(main) {
             });
         });
     };
+    
     this.updateExpertMode = function () {
         that.init(true);
     };
@@ -448,16 +449,42 @@ function Adapters(main) {
         }
     };
 
+    this.getHostInfo = function (host, callback) {
+        if (!host) {
+            return;
+        }
+
+        if (!callback) {
+            throw 'Callback cannot be null or undefined';
+        }
+
+        this.main.socket.emit('sendToHost', host, 'getHostInfo', null, function (data) {
+            if (data === 'permissionError') {
+                console.error('May not read "getHostInfo"');
+            } else if (!data) {
+                console.error('Cannot read "getHostInfo"');
+            }
+
+            data && callback && callback(data);
+        });
+    };
+    
     this.getNews = function (actualVersion, adapter) {
         var text = '';
         if (adapter.news) {
             for (var v in adapter.news) {
-                if (systemLang === v)
-                    text += (text ? '\n' : '') + adapter.news[v];
-                if (v === 'en' || v === 'ru' || v === 'de')
+                if (!adapter.news.hasOwnProperty(v)) {
                     continue;
-                if (v === actualVersion)
+                }
+                if (systemLang === v) {
+                    text += (text ? '\n' : '') + adapter.news[v];
+                }
+                if (v === 'en' || v === 'ru' || v === 'de') {
+                    continue;
+                }
+                if (v === actualVersion) {
                     break;
+                }
                 text += (text ? '\n' : '') + (adapter.news[v][systemLang] || adapter.news[v].en);
             }
         }
