@@ -33,8 +33,6 @@ function Logs(main) {
     this.logFilterHost = '';
     this.logFilterSeverity = '';
     this.logFilterMessage = '';
-    this.$logFilterSeverity = null;
-    this.$logFilterMessage = null;
 
     this.logPauseList = [];
     this.logPauseMode = false;
@@ -45,14 +43,14 @@ function Logs(main) {
     this.prepare = function () {
 
         $('#menu-logs-div').load("templates/log.html", function () {
+            
+            $('#log-outer').bootstrapTable();
 
-            that.$logFilterSeverity = $('#log-filter-severity');
-            that.$logFilterMessage = $('#log-filter-message');
+            $('#log-filter-severity, #log-filter-host').on('change', function () {
+                that.filter();
+            });
 
-            $('#log-filter-host').change(this.filter);
-            that.$logFilterSeverity.change(this.filter);
-
-            that.$logFilterMessage.change(function () {
+            $('#log-filter-message').change(function () {
                 if (that.logFilterTimeout) {
                     clearTimeout(that.logFilterTimeout);
                 }
@@ -117,7 +115,7 @@ function Logs(main) {
             }
 
             $('#log-outer').find('[data-i18n]').i18n();
-            $('#log-outer').bootstrapTable();
+
 
         });
 
@@ -178,8 +176,8 @@ function Logs(main) {
                 restartFunctions('#log_error_list');
 
                 that.logFilterHost = $('#log-filter-host').val();
-                that.logFilterMessage = that.$logFilterMessage.val();
-                that.logFilterSeverity = that.$logFilterSeverity.val();
+                that.logFilterMessage = $('#log-filter-message').val();
+                that.logFilterSeverity = $('#log-filter-severity').val();
             }, 0);
         });
 
@@ -286,8 +284,8 @@ function Logs(main) {
         var $logOuter = $('#log-outer');
 
         that.logFilterHost = $('#log-filter-host').val();
-        that.logFilterMessage = that.$logFilterMessage.val();
-        that.logFilterSeverity = that.$logFilterSeverity.val();
+        that.logFilterMessage = $('#log-filter-message').val();
+        that.logFilterSeverity = $('#log-filter-severity').val();
 
         if (that.logFilterSeverity === 'error') {
             $logOuter.find('.log-severity-debug').hide();

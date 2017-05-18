@@ -198,10 +198,10 @@ adapter.on('unload', function (callback) {
 
 adapter.on('log', function (obj) {
     // obj = {message: msg, severity: level, from: this.namespace, ts: (new Date()).getTime()}
-    if(obj.severity === "error"){
-        for(var endpoint in subscriptions){
+    if (obj.severity === "error") {
+        for (var endpoint in subscriptions) {
             sendNotification(endpoint, obj.message);
-        }       
+        }
     }
     if (webServer && webServer.io && webServer.io.sockets) {
         // TODO Build in some threshold
@@ -806,6 +806,9 @@ function getData() {
     });
     adapter.log.info('requesting all objects');
     adapter.objects.getObjectList({include_docs: true}, function (err, res) {
+        if (err) {
+            console.log(err);
+        }
         adapter.log.info('received all objects');
         res = res.rows;
         objects = {};

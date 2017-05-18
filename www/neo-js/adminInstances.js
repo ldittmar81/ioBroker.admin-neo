@@ -25,7 +25,7 @@ function Instances(main) {
     this.menuIcon = 'fa-object-group';
     this.list = [];
     this.hostsText = null;
- 
+
     function getLinkVar(_var, obj, attr, link, instance) {
         if (attr === 'protocol') {
             attr = 'secure';
@@ -73,7 +73,7 @@ function Instances(main) {
     this.resolveLink = function (link, adapter, instance) {
         var vars = link.match(/%(\w+)%/g);
         var _var, v, parts, result;
-      
+
         if (vars) {
             // first replace simple patterns
             for (v = vars.length - 1; v >= 0; v--) {
@@ -122,7 +122,7 @@ function Instances(main) {
                     };
                 }
             }
-            
+
             if (instances) {
                 result = [];
                 var count = 0;
@@ -140,7 +140,7 @@ function Instances(main) {
                 }
             }
         }
-        
+
         return result || link;
     };
 
@@ -333,6 +333,24 @@ function Instances(main) {
         return mem;
     }
 
+    function addGroups() {
+
+        var $tempGroup = $('#instancesTemplateGroup').children().clone(true, true);
+        $tempGroup.find('.group_title').text($.i18n('realInstances'));
+        $tempGroup.find('.instancesList').attr('id', 'groupRealInstances');
+        $instanceContainer.append($tempGroup);
+
+        $tempGroup = $('#instancesTemplateGroup').children().clone(true, true);
+        $tempGroup.find('.group_title').text($.i18n('webInstances'));
+        $tempGroup.find('.instancesList').attr('id', 'groupWebInstances');
+        $instanceContainer.append($tempGroup);
+
+        $tempGroup = $('#instancesTemplateGroup').children().clone(true, true);
+        $tempGroup.find('.group_title').text($.i18n('visAddonInstances'));
+        $tempGroup.find('.instancesList').attr('id', 'groupVisAddonInstances');
+        $instanceContainer.append($tempGroup);
+    }
+
     function showOneAdapter(instanceId) {
 
         var common = that.main.objects[instanceId] ? that.main.objects[instanceId].common || {} : {};
@@ -342,6 +360,8 @@ function Instances(main) {
 
         if (!that.main.config.instanceFormList) {
             var $instanceTile = $instancesTileTemplate.children().clone(true, true);
+
+            var type = "RealInstance";
 
             $instanceTile.attr('data-instance-id', instanceId);
             $instanceTile.attr('data-adapter', adapter);
@@ -366,6 +386,11 @@ function Instances(main) {
             var isRun = common.onlyWWW || common.enabled;
 
             if (common.onlyWWW) {
+                if (common.type === "vis") {
+                    type = "VisAddonInstance";
+                } else {
+                    type = "WebInstance";
+                }
                 $instanceTile.find('.instance-stop-run').remove();
                 $instanceTile.find('.instance-reload').remove();
             } else {
@@ -397,7 +422,7 @@ function Instances(main) {
 
             that.initButtons($instanceTile);
 
-            $instanceContainer.append($instanceTile);
+            $('#group' + type + 's').append($instanceTile);
         } else {
             var row = [{
                     instance: adapter + '.' + instance,
@@ -421,9 +446,9 @@ function Instances(main) {
         }
         return "";
     }
-    
+
     function addButtonsFormatter() {
-        var $tempButtons = $('#instanceTemplateTableButtons').children().clone(true, true);       
+        var $tempButtons = $('#instanceTemplateTableButtons').children().clone(true, true);
         return $tempButtons.toString();
     }
 
@@ -581,7 +606,7 @@ function Instances(main) {
 
     this.prepare = function () {
         $('#menu-instances-div').load("templates/instances.html", function () {
-            
+
             $instancesTableTemplate = $('#instancesTemplateTable');
             $instancesTileTemplate = $('#instancesTemplateTile');
             $instanceContainer = $('#instances-container');
@@ -676,7 +701,7 @@ function Instances(main) {
         }
 
         this.main.socket.emit('getObject', 'system.adapter.' + parts[0], function (err, obj) {
-            if(err){
+            if (err) {
                 console.log(err);
             }
             if (obj) {
@@ -740,7 +765,7 @@ function Instances(main) {
         }
 
         this.main.socket.emit('getObject', 'system.adapter.' + parts[0], function (err, obj) {
-            if(err){
+            if (err) {
                 console.log(err);
             }
             if (obj && link) {
@@ -826,11 +851,14 @@ function Instances(main) {
                     this.list.splice(l, 1);
                 }
             }
+
             this.list.sort();
             onlyWWW.sort();
             for (l = 0; l < onlyWWW.length; l++) {
                 this.list.push(onlyWWW[l]);
             }
+
+            addGroups();
 
             for (var i = 0; i < this.list.length; i++) {
                 var obj = this.main.objects[this.list[i]];
@@ -861,17 +889,17 @@ function Instances(main) {
         // id = 'system.adapter.NAME.X'
         $iframeDialog = $('#modal-config');
         var parts = id.split('.');
-        
+
         $('#config-iframe').attr('src', 'adapter/' + parts[2] + '/?' + parts[3]);
 
         var name = id.replace(/^system\.adapter\./, '');
-        
+
         $('#modal-config').data('name', name);
 
         $('#modal-config-label').text($.i18n('adapterConfiguration') + ': ' + name);
-        
+
         $iframeDialog.modal();
-        
+
     };
 
     this.initButtons = function ($instanceTile) {
