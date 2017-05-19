@@ -888,15 +888,18 @@ function Instances(main) {
     this.showConfigDialog = function (id) {
         // id = 'system.adapter.NAME.X'
         $iframeDialog = $('#modal-config');
+        
         var parts = id.split('.');
-
         $('#config-iframe').attr('src', 'adapter/' + parts[2] + '/?' + parts[3]);
-
+        
         var name = id.replace(/^system\.adapter\./, '');
-
         $('#modal-config').data('name', name);
-
         $('#modal-config-label').text($.i18n('adapterConfiguration') + ': ' + name);
+        
+        var height = $(window).height();
+        $iframeDialog.find('.modal-content').css("height", height - 60);
+        $('#config-iframe').css("height", height - 200);
+        
 
         $iframeDialog.modal();
 

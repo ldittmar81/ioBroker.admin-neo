@@ -701,7 +701,7 @@ var adapterRedirect = function (redirect, timeout) {
         function initMenus() {
 
             initAllDialogs();
-
+            
             // extract all additional instances
             var text = '', list = [], showMenus = '', link = '', name = '', div = '', a;
 
@@ -869,6 +869,8 @@ var adapterRedirect = function (redirect, timeout) {
             }
 
             $('.side-menu').prepend(text);
+            
+            copyAdminMenuForMobile();
 
             $('.menu-close').click(function () {
                 var pos = main.systemConfig.common.menus.indexOf($(this).data('tab'));
@@ -911,6 +913,13 @@ var adapterRedirect = function (redirect, timeout) {
             } else {
                 initHtmlMenus(showMenus);
             }
+        }
+        
+        function copyAdminMenuForMobile(){
+            var $tmpObj = $('#adminHomeMenu').clone(true, true);
+            $tmpObj.removeAttr('id').addClass("visible-xs");
+            
+            $('.side-menu').prepend($tmpObj);
         }
 
         function initAllDialogs() {
