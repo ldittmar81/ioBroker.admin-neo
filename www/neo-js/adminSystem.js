@@ -332,7 +332,7 @@ function System(main) {
 
     this.init = function () {
         if (!main.systemConfig.error) {
-            $('#button-system, #link-system').click(function () {
+            $('#button-system, .link-system').click(function () {
 
                 $('#system_activeRepo').html('');
 
@@ -414,7 +414,7 @@ function System(main) {
             });
         } else {
             $('#button-system').prop('disabled', true);
-            $('#link-system').hide();
+            $('.link-system').hide();
         }
 
     };

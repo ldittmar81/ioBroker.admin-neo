@@ -575,7 +575,7 @@ var adapterRedirect = function (redirect, timeout) {
                 $('#menuitem-' + id).parent().addClass('active');
             },
             updateWizard: function () {
-                var $wizard = $('#link-wizard');
+                var $wizard = $('.link-wizard');
                 if (main.objects['system.adapter.discovery.0']) {
                     if (!$wizard.data('inited')) {
                         $wizard.data('inited', true);
@@ -689,7 +689,7 @@ var adapterRedirect = function (redirect, timeout) {
                 if (!auth) {
                     $('#button-logout').remove();
                 }
-                $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
+                $('.current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
             });
 
             $('#events_threshold').click(function () {
@@ -918,8 +918,11 @@ var adapterRedirect = function (redirect, timeout) {
         function copyAdminMenuForMobile(){
             var $tmpObj = $('#adminHomeMenu').clone(true, true);
             $tmpObj.removeAttr('id').addClass("visible-xs");
+            $tmpObj.find('.user-profile').removeAttr('class').removeAttr('data-toggle').removeAttr('href');
+            $tmpObj.find('.dropdown-menu').removeAttr('class').addClass('nav child_menu').find('i').remove();
             
             $('.side-menu').prepend($tmpObj);
+            initIoBrokerSideMenu();
         }
 
         function initAllDialogs() {
@@ -1333,11 +1336,11 @@ var adapterRedirect = function (redirect, timeout) {
 
                 main.socket.emit('authEnabled', function (auth, user) {
                     if (!auth) {
-                        $('#link-logout').remove();
+                        $('.link-logout').remove();
                         $('#button-logout').remove();
                         $('#button-info').removeClass('hidden');
                     }
-                    $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
+                    $('.current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
                     if (auth) {
                         main._lastTimer = (new Date()).getTime();
                         monitor();
@@ -1459,10 +1462,10 @@ var adapterRedirect = function (redirect, timeout) {
         $('#link-logs').on("click", function () {
             main.selectMenu('logs');
         });
-        $('#link-users').on("click", function () {
+        $('.link-users').on("click", function () {
             main.usersDialog.init();
         });
-        $('#link-groups').on("click", function () {
+        $('.link-groups').on("click", function () {
             main.groupsDialog.init();
         });
         // / open links

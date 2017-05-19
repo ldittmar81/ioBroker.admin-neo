@@ -8,7 +8,7 @@
 /* global io:false */
 /* global jQuery:false */
 /* global $:false */
-/* global systemLang, semver, bootbox */
+/* global systemLang, semver, bootbox, availableLanguages */
 
 /**
  * @constructor
@@ -479,7 +479,7 @@ function Adapters(main) {
                 if (systemLang === v) {
                     text += (text ? '\n' : '') + adapter.news[v];
                 }
-                if (v === 'en' || v === 'ru' || v === 'de') {
+                if (availableLanguages.hasOwnProperty(v)) {
                     continue;
                 }
                 if (v === actualVersion) {
