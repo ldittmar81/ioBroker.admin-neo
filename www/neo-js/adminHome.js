@@ -51,7 +51,7 @@ function Home(main) {
         }
         text += hours + ':' + minutes + ':' + seconds;
 
-        return text
+        return text;
     }
 
     function formatRam(bytes) {
@@ -65,7 +65,7 @@ function Home(main) {
             text += MB + 'MB ';
         }
 
-        return text
+        return text;
     }
 
     var formatInfo = {
@@ -140,12 +140,14 @@ function Home(main) {
             if (data) {
                 for (var item in data) {
                     if (data.hasOwnProperty(item)) {
-                        text += '<dt>' + $.i18n(item) + '</dt>'
+                        text += '<dt>' + $.i18n(item) + '</dt>';
                         text += '<dd class="system-info" data-attribute="' + item + '">' + (formatInfo[item] ? formatInfo[item](data[item]) : data[item]) + '</dd>';
                     }
                 }
             }
-            if (text) {
+            if (text) {                
+                $('#homePlaceholderTab').hide();
+                $('#homeUpdateListTab, #homeNewAdapterTab').removeClass('col-md-6').addClass('col-md-4');
                 $('#systemInfoTab').show();
                 $('#systemInfoList').html(text);
             }
