@@ -30,13 +30,13 @@ function System(main) {
     function string2cert(name, str) {
         // expected format: -----BEGIN CERTIFICATE-----certif...icate==-----END CERTIFICATE-----
         if (str.length < '-----BEGIN CERTIFICATE-----==-----END CERTIFICATE-----'.length) {
-            main.showMessage($.i18n('Invalid certificate "%s". To short.', name));
+            main.showMessage($.i18n('invalidCertShort', name));
             return '';
         }
         var lines = [];
         if (str.substring(0, '-----BEGIN RSA PRIVATE KEY-----'.length) === '-----BEGIN RSA PRIVATE KEY-----') {
             if (str.substring(str.length - '-----END RSA PRIVATE KEY-----'.length) !== '-----END RSA PRIVATE KEY-----') {
-                main.showMessage($.i18n('Certificate "%s" must end with "-----END RSA PRIVATE KEY-----".', name), '', 'notice');
+                main.showMessage($.i18n('certMustEndWith', name, "-----END RSA PRIVATE KEY-----"), '', 'notice');
                 return '';
             }
             str = str.substring('-----BEGIN RSA PRIVATE KEY-----'.length);
@@ -49,7 +49,7 @@ function System(main) {
             return '-----BEGIN RSA PRIVATE KEY-----\r\n' + lines.join('\r\n') + '\r\n-----END RSA PRIVATE KEY-----\r\n';
         } else if (str.substring(0, '-----BEGIN PRIVATE KEY-----'.length) === '-----BEGIN PRIVATE KEY-----') {
             if (str.substring(str.length - '-----END PRIVATE KEY-----'.length) !== '-----END PRIVATE KEY-----') {
-                main.showMessage($.i18n('Certificate "%s" must end with "-----BEGIN PRIVATE KEY-----".', name), '', 'notice');
+                main.showMessage($.i18n('certMustStartWith', name, "-----BEGIN PRIVATE KEY-----"), '', 'notice');
                 return '';
             }
             str = str.substring('-----BEGIN PRIVATE KEY-----'.length);
@@ -62,11 +62,11 @@ function System(main) {
             return '-----BEGIN PRIVATE KEY-----\r\n' + lines.join('\r\n') + '\r\n-----END PRIVATE KEY-----\r\n';
         } else {
             if (str.substring(0, '-----BEGIN CERTIFICATE-----'.length) !== '-----BEGIN CERTIFICATE-----') {
-                main.showMessage($.i18n('Certificate "%s" must start with "-----BEGIN CERTIFICATE-----".', name), '', 'notice');
+                main.showMessage($.i18n('certMustStartWith', name, "-----BEGIN CERTIFICATE-----"), '', 'notice');
                 return '';
             }
             if (str.substring(str.length - '-----END CERTIFICATE-----'.length) !== '-----END CERTIFICATE-----') {
-                main.showMessage($.i18n('Certificate "%s" must end with "-----END CERTIFICATE-----".', name), '', 'notice');
+                main.showMessage($.i18n('certMustEndWith', name, "-----END CERTIFICATE-----"), '', 'notice');
                 return '';
             }
             // process chained certificates

@@ -69,7 +69,7 @@ function Events(main) {
             $('#event-filter-ack').change(filterEvents);
             $('#event-filter-from').change(filterEvents);
 
-            $('#event-pause').attr('data-i18n-tooltip', $.i18n('Pause output')).click(function () {
+            $('#event-pause').attr('data-i18n-tooltip', $.i18n('pauseOutput')).click(function () {
                 that.pause();
             });
 
@@ -282,7 +282,7 @@ function Events(main) {
             this.eventPauseList = [];
             this.eventPauseCounter = 0;
 
-            $('#event-pause').removeClass('ui-state-error ui-state-focus').attr('title', $.i18n('Pause output'));
+            $('#event-pause').removeClass('ui-state-error ui-state-focus').attr('title', $.i18n('pauseOutput'));
         }
     };
 }

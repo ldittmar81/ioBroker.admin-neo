@@ -28,8 +28,6 @@ function Groups(main) {
             that.$dialogGroups = $('#modal-groups');
             that.$table = $('#groups-table');
             
-            that.$table.bootstrapTable();
-
         });
     };
 
@@ -40,6 +38,10 @@ function Groups(main) {
             }, 500);
             return;
         }
+        
+        restartFunctions('#dialog-groups');
+        
+        that.$table.bootstrapTable();
 
         for (var i = 0; i < this.list.length; i++) {
             var obj = that.main.objects[this.list[i]];
@@ -72,18 +74,16 @@ function Groups(main) {
 
         $('.group-del').click(function () {
             var id = $(this).attr('data-group-id');
-            that.main.confirmMessage($.i18n('Are you sure?'), null, 'help', function (result) {
+            that.main.confirmMessage($.i18n('areyousure'), null, 'help', function (result) {
                 if (result) {
                     that.main.socket.emit('delGroup', id.replace("system.group.", ""), function (err) {
                         if (err) {
-                            that.main.showMessage($.i18n('Cannot delete group: %s', err), '', 'alert');
+                            that.main.showMessage($.i18n('cannotDeleteGroup', err), '', 'alert');
                         }
                     });
                 }
             });
         });
-
-        restartFunctions('#dialog-groups');
 
         that.$dialogGroups.modal();
     };

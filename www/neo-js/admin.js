@@ -610,10 +610,12 @@ var adapterRedirect = function (redirect, timeout) {
 
         main.instances = menus.instances.list;
         main.menus = menus;
+        
         main.systemDialog = new System(main);
         main.infoDialog = new Info(main);
         main.usersDialog = new Users(main);
         main.groupsDialog = new Groups(main);
+        
         main.canSubscribe = false;
         main.isSubscribed = false;
 
@@ -1252,7 +1254,7 @@ var adapterRedirect = function (redirect, timeout) {
             console.log(error);
         });
         main.socket.on('permissionError', function (err) {
-            main.showMessage($.i18n('Has no permission to $1 $2 $3', err.operation, err.type, (err.id || '')));
+            main.showMessage($.i18n('hasNoPermissionTo', err.operation, err.type, (err.id || '')));
         });
         main.socket.on('stateChange', function (id, obj) {
             setTimeout(stateChange, 0, id, obj);

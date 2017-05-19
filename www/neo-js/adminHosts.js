@@ -125,7 +125,7 @@ function Hosts(main) {
             if (!that.main.states['system.host.' + $(this).val() + '.alive'] ||
                     !that.main.states['system.host.' + $(this).val() + '.alive'].val ||
                     that.main.states['system.host.' + $(this).val() + '.alive'].val === 'null') {
-                that.main.showMessage($.i18n('Host %s is offline', $(this).val()));
+                that.main.showMessage($.i18n('hostIsOffline', $(this).val()));
                 $(this).val(that.main.currentHost);
                 return;
             }

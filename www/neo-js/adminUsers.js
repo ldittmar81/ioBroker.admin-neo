@@ -17,7 +17,7 @@
  */
 function Users(main) {
     'use strict';
-    
+
     var that = this;
     this.list = [];
     this.main = main;
@@ -28,8 +28,6 @@ function Users(main) {
 
             that.$dialogUsers = $('#modal-users');
             that.$table = $('#users-table');
-            
-            that.$table.bootstrapTable();
 
         });
     };
@@ -42,6 +40,10 @@ function Users(main) {
             }, 500);
             return;
         }
+        
+        restartFunctions('#dialog-users');
+        
+        that.$table.bootstrapTable();
 
         for (var i = 0; i < that.list.length; i++) {
             var obj = that.main.objects[that.list[i]];
@@ -52,7 +54,7 @@ function Users(main) {
                 var name = groups[j].substring('system.group.'.length);
                 name = name.substring(0, 1).toUpperCase() + name.substring(1);
                 select += '<option value="' + groups[j] + '"';
-                if (that.main.objects[groups[j]].common && that.main.objects[groups[j]].common.members && that.main.objects[groups[j]].common.members.indexOf(that.list[i]) !== -1){
+                if (that.main.objects[groups[j]].common && that.main.objects[groups[j]].common.members && that.main.objects[groups[j]].common.members.indexOf(that.list[i]) !== -1) {
                     select += ' selected';
                 }
                 select += '>' + name + '</option>';
@@ -68,8 +70,6 @@ function Users(main) {
             });
         }
 
-        restartFunctions('#dialog-users');
-
         that.$dialogUsers.modal();
     };
 
@@ -81,11 +81,11 @@ function Users(main) {
         var passconf = $('#edit-user-passconf').val();
 
         if (pass !== passconf) {
-            that.main.showMessage($.i18n('Password and confirmation are not equal!'), null, 'notice');
+            that.main.showMessage($.i18n('pwNotEqual'), null, 'notice');
             return;
         }
         if (!pass) {
-            that.main.showMessage($.i18n('Password cannot be empty!'), null, 'notice');
+            that.main.showMessage($.i18n('pwNotEmpty'), null, 'notice');
             return;
         }
         var id = $('#edit-user-id').val();
@@ -94,7 +94,7 @@ function Users(main) {
         if (!id) {
             that.main.socket.emit('addUser', user, pass, function (err) {
                 if (err) {
-                    that.main.showMessage($.i18n('Cannot create user: ') + $.i18n(err), null, 'alert');
+                    that.main.showMessage($.i18n('cannotCreateUser', $.i18n(err)), null, 'alert');
                 } else {
                     that.$dialog.modal('hide');
                     setTimeout(function () {
@@ -107,7 +107,7 @@ function Users(main) {
             if (pass !== '__pass_not_set__') {
                 that.main.socket.emit('changePassword', user, pass, function (err) {
                     if (err) {
-                        that.main.showMessage($.i18n('Cannot set password: ') + $.i18n(err), null, 'alert');
+                        that.main.showMessage($.i18n('cannotSetPw', $.i18n(err)), null, 'alert');
                     } else {
                         that.$dialog.modal('hide');
                     }

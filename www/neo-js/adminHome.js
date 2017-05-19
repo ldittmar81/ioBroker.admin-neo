@@ -140,15 +140,14 @@ function Home(main) {
             if (data) {
                 for (var item in data) {
                     if (data.hasOwnProperty(item)) {
-                        text += '<tr><td>' + $.i18n(item) + ':&nbsp;</td><td class="system-info" data-attribute="' + item + '">' + (formatInfo[item] ? formatInfo[item](data[item]) : data[item]) + '</td></tr>';
+                        text += '<dt>' + $.i18n(item) + '</dt>'
+                        text += '<dd class="system-info" data-attribute="' + item + '">' + (formatInfo[item] ? formatInfo[item](data[item]) : data[item]) + '</dd>';
                     }
                 }
             }
             if (text) {
-                $('#systemInfoTab')
-                    .show()
-                    .find('#systemInfoList')
-                        .html(text);
+                $('#systemInfoTab').show();
+                $('#systemInfoList').html(text);
             }
         });
         
