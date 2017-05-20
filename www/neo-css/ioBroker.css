@@ -347,7 +347,7 @@ html , body{
 }
 @media (min-width: 480px) {
     .nav_menu {
-        position: static
+        position: static;
     }
 }
 .nav-md .container.body .col-md-3.left_col {
@@ -392,6 +392,7 @@ body .container.body .right_col {
     }
     .right_col {
         padding: 10px !important;
+        margin-top: 50px !important;
         width: 100%;
     }
 }
@@ -4702,4 +4703,10 @@ img.tranparent {
     top: -10px;
     right: 10px;
     position: absolute;
+}
+
+@media (max-width: 767px) {
+    .modal-dialog{
+        margin-left: 80px;
+    }    
 }

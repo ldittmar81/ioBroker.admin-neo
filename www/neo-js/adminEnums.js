@@ -134,7 +134,7 @@ function Enums(main) {
 
     function enumAddChild(parent, newId, name) {
         if (main.objects[newId]) {
-            main.showMessage($.i18n('Name yet exists!'), '', 'notice');
+            main.showMessage($.i18n('nameYetExists'), '', 'notice');
             return false;
         }
 

@@ -66,7 +66,7 @@
 
     <div class="row">
 
-        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+        <div id="homeUpdateListTab" class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
                     <h2>
@@ -87,11 +87,11 @@
             </div>
         </div>
         
-        <div class="col-lg-4 hidden-md hidden-sm hidden-xs">
+        <div id="homePlaceholderTab" class="col-lg-4 hidden-md hidden-sm hidden-xs">
             <img class="img-responsive center-block tranparent" src="img/logoNoText.png" alt="ioBroker"/>
         </div>
 
-        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+        <div id="homeNewAdapterTab" class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
                     <h2>
@@ -112,7 +112,7 @@
             </div>
         </div>
 
-        <div class="col-md-4 col-sm-4 col-xs-12" id="systemInfoTab" style="display: none">
+        <div id="systemInfoTab" class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="display: none">
             <div class="x_panel">
                 <div class="x_title">
                     <h2>
@@ -127,7 +127,7 @@
                 </div>
                 <div class="x_content">
                     <div class="">
-                        <table id="systemInfoList"></table>
+                        <dl class="dl-horizontal" id="systemInfoList"></dl>
                     </div>
                 </div>
             </div>

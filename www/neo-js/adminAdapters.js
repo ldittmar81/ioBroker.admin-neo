@@ -8,7 +8,7 @@
 /* global io:false */
 /* global jQuery:false */
 /* global $:false */
-/* global systemLang, semver, bootbox */
+/* global systemLang, semver, bootbox, availableLanguages */
 
 /**
  * @constructor
@@ -479,7 +479,7 @@ function Adapters(main) {
                 if (systemLang === v) {
                     text += (text ? '\n' : '') + adapter.news[v];
                 }
-                if (v === 'en' || v === 'ru' || v === 'de') {
+                if (availableLanguages.hasOwnProperty(v)) {
                     continue;
                 }
                 if (v === actualVersion) {
@@ -511,14 +511,14 @@ function Adapters(main) {
         for (var adapter in adapters) {
             if (adapter === 'js-controller') {
                 if (!semver.satisfies(that.main.objects['system.host.' + that.main.currentHost].common.installedVersion, adapters[adapter])) {
-                    return $.i18n('Invalid version of $1. Required $2', adapter, adapters[adapter]);
+                    return $.i18n('invalid_version', adapter, adapters[adapter]);
                 }
             } else {
                 if (!that.main.objects['system.adapter.' + adapter] || !that.main.objects['system.adapter.' + adapter].common || !that.main.objects['system.adapter.' + adapter].common.installedVersion) {
-                    return $.i18n('No version of $1', adapter);
+                    return $.i18n('noVersionOf', adapter);
                 }
                 if (!semver.satisfies(that.main.objects['system.adapter.' + adapter].common.installedVersion, adapters[adapter])) {
-                    return $.i18n('Invalid version of $1', adapter);
+                    return $.i18n('invalidVersionOf', adapter);
                 }
             }
         }
@@ -794,7 +794,7 @@ function Adapters(main) {
                         } else if (adapter.version === 'npm error') {
                             state = "error";
                             bgColor = "";
-                            adapter.version = $.i18n('npm error');
+                            adapter.version = $.i18n('npmError');
                         } else {
                             state = "stable";
                             bgColor = "bg-success";

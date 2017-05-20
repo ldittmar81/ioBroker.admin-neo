@@ -269,7 +269,7 @@ function Objects(main) {
         $('.object-tab-field-delete').click(function () {
             var part = $(this).data('part');
             var field = $(this).data('attr');
-            that.main.confirmMessage($.i18n('Are you sure?'), $.i18n('Delete attribute'), 'alert', function (result) {
+            that.main.confirmMessage($.i18n('areyousure'), $.i18n('deleteAttribute'), 'alert', function (result) {
                 if (result) {
                     var _obj = that.saveFromTabs();
                     delete _obj[part][field];
@@ -336,7 +336,7 @@ function Objects(main) {
                 obj = JSON.parse(obj);
             }
         } catch (e) {
-            that.main.showMessage($.i18n('Cannot parse.'), 'Error in ' + e, 'alert');
+            that.main.showMessage($.i18n('cannotParse'), 'Error in ' + e, 'alert');
             return false;
         }
 
@@ -348,12 +348,12 @@ function Objects(main) {
         obj.type = $('#edit-object-type').val();
         var err = saveObjectFields('object-tab-common-table', obj.common);
         if (err) {
-            that.main.showMessage($.i18n('Cannot parse.'), 'Error in ' + err, 'alert');
+            that.main.showMessage($.i18n('cannotParse'), 'Error in ' + err, 'alert');
             return false;
         }
         err = saveObjectFields('object-tab-native-table', obj.native);
         if (err) {
-            that.main.showMessage($.i18n('Cannot parse.'), 'Error in ' + err, 'alert');
+            that.main.showMessage($.i18n('cannotParse'), 'Error in ' + err, 'alert');
             return false;
         }
         obj.acl.object = 0;
@@ -385,7 +385,7 @@ function Objects(main) {
         try {
             obj = JSON.parse(that.editor.getValue());
         } catch (e) {
-            that.main.showMessage(e, $.i18n('Parse error'), 'alert');
+            that.main.showMessage(e, $.i18n('cannotParse'), 'alert');
             return false;
         }
         return obj;
@@ -454,7 +454,7 @@ function Objects(main) {
             img = '/adapter/' + adapter + '/' + img;
             var tab = '<div class="customs-row-title ui-widget-header ' +
                     (hidden ? 'customs-row-title-collapsed' : 'customs-row-title-expanded') +
-                    '" data-adapter="' + data + '"><img class="customs-row-title-icon" width="20" src="' + img + '" /><span class="customs-row-title-settings">' + $.i18n('Settings for %s', '') + '</span>' + data +
+                    '" data-adapter="' + data + '"><img class="customs-row-title-icon" width="20" src="' + img + '" /><span class="customs-row-title-settings">' + $.i18n('settingsFor', '') + '</span>' + data +
                     '</div>' +
                     '<div class="customs-settings" style="' + (hidden ? 'display: none' : '') + '">' +
                     $('script[data-template-name="' + adapter + '"]').html() +
@@ -623,7 +623,7 @@ function Objects(main) {
     this.loadHistoryTable = function (id, isSilent) {
         var end = (new Date()).getTime() + 10000; // now
         if (!isSilent) {
-            $('#grid-history-body').html('<tr><td colspan="5" style="text-align: center">' + $.i18n('Loading...') + '</td></tr>');
+            $('#grid-history-body').html('<tr><td colspan="5" style="text-align: center">' + $.i18n('loading') + '</td></tr>');
         }
 
         main.socket.emit('getHistory', id, {
@@ -649,7 +649,7 @@ function Objects(main) {
                                     '</tr>\n';
                         }
                     } else {
-                        text = '<tr><td colspan="5" style="text-align: center">' + $.i18n('No data') + '</td></tr>';
+                        text = '<tr><td colspan="5" style="text-align: center">' + $.i18n('noData') + '</td></tr>';
                     }
                     $('#grid-history-body').html(text)
                             .data('odd', true);

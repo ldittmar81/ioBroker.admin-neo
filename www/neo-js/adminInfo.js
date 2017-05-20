@@ -25,7 +25,7 @@ function Info(main) {
 
             $dialogInfo = $('#modal-info');
 
-            $('#button-info, #link-info').click(function () {
+            $('#button-info, .link-info').click(function () {
                 that.init();
             });
 

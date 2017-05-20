@@ -575,7 +575,7 @@ var adapterRedirect = function (redirect, timeout) {
                 $('#menuitem-' + id).parent().addClass('active');
             },
             updateWizard: function () {
-                var $wizard = $('#link-wizard');
+                var $wizard = $('.link-wizard');
                 if (main.objects['system.adapter.discovery.0']) {
                     if (!$wizard.data('inited')) {
                         $wizard.data('inited', true);
@@ -610,10 +610,12 @@ var adapterRedirect = function (redirect, timeout) {
 
         main.instances = menus.instances.list;
         main.menus = menus;
+        
         main.systemDialog = new System(main);
         main.infoDialog = new Info(main);
         main.usersDialog = new Users(main);
         main.groupsDialog = new Groups(main);
+        
         main.canSubscribe = false;
         main.isSubscribed = false;
 
@@ -687,7 +689,7 @@ var adapterRedirect = function (redirect, timeout) {
                 if (!auth) {
                     $('#button-logout').remove();
                 }
-                $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
+                $('.current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
             });
 
             $('#events_threshold').click(function () {
@@ -699,7 +701,7 @@ var adapterRedirect = function (redirect, timeout) {
         function initMenus() {
 
             initAllDialogs();
-
+            
             // extract all additional instances
             var text = '', list = [], showMenus = '', link = '', name = '', div = '', a;
 
@@ -867,6 +869,8 @@ var adapterRedirect = function (redirect, timeout) {
             }
 
             $('.side-menu').prepend(text);
+            
+            copyAdminMenuForMobile();
 
             $('.menu-close').click(function () {
                 var pos = main.systemConfig.common.menus.indexOf($(this).data('tab'));
@@ -909,6 +913,16 @@ var adapterRedirect = function (redirect, timeout) {
             } else {
                 initHtmlMenus(showMenus);
             }
+        }
+        
+        function copyAdminMenuForMobile(){
+            var $tmpObj = $('#adminHomeMenu').clone(true, true);
+            $tmpObj.removeAttr('id').addClass("visible-xs");
+            $tmpObj.find('.user-profile').removeAttr('class').removeAttr('data-toggle').removeAttr('href');
+            $tmpObj.find('.dropdown-menu').removeAttr('class').addClass('nav child_menu').find('i').remove();
+            
+            $('.side-menu').prepend($tmpObj);
+            initIoBrokerSideMenu();
         }
 
         function initAllDialogs() {
@@ -1252,7 +1266,7 @@ var adapterRedirect = function (redirect, timeout) {
             console.log(error);
         });
         main.socket.on('permissionError', function (err) {
-            main.showMessage($.i18n('Has no permission to $1 $2 $3', err.operation, err.type, (err.id || '')));
+            main.showMessage($.i18n('hasNoPermissionTo', err.operation, err.type, (err.id || '')));
         });
         main.socket.on('stateChange', function (id, obj) {
             setTimeout(stateChange, 0, id, obj);
@@ -1322,11 +1336,11 @@ var adapterRedirect = function (redirect, timeout) {
 
                 main.socket.emit('authEnabled', function (auth, user) {
                     if (!auth) {
-                        $('#link-logout').remove();
+                        $('.link-logout').remove();
                         $('#button-logout').remove();
                         $('#button-info').removeClass('hidden');
                     }
-                    $('#current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
+                    $('.current-user').html(user ? user[0].toUpperCase() + user.substring(1).toLowerCase() : '');
                     if (auth) {
                         main._lastTimer = (new Date()).getTime();
                         monitor();
@@ -1448,10 +1462,10 @@ var adapterRedirect = function (redirect, timeout) {
         $('#link-logs').on("click", function () {
             main.selectMenu('logs');
         });
-        $('#link-users').on("click", function () {
+        $('.link-users').on("click", function () {
             main.usersDialog.init();
         });
-        $('#link-groups').on("click", function () {
+        $('.link-groups').on("click", function () {
             main.groupsDialog.init();
         });
         // / open links
