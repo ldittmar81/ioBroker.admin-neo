@@ -11,7 +11,7 @@
 
 'use strict';
 
-var availableLanguages = {'de': 'Deutsch', 'en': 'English', 'nl': 'Dutch', 'pt': 'Português', 'ru': 'русский'};
+var availableLanguages = {'de': 'Deutsch', 'en': 'English', 'fr': 'Français', 'nl': 'Dutch', 'pt': 'Português', 'ru': 'русский'};
 
 var systemLang = navigator.language || navigator.userLanguage;
 if (!availableLanguages.hasOwnProperty(systemLang)) {
