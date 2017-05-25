@@ -20,8 +20,10 @@ function States(main) {
 
     var that = this;
     this.menuIcon = 'fa-bolt';
-
+    
     this.main = main;
+    
+    this.$table;
 
     function convertState(key, _obj) {
         var obj = JSON.parse(JSON.stringify(_obj));
@@ -51,13 +53,16 @@ function States(main) {
         }
 
         obj.type = that.main.objects[obj._id] && that.main.objects[obj._id].common ? that.main.objects[obj._id].common.type : '';
-        if (obj.ts)
+        if (obj.ts) {
             obj.ts = that.main.formatDate(obj.ts);
-        if (obj.lc)
+        }
+        if (obj.lc) {
             obj.lc = that.main.formatDate(obj.lc);
+        }
 
-        if (typeof obj.val === 'object')
+        if (typeof obj.val === 'object') {
             obj.val = JSON.stringify(obj.val);
+        }
 
         if (that.main.objects[obj._id] && that.main.objects[obj._id].common && that.main.objects[obj._id].common.role === 'value.time') {
             obj.val = main.formatDate(obj.val);
@@ -70,7 +75,7 @@ function States(main) {
 
     this.prepare = function () {
         $('#menu-states-div').load("templates/states.html", function () {
-            
+            restartFunctions('#menu-states-div');
         });
     };
 
@@ -87,7 +92,7 @@ function States(main) {
             var obj = convertState(key, main.states[key]);
             data.push(obj);
         }
-        
+
         $('#states-outer').bootstrapTable({
             data: data
         });
@@ -96,8 +101,43 @@ function States(main) {
     };
 
     this.clear = function () {
+        $('#states-outer').bootstrapTable('removeAll');
     };
 
     this.stateChange = function (id, state) {
+        var rowData;
+        // Update gridStates
+        if (state) {
+            if (this.main.states[id]) {
+                rowData = $('#states-outer').bootstrapTable('getRowByUniqueId', "state_" + id);
+                if (rowData) {
+                    rowData.val = state.val;
+                    rowData.ack = state.ack;
+                    if (state.ts){
+                        rowData.ts = main.formatDate(state.ts);
+                    }
+                    if (state.lc){
+                        rowData.lc = main.formatDate(state.lc);
+                    }
+                    rowData.from = state.from ? state.from.replace('system.adapter.', '').replace('system.', '') : '';
+                    if (main.objects[id] && main.objects[id].common && main.objects[id].common.role === 'value.time') {
+                        rowData.val = main.formatDate(rowData.val);
+                    }
+                    
+                    $('#states-outer').bootstrapTable('updateByUniqueId', "state_" + id, rowData);
+                    $('tr[data-uniqueid="state_' + id + '"]').find('td').addClass("bg-success");
+
+                } else {
+                    rowData = convertState(id, state);
+                    $('#states-outer').bootstrapTable('append', rowData);
+                }
+            } else {
+                rowData = convertState(id, state);
+                $('#states-outer').bootstrapTable('append', rowData);
+            }
+        } else {            
+             $('#states-outer').bootstrapTable('removeByUniqueId', "state_" + id);
+        }
+        this.main.addEventMessage(id, state, rowData);
     };
 }
