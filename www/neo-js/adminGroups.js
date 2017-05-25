@@ -55,18 +55,20 @@ function Groups(main) {
                     select += ' selected';
                 select += '>' + name + '</option>';
             }
-
-            that.$table.bootstrapTable('insertRow', {
-                row: {
+            
+            var row = [{
                     _id: obj._id,
                     name: obj.common ? obj.common.name : '',
                     description: obj.common ? obj.common.desc : '',
                     users: select,
-                    buttons: '<button data-group-id="' + this.list[i] + '" class="group-edit">' + $.i18n('edit') + '</button>' +
-                            (!obj.common.dontDelete ? ('<button data-group-id="' + this.list[i] + '" class="group-del">' + $.i18n('delete') + '</button>') : '')
-                }
-            });
+                    buttons: '<button data-group-id="' + this.list[i] + '" class="btn btn-default group-edit">' + $.i18n('edit') + '</button>' +
+                            (!obj.common.dontDelete ? ('<button data-group-id="' + this.list[i] + '" class="btn btn-default group-del">' + $.i18n('delete') + '</button>') : '')
+            }];
+
+            that.$table.bootstrapTable('append', row);
         }
+        
+        $('.group-users-edit').selectpicker();
 
         $('.group-edit').click(function () {
             editGroup($(this).attr('data-group-id'));
@@ -84,6 +86,8 @@ function Groups(main) {
                 }
             });
         });
+        
+        $('.fixed-table-body').addClass('overflow_visible');
 
         that.$dialogGroups.modal();
     };

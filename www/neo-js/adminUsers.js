@@ -40,16 +40,18 @@ function Users(main) {
             }, 500);
             return;
         }
-        
+
         restartFunctions('#dialog-users');
-        
         that.$table.bootstrapTable();
+
+        that.$table.bootstrapTable('removeAll');
 
         for (var i = 0; i < that.list.length; i++) {
             var obj = that.main.objects[that.list[i]];
             var select = '<select class="user-groups-edit" multiple="multiple" data-id="' + that.list[i] + '">';
 
             var groups = that.main.groupsDialog.list;
+
             for (var j = 0; j < groups.length; j++) {
                 var name = groups[j].substring('system.group.'.length);
                 name = name.substring(0, 1).toUpperCase() + name.substring(1);
@@ -60,15 +62,23 @@ function Users(main) {
                 select += '>' + name + '</option>';
             }
 
-            that.$table.bootstrapTable('insertRow', {
-                row: {
+            var row = [{
                     _id: obj._id,
                     name: obj.common ? obj.common.name : '',
                     enabled: '<input class="user-enabled-edit" type="checkbox" data-id="' + that.list[i] + '" ' + (obj.common && obj.common.enabled ? 'checked' : '') + '/>',
                     groups: select
-                }
-            });
+                }];
+            that.$table.bootstrapTable('append', row);
         }
+
+        $('.user-enabled-edit').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+
+        $('.user-groups-edit').selectpicker();
+        
+        $('.fixed-table-body').addClass('overflow_visible');
 
         that.$dialogUsers.modal();
     };
@@ -142,6 +152,5 @@ function Users(main) {
             }, 200);
         }
     };
-
 }
 
