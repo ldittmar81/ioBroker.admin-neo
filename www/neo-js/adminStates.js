@@ -20,10 +20,8 @@ function States(main) {
 
     var that = this;
     this.menuIcon = 'fa-bolt';
-    
-    this.main = main;
-    
-    this.$table;
+   
+    this.main = main;    
 
     function convertState(key, _obj) {
         var obj = JSON.parse(JSON.stringify(_obj));
@@ -105,39 +103,41 @@ function States(main) {
     };
 
     this.stateChange = function (id, state) {
-        var rowData;
-        // Update gridStates
-        if (state) {
-            if (this.main.states[id]) {
-                rowData = $('#states-outer').bootstrapTable('getRowByUniqueId', "state_" + id);
-                if (rowData) {
-                    rowData.val = state.val;
-                    rowData.ack = state.ack;
-                    if (state.ts){
-                        rowData.ts = main.formatDate(state.ts);
-                    }
-                    if (state.lc){
-                        rowData.lc = main.formatDate(state.lc);
-                    }
-                    rowData.from = state.from ? state.from.replace('system.adapter.', '').replace('system.', '') : '';
-                    if (main.objects[id] && main.objects[id].common && main.objects[id].common.role === 'value.time') {
-                        rowData.val = main.formatDate(rowData.val);
-                    }
-                    
-                    $('#states-outer').bootstrapTable('updateByUniqueId', "state_" + id, rowData);
-                    $('tr[data-uniqueid="state_' + id + '"]').find('td').addClass("bg-success");
+        if (this.main.activemenu === 'states') {
+            var rowData;
+            // Update gridStates
+            if (state) {
+                if (this.main.states[id]) {
+                    rowData = $('#states-outer').bootstrapTable('getRowByUniqueId', "state_" + id);
+                    if (rowData) {
+                        rowData.val = state.val;
+                        rowData.ack = state.ack;
+                        if (state.ts) {
+                            rowData.ts = main.formatDate(state.ts);
+                        }
+                        if (state.lc) {
+                            rowData.lc = main.formatDate(state.lc);
+                        }
+                        rowData.from = state.from ? state.from.replace('system.adapter.', '').replace('system.', '') : '';
+                        if (main.objects[id] && main.objects[id].common && main.objects[id].common.role === 'value.time') {
+                            rowData.val = main.formatDate(rowData.val);
+                        }
 
+                        $('#states-outer').bootstrapTable('updateByUniqueId', "state_" + id, rowData);
+                        $('tr[data-uniqueid="state_' + id + '"]').find('td').addClass("bg-success");
+
+                    } else {
+                        rowData = convertState(id, state);
+                        $('#states-outer').bootstrapTable('append', rowData);
+                    }
                 } else {
                     rowData = convertState(id, state);
                     $('#states-outer').bootstrapTable('append', rowData);
                 }
             } else {
-                rowData = convertState(id, state);
-                $('#states-outer').bootstrapTable('append', rowData);
+                $('#states-outer').bootstrapTable('removeByUniqueId', "state_" + id);
             }
-        } else {            
-             $('#states-outer').bootstrapTable('removeByUniqueId', "state_" + id);
+            this.main.addEventMessage(id, state, rowData);
         }
-        this.main.addEventMessage(id, state, rowData);
     };
 }

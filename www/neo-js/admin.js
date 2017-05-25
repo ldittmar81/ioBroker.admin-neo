@@ -55,6 +55,7 @@ var adapterRedirect = function (redirect, timeout) {
             objectsLoaded: false,
             waitForRestart: false,
             iframemenu: false,
+            activemenu: null,
             menus: null,
             isServiceWorker: false,
             isLogSubscribed: false,
@@ -569,6 +570,8 @@ var adapterRedirect = function (redirect, timeout) {
                         menus[id].init();
                     }
                 }
+                
+                main.activemenu = id;
 
                 $("#menu-title").text($('#menutitle-' + id).text());
                 $('.side-menu li.active').removeClass('active');
