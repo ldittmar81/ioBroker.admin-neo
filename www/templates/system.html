@@ -15,6 +15,9 @@
                             <a href="#tab-system-main" role="tab" data-toggle="tab" data-i18n="mainSettings">Main settings</a>
                         </li>
                         <li role="presentation">
+                            <a href="#tab-system-backup" role="tab" data-toggle="tab" data-i18n="backup">Backup</a>
+                        </li>
+                        <li role="presentation">
                             <a href="#tab-system-repo" role="tab" data-toggle="tab" data-i18n="repositories">Repositories</a>
                         </li>
                         <li role="presentation">
@@ -392,6 +395,66 @@
                                 </div>
 
                             </div>
+                        </div>
+
+                        <div id="tab-system-backup" role="tabpanel" class="tab-pane fade">
+
+                            <div class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label for="system_download_backup" class="col-sm-2 control-label">
+                                        <span data-i18n="createBackup">Create Backup</span>:
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <button class="btn btn-default" id="system_download_backup" data-i18n="downloadBackup"></button>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <div class="form-group">
+                                    <label for="system_autobackup_url" class="col-sm-2 control-label">
+                                        <span data-i18n="urlOrLinkForBackup">urlOrLinkForBackup</span>:
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="system_autobackup_url" class="form-control system-settings value"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="system_autobackup_url" class="col-sm-2 control-label">
+                                        <span data-i18n="sheduleBackup">sheduleBackup</span>:
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" id="system_autobackup_shedule" class="form-control system-settings value"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" id="system_autobackup_shedule_window">
+                                                    <i class="fa fa-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <div class="form-group">
+                                    <label for="system_backup_file" class="col-sm-2 control-label">
+                                        <span data-i18n="importBackup">Import Backup</span>:
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="file" id="system_backup_file" name="system_backup_file" class="form-control" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" id="system_upload_backup" data-i18n="uploadBackup"></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
 
                         <div id="tab-system-repo" role="tabpanel" class="tab-pane fade">

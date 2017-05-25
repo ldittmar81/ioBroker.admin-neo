@@ -800,7 +800,7 @@ function Adapters(main) {
                             bgColor = "bg-success";
                         }
 
-                        if (adapter.newAdapter || (adapter.installed && adapter.version !== adapter.installed.version)) {
+                        if (adapter.newAdapter || (adapter.installed && adapter.installed.updatable)) {
                             $tempAdapterBorder = $adapterNewTemplate.children().clone(true, true);
                             if (adapter.newAdapter) {
                                 $tempAdapterBorder.find('.ui-ribbon').text($.i18n('newAdapter')).addClass('x_new_adapter');
