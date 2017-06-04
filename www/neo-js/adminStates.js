@@ -20,17 +20,13 @@ function States(main) {
 
     var that = this;
     this.menuIcon = 'fa-bolt';
-   
-    this.main = main;    
+
+    this.main = main;
 
     function convertState(key, _obj) {
         var obj = JSON.parse(JSON.stringify(_obj));
-        if (!obj) {
-            console.log(key);
-        }
         obj = obj || {};
         obj._id = key;
-        obj.id = 'state_' + key;
         obj.name = main.objects[obj._id] ? (main.objects[obj._id].common.name || obj._id) : obj._id;
 
         if (that.main.objects[key] && that.main.objects[key].parent && that.main.objects[that.main.objects[key].parent]) {
@@ -50,7 +46,7 @@ function States(main) {
             obj.pname = b.join('.');
         }
 
-        obj.type = that.main.objects[obj._id] && that.main.objects[obj._id].common ? that.main.objects[obj._id].common.type : '';
+        obj.type = that.main.objects[obj._id] && that.main.objects[obj._id].common ? that.main.objects[obj._id].common.type : '-';
         if (obj.ts) {
             obj.ts = that.main.formatDate(obj.ts);
         }
@@ -66,8 +62,7 @@ function States(main) {
             obj.val = main.formatDate(obj.val);
         }
 
-        obj.gridId = 'state_' + key.replace(/ /g, '_');
-        obj.from = obj.from ? obj.from.replace('system.adapter.', '').replace('system.', '') : '';
+        obj.from = obj.from ? obj.from.replace('system.adapter.', '').replace('system.', '') : '-';
         return obj;
     }
 
@@ -85,59 +80,80 @@ function States(main) {
             return;
         }
 
-        var data = [];
         for (var key in main.states) {
             var obj = convertState(key, main.states[key]);
-            data.push(obj);
+            that.addRow(obj);
         }
-
-        $('#states-outer').bootstrapTable({
-            data: data
-        });
 
         this.main.fillContent('#menu-states-div');
     };
 
     this.clear = function () {
-        $('#states-outer').bootstrapTable('removeAll');
+        $('#states-tbody').html('');
+    };
+
+    this.addRow = function (data) {
+        var row = "<tr id='statetable_" + data['_id'] + "'>";
+        row += "<td data-field='_id'>" + data['_id'] + "</td>";
+        row += "<td data-field='pname'>" + data.pname + "</td>";
+        row += "<td data-field='name'>" + data.name + "</td>";
+        row += "<td data-field='val'>" + (data.val ? data.val : '-') + "</td>";
+        row += "<td data-field='ack'>" + (data.ack ? data.ack : '-') + "</td>";
+        row += "<td data-field='from'>" + (data.from ? data.from.replace('system.adapter.', '').replace('system.', '') : '') + "</td>";
+        row += "<td data-field='ts'>" + main.formatDate(data.ts) + "</td>";
+        row += "<td data-field='lc'>" + main.formatDate(data.lc) + "</td>";
+        row += "</tr>"
+        $('#states-tbody').append(row);
     };
 
     this.stateChange = function (id, state) {
         if (this.main.activemenu === 'states') {
-            var rowData;
+            var rowData = {};
             // Update gridStates
             if (state) {
                 if (this.main.states[id]) {
-                    rowData = $('#states-outer').bootstrapTable('getRowByUniqueId', "state_" + id);
-                    if (rowData) {
-                        rowData.val = state.val;
+                    var $tr = $('#states-tbody').find('tr[id="statetable_' + id + '"]');
+                    if ($tr.length > 0) {
+                        rowData['_id'] = id;
+                        rowData.pname = $tr.find('td[data-field="pname"]').text();
+                        rowData.name = $tr.find('td[data-field="name"]').text();
                         rowData.ack = state.ack;
+                        $tr.find('td[data-field="ack"]').text(rowData.ack ? rowData.ack : '-');
                         if (state.ts) {
                             rowData.ts = main.formatDate(state.ts);
+                            $tr.find('td[data-field="ts"]').text(rowData.ts ? rowData.ts : '-');
                         }
                         if (state.lc) {
                             rowData.lc = main.formatDate(state.lc);
+                            $tr.find('td[data-field="lc"]').text(rowData.lc ? rowData.lc : '-');
                         }
                         rowData.from = state.from ? state.from.replace('system.adapter.', '').replace('system.', '') : '';
+                        $tr.find('td[data-field="from"]').text(rowData.from ? rowData.from : '-');
                         if (main.objects[id] && main.objects[id].common && main.objects[id].common.role === 'value.time') {
-                            rowData.val = main.formatDate(rowData.val);
+                            rowData.val = main.formatDate(state.val);
+                        } else {
+                            rowData.val = state.val;
                         }
+                        $tr.find('td[data-field="val"]').text(rowData.val ? rowData.val : '-');
 
-                        $('#states-outer').bootstrapTable('updateByUniqueId', "state_" + id, rowData);
-                        $('tr[data-uniqueid="state_' + id + '"]').find('td').addClass("bg-success");
+                        $tr.find('td').addClass("glow_ok");
+                        setTimeout(function () {
+                            $tr.find('td').removeClass("glow_ok");
+                        }, 500);
 
                     } else {
                         rowData = convertState(id, state);
-                        $('#states-outer').bootstrapTable('append', rowData);
+                        that.addRow(rowData);
                     }
                 } else {
                     rowData = convertState(id, state);
-                    $('#states-outer').bootstrapTable('append', rowData);
+                    that.addRow(rowData);
                 }
             } else {
-                $('#states-outer').bootstrapTable('removeByUniqueId', "state_" + id);
+                $('#statetable_' + id).remove();
             }
             this.main.addEventMessage(id, state, rowData);
         }
     };
+
 }

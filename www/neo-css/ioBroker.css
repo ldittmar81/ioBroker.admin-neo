@@ -4710,3 +4710,10 @@ img.tranparent {
         margin-left: 80px;
     }    
 }
+
+.glow_ok {
+    text-shadow: 0 0 10px green !important;
+}
+.glow_error {
+    text-shadow: 0 0 10px red !important;
+}
