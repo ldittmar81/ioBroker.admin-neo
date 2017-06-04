@@ -1,4 +1,6 @@
 {
+  "CPUs": "CPUs",
+  "RAM": "RAM",
   "ack": "Bestätigt",
   "acknowledged": "Bestätigt",
   "activated": "Aktiviert. Klicken zum Stoppen.",

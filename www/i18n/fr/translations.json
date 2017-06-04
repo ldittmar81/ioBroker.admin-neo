@@ -1,5 +1,15 @@
 {
+  "CPUs": "Processeurs",
+  "RAM": "RAM",
   "all": "Tout",
+  "and": "et",
+  "cancel": "annuler",
   "city": "Ville",
-  "currency": "Devise"
+  "config": "Configuration",
+  "currency": "Devise",
+  "december": "Décembre",
+  "delete": "effacer",
+  "edit": "Éditer",
+  "error": "erreur",
+  "loading": "Chargement..."
 }

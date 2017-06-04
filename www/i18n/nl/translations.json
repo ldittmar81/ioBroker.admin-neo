@@ -1,4 +1,6 @@
 {
+  "CPUs": "CPU's",
+  "RAM": "RAM",
   "ack": "Bevestigt",
   "acknowledged": "Bevestigt",
   "activated": "Geactiveer, klik om te stoppen.",
@@ -162,6 +164,7 @@
   "link": "Link",
   "list": "Lijstenaanzicht",
   "listen_on_ip": "Luister op alle IP's",
+  "loading": "Lading...",
   "log": "Log",
   "log_size": "Log-groote",
   "logic_group": "Logic & Scripts",

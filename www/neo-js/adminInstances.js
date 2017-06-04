@@ -386,7 +386,7 @@ function Instances(main) {
             var isRun = common.onlyWWW || common.enabled;
 
             if (common.onlyWWW) {
-                if (common.type === "vis") {
+                if (common.type === "vis" || common.type === "visualization-icons" || common.type === "visualization-widgets") {
                     type = "VisAddonInstance";
                 } else {
                     type = "WebInstance";

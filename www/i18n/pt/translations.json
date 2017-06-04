@@ -1,4 +1,6 @@
 {
+  "CPUs": "CPUs",
+  "RAM": "RAM",
   "ack": "conf.",
   "acknowledged": "confirmado",
   "adapters": "Adaptador",
@@ -145,6 +147,7 @@
   "linux": "Sistema operacional Linux",
   "list": "lista",
   "listen_on_ip": "Escutar todos os endereços IP",
+  "loading": "Carregando...",
   "log": "Log",
   "log_size": "tamanho do log",
   "logfileDeletedQuestion": "O arquivo de log será deletado. Você tem certeza?",
