@@ -30,7 +30,9 @@
         "extIcon": "https://raw.githubusercontent.com/ldittmar81/ioBroker.admin-neo/master/admin/admin-neo.png",
         "keywords": ["setup", "config", "update", "upgrade", "system", "konfiguration", "administration", "einrichtung", "wartung"],
         "readme": "https://github.com/ldittmar81/ioBroker.admin-neo/blob/master/README.md",
-        "authors": ["ldittmar <iobroker@lmdsoft.de>"],
+        "authors": [
+            "ldittmar <iobroker@lmdsoft.de>"
+        ],
         "dependencies": [{
             "js-controller": ">=0.16.0"
         }],
@@ -39,10 +41,7 @@
         "logTransporter": true,
         "stopBeforeUpdate": true,
         "wwwDontUpload": true,
-        "localLink": "%protocol%://%ip%:%port%",
-        "authors": [
-            "ldittmar <iobroker@lmdsoft.de>"
-        ]
+        "localLink": "%protocol%://%ip%:%port%"
     },
     "native": {
         "port": 8091,

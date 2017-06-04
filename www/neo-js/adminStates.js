@@ -10,7 +10,7 @@
 /* global $, sorttable:false */
 
 /**
- * 
+ * State table
  * @constructor
  * @param {Object} main
  * @returns {States}
@@ -19,10 +19,16 @@ function States(main) {
     "use strict";
 
     var that = this;
-    this.menuIcon = 'fa-bolt';
 
+    this.menuIcon = 'fa-bolt';
     this.main = main;
 
+    /**
+     * Fill data object with state value
+     * @param {String} key
+     * @param {Object|String} _obj
+     * @returns {Object}
+     */
     function convertState(key, _obj) {
         var obj = JSON.parse(JSON.stringify(_obj));
         obj = obj || {};
@@ -66,19 +72,27 @@ function States(main) {
         return obj;
     }
 
+    /**
+     * Prepare states
+     */
     this.prepare = function () {
         $('#menu-states-div').load("templates/states.html", function () {
             restartFunctions('#menu-states-div');
         });
     };
 
-    this.init = function (update) {
+    /**
+     * Init states
+     */
+    this.init = function () {
         if (!this.main.objectsLoaded || !this.main.states) {
             setTimeout(function () {
-                that.init(update);
+                that.init();
             }, 250);
             return;
         }
+        
+        that.clear();
 
         for (var key in main.states) {
             var obj = convertState(key, main.states[key]);
@@ -89,10 +103,17 @@ function States(main) {
         this.main.fillContent('#menu-states-div');
     };
 
+    /**
+     * Clear table body
+     */
     this.clear = function () {
         $('#states-tbody').html('');
     };
 
+    /**
+     * Add new row to table
+     * @param {Object} data
+     */
     this.addRow = function (data) {
         var row = "<tr id='statetable_" + data['_id'] + "'>";
         row += "<td data-field='_id'>" + data['_id'] + "</td>";
@@ -107,6 +128,11 @@ function States(main) {
         $('#states-tbody').append(row);
     };
 
+    /**
+     * Update row on state change
+     * @param {String} id
+     * @param {Object} state
+     */
     this.stateChange = function (id, state) {
         if (this.main.activemenu === 'states') {
             var rowData = {};
