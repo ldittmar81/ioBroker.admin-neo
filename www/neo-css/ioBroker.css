@@ -4717,3 +4717,6 @@ img.tranparent {
 .glow_error {
     text-shadow: 0 0 10px red !important;
 }
+table.sortable thead {    
+    cursor: pointer;
+}

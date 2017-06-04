@@ -7,7 +7,7 @@
 /* jshint jquery:true */
 /* global io:false */
 /* global jQuery:false */
-/* global $:false */
+/* global $, sorttable:false */
 
 /**
  * 
@@ -84,6 +84,7 @@ function States(main) {
             var obj = convertState(key, main.states[key]);
             that.addRow(obj);
         }
+        sorttable.makeSortable($('#states-outer')[0]);
 
         this.main.fillContent('#menu-states-div');
     };
@@ -148,6 +149,7 @@ function States(main) {
                 } else {
                     rowData = convertState(id, state);
                     that.addRow(rowData);
+                    sorttable.makeSortable($('#states-outer')[0]);
                 }
             } else {
                 $('#statetable_' + id).remove();

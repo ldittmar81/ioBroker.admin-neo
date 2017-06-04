@@ -116,6 +116,7 @@ $('#meter).progressbar('auto'); // auto increase bar till 90%
 * jQuery Sparkline 2.1.2 http://omnipotent.net/jquery.sparkline/#s-about
 * clipboard.js 1.6.1 https://clipboardjs.com/
 * Fancytree 2.22.0 https://github.com/mar10/fancytree
+* Sorttable 2 https://kryogenix.org/code/browser/sorttable/
 
 ## Other programs
 Use https://github.com/jcbvm/i18n-editor for translations
