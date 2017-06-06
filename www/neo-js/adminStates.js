@@ -84,12 +84,16 @@ function States(main) {
             var reg = new RegExp(filter);
 
             for (var key in main.states) {
-
+                var $tr = $('#states-tbody').find('tr[id="statetable_' + key + '"]');
                 var isShow = 'hide';
+
                 if (reg.test(key)) {
                     isShow = 'show';
+                } else if (reg.test($tr.find('td[data-field="name"]').text())) {
+                    isShow = 'show';
                 }
-                $('#states-tbody').find('tr[id="statetable_' + key + '"]')[isShow]();
+
+                $tr[isShow]();
             }
         } else {
             $('#states-tbody').find('tr').show();
@@ -161,12 +165,12 @@ function States(main) {
     this.addRow = function (data) {
         var row = "<tr id='statetable_" + data['_id'] + "'>";
         row += "<td data-field='_id'>" + data['_id'] + "</td>";
-        row += "<td data-field='pname'>" + data.pname + "</td>";
-        row += "<td data-field='name'>" + data.name + "</td>";
+        row += "<td data-field='pname' class='visible-lg'>" + data.pname + "</td>";
+        row += "<td data-field='name' class='visible-lg'>" + data.name + "</td>";
         row += "<td data-field='val'>" + (data.val ? data.val : '-') + "</td>";
         row += "<td data-field='ack'>" + (data.ack ? data.ack : '-') + "</td>";
-        row += "<td data-field='from'>" + (data.from ? data.from.replace('system.adapter.', '').replace('system.', '') : '') + "</td>";
-        row += "<td data-field='ts'>" + main.formatDate(data.ts) + "</td>";
+        row += "<td data-field='from' class='visible-lg'>" + (data.from ? data.from.replace('system.adapter.', '').replace('system.', '') : '') + "</td>";
+        row += "<td data-field='ts' class='visible-md visible-lg'>" + main.formatDate(data.ts) + "</td>";
         row += "<td data-field='lc'>" + main.formatDate(data.lc) + "</td>";
         row += "</tr>"
         $('#states-tbody').append(row);
