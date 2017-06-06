@@ -73,10 +73,54 @@ function States(main) {
     }
 
     /**
+     * Filter for states
+     * @param {String} filter
+     */
+    function applyFilter(filter) {
+        if (filter === undefined) {
+            filter = $('#states-filter').val();
+        }
+        if (filter) {
+            var reg = new RegExp(filter);
+
+            for (var key in main.states) {
+
+                var isShow = 'hide';
+                if (reg.test(key)) {
+                    isShow = 'show';
+                }
+                $('#states-tbody').find('tr[id="statetable_' + key + '"]')[isShow]();
+            }
+        } else {
+            $('#states-tbody').find('tr').show();
+        }
+    }
+
+    /**
      * Prepare states
      */
     this.prepare = function () {
         $('#menu-states-div').load("templates/states.html", function () {
+
+            $('#states-filter').change(function () {
+                that.main.saveConfig('statesFilter', $(this).val());
+                applyFilter($(this).val());
+            }).keyup(function () {
+                if (that.filterTimeout) {
+                    clearTimeout(that.filterTimeout);
+                }
+                that.filterTimeout = setTimeout(function () {
+                    $('#states-filter').trigger('change');
+                }, 300);
+            });
+            if (that.main.config.statesFilter && that.main.config.statesFilter[0] !== '{') {
+                $('#states-filter').val(that.main.config.statesFilter);
+            }
+
+            $('.clearable').click(function () {
+                $('#states-filter').val('').trigger('change');
+            });
+
             restartFunctions('#menu-states-div');
         });
     };
@@ -91,7 +135,7 @@ function States(main) {
             }, 250);
             return;
         }
-        
+
         that.clear();
 
         for (var key in main.states) {
