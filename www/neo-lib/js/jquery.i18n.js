@@ -72,13 +72,13 @@
 					} while ( localePartIndex );
 
 					if ( locale === 'en' ) {
-						break;
+                                                $.i18n.log( 'No english word for: ' + value );
+                                                break;
 					}
 
 					locale = ( $.i18n.fallbacks[ i18n.locale ] && $.i18n.fallbacks[ i18n.locale ][ fallbackIndex ] ) ||
 						i18n.options.fallbackLocale;
-					//$.i18n.log( 'Trying fallback locale "' + value + '" for ' + i18n.locale + ': ' + locale );
-                    $.i18n.log( 'No translation for "' + value + '": "' + value + '",');
+					$.i18n.log( 'Trying fallback locale for ' + i18n.locale + ': ' + locale + ' (' + value + ')');
 
 					fallbackIndex++;
 				}
@@ -150,7 +150,7 @@
 				sourceMap[ locale ] = source + '/' + locale + '.json';
 				fallbackLocales = ( $.i18n.fallbacks[ locale ] || [] )
 					.concat( this.options.fallbackLocale );
-				for ( locIndex in fallbackLocales ) {
+				for ( locIndex = 0; locIndex < fallbackLocales.length; locIndex++ ) {
 					fallbackLocale = fallbackLocales[ locIndex ];
 					sourceMap[ fallbackLocale ] = source + '/' + fallbackLocale + '.json';
 				}
@@ -169,6 +169,8 @@
 		 * @return {string}
 		 */
 		parse: function ( key, parameters ) {
+                        key = key.replace('.','_').replace(' ', '_');
+                        key = key.charAt(0).toLowerCase() + key.slice(1)
 			var message = key.toLocaleString();
 			// FIXME: This changes the state of the I18N object,
 			// should probably not change the 'this.parser' but just
