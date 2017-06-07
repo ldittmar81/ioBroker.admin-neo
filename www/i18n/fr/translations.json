@@ -1,6 +1,10 @@
 {
+  "Architecture": "Architecture",
   "CPUs": "Processeurs",
+  "Model": "Modèle",
+  "Platform": "Système opérateur",
   "RAM": "RAM",
+  "Speed": "La vitesse",
   "all": "Tout",
   "and": "et",
   "cancel": "annuler",
@@ -11,5 +15,9 @@
   "delete": "effacer",
   "edit": "Éditer",
   "error": "erreur",
-  "loading": "Chargement..."
+  "informationText": "<h1 style='float: left;'>Automatiser votre vie!</h1><img style='float: right;' src=\"img/logo.png\" alt=\"ioBroker\"/><p style='clear: both;'>Si vous avez des questions ou des problèmes, s'il vous plaît contacter notre forum communautaire eyperiente. Ils sont toujours prêts à vous aider!</p><a href='http://forum.iobroker.net/'><i class=\"fa fa-external-link\" aria-hidden=\"true\"></i> au forum...</a>",
+  "loading": "Chargement...",
+  "selectLanguage": "Choisir la langue",
+  "systemInfoText": "sur le serveur",
+  "tempUnit": "Unité de température"
 }
