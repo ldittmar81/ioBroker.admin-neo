@@ -125,6 +125,8 @@ Um die Übersetzungsdatein zu bearbeiten, empfehle ich die Installation des Edit
 
 Eine orangene Markierung bei der Übersetzung bedeutet, dass das Wort in irgendeine Sprache fehlt. Sollte die Übersetzung in eine Sprache fehlen, dann wird Englisch angezeigt.
 
+Auf der Adminoberfläche werden fehlenden Übersetzungen in der Console angezeigt. Sämtliche Übersetzungsschlüsseln MÜSSEN mit eienm kleinen Buchstaben anfangen und dürfen werder Punkt noch Leerzeichen enthalten.
+
 ## Javascript & CSS-Style nicht in der HTML
 Damit das ganze flexibler wird, sollte man möglichst alle JavaScripts und CSS-Styles in den entsprechenden Dateien auslagern. Warum? Wenn man anstatt überall style="color: #ffe6e6;" macht und auf einmal merkt man dass es zu Hell sei, dann müsste man überall wieder rein gehen und auf ein andern Wert setzen. Wenn man aber dafür eine Klasse erstellt z.B. class="danger", dann könnte man einfach die Änderung global machen.
 Wenn weder JS noch CSS in einer HTML ist, könnte man diese einfach durch eine andere ersetzen und es würde alles gleich funktionieren (verschiedene Styles) - man müsste nur auf die ids und classes auchten.

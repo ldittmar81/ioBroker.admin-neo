@@ -69,7 +69,7 @@ function Enums(main) {
         activate: function (event, data) {
             if (data.node.data.members) {
                 $(".objectCounterForEnum").text(data.node.data.members);
-            }else{
+            } else {
                 $(".objectCounterForEnum").text("0");
             }
             $(".folderTitleForEnum").text(data.node.title);
@@ -123,13 +123,88 @@ function Enums(main) {
                 if (tasks.length) {
                     enumRename(undefined, undefined, undefined, callback);
                 } else {
-                    if (callback)
+                    if (callback) {
                         callback();
+                    }
                 }
             });
         }
     }
     function _enumRename(oldId, newId, newName, callback) {
+        //Check if this name exists
+        if (oldId !== newId && main.objects[newId]) {
+            main.showMessage($.i18n('nameYetExists'), '', 'info');
+            that.init(true);
+            if (callback) {
+                callback();
+            }
+        } else {
+            if (oldId === newId) {
+                if (newName !== undefined) {
+                    tasks.push({name: 'extendObject', id: oldId, obj: {common: {name: newName}}});
+                    if (callback) {
+                        callback();
+                    }
+                }
+            } else if (main.objects[oldId] && main.objects[oldId].common && main.objects[oldId].common.nondeletable) {
+                main.showMessage($.i18n('changeOfEnumNotAllowed', oldId), '', 'notice');
+                that.init(true);
+                if (callback) {
+                    callback();
+                }
+            } else {
+                var leaf = that.$grid.selectId('getTreeInfo', oldId);
+                //var leaf = treeFindLeaf(oldId);
+                if (leaf && leaf.children) {
+                    main.socket.emit('getObject', oldId, function (err, obj) {
+                        setTimeout(function () {
+                            if (obj) {
+                                obj._id = newId;
+                                if (obj._rev) {
+                                    delete obj._rev;
+                                }
+                                if (newName !== undefined) {
+                                    obj.common.name = newName;
+                                }
+                                tasks.push({name: 'delObject', id: oldId});
+                                tasks.push({name: 'setObject', id: newId, obj: obj});
+                                // Rename all children
+                                var count = 0;
+                                for (var i = 0; i < leaf.children.length; i++) {
+                                    var n = leaf.children[i].replace(oldId, newId);
+                                    count++;
+                                    _enumRename(leaf.children[i], n, undefined, function () {
+                                        count--;
+                                        if (!count && callback) {
+                                            callback();
+                                        }
+                                    });
+                                }
+                            }
+                        }, 0);
+                    });
+                } else {
+                    main.socket.emit('getObject', oldId, function (err, obj) {
+                        if (obj) {
+                            setTimeout(function () {
+                                obj._id = newId;
+                                if (obj._rev) {
+                                    delete obj._rev;
+                                }
+                                if (newName !== undefined) {
+                                    obj.common.name = newName;
+                                }
+                                tasks.push({name: 'delObject', id: oldId});
+                                tasks.push({name: 'setObject', id: newId, obj: obj});
+                                if (callback) {
+                                    callback();
+                                }
+                            }, 0);
+                        }
+                    });
+                }
+            }
+        }
     }
 
     function enumAddChild(parent, newId, name) {
@@ -149,7 +224,7 @@ function Enums(main) {
         return true;
     }
 
-    function enumMembers(id) {
+    function enumMembers(id) {        
     }
 
     function prepareEnumMembers() {

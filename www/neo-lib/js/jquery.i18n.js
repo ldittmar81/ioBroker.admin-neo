@@ -72,7 +72,7 @@
 					} while ( localePartIndex );
 
 					if ( locale === 'en' ) {
-                                                $.i18n.log( 'No english word for: ' + value );
+                                                $.i18n.log( 'No english word for "' + value + '". Please fix it!!!');
                                                 break;
 					}
 
@@ -169,7 +169,8 @@
 		 * @return {string}
 		 */
 		parse: function ( key, parameters ) {
-                        key = key.replace('.','_').replace(' ', '_');
+                        key = key.split(' ').join('_');
+                        key = key.split('.').join('_');
                         key = key.charAt(0).toLowerCase() + key.slice(1)
 			var message = key.toLocaleString();
 			// FIXME: This changes the state of the I18N object,

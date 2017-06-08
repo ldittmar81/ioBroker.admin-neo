@@ -216,6 +216,21 @@ function Objects(main) {
     }
 
     function syncEnum(id, enumName, newArray) {
+        var enums = that.main.menus.enums.list;
+        var toCheck = [];
+        for (var e = 0; e < enums.length; e++) {
+            if (enums[e].substring(0, 'enum.'.length + enumName.length + 1) === 'enum.' + enumName + '.') {
+                toCheck.push(enums[e]);
+            }
+        }
+
+        _syncEnum(id, toCheck, newArray, function (err) {
+            if (err){
+                that.main.showError(err);
+            }
+            // force update of object
+            that.$grid.selectId('object', id, that.main.objects[id]);
+        });
     }
 
     this.init = function (update) {
