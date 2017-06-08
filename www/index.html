@@ -30,20 +30,27 @@
         <link rel="icon" type="image/png" sizes="16x16" href="img/icons/favicon-16x16.png">
         <link rel="manifest" href="manifest.json">
 
+        <!-- Normal case -->
+        <link href="src/vendorlib.min.css" rel="stylesheet" type="text/css"/>
+        <link href="src/ioBroker.min.css" rel="stylesheet" type="text/css"/>
+        
+        <!-- For Debug  -->
+        <!--
         <link href="neo-lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <link href="neo-lib/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
         <link href="neo-lib/css/ui.fancytree.min.css" rel="stylesheet" type="text/css"/>
         <link href="neo-lib/css/bootstrap-table.min.css" rel="stylesheet" type="text/css"/>
         <link href="neo-lib/css/bootstrap-table-sticky-header.css" rel="stylesheet" type="text/css"/>
-        <link href="neo-lib/css/font-awesome.min.css" rel="stylesheet"  type="text/css"/>
         <link href="neo-lib/css/animate.min.css" rel="stylesheet" type="text/css"/>
         <link href="neo-lib/css/dropzone.min.css" rel="stylesheet" type="text/css" />
         <link href="neo-lib/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
-        <link href="neo-lib/css/skins/flat/green.css" rel="stylesheet" type="text/css">
         <link href="neo-lib/css/pnotify.min.css" rel="stylesheet" type="text/css" />
 
         <link href="neo-css/ioBroker.css" rel="stylesheet" type="text/css"/>
         <link href="neo-css/adapter.css" rel="stylesheet" type="text/css"/>
+        -->
+        <link href="neo-lib/css/font-awesome.min.css" rel="stylesheet"  type="text/css"/>
+        <link href="neo-lib/css/skins/flat/green.css" rel="stylesheet" type="text/css">
 
     </head>
     <body class="nav-md">        
@@ -236,6 +243,15 @@
 
         <div id="connecting" class="gears"><img src="img/gears.gif" alt="gears"/></div>
 
+        <script type="text/javascript" src="./socket.io/socket.io.js"></script>
+        
+        <!-- Normal case -->
+        <script type="text/javascript" src="src/vendorlib.min.js"></script>
+        <script type="text/javascript" src="src/helpers.min.js"></script>
+        <script type="text/javascript" src="src/admin-neo.min.js"></script>
+        
+        <!-- For Debug  -->
+        <!--
         <script type="text/javascript" src="neo-lib/js/jquery.min.js"></script>
         <script type="text/javascript" src="neo-lib/js/jquery-ui.min.js"></script>
         <script type="text/javascript" src="neo-lib/js/jquery.mobile.custom.min.js"></script>
@@ -266,9 +282,7 @@
         <script type="text/javascript" src="neo-lib/js/jquery.sparkline.min.js"></script>
         <script type="text/javascript" src="neo-lib/js/clipboard.min.js"></script>
         <script type="text/javascript" src="neo-lib/js/sorttable.min.js"></script>
-
-        <script type="text/javascript" src="./socket.io/socket.io.js"></script>
-
+        
         <script type="text/javascript" src="neo-js/selectID.js"></script>
         <script type="text/javascript" src="neo-js/languages.js"></script>
         <script type="text/javascript" src="neo-js/cron.js"></script>
@@ -289,6 +303,7 @@
         <script type="text/javascript" src="neo-js/adminGroups.js"></script>
         <script type="text/javascript" src="neo-js/adminSystem.js"></script>
         <script type="text/javascript" src="neo-js/admin.js"></script>
+        -->
 
     </body>
 </html>

@@ -11,6 +11,7 @@ var request = require('request');
 var fs = require('fs');
 var Stream = require('stream');
 var webPush = require('web-push');
+var compressor = require('node-minify');
 var utils = require(__dirname + '/lib/utils'); // Get common adapter utils
 var tools = require(utils.controllerDir + '/lib/tools.js');
 var LE = require(utils.controllerDir + '/lib/letsencrypt.js');
@@ -34,6 +35,86 @@ var userKey = 'connect.sid';
 var cmdSessions = {};
 var bruteForce = {};
 var subscriptions = [];
+
+//Minify JS and CSS
+compressor.minify({
+    compressor: 'uglifyjs',
+    input: [
+        'www/neo-lib/js/jquery.min.js',
+        'www/neo-lib/js/jquery-ui.min.js',
+        'www/neo-lib/js/jquery.mobile.custom.min.js',
+        'www/neo-lib/js/semver.min.js',
+        'www/neo-lib/js/CLDRPluralRuleParser.js',
+        'www/neo-lib/js/jquery.i18n.js',
+        'www/neo-lib/js/jquery.i18n.messagestore.js',
+        'www/neo-lib/js/jquery.i18n.fallbacks.js',
+        'www/neo-lib/js/jquery.i18n.parser.js',
+        'www/neo-lib/js/jquery.i18n.emitter.js',
+        'www/neo-lib/js/jquery.i18n.language.js',
+        'www/neo-lib/js/languages/*.js',
+        'www/neo-lib/js/bootstrap.min.js',
+        'www/neo-lib/js/jquery.fancytree-all.min.js',
+        'www/neo-lib/js/ace.js',
+        'www/neo-lib/js/bootstrap-select.min.js',
+        'www/neo-lib/js/bootstrap-table.min.js',
+        'www/neo-lib/js/bootstrap-table-editable.min.js',
+        'www/neo-lib/js/bootstrap-table-mobile.min.js',
+        'www/neo-lib/js/bootstrap-table-sticky-header.min.js',
+        'www/neo-lib/js/bootstrap-table-contextmenu.min.js',
+        'www/neo-lib/js/bootbox.min.js',
+        'www/neo-lib/js/dropzone.min.js',
+        'www/neo-lib/js/icheck.min.js',
+        'www/neo-lib/js/jquery.inputmask.bundle.min.js',
+        'www/neo-lib/js/pnotify.min.js',
+        'www/neo-lib/js/parsley.min.js',
+        'www/neo-lib/js/showdown.min.js',
+        'www/neo-lib/js/jquery.sparkline.min.js',
+        'www/neo-lib/js/clipboard.min.js',
+        'www/neo-lib/js/sorttable.min.js'
+    ],
+    output: 'www/src/vendorlib.min.js',
+    callback: function (err, min) {}
+});
+compressor.minify({
+    compressor: 'uglifyjs',
+    input: [
+        'www/neo-js/selectID.js',
+        'www/neo-js/languages.js',
+        'www/neo-js/cron.js',
+        'www/neo-js/orbitlist.js',
+        'www/neo-js/ioBroker.js'
+    ],
+    output: 'www/src/helpers.min.js',
+    callback: function (err, min) {}
+});
+compressor.minify({
+    compressor: 'uglifyjs',
+    input: ['www/neo-js/admin*.js'],
+    output: 'www/src/admin-neo.min.js',
+    callback: function (err, min) {}
+});
+compressor.minify({
+    compressor: 'clean-css',
+    input: [
+        'www/neo-lib/css/bootstrap.min.css',
+        'www/neo-lib/css/bootstrap-theme.min.css',
+        'www/neo-lib/css/ui.fancytree.min.css',
+        'www/neo-lib/css/bootstrap-table.min.css',
+        'www/neo-lib/css/bootstrap-table-sticky-header.css',
+        'www/neo-lib/css/animate.min.css',
+        'www/neo-lib/css/dropzone.min.css',
+        'www/neo-lib/css/bootstrap-select.min.css',
+        'www/neo-lib/css/pnotify.min.css'
+    ],
+    output: 'www/src/vendorlib.min.css',
+    callback: function (err, min) {}
+});
+compressor.minify({
+    compressor: 'clean-css',
+    input: ['www/neo-css/*.css'],
+    output: 'www/src/ioBroker.min.css',
+    callback: function (err, min) {}
+});
 
 // do not send too many state updates
 var eventsThreshold = {
