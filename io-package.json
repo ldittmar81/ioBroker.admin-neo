@@ -2,8 +2,16 @@
     "common": {
         "name": "admin-neo",
         "title": "ioBroker Admin Neo",
-        "version": "0.0.1",
-        "news": {            
+        "version": "0.0.2",
+        "news": {
+            "0.0.2": {
+                "en": "performance improvement",
+                "de": "Performance-Verbesserungen",
+                "ru": "улучшение производительности",
+                "pt": "Aperfeiçoamento do processo",
+                "fr": "Amélioration des performances",
+                "nl": "Prestatieverbetering"
+            },
             "0.0.1": {
                 "en": "initial commit",
                 "de": "Initiale Version",

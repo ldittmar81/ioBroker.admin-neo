@@ -347,7 +347,7 @@ function Adapters(main) {
             });
         });
     };
-    
+
     this.updateExpertMode = function () {
         that.init(true);
     };
@@ -468,7 +468,7 @@ function Adapters(main) {
             data && callback && callback(data);
         });
     };
-    
+
     this.getNews = function (actualVersion, adapter) {
         var text = '';
         if (adapter.news) {
@@ -686,78 +686,81 @@ function Adapters(main) {
             return;
         }
 
-        if (that.main.config.expertMode) {
-            $('#btn-adapters-expert-mode').removeClass('btn-default').addClass('btn-primary');
-            $('#btn_upgrade_all').show();
-        } else {
-            $('#btn-adapters-expert-mode').addClass('btn-default').removeClass('btn-primary');
-            if (that.onlyUpdatable) {
+        if (this.main.activemenu === 'adapters' || update) {
+
+            if (that.main.config.expertMode) {
+                $('#btn-adapters-expert-mode').removeClass('btn-default').addClass('btn-primary');
                 $('#btn_upgrade_all').show();
             } else {
-                $('#btn_upgrade_all').hide();
+                $('#btn-adapters-expert-mode').addClass('btn-default').removeClass('btn-primary');
+                if (that.onlyUpdatable) {
+                    $('#btn_upgrade_all').show();
+                } else {
+                    $('#btn_upgrade_all').hide();
+                }
             }
+
+            $adapterContainer.html('');
+
+            this.getAdaptersInfo(this.main.currentHost, update, updateRepo, function (repository, installedList) {
+                var listInstalled = [];
+                var listUnsinstalled = [];
+                var adapter, obj;
+
+                if (installedList) {
+                    for (adapter in installedList) {
+                        if (!installedList.hasOwnProperty(adapter)) {
+                            continue;
+                        }
+                        obj = installedList[adapter];
+                        if (!obj || obj.controller || adapter === 'hosts') {
+                            continue;
+                        }
+                        listInstalled.push(adapter);
+                    }
+                    listInstalled.sort();
+                }
+
+                that.urls = {};
+
+                // List of adapters from repository
+                for (adapter in repository) {
+                    if (!repository.hasOwnProperty(adapter)) {
+                        continue;
+                    }
+
+                    that.urls[adapter] = repository[adapter].meta;
+                    obj = repository[adapter];
+                    if (!obj || obj.controller) {
+                        continue;
+                    }
+                    if (installedList && installedList[adapter]) {
+                        continue;
+                    }
+                    listUnsinstalled.push(adapter);
+                }
+                listUnsinstalled.sort();
+
+                that.tree = [];
+                that.data = {};
+
+                // list of the installed adapters
+                fillData(listInstalled, installedList, repository, installedList);
+
+                if (!that.onlyInstalled && !that.onlyUpdatable) {
+                    fillData(listUnsinstalled, installedList, repository, null);
+                }
+
+                if (that.isList) {
+                    that.createAdapterTable();
+                } else {
+                    that.createAdapterTiles();
+                }
+
+            });
+
+            this.main.fillContent('#menu-adapters-div');
         }
-
-        $adapterContainer.html('');
-
-        this.getAdaptersInfo(this.main.currentHost, update, updateRepo, function (repository, installedList) {
-            var listInstalled = [];
-            var listUnsinstalled = [];
-            var adapter, obj;
-
-            if (installedList) {
-                for (adapter in installedList) {
-                    if (!installedList.hasOwnProperty(adapter)) {
-                        continue;
-                    }
-                    obj = installedList[adapter];
-                    if (!obj || obj.controller || adapter === 'hosts') {
-                        continue;
-                    }
-                    listInstalled.push(adapter);
-                }
-                listInstalled.sort();
-            }
-
-            that.urls = {};
-
-            // List of adapters from repository
-            for (adapter in repository) {
-                if (!repository.hasOwnProperty(adapter)) {
-                    continue;
-                }
-
-                that.urls[adapter] = repository[adapter].meta;
-                obj = repository[adapter];
-                if (!obj || obj.controller) {
-                    continue;
-                }
-                if (installedList && installedList[adapter]) {
-                    continue;
-                }
-                listUnsinstalled.push(adapter);
-            }
-            listUnsinstalled.sort();
-
-            that.tree = [];
-            that.data = {};
-
-            // list of the installed adapters
-            fillData(listInstalled, installedList, repository, installedList);
-
-            if (!that.onlyInstalled && !that.onlyUpdatable) {
-                fillData(listUnsinstalled, installedList, repository, null);
-            }
-
-            if (that.isList) {
-                that.createAdapterTable();
-            } else {
-                that.createAdapterTiles();
-            }
-
-        });
-
-        this.main.fillContent('#menu-adapters-div');
     };
     this.createAdapterTiles = function () {
         var i;
@@ -941,14 +944,14 @@ function Adapters(main) {
         return $tempButtons.toString();
     }
 
-    this.showLicenseDialog = function(adapter, callback) {
+    this.showLicenseDialog = function (adapter, callback) {
         var $dialogLicense = $('#modal-license');
         // Is adapter installed
         if (that.data[adapter].installed || !that.data[adapter].licenseUrl) {
             callback(true);
             return;
         }
-        
+
         $('#license_language').hide();
         $('#license_diag').hide();
         $('#license_language_label').hide();
@@ -982,7 +985,7 @@ function Adapters(main) {
                     body = body.toString().replace(/\r\n/g, '<br>');
                     body = body.replace(/\n/g, '<br>');
                     $('#license_text').html(body);
-                    $dialogLicense.modal();             
+                    $dialogLicense.modal();
                 } else {
                     callback && callback(true);
                     callback = null;

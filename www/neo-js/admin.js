@@ -549,6 +549,8 @@ var adapterRedirect = function (redirect, timeout) {
                 return menuTitle;
             },
             selectMenu: function (id, init) {
+                main.activemenu = id;
+                
                 if (init !== false) {
                     if ($('#custom-' + id + '-menu').length) {
                         main.iframemenu = true;
@@ -570,8 +572,6 @@ var adapterRedirect = function (redirect, timeout) {
                         menus[id].init();
                     }
                 }
-                
-                main.activemenu = id;
 
                 $("#menu-title").text($('#menutitle-' + id).text());
                 $('.side-menu li.active').removeClass('active');

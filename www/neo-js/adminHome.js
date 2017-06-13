@@ -19,15 +19,23 @@ function Home(main) {
 
     var that = this;
     this.menuIcon = 'fa-home';
-
     this.main = main;
 
+    /**
+     * 
+     * Load home page from template
+     */
     this.prepare = function () {
         $('#menu-home-div').load('templates/home.html', function () {
 
         });
     };
 
+    /**
+     * Format number in seconds to time text
+     * @param {!number} seconds
+     * @returns {String}
+     */
     function formatSeconds(seconds) {
         var days = Math.floor(seconds / (3600 * 24));
         seconds %= 3600 * 24;
@@ -54,6 +62,11 @@ function Home(main) {
         return text;
     }
 
+    /**
+     * Format bytes to MB or GB
+     * @param {!number} bytes
+     * @returns {String}
+     */
     function formatRam(bytes) {
         var GB = Math.floor(bytes / (1024 * 1024 * 1024) * 10) / 10;
         bytes %= (1024 * 1024 * 1024);
@@ -134,7 +147,7 @@ function Home(main) {
                 fillList('new', listNew, repository, installedList);
             });
         }
-        
+
         that.main.menus.adapters.getHostInfo(that.main.currentHost, function (data) {
             var text = '';
             if (data) {
@@ -145,14 +158,14 @@ function Home(main) {
                     }
                 }
             }
-            if (text) {                
+            if (text) {
                 $('#homePlaceholderTab').hide();
                 $('#homeUpdateListTab, #homeNewAdapterTab').removeClass('col-md-6').addClass('col-md-4');
                 $('#systemInfoTab').show();
                 $('#systemInfoList').html(text);
             }
         });
-        
+
         requestCrossDomain('http://forum.iobroker.net/feed.php?mode=topics', that.getForumData);
 
         this.main.fillContent('#menu-home-div');
@@ -160,6 +173,10 @@ function Home(main) {
         startClock();
     };
 
+    /**
+     * Fill forum div with data
+     * @param {Object} data
+     */
     this.getForumData = function (data) {
         if (data.results && data.results[0]) {
             var $forumContent = $($.parseXML(data.results[0]));
@@ -183,6 +200,13 @@ function Home(main) {
         }
     };
 
+    /**
+     * 
+     * @param {String} type
+     * @param {Array} list
+     * @param {Object} repository
+     * @param {Object} installedList
+      */
     function fillList(type, list, repository, installedList) {
         var $ul = $('#' + type + 'HomeList');
         $ul.empty();
@@ -221,6 +245,10 @@ function Home(main) {
         }
     }
 
+    /**
+     * 
+     * Start the home page clock
+     */
     function startClock() {
         isClockOn = true;
         secInterval = setInterval(function () {

@@ -26,6 +26,15 @@ function Instances(main) {
     this.list = [];
     this.hostsText = null;
 
+    /**
+     * 
+     * @param {String} _var
+     * @param {Object} obj
+     * @param {String} attr
+     * @param {String} link
+     * @param {String} instance
+     * @returns {String} link
+     */
     function getLinkVar(_var, obj, attr, link, instance) {
         if (attr === 'protocol') {
             attr = 'secure';
@@ -70,6 +79,13 @@ function Instances(main) {
         return link;
     }
 
+    /**
+     * 
+     * @param {String} link
+     * @param {String} adapter
+     * @param {String} instance
+     * @returns {Array|String|@var;firtsLink}
+     */
     this.resolveLink = function (link, adapter, instance) {
         var vars = link.match(/%(\w+)%/g);
         var _var, v, parts, result;
@@ -161,6 +177,11 @@ function Instances(main) {
         }
     };
 
+    /**
+     * 
+     * @param {String} instanceId
+     * @param {JQuery} $tile
+     */
     function updateLed(instanceId, $tile) {
         var tmp = instanceId.split('.');
         var adapter = tmp[2];
@@ -267,6 +288,11 @@ function Instances(main) {
 
     }
 
+    /**
+     * 
+     * @param {String} page
+     * @returns {Number}
+     */
     this.calculateTotalRam = function (page) {
         var host = that.main.states['system.host.' + that.main.currentHost + '.memRss'];
         var processes = 1;
@@ -292,6 +318,11 @@ function Instances(main) {
         return Math.round(mem);
     };
 
+    /**
+     * 
+     * @param {String} page
+     * @returns {Number}
+     */
     this.calculateFreeMem = function (page) {
         var host = that.main.states['system.host.' + that.main.currentHost + '.freemem'];
         if (host) {
@@ -315,6 +346,11 @@ function Instances(main) {
         return Math.round(host.val);
     };
 
+    /**
+     * 
+     * @param {String} instanceId
+     * @returns {Number|Object.states.val|Instances.calculateRam.mem|String}
+     */
     function calculateRam(instanceId) {
         var mem;
         var common = that.main.objects[instanceId] ? that.main.objects[instanceId].common || {} : {};
@@ -333,6 +369,9 @@ function Instances(main) {
         return mem;
     }
 
+    /**
+     * 
+     */
     function addGroups() {
 
         var $tempGroup = $('#instancesTemplateGroup').children().clone(true, true);
@@ -351,6 +390,10 @@ function Instances(main) {
         $instanceContainer.append($tempGroup);
     }
 
+    /**
+     * 
+     * @param {String} instanceId
+     */
     function showOneAdapter(instanceId) {
 
         var common = that.main.objects[instanceId] ? that.main.objects[instanceId].common || {} : {};
@@ -440,6 +483,12 @@ function Instances(main) {
 
     }
 
+    /**
+     * 
+     * @param {String} value
+     * @param {String} adapter
+     * @returns {String}
+     */
     function iconFormatter(value, adapter) {
         if (value) {
             return '<img style="height: 20px;" src="adapter/' + adapter + '/' + value + '"/>';
@@ -447,11 +496,19 @@ function Instances(main) {
         return "";
     }
 
+    /**
+     * 
+     * @returns {String}
+     */
     function addButtonsFormatter() {
         var $tempButtons = $('#instanceTemplateTableButtons').children().clone(true, true);
         return $tempButtons.toString();
     }
 
+    /**
+     * 
+     * @param {String} filter
+     */
     function applyFilter(filter) {
         if (filter === undefined) {
             filter = $('#instances-filter').val();
@@ -583,6 +640,11 @@ function Instances(main) {
         }, 100);
     }
 
+    /**
+     * 
+     * @param {String} value
+     * @param {Function} cb
+     */
     function showCronDialog(value, cb) {
         value = (value || '').replace(/"/g, '').replace(/'/g, '');
         try {
@@ -604,6 +666,9 @@ function Instances(main) {
         $('#modal-cron').modal();
     }
 
+    /**
+     * 
+     */
     this.prepare = function () {
         $('#menu-instances-div').load("templates/instances.html", function () {
 
@@ -733,14 +798,30 @@ function Instances(main) {
         });
     };
 
+    /**
+     * 
+     * @param {type} vars
+     * @param {String} adapter
+     * @param {String} instance
+     * @param {type} elem
+     */
     this.replaceLinks = function (vars, adapter, instance, elem) {
-        if (typeof vars !== 'object')
+        if (typeof vars !== 'object') {
             vars = [vars];
+        }
         for (var t = 0; t < vars.length; t++) {
             this.replaceLink(vars[t], adapter, instance, elem);
         }
     };
 
+    /**
+     * 
+     * @param {String} link
+     * @param {String} _var
+     * @param {String} adapter
+     * @param {String} instance
+     * @param {Function} callback
+     */
     this._replaceLink = function (link, _var, adapter, instance, callback) {
         // remove %%
         _var = _var.replace(/%/g, '');
@@ -788,6 +869,14 @@ function Instances(main) {
         });
     };
 
+    /**
+     * 
+     * @param {String} link
+     * @param {type} adapter
+     * @param {type} instance
+     * @param {type} arg
+     * @param {Function} callback
+     */
     this._replaceLinks = function (link, adapter, instance, arg, callback) {
         if (!link) {
             return callback(link, adapter, instance, arg);
@@ -811,6 +900,10 @@ function Instances(main) {
         }.bind(this));
     };
 
+    /**
+     * 
+     * @param {Boolean} update
+     */
     this.init = function (update) {
         if (!this.main.objectsLoaded) {
             setTimeout(function () {
@@ -819,64 +912,66 @@ function Instances(main) {
             return;
         }
 
-        $instanceContainer.html('');
+        if (this.main.currentHost && (this.main.activemenu === 'instances' || update)) {
+            $instanceContainer.html('');
 
-        if (that.main.config.expertMode) {
-            $('#btn-instances-expert-mode').removeClass('btn-default').addClass('btn-primary');
-        } else {
-            $('#btn-instances-expert-mode').addClass('btn-default').removeClass('btn-primary');
-        }
+            if (that.main.config.expertMode) {
+                $('#btn-instances-expert-mode').removeClass('btn-default').addClass('btn-primary');
+            } else {
+                $('#btn-instances-expert-mode').addClass('btn-default').removeClass('btn-primary');
+            }
 
-        if (that.main.config.instanceFormList) {
-            $('#btn-instances-form i').removeClass('fa-list').addClass('fa-window-maximize');
-            $('#btn-instances-form').changeTooltip($.i18n('tiles'));
-            createTable();
-        } else {
-            $('#btn-instances-form i').addClass('fa-list').removeClass('fa-window-maximize');
-            $('#btn-instances-form').changeTooltip($.i18n('list'));
-        }
+            if (that.main.config.instanceFormList) {
+                $('#btn-instances-form i').removeClass('fa-list').addClass('fa-window-maximize');
+                $('#btn-instances-form').changeTooltip($.i18n('tiles'));
+                createTable();
+            } else {
+                $('#btn-instances-form i').addClass('fa-list').removeClass('fa-window-maximize');
+                $('#btn-instances-form').changeTooltip($.i18n('list'));
+            }
 
-        if (this.main.currentHost) {
-            this.list.sort();
-            var onlyWWW = [];
-            // move all adapters with not onlyWWW and noConfig to the bottom
-            for (var l = this.list.length - 1; l >= 0; l--) {
-                if (this.main.objects[this.list[l]] &&
-                        this.main.objects[this.list[l]].common &&
-                        !this.main.objects[this.list[l]].common.localLink &&
-                        !this.main.objects[this.list[l]].common.localLinks &&
-                        this.main.objects[this.list[l]].common.noConfig
-                        ) {
-                    onlyWWW.push(this.list[l]);
-                    this.list.splice(l, 1);
+            if (this.main.currentHost) {
+                this.list.sort();
+                var onlyWWW = [];
+                // move all adapters with not onlyWWW and noConfig to the bottom
+                for (var l = this.list.length - 1; l >= 0; l--) {
+                    if (this.main.objects[this.list[l]] &&
+                            this.main.objects[this.list[l]].common &&
+                            !this.main.objects[this.list[l]].common.localLink &&
+                            !this.main.objects[this.list[l]].common.localLinks &&
+                            this.main.objects[this.list[l]].common.noConfig
+                            ) {
+                        onlyWWW.push(this.list[l]);
+                        this.list.splice(l, 1);
+                    }
                 }
-            }
 
-            this.list.sort();
-            onlyWWW.sort();
-            for (l = 0; l < onlyWWW.length; l++) {
-                this.list.push(onlyWWW[l]);
-            }
-
-            addGroups();
-
-            for (var i = 0; i < this.list.length; i++) {
-                var obj = this.main.objects[this.list[i]];
-                if (!obj) {
-                    continue;
+                this.list.sort();
+                onlyWWW.sort();
+                for (l = 0; l < onlyWWW.length; l++) {
+                    this.list.push(onlyWWW[l]);
                 }
-                showOneAdapter(this.list[i]);
+
+                addGroups();
+
+                for (var i = 0; i < this.list.length; i++) {
+                    var obj = this.main.objects[this.list[i]];
+                    if (!obj) {
+                        continue;
+                    }
+                    showOneAdapter(this.list[i]);
+                }
+
+                applyFilter();
+
+                $('#currentHost').html(this.main.currentHost);
+                var totalRam = that.calculateTotalRam('instances');
+                var freeRam = that.calculateFreeMem('instances');
+                $('#instancesTotalRamText').text($.i18n('totalRamText', totalRam, freeRam));
             }
 
-            applyFilter();
-
-            $('#currentHost').html(this.main.currentHost);
-            var totalRam = that.calculateTotalRam('instances');
-            var freeRam = that.calculateFreeMem('instances');
-            $('#instancesTotalRamText').text($.i18n('totalRamText', totalRam, freeRam));
+            this.main.fillContent('#menu-instances-div');
         }
-
-        this.main.fillContent('#menu-instances-div');
     };
 
     this.stateChange = function (id, state) {
@@ -885,26 +980,34 @@ function Instances(main) {
     this.objectChange = function (id, obj) {
     };
 
+    /**
+     * 
+     * @param {String} id
+     */
     this.showConfigDialog = function (id) {
         // id = 'system.adapter.NAME.X'
         $iframeDialog = $('#modal-config');
-        
+
         var parts = id.split('.');
         $('#config-iframe').attr('src', 'adapter/' + parts[2] + '/?' + parts[3]);
-        
+
         var name = id.replace(/^system\.adapter\./, '');
         $('#modal-config').data('name', name);
         $('#modal-config-label').text($.i18n('adapterConfiguration') + ': ' + name);
-        
+
         var height = $(window).height();
         $iframeDialog.find('.modal-content').css("height", height - 60);
         $('#config-iframe').css("height", height - 200);
-        
+
 
         $iframeDialog.modal();
 
     };
 
+    /**
+     * 
+     * @param {JQuery} $instanceTile
+     */
     this.initButtons = function ($instanceTile) {
         var id = $instanceTile.attr('data-instance-id');
         var attr = $instanceTile.attr('data-adapter');
@@ -937,6 +1040,9 @@ function Instances(main) {
         });
     };
 
+    /**
+     * 
+     */
     function createTable() {
         var $tempTable = $instancesTableTemplate.children().clone(true, true);
         $tempTable.find('.instanceTable').bootstrapTable();
