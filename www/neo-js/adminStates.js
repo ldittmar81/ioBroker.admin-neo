@@ -140,22 +140,13 @@ function States(main) {
             return;
         }
 
-        that.clear();
-
         for (var key in main.states) {
             var obj = convertState(key, main.states[key]);
-            that.addRow(obj);
+            that.stateChange(key, obj);
         }
         sorttable.makeSortable($('#states-outer')[0]);
 
         this.main.fillContent('#menu-states-div');
-    };
-
-    /**
-     * Clear table body
-     */
-    this.clear = function () {
-        $('#states-tbody').html('');
     };
 
     /**

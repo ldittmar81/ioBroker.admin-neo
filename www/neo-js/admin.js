@@ -1130,7 +1130,6 @@ var adapterRedirect = function (redirect, timeout) {
         // ----------------------------- States show and Edit ------------------------------------------------
 
         function getStates(callback) {
-            menus.states.clear();
             main.socket.emit('getStates', function (err, res) {
                 if (err) {
                     console.log(err);
