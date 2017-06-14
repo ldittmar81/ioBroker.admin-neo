@@ -30,7 +30,7 @@
 		this.locale = this.options.locale;
 		this.messageStore = this.options.messageStore;
 		this.languages = {};
-
+               
 		this.init();
 	};
 
@@ -290,7 +290,7 @@
 		if ( window.console && $.i18n.debug ) {
 			window.console.log.apply( window.console, arguments );
 		}
-	};
+	};        
 	/* Static members */
 	I18N.defaults = {
 		locale: String.locale,
