@@ -126,8 +126,30 @@ function States(main) {
             });
 
             restartFunctions('#menu-states-div');
+            
+            prepareTable();
+
         });
     };
+
+    /**
+     * 
+     * Fill the table for the first time
+     */
+    function prepareTable() {
+        if (!this.main.objectsLoaded || !this.main.states) {
+            setTimeout(function () {
+                prepareTable();
+            }, 250);
+            return;
+        }
+        
+        for (var key in this.main.states) {
+            var obj = convertState(key, this.main.states[key]);
+            that.stateChange(key, obj);
+        }
+        sorttable.makeSortable($('#states-outer')[0]);
+    }
 
     /**
      * Init states
@@ -139,12 +161,6 @@ function States(main) {
             }, 250);
             return;
         }
-
-        for (var key in main.states) {
-            var obj = convertState(key, main.states[key]);
-            that.stateChange(key, obj);
-        }
-        sorttable.makeSortable($('#states-outer')[0]);
 
         this.main.fillContent('#menu-states-div');
     };
