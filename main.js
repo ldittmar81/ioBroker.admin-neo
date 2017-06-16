@@ -40,80 +40,88 @@ var subscriptions = [];
 compressor.minify({
     compressor: 'uglifyjs',
     input: [
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery-ui.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.mobile.custom.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/semver.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/CLDRPluralRuleParser.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.i18n.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.i18n.messagestore.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.i18n.fallbacks.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.i18n.parser.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.i18n.emitter.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.i18n.language.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/languages/*.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootstrap.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.fancytree-all.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/ace.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootstrap-select.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootstrap-table.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootstrap-table-editable.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootstrap-table-mobile.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootstrap-table-sticky-header.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootstrap-table-contextmenu.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/bootbox.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/dropzone.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/icheck.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.inputmask.bundle.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/pnotify.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/parsley.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/showdown.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/jquery.sparkline.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/clipboard.min.js',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/js/sorttable.min.js'
+        __dirname + '/www/neo-lib/js/jquery.min.js',
+        __dirname + '/www/neo-lib/js/jquery-ui.min.js',
+        __dirname + '/www/neo-lib/js/jquery.mobile.custom.min.js',
+        __dirname + '/www/neo-lib/js/semver.min.js',
+        __dirname + '/www/neo-lib/js/CLDRPluralRuleParser.js',
+        __dirname + '/www/neo-lib/js/jquery.i18n.js',
+        __dirname + '/www/neo-lib/js/jquery.i18n.messagestore.js',
+        __dirname + '/www/neo-lib/js/jquery.i18n.fallbacks.js',
+        __dirname + '/www/neo-lib/js/jquery.i18n.parser.js',
+        __dirname + '/www/neo-lib/js/jquery.i18n.emitter.js',
+        __dirname + '/www/neo-lib/js/jquery.i18n.language.js',
+        __dirname + '/www/neo-lib/js/languages/*.js',
+        __dirname + '/www/neo-lib/js/bootstrap.min.js',
+        __dirname + '/www/neo-lib/js/jquery.fancytree-all.min.js',
+        __dirname + '/www/neo-lib/js/ace.js',
+        __dirname + '/www/neo-lib/js/bootstrap-select.min.js',
+        __dirname + '/www/neo-lib/js/bootstrap-table.min.js',
+        __dirname + '/www/neo-lib/js/bootstrap-table-editable.min.js',
+        __dirname + '/www/neo-lib/js/bootstrap-table-mobile.min.js',
+        __dirname + '/www/neo-lib/js/bootstrap-table-sticky-header.min.js',
+        __dirname + '/www/neo-lib/js/bootstrap-table-contextmenu.min.js',
+        __dirname + '/www/neo-lib/js/bootbox.min.js',
+        __dirname + '/www/neo-lib/js/dropzone.min.js',
+        __dirname + '/www/neo-lib/js/icheck.min.js',
+        __dirname + '/www/neo-lib/js/jquery.inputmask.bundle.min.js',
+        __dirname + '/www/neo-lib/js/pnotify.min.js',
+        __dirname + '/www/neo-lib/js/parsley.min.js',
+        __dirname + '/www/neo-lib/js/showdown.min.js',
+        __dirname + '/www/neo-lib/js/jquery.sparkline.min.js',
+        __dirname + '/www/neo-lib/js/clipboard.min.js',
+        __dirname + '/www/neo-lib/js/sorttable.min.js'
     ],
-    output: 'node_modules/ioBroker.admin-neo/www/src/vendorlib.min.js',
-    callback: function (err, min) {}
+    output: __dirname + '/www/src/vendorlib.min.js',
+    callback: function (err, min) {
+    }
 });
 compressor.minify({
     compressor: 'uglifyjs',
     input: [
-        'node_modules/ioBroker.admin-neo/www/neo-js/selectID.js',
-        'node_modules/ioBroker.admin-neo/www/neo-js/languages.js',
-        'node_modules/ioBroker.admin-neo/www/neo-js/cron.js',
-        'node_modules/ioBroker.admin-neo/www/neo-js/orbitlist.js',
-        'node_modules/ioBroker.admin-neo/www/neo-js/ioBroker.js'
+        __dirname + '/www/neo-js/selectID.js',
+        __dirname + '/www/neo-js/languages.js',
+        __dirname + '/www/neo-js/cron.js',
+        __dirname + '/www/neo-js/orbitlist.js',
+        __dirname + '/www/neo-js/ioBroker.js'
     ],
-    output: 'node_modules/ioBroker.admin-neo/www/src/helpers.min.js',
-    callback: function (err, min) {}
+    output: __dirname + '/www/src/helpers.min.js',
+    callback: function (err, min) {
+    }
 });
 compressor.minify({
     compressor: 'uglifyjs',
-    input: ['node_modules/ioBroker.admin-neo/www/neo-js/admin*.js'],
-    output: 'node_modules/ioBroker.admin-neo/www/src/admin-neo.min.js',
-    callback: function (err, min) {}
+    input: [__dirname + '/www/neo-js/admin*.js'],
+    output: __dirname + '/www/src/admin-neo.min.js',
+    callback: function (err, min) {
+        if(err){
+            console.log("ERRRO admin-neo.min.js: " + err);
+        }
+    }
 });
 compressor.minify({
     compressor: 'clean-css',
     input: [
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/bootstrap.min.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/bootstrap-theme.min.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/ui.fancytree.min.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/bootstrap-table.min.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/bootstrap-table-sticky-header.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/animate.min.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/dropzone.min.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/bootstrap-select.min.css',
-        'node_modules/ioBroker.admin-neo/www/neo-lib/css/pnotify.min.css'
+        __dirname + '/www/neo-lib/css/bootstrap.min.css',
+        __dirname + '/www/neo-lib/css/bootstrap-theme.min.css',
+        __dirname + '/www/neo-lib/css/ui.fancytree.min.css',
+        __dirname + '/www/neo-lib/css/bootstrap-table.min.css',
+        __dirname + '/www/neo-lib/css/bootstrap-table-sticky-header.css',
+        __dirname + '/www/neo-lib/css/animate.min.css',
+        __dirname + '/www/neo-lib/css/dropzone.min.css',
+        __dirname + '/www/neo-lib/css/bootstrap-select.min.css',
+        __dirname + '/www/neo-lib/css/pnotify.min.css'
     ],
-    output: 'node_modules/ioBroker.admin-neo/www/src/vendorlib.min.css',
-    callback: function (err, min) {}
+    output: __dirname + '/www/src/vendorlib.min.css',
+    callback: function (err, min) {       
+    }
 });
 compressor.minify({
     compressor: 'clean-css',
-    input: ['node_modules/ioBroker.admin-neo/www/neo-css/*.css'],
-    output: 'node_modules/ioBroker.admin-neo/www/src/ioBroker.min.css',
-    callback: function (err, min) {}
+    input: [__dirname + '/www/neo-css/*.css'],
+    output: __dirname + '/www/src/ioBroker.min.css',
+    callback: function (err, min) {       
+    }
 });
 
 // do not send too many state updates
