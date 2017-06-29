@@ -31,9 +31,9 @@ function Adapters(main) {
     this.groupImages = {
         'alarm_group': 'img/groups/alarm.png',
         'camera_group': 'img/groups/camera.png',
-        'climate-control': 'img/groups/climate-control.png',
+        'climate-control_group': 'img/groups/climate-control.png',
         'communication_group': 'img/groups/communication.png',
-        'date_and_time_group': 'img/groups/date_and_time.png',
+        'date-and-time_group': 'img/groups/date_and_time.png',
         'energy_group': 'img/groups/energy.png',
         'garden_group': 'img/groups/garden.png',
         'general_group': 'img/groups/general.png',
