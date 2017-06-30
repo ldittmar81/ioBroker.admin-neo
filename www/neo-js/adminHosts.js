@@ -227,6 +227,9 @@ function Hosts(main) {
             case "darwin":
                 icon = "fa-apple";
                 break;
+            case "android":
+                icon = "fa-android";
+                break;
             case "freebsd":
                 icon = "fa-sym-freebsd";
                 break;
